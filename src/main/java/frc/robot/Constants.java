@@ -16,4 +16,9 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  // LimeLight Constants
+  public static final double h1 = 1;
+  public static final double h2 = 1;
+  public static final double angle1 = 1;
 }

@@ -26,7 +26,7 @@ public class RobotContainer {
   private final Drivetrain dt;
   private final c_driveWithController driveWithController;
 
-  XboxController xboxController = new XboxController(0);
+  private final XboxController xboxController = new XboxController(0);
   
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -38,7 +38,7 @@ public class RobotContainer {
     
     dt = new Drivetrain();
 
-    driveWithController = new c_driveWithController(xboxController);
+    driveWithController = new c_driveWithController(dt,xboxController);
 
     // Configure the trigger bindings
     configureBindings();
@@ -61,7 +61,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
 
-    /** Makes controller driving the default command */
+    // Makes controller driving the default command
     dt.setDefaultCommand(driveWithController);
 
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());

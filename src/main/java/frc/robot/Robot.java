@@ -15,6 +15,8 @@ import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
 
+
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -36,6 +38,11 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     
+    // Creates custom logs (log names are subject to change)
+    BooleanLogEntry myBooleanLog;
+    DoubleLogEntry myDoubleLog;
+    StringLogEntry myStringLog;
+
     // Starts recording to data log
     DataLogManager.start();
   }
@@ -54,6 +61,14 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    /*
+    if (CONDITION) {
+      myBooleanLog.append(variable);
+      myDoubleLog.append(variable);
+      myStringLog.append(variable);
+    };
+    */
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

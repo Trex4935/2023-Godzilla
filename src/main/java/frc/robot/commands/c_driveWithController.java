@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Drivetrain;
 
@@ -12,7 +13,7 @@ public class c_driveWithController extends CommandBase {
   Drivetrain dt;
 
   /** Creates a new c_driveWithJoystick. */
-  public c_driveWithController() {
+  public c_driveWithController(XboxController xboxController) {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

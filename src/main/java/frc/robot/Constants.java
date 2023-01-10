@@ -17,8 +17,26 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
-  // LimeLight Constants
+    public static class WheelIDConstants {
+    public final static int FLMotorID = 1;
+    public final static int FRMotorID = 2;
+    public final static int BLMotorID = 3;
+    public final static int BRMotorID = 4;
+  }
+    
+  public static class LimeLightConstants {
   public static final double h1 = 1;
   public static final double h2 = 1;
   public static final double angle1 = 1;
+}
+
+public static class AxisIDConstants {
+public static final int leftIDAxis = 1;
+public static final int rightIDAxis = 2;
+
+
+}
+
+public static final double dtmaxspeed = 5;
+
 }

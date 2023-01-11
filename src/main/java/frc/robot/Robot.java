@@ -10,11 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 // Logging Imports
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.util.datalog.StringLogEntry;
-
 
 
 /**
@@ -24,6 +20,7 @@ import edu.wpi.first.util.datalog.StringLogEntry;
  * project.
  */
 public class Robot extends TimedRobot {
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -37,14 +34,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    
-    // Creates custom logs (log names are subject to change)
-    BooleanLogEntry myBooleanLog;
-    DoubleLogEntry myDoubleLog;
-    StringLogEntry myStringLog;
 
     // Starts recording to data log
     DataLogManager.start();
+
   }
 
   /**
@@ -61,12 +54,11 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-
+    
+    // Used to add any abnormalities to the log.
     /*
     if (CONDITION) {
-      myBooleanLog.append(variable);
-      myDoubleLog.append(variable);
-      myStringLog.append(variable);
+      DataLogManager.log("message");
     };
     */
   }
@@ -102,6 +94,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    // Creates entry to show teleop.
+    DataLogManager.log("Starting teleop");
+
   }
 
   /** This function is called periodically during operator control. */
@@ -112,6 +108,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    
   }
 
   /** This function is called periodically during test mode. */

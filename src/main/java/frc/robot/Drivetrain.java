@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AxisIDConstants;
+import frc.robot.Constants.MovementConstraints;
 import frc.robot.Constants.WheelIDConstants;
 import frc.robot.extensions.Talon;
 
@@ -35,7 +36,7 @@ XboxController xboxController;
 
 
 public Drivetrain() {
- //New's up motors and configures the talons in a separate method
+ // Creates new motor objects and configures the talons in a separate method
     FLMotor = Talon.createDefaultTalon(WheelIDConstants.FLMotorID);
     FRMotor = Talon.createDefaultTalon(WheelIDConstants.FRMotorID);
     MLMotor = Talon.createDefaultTalon(WheelIDConstants.MLMotorID);
@@ -50,7 +51,7 @@ public Drivetrain() {
 
     diffdrive = new DifferentialDrive(leftMotors, rightMotors);
 
-    
+    diffdrive.setMaxOutput(MovementConstraints.dtmaxspeed);
 
 }
 

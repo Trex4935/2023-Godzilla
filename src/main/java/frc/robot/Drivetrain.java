@@ -43,7 +43,7 @@ public Drivetrain() {
     MRMotor = Talon.createDefaultTalon(WheelIDConstants.MRMotorID);
     BLMotor = Talon.createDefaultTalon(WheelIDConstants.BLMotorID);
     BRMotor = Talon.createDefaultTalon(WheelIDConstants.BRMotorID);
-//Sets up motor controller groups
+ // Sets up motor controller groups
     leftMotors = new MotorControllerGroup(FLMotor, MLMotor, BLMotor);
     rightMotors = new MotorControllerGroup(FRMotor, MRMotor, BRMotor);
     

@@ -17,21 +17,24 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
-    public static class WheelIDConstants {
-    public final static int FLMotorID = 1;
-    public final static int FRMotorID = 2;
-    public final static int MLMotorID = 3;
-    public final static int MRMotorID = 4;
-    public final static int BLMotorID = 5;
-    public final static int BRMotorID = 6;
+  /** Class for the wheel ID constants.*/
+  public static class WheelIDConstants {
+  public final static int FLMotorID = 1;
+  public final static int FRMotorID = 2;
+  public final static int MLMotorID = 3;
+  public final static int MRMotorID = 4;
+  public final static int BLMotorID = 5;
+  public final static int BRMotorID = 6;
   }
     
+  /** Class for the Limelight constants.*/
   public static class LimeLightConstants {
   public static final double h1 = 1;
   public static final double h2 = 1;
   public static final double angle1 = 1;
 }
 
+/**Class for Xbox Controller ID constants.*/
 public static class AxisIDConstants {
 public static final int leftIDAxis = 1;
 public static final int rightIDAxis = 5;
@@ -39,6 +42,10 @@ public static final int rightIDAxis = 5;
 
 }
 
+/**Class for the speed and acceleration limits of the robot.*/
+public static class MovementConstraints {
+public static final double dtmaxaccel = 1;
 public static final double dtmaxspeed = 1;
+}
 
 }

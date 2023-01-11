@@ -20,8 +20,10 @@ public final class Constants {
     public static class WheelIDConstants {
     public final static int FLMotorID = 1;
     public final static int FRMotorID = 2;
-    public final static int BLMotorID = 3;
-    public final static int BRMotorID = 4;
+    public final static int MLMotorID = 3;
+    public final static int MRMotorID = 4;
+    public final static int BLMotorID = 5;
+    public final static int BRMotorID = 6;
   }
     
   public static class LimeLightConstants {
@@ -32,11 +34,11 @@ public final class Constants {
 
 public static class AxisIDConstants {
 public static final int leftIDAxis = 1;
-public static final int rightIDAxis = 2;
+public static final int rightIDAxis = 5;
 
 
 }
 
-public static final double dtmaxspeed = 5;
+public static final double dtmaxspeed = 1;
 
 }

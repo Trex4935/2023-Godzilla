@@ -19,11 +19,15 @@ public class Drivetrain extends SubsystemBase {
 
 WPI_TalonSRX FLMotor;
 WPI_TalonSRX FRMotor;
+WPI_TalonSRX MLMotor;
+WPI_TalonSRX MRMotor;
 WPI_TalonSRX BLMotor;
 WPI_TalonSRX BRMotor;
 
 MotorControllerGroup leftMotors;
 MotorControllerGroup rightMotors;
+
+
 
 DifferentialDrive diffdrive;
 
@@ -34,11 +38,15 @@ public Drivetrain() {
  //New's up motors and configures the talons in a separate method
     FLMotor = Talon.createDefaultTalon(WheelIDConstants.FLMotorID);
     FRMotor = Talon.createDefaultTalon(WheelIDConstants.FRMotorID);
+    MLMotor = Talon.createDefaultTalon(WheelIDConstants.MLMotorID);
+    MRMotor = Talon.createDefaultTalon(WheelIDConstants.MRMotorID);
     BLMotor = Talon.createDefaultTalon(WheelIDConstants.BLMotorID);
     BRMotor = Talon.createDefaultTalon(WheelIDConstants.BRMotorID);
 //Sets up motor controller groups
-    leftMotors = new MotorControllerGroup(FLMotor, BLMotor);
-    rightMotors = new MotorControllerGroup(FLMotor, BRMotor);
+    leftMotors = new MotorControllerGroup(FLMotor, MLMotor, BLMotor);
+    rightMotors = new MotorControllerGroup(FRMotor, MRMotor, BRMotor);
+    
+    
 
     diffdrive = new DifferentialDrive(leftMotors, rightMotors);
 
@@ -48,8 +56,8 @@ public Drivetrain() {
 
 /** Sets speed to the axis values of Xbox Controller*/
 public void driveWithController(XboxController xboxController) {
-    diffdrive.tankDrive((xboxController.getRawAxis(AxisIDConstants.leftIDAxis)* Constants.dtmaxspeed), 
-    (xboxController.getRawAxis(AxisIDConstants.rightIDAxis)* Constants.dtmaxspeed));
+    diffdrive.tankDrive(xboxController.getRawAxis(AxisIDConstants.leftIDAxis), 
+    xboxController.getRawAxis(AxisIDConstants.rightIDAxis));
 }
 
 public void stopMotors() {

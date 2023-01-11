@@ -45,7 +45,7 @@ public static final int rightIDAxis = 5;
 /**Class for the speed and acceleration limits of the robot.*/
 public static class MovementConstraints {
 public static final double dtmaxaccel = 1;
-public static final double dtmaxspeed = 1;
+public static final double dtmaxspeed = 0.75;
 }
 
 }

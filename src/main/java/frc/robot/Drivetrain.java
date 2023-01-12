@@ -75,7 +75,7 @@ public double return0(){
     return 0;
 }
 
-public void setDouble(double b){
+public double setDouble(){
     return 0;
 }
 

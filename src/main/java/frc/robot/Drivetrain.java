@@ -4,8 +4,12 @@
 
 package frc.robot;
 
+import java.util.function.DoubleConsumer;
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -24,6 +28,7 @@ WPI_TalonSRX MLMotor;
 WPI_TalonSRX MRMotor;
 WPI_TalonSRX BLMotor;
 WPI_TalonSRX BRMotor;
+
 
 MotorControllerGroup leftMotors;
 MotorControllerGroup rightMotors;
@@ -65,5 +70,22 @@ public void stopMotors() {
     leftMotors.set(0);
     rightMotors.set(0);
 }
+
+public double return0(){
+    return 0;
+}
+
+public void setDouble(double b){
+    return 0;
+}
+
+
+
+public void initSendable(SendableBuilder builder, XboxController xboxController) {
+    DoubleConsumer consum = b -> leftMotors.set(b);
+    DoubleSupplier sup = () -> xboxController.getRawAxis(AxisIDConstants.leftIDAxis);
+    builder.setSmartDashboardType("Motor Speed");
+    builder.addDoubleProperty("motorSpeed", sup , consum);
+    }
 
 }

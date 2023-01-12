@@ -7,8 +7,13 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+// Logging Imports
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.util.datalog.DataLog;
+
 public class ExampleSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
+
   public ExampleSubsystem() {}
 
   /**
@@ -18,6 +23,9 @@ public class ExampleSubsystem extends SubsystemBase {
    */
   public CommandBase exampleMethodCommand() {
     // Inline construction of command goes here.
+
+
+
     // Subsystem::RunOnce implicitly requires `this` subsystem.
     return runOnce(
         () -> {
@@ -38,6 +46,8 @@ public class ExampleSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+
   }
 
   @Override

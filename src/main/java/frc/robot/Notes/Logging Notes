@@ -1,0 +1,34 @@
+
+----------------------------------------------------------
+If you need help with logging:
+----------------------------------------------------------
+
+Imports:
+
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.util.datalog.DataLog;
+
+----------------------------------------------------------
+
+Automatic logging:
+- Should be inside robotInit
+
+public void robotInit() {
+    DataLogManager.start();
+}
+
+----------------------------------------------------------
+
+Conditional Logging:
+- Used to add any abnormalities to the log.
+
+if (CONDITION) {
+    DataLogManager.log("MESSAGE");
+};
+
+----------------------------------------------------------
+
+Manual Logging (Inside the Code)
+- Written directly in the code.
+
+DataLogManager.log("MESSAGE");

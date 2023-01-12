@@ -22,6 +22,11 @@ import frc.robot.extensions.Talon;
 /** Add your docs here. */
 public class Drivetrain extends SubsystemBase {
 
+/**
+ * F = Front  | L = Left
+ * M = Middle | R = Right
+ * B = Back   | 
+ */
 WPI_TalonSRX FLMotor;
 WPI_TalonSRX FRMotor;
 WPI_TalonSRX MLMotor;
@@ -32,8 +37,6 @@ WPI_TalonSRX BRMotor;
 
 MotorControllerGroup leftMotors;
 MotorControllerGroup rightMotors;
-
-
 
 DifferentialDrive diffdrive;
 
@@ -52,10 +55,10 @@ public Drivetrain() {
     leftMotors = new MotorControllerGroup(FLMotor, MLMotor, BLMotor);
     rightMotors = new MotorControllerGroup(FRMotor, MRMotor, BRMotor);
     
-    
-
+    // Creates differential drive configuration with groups.
     diffdrive = new DifferentialDrive(leftMotors, rightMotors);
 
+    // Sets max speed of drivetrain
     diffdrive.setMaxOutput(MovementConstraints.dtmaxspeed);
 
 }
@@ -66,6 +69,7 @@ public void driveWithController(XboxController xboxController) {
     xboxController.getRawAxis(AxisIDConstants.rightIDAxis));
 }
 
+/** Stops motors */
 public void stopMotors() {
     leftMotors.set(0);
     rightMotors.set(0);

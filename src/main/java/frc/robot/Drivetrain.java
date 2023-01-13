@@ -84,8 +84,8 @@ public double setDouble(){
 }
 
 
-
-public void initSendable(SendableBuilder builder, XboxController xboxController) {
+@Override
+public void initSendable(SendableBuilder builder) {
     DoubleConsumer consum = b -> leftMotors.set(b);
     DoubleSupplier sup = () -> xboxController.getRawAxis(AxisIDConstants.leftIDAxis);
     builder.setSmartDashboardType("Motor Speed");

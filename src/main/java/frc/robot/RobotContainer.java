@@ -27,6 +27,7 @@ public class RobotContainer {
   private final c_driveWithController driveWithController;
 
   private final XboxController xboxController = new XboxController(0);
+  private final XboxController armController = new XboxController(1);
   
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -76,4 +77,6 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
   }
+
+
 }

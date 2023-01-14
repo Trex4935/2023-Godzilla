@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.ArmRotationConstants;
+import frc.robot.Constants.ArmConstants;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -18,34 +18,32 @@ import frc.robot.extensions.*;
 
 public class Arm extends SubsystemBase {
   CANSparkMax ArmRotation;
-  WPI_TalonFX ArmExtendingMotor;
-  WPI_TalonFX AEM;
-  FlippedDIO limitSwitchBottom;
-  FlippedDIO limitSwitchTop;
+  private WPI_TalonFX ArmExtensionMotor;
 
   /** Creates a new ArmRotation. */
-  public Arm(int SparkMaxID, int TalonFXID) {
-    //Arm Rotation
-    ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
-    //Arm Extension
-    ArmExtendingMotor = new WPI_TalonFX(TalonFXID);
-    AEM = ArmExtendingMotor;
+  public Arm() {
+    // Arm Rotation
+    ArmRotation = SparkMax.createDefaultCANSparkMax(ArmConstants.armRotationCAN);
+
+    // Arm Extension
+    ArmExtensionMotor = Falcon.createDefaultFalcon(ArmConstants.armExtensionCAN);
+    /// Need Encoder based soft limits implemented
   }
+
   // note for me: gear ratio is 200:1; incorporate later
-public void moveArm(){
-  
-}
+  public void moveArm() {
 
-public void extendArm(XboxController xboxController) {
-  if (limitSwitchTop.get() == false)
- AEM.set(xboxController.getRawAxis(1));
- else {AEM.stopMotor();}
+  }
 
- if (limitSwitchBottom.get() == false)
- AEM.set(xboxController.getRawAxis(0));
- else {AEM.stopMotor();}
-}
+  // Stop the Extension motor
+  public void stopExtensionMotor() {
+    ArmExtensionMotor.stopMotor();
+  }
 
+  // Takes a speed values from -1 to 1 and set the extension motor to that value
+  public void extendArm(Double speed) {
+    ArmExtensionMotor.set(speed);
+  }
 
   @Override
   public void periodic() {

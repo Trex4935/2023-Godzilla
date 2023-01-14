@@ -33,12 +33,11 @@ public final class Constants {
 
   /** Class for the Limelight constants. */
   public static class LimeLightConstants {
-  public static final double h1 = 1;
-  public static final double h2 = 1;
-  public static final double angle1 = 1;
-  
-}
+    public static final double h1 = 1;
+    public static final double h2 = 1;
+    public static final double angle1 = 1;
 
+  }
 
   /** Class for Xbox Controller ID constants. */
   public static class AxisIDConstants {
@@ -47,19 +46,16 @@ public final class Constants {
 
   }
 
-  /**Class for the speed and acceleration limits of the robot.*/
+  /** Class for the speed and acceleration limits of the robot. */
   public static class MovementConstraints {
-  public static final double dtmaxaccel = 1;
-  public static final double dtmaxspeed = 0.75;
-}
-
-  /**Class for Arm Rotation CAN IDs.*/
-  public static class ArmRotationConstants {
-    public static final int armRotationCAN = 5;
-    
+    public static final double dtmaxaccel = 1;
+    public static final double dtmaxspeed = 0.75;
   }
 
-  public static final int armMotorID = 1;
+  /** Class for Arm Rotation CAN IDs. */
+  public static class ArmConstants {
+    public static final int armRotationCAN = 5;
+    public static final int armExtensionCAN = 6;
 
-
+  }
 }

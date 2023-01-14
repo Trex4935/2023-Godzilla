@@ -8,17 +8,16 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-
-
-public class c_ExtendArm extends CommandBase {
-
-  Arm arm;
-  XboxController xboxController;
-
-  /** Creates a new c_ExtendArm. */
-  public c_ExtendArm(XboxController xboxController) {
+public class cm_ExtendArm extends CommandBase {
+  private final Arm m_arm;
+  private final XboxController m_XboxController;
+  
+  /** Creates a new cm_ExtendArm. */
+  public cm_ExtendArm(Arm armSubsystem,XboxController XboxController) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm);
+    m_arm = armSubsystem;
+    m_XboxController = XboxController;
+    addRequirements(armSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -28,18 +27,16 @@ public class c_ExtendArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-//    arm.extendToBottom(xboxController);
+    m_arm.extendArm(m_XboxController.getRawAxis(4));
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-//    arm.stopEncoderBottomLimit();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
-}
+  }
 }

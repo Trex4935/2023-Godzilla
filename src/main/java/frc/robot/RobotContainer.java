@@ -8,6 +8,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.c_driveWithController;
+import frc.robot.commands.cm_ExtendArm;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,10 +26,11 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain dt;
+  private final Arm arm;
   private final c_driveWithController driveWithController;
+  private final cm_ExtendArm extendArm;
 
   private final XboxController xboxController = new XboxController(0);
-  private final XboxController armController = new XboxController(1);
   
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -38,8 +41,10 @@ public class RobotContainer {
   public RobotContainer() {
     
     dt = new Drivetrain();
+    arm = new Arm();
 
     driveWithController = new c_driveWithController(dt,xboxController);
+    extendArm = new cm_ExtendArm(arm, xboxController);
 
     // Configure the trigger bindings
     configureBindings();

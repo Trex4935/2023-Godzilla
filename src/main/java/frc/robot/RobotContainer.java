@@ -8,6 +8,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.c_driveWithController;
+import frc.robot.commands.cm_ExtendArm;
+import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,7 +26,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain dt;
+  private final ArmExtension arm;
   private final c_driveWithController driveWithController;
+  private final cm_ExtendArm extendArm;
 
   private final XboxController xboxController = new XboxController(0);
   
@@ -37,8 +41,10 @@ public class RobotContainer {
   public RobotContainer() {
     
     dt = new Drivetrain();
+    arm = new ArmExtension();
 
     driveWithController = new c_driveWithController(dt,xboxController);
+    extendArm = new cm_ExtendArm(arm, xboxController);
 
     // Configure the trigger bindings
     configureBindings();
@@ -63,7 +69,7 @@ public class RobotContainer {
 
     // Makes controller driving the default command
     dt.setDefaultCommand(driveWithController);
-
+    arm.setDefaultCommand(extendArm);
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
@@ -76,4 +82,6 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
   }
+
+
 }

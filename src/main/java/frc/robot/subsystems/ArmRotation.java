@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmRotationConstants;
@@ -17,15 +18,26 @@ public class ArmRotation extends SubsystemBase {
 
   /** Creates a new ArmRotation. */
   public ArmRotation() {
-
+// init motor
     ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
+    ArmRotation.setInverted(true);
+    
 
   }
-  // note for me: gear ratio is 200:1; incorporate later
-public void moveArm(){
-  
+  public void moveArmForward(){
+    ArmRotation.set(0.5);
+  }
+  public void moveArmBackward(){
+    ArmRotation.set(-0.5);
+  }
+
+public void RotateArmWithJoystick(XboxController xboxController){
+ 
 }
 
+public void stopArmRotation(){
+  ArmRotation.stopMotor();
+}
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

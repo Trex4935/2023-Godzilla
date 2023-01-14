@@ -7,12 +7,20 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.c_armRotation;
+import frc.robot.commands.c_armRotationBackwards;
 import frc.robot.commands.c_driveWithController;
 import frc.robot.subsystems.ExampleSubsystem;
+
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.ArmRotation;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,6 +32,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain dt;
+  private final ArmRotation ar;
   private final c_driveWithController driveWithController;
 
   private final XboxController xboxController = new XboxController(0);
@@ -37,6 +46,7 @@ public class RobotContainer {
   public RobotContainer() {
     
     dt = new Drivetrain();
+    ar = new ArmRotation();
 
     driveWithController = new c_driveWithController(dt,xboxController);
 
@@ -76,4 +86,14 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
   }
+  public static void XboxControls(XboxController xboxController){
+    // X (move backwards)
+    new JoystickButton(xboxController, Button.kX.value)
+    .whileTrue(new c_armRotationBackwards(ArmRotation));
+    // B (move forwards)
+ new JoystickButton(xboxController, Button.kB.value)
+ .whileTrue(c_armRotation());
+  }
 }
+
+  

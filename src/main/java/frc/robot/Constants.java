@@ -59,12 +59,16 @@ public final class Constants {
     public static final int armRotationCAN = 5;
     
   }
+  public static class JoystickIDConstants {
+    //differentiates the joysticks inputs by assigning different ID ports
+    public static final int joystickLeft = 0;
+    public static final int joystickRight = 1;
+  }
 
-/**Class for the speed and acceleration limits of the robot.*/
-public static class MovementConstraints {
-public static final double dtmaxaccel = 1;
-public static final double dtmaxspeed = 0.75;
+  //Both joysticks use the same Axis value
+  public static class JoystickAxis {
+    public static final int joystickAxis = 1;
+  }
 }
 
 
-}

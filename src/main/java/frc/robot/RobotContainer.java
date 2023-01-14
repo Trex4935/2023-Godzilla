@@ -10,10 +10,12 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.c_armRotation;
 import frc.robot.commands.c_armRotationBackwards;
 import frc.robot.commands.c_driveWithController;
+import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.subsystems.ExampleSubsystem;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,9 +35,11 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain dt;
   private final ArmRotation ar;
-  private final c_driveWithController driveWithController;
+  private final cm_driveWithJoysticks driveWithJoysticks;
 
-  private final XboxController xboxController = new XboxController(0);
+  //private final XboxController xboxController = new XboxController(0);
+  private final Joystick m_JoystickLeft = new Joystick(0);
+  private final Joystick m_JoystickRight = new Joystick(1);
   
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -48,7 +52,8 @@ public class RobotContainer {
     dt = new Drivetrain();
     ar = new ArmRotation();
 
-    driveWithController = new c_driveWithController(dt,xboxController);
+    driveWithJoysticks = new cm_driveWithJoysticks(dt,m_JoystickLeft, m_JoystickRight);
+    //driveWithController = new c_driveWithController(dt,xboxController);
 
     // Configure the trigger bindings
     configureBindings();
@@ -71,8 +76,8 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
 
-    // Makes controller driving the default command
-    dt.setDefaultCommand(driveWithController);
+    // Makes Joystick driving the default command
+    dt.setDefaultCommand(driveWithJoysticks);
 
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
@@ -85,14 +90,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
-  }
-  public static void XboxControls(XboxController xboxController){
-    // X (move backwards)
-    new JoystickButton(xboxController, Button.kX.value)
-    .whileTrue(new c_armRotationBackwards(ArmRotation));
-    // B (move forwards)
- new JoystickButton(xboxController, Button.kB.value)
- .whileTrue(c_armRotation());
   }
 }
 

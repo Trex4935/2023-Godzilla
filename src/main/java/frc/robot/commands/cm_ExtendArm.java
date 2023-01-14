@@ -6,14 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmExtension;
 
 public class cm_ExtendArm extends CommandBase {
-  private final Arm m_arm;
+  private final ArmExtension m_arm;
   private final XboxController m_XboxController;
   
   /** Creates a new cm_ExtendArm. */
-  public cm_ExtendArm(Arm armSubsystem,XboxController XboxController) {
+  public cm_ExtendArm(ArmExtension armSubsystem,XboxController XboxController) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_arm = armSubsystem;
     m_XboxController = XboxController;

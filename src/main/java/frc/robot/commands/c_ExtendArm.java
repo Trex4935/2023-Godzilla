@@ -6,13 +6,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmExtension;
 
 
 
 public class c_ExtendArm extends CommandBase {
 
-  Arm arm;
+  ArmExtension arm;
   XboxController xboxController;
 
   /** Creates a new c_ExtendArm. */

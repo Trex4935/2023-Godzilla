@@ -16,12 +16,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import frc.robot.extensions.*;
 
-public class Arm extends SubsystemBase {
+public class ArmExtension extends SubsystemBase {
   CANSparkMax ArmRotation;
   private WPI_TalonFX ArmExtensionMotor;
 
   /** Creates a new ArmRotation. */
-  public Arm() {
+  public ArmExtension() {
     // Arm Rotation
     ArmRotation = SparkMax.createDefaultCANSparkMax(ArmConstants.armRotationCAN);
 

@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Drivetrain;
+import frc.robot.subsystems.Drivetrain;
 
 public class c_driveWithController extends CommandBase {
 

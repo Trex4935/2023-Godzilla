@@ -58,6 +58,13 @@ public final class Constants {
     public static final int armRotationCAN = 1;
     
   }
+
+  // class for Arm Rotation CAN IDs
+  public static class ArmExtensionConstants {
+    public static final int armExtensionCAN = 6;
+    
+  }
+
   public static class JoystickIDConstants {
     //differentiates the joysticks inputs by assigning different ID ports
     public static final int joystickLeft = 0;

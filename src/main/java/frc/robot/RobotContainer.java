@@ -33,7 +33,7 @@ public class RobotContainer {
   private final Drivetrain dt;
   private final ArmExtension arm;
   private final ArmRotation armRotation;
-  private final cm_driveWithJoysticks driveWtithJoysticks;
+  private final cm_driveWithJoysticks driveWithJoysticks;
   private final cm_ExtendArm extendArm;
 
   private final Joystick m_JoystickLeft = new Joystick(0);
@@ -54,7 +54,7 @@ public class RobotContainer {
     dt = new Drivetrain();
     arm = new ArmExtension();
 
-    driveWtithJoysticks = new cm_driveWithJoysticks(dt,m_JoystickLeft, m_JoystickRight);
+    driveWithJoysticks = new cm_driveWithJoysticks(dt,m_JoystickLeft, m_JoystickRight);
     extendArm = new cm_ExtendArm(arm, operator);
     armRotation = new ArmRotation();
 
@@ -65,6 +65,7 @@ public class RobotContainer {
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(dt);
     
+    Trigger xButton = new JoystickButton(operator, XboxController.Button.kX.value);
    
     // Configure the trigger bindings
     configureBindings();
@@ -74,16 +75,23 @@ public class RobotContainer {
   /** Use to define trigger->command mappings.*/
   private void configureBindings() {
     
-    // Makes controller driving the default command
-    dt.setDefaultCommand(driveWithController);
+  new Trigger(armRotation::).whileTrue(new armRotationForward(armRotation));
 
+    // Makes controller driving the default command
+    dt.setDefaultCommand(driveWithJoysticks);
+    arm.setDefaultCommand(extendArm);
+    
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
+
+
     // trigger when X is pressed the armRotationForward command
-    m_driverController.x().whileTrue(armRotationForward);
+
+    
+    operator.x().whileTrue(armRotationForward);
 
     // trigger when b is pressed the armRotationBackward command
-    m_driverController.b().whileTrue(armRotationBackward);
+    Trigger.b().whileTrue(armRotationBackward);
     
 
 

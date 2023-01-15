@@ -55,7 +55,7 @@ public final class Constants {
 
   // class for Arm Rotation CAN IDs
   public static class ArmRotationConstants {
-    public static final int armRotationCAN = 1;
+    public static final int armRotationCAN = 33;
     
   }
 

@@ -25,12 +25,12 @@ public class ArmRotation extends SubsystemBase {
   }
 
   public void moveArmForward() {
-    ArmRotation.set(0.5);
+    ArmRotation.set(1);
   }
 
   // sets the speed that the arm moves backward
   public void moveArmBackward() {
-    ArmRotation.set(-0.5);
+    ArmRotation.set(-1);
   }
 
   /*

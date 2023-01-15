@@ -4,84 +4,80 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.cm_ExtendArm;
+// Subsystems
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.ArmRotation;
+
+// Commands
 import frc.robot.commands.cm_armRotationForward;
 import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
-import frc.robot.subsystems.ArmExtension;
-import frc.robot.subsystems.Drivetrain;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.ArmRotation;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
+// Other
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
+// Robot Base Class
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final Drivetrain dt;
-  private final ArmExtension arm;
-  private final ArmRotation armRotation;
+
+  // Declare Subsystems
+  private final Drivetrain drivetrain;
+  private final ArmExtension armextension;
+  private final ArmRotation armrotation;
+
+  // Declare Commands
   private final cm_driveWithJoysticks driveWithJoysticks;
   // private final cm_ExtendArm extendArm;
-
-
-  private final Joystick m_JoystickLeft = new Joystick(0);
-  private final Joystick m_JoystickRight = new Joystick(1);
-
-  private CommandXboxController operator = new CommandXboxController(2);
-
-  // Declare the arm rotation command objects
   private final cm_armRotationForward armRotationForward;
   private final cm_armRotationBackward armRotationBackward;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  // Declare Other
+  private final Joystick m_JoystickLeft = new Joystick(0);
+  private final Joystick m_JoystickRight = new Joystick(1);
+  private CommandXboxController operator = new CommandXboxController(2);
+
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
-    
-    // Create subsystem objects
-    dt = new Drivetrain();
-    arm = new ArmExtension();
-    armRotation = new ArmRotation();
 
-    driveWithJoysticks = new cm_driveWithJoysticks(dt,m_JoystickLeft, m_JoystickRight);
+    // Create Subsystem objects
+    drivetrain = new Drivetrain();
+    armextension = new ArmExtension();
+    armrotation = new ArmRotation();
 
-    // extendArm = new cm_ExtendArm(arm, operator);
+    // Create Command objects
+    // extendArm = new cm_ExtendArm(armextension, 0.0);
+    armRotationForward = new cm_armRotationForward(armrotation);
+    armRotationBackward = new cm_armRotationBackward(armrotation);
+    driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
 
-    // Create the arm rotation command objects
-    armRotationForward = new cm_armRotationForward(armRotation);
-    armRotationBackward = new cm_armRotationBackward(armRotation);
-    
     // Put the drive train sendable values onto the networktables / dashboard
-    SmartDashboard.putData(dt);
-   
+    SmartDashboard.putData(drivetrain);
+
     // Configure the trigger bindings
     configureBindings();
-    
+
   }
 
-  /** Use to define trigger->command mappings.*/
+  /** Use to define trigger->command mappings. */
   private void configureBindings() {
 
     // Makes controller driving the default command
-    dt.setDefaultCommand(driveWithJoysticks);
+    drivetrain.setDefaultCommand(driveWithJoysticks);
 
-    // arm.setDefaultCommand(extendArm);
+    // Creates command to move the arm in and out
+    new RunCommand(() -> armextension.extendArm(operator.getRightX()));
+
     
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     operator.b().whileTrue(armRotationForward);
-    operator.x().whileTrue(armRotationBackward);  
-
+    operator.x().whileTrue(armRotationBackward);
+    
   }
 
   /**
@@ -95,5 +91,3 @@ public class RobotContainer {
   }
 
 }
-
-  

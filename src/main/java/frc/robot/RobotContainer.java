@@ -27,7 +27,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain dt;
   private final ArmExtension arm;
-  private final cm_driveWithJoysticks driveWtithJoysticks;
+  private final cm_driveWithJoysticks driveWithJoysticks;
   private final cm_ExtendArm extendArm;
 
   private final Joystick m_JoystickLeft = new Joystick(0);
@@ -42,7 +42,7 @@ public class RobotContainer {
     dt = new Drivetrain();
     arm = new ArmExtension();
 
-    driveWtithJoysticks = new cm_driveWithJoysticks(dt,m_JoystickLeft, m_JoystickRight);
+    driveWithJoysticks = new cm_driveWithJoysticks(dt,m_JoystickLeft, m_JoystickRight);
     extendArm = new cm_ExtendArm(arm, operator);
 
     // Put the drive train sendable values onto the networktables / dashboard
@@ -56,7 +56,7 @@ public class RobotContainer {
   private void configureBindings() {
     
     // Makes controller driving the default command
-    dt.setDefaultCommand(driveWtithJoysticks);
+    dt.setDefaultCommand(driveWithJoysticks);
     arm.setDefaultCommand(extendArm);
   }
 

@@ -7,13 +7,10 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.c_armRotation;
-import frc.robot.commands.c_armRotationBackwards;
+import frc.robot.commands.cm_armRotationForward;
+import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.c_driveWithController;
 import frc.robot.subsystems.ExampleSubsystem;
-
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,11 +30,13 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain dt;
   private final ArmRotation armRotation;
-
-
   private final c_driveWithController driveWithController;
 
   private final XboxController xboxController = new XboxController(0);
+
+  // Declare the arm rotation command objects
+  private final cm_armRotationForward armRotationForward;
+  private final cm_armRotationBackward armRotationBackward;
 
   
   
@@ -51,6 +50,10 @@ public class RobotContainer {
     
     dt = new Drivetrain();
     armRotation = new ArmRotation();
+
+    // Create the arm rotation command objects
+    armRotationForward = new cm_armRotationForward(armRotation);
+    armRotationBackward = new cm_armRotationBackward(armRotation);
     
     driveWithController = new c_driveWithController(dt,xboxController);
     
@@ -80,17 +83,17 @@ public class RobotContainer {
     // Makes controller driving the default command
     dt.setDefaultCommand(driveWithController);
 
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
+    // trigger when X is pressed the armRotationForward command
+    m_driverController.x().whileTrue(armRotationForward);
+
+    // trigger when b is pressed the armRotationBackward command
+    m_driverController.b().whileTrue(armRotationBackward);
+    
 
 
-
-     /** Arm Rotation Controls */
-    // X (move backwards)
-    new JoystickButton(xboxController, Button.kX.value)
-    .whileTrue(new c_armRotationBackwards(armRotation));
-    // B (move forwards)
-    new JoystickButton(xboxController, Button.kB.value)
-    .whileTrue(new c_armRotation(armRotation));
+  
   }
 
   /**

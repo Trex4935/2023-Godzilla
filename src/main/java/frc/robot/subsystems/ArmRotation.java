@@ -18,27 +18,32 @@ public class ArmRotation extends SubsystemBase {
 
   /** Creates a new ArmRotation. */
   public ArmRotation() {
-// init motor
+    // init motor
     ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
-    
-    
-// sets the speed that the arm moves forward ()
+
+    // sets the speed that the arm moves forward ()
   }
-  public void moveArmForward(){
+
+  public void moveArmForward() {
     ArmRotation.set(0.5);
   }
+
   // sets the speed that the arm moves backward
-  public void moveArmBackward(){
+  public void moveArmBackward() {
     ArmRotation.set(-0.5);
   }
-/*  Rotates the arm by using buttons
-public void RotateArmWithButtons(XboxController xboxController){
- 
-} */
-//  stops the ArmRotation motor
-public void stopArmRotation(){
-  ArmRotation.stopMotor();
-} 
+
+  /*
+   * Rotates the arm by using buttons
+   * public void RotateArmWithButtons(XboxController xboxController){
+   * 
+   * }
+   */
+  // stops the ArmRotation motor
+  public void stopArmRotation() {
+    ArmRotation.stopMotor();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

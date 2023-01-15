@@ -33,12 +33,11 @@ public final class Constants {
 
   /** Class for the Limelight constants. */
   public static class LimeLightConstants {
-  public static final double h1 = 1;
-  public static final double h2 = 1;
-  public static final double angle1 = 1;
-  
-}
+    public static final double h1 = 1;
+    public static final double h2 = 1;
+    public static final double angle1 = 1;
 
+  }
 
   /** Class for Xbox Controller ID constants. */
   public static class AxisIDConstants {
@@ -59,5 +58,14 @@ public final class Constants {
     public static final int armRotationCAN = 1;
     
   }
+  public static class JoystickIDConstants {
+    //differentiates the joysticks inputs by assigning different ID ports
+    public static final int joystickLeft = 0;
+    public static final int joystickRight = 1;
+  }
 
+  //Both joysticks use the same Axis value
+  public static class JoystickAxis {
+    public static final int joystickAxis = 1;
+  }
 }

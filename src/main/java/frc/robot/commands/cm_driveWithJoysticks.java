@@ -4,39 +4,47 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Drivetrain;
+import frc.robot.Constants.JoystickIDConstants;
+import frc.robot.subsystems.Drivetrain;
 
-public class c_driveWithController extends CommandBase {
-
+public class cm_driveWithJoysticks extends CommandBase {
   private final Drivetrain m_Drivetrain;
-  private final XboxController m_XboxController;
+  private final Joystick m_joystickLeft;
+  private final Joystick m_joystickRight;
+  
 
-  /** Creates a new c_driveWithJoystick. */
-  public c_driveWithController(Drivetrain dt, XboxController xboxController) {
+
+  /** Creates a new cm_driveWithJoysticks. */
+  public cm_driveWithJoysticks(Drivetrain dt, Joystick joystickLeft, Joystick joystickRight) {
     m_Drivetrain = dt;
-    m_XboxController = xboxController;
+    m_joystickLeft = joystickLeft;
+    m_joystickRight = joystickRight;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Drivetrain.driveWithController(m_XboxController);
+    //This command moves robot by calling the joysticks method and taking in the inputs of both joysticks 
+  m_Drivetrain.driveWithJoysticks(m_joystickLeft, m_joystickRight);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    //Stops motor when not moving Joysticks
     m_Drivetrain.stopMotors();
   }
-
+ 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

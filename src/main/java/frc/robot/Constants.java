@@ -50,14 +50,21 @@ public final class Constants {
   public static class MovementConstraints {
     public static final double dtmaxaccel = 1;
     public static final double dtmaxspeed = 0.75;
+    
   }
 
-  /** Class for Arm Rotation CAN IDs. */
-  public static class ArmConstants {
-    public static final int armRotationCAN = 5;
+  // class for Arm Rotation CAN IDs
+  public static class ArmRotationConstants {
+    public static final int armRotationCAN = 33;
+    
+  }
+
+  // class for Arm Rotation CAN IDs
+  public static class ArmExtensionConstants {
     public static final int armExtensionCAN = 6;
-
+    
   }
+
   public static class JoystickIDConstants {
     //differentiates the joysticks inputs by assigning different ID ports
     public static final int joystickLeft = 0;

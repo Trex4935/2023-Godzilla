@@ -36,6 +36,7 @@ public class RobotContainer {
   private final cm_driveWithJoysticks driveWithJoysticks;
   // private final cm_ExtendArm extendArm;
 
+
   private final Joystick m_JoystickLeft = new Joystick(0);
   private final Joystick m_JoystickRight = new Joystick(1);
 
@@ -54,6 +55,7 @@ public class RobotContainer {
     armRotation = new ArmRotation();
 
     driveWithJoysticks = new cm_driveWithJoysticks(dt,m_JoystickLeft, m_JoystickRight);
+
     // extendArm = new cm_ExtendArm(arm, operator);
 
     // Create the arm rotation command objects
@@ -73,11 +75,13 @@ public class RobotContainer {
 
     // Makes controller driving the default command
     dt.setDefaultCommand(driveWithJoysticks);
+
     // arm.setDefaultCommand(extendArm);
     
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     operator.b().whileTrue(armRotationForward);
     operator.x().whileTrue(armRotationBackward);  
+
   }
 
   /**

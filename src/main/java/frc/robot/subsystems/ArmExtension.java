@@ -6,33 +6,21 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import frc.robot.extensions.*;
 
 public class ArmExtension extends SubsystemBase {
-  CANSparkMax ArmRotation;
   private WPI_TalonFX ArmExtensionMotor;
 
-  /** Creates a new ArmRotation. */
+  /** Creates a new motor. */
   public ArmExtension() {
-    // Arm Rotation
-    ArmRotation = SparkMax.createDefaultCANSparkMax(ArmConstants.armRotationCAN);
-
     // Arm Extension
     ArmExtensionMotor = Falcon.createDefaultFalcon(ArmConstants.armExtensionCAN);
     /// Need Encoder based soft limits implemented
-  }
-
-  // note for me: gear ratio is 200:1; incorporate later
-  public void moveArm() {
-
   }
 
   // Stop the Extension motor

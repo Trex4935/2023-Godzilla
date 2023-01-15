@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -33,6 +34,9 @@ public class Drivetrain extends SubsystemBase {
 
     XboxController xboxController;
 
+    // Max speed value for the motors ... default comes from constants
+    Double m_MaxSpeed = MovementConstraints.dtmaxspeed;
+
     public Drivetrain() {
         // Creates new motor objects and configures the talons in a separate method
         FLMotor = Talon.createDefaultTalon(WheelIDConstants.FLMotorID);
@@ -47,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
 
         diffdrive = new DifferentialDrive(leftMotors, rightMotors);
 
-        diffdrive.setMaxOutput(MovementConstraints.dtmaxspeed);
+        diffdrive.setMaxOutput(m_MaxSpeed);
 
     }
 
@@ -65,4 +69,21 @@ public class Drivetrain extends SubsystemBase {
         rightMotors.set(0);
     }
 
+    // Sets the max speed value (sendable)
+    public void setMaxSpeed(double MaxSpeed) {
+        m_MaxSpeed = MaxSpeed;
+    }
+
+    // Get the Max speed value (sendable)
+    public double getMaxSpeed() {
+        return m_MaxSpeed;
+    }
+
+    // Sendable override
+    // Anything put here will be added to the network tables and thus can be added
+    // to the dashboard / consumed by the LED controller
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
+    }
 }

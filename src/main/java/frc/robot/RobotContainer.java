@@ -7,11 +7,12 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.c_driveWithController;
 import frc.robot.commands.cm_ExtendArm;
+import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -28,10 +29,13 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain dt;
   private final ArmExtension arm;
-  private final c_driveWithController driveWithController;
+  private final cm_driveWithJoysticks driveWtithJoysticks;
   private final cm_ExtendArm extendArm;
 
-  private final XboxController xboxController = new XboxController(0);
+  private final Joystick m_JoystickLeft = new Joystick(0);
+  private final Joystick m_JoystickRight = new Joystick(1);
+
+  private final XboxController operator = new XboxController(2);
   
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -44,8 +48,8 @@ public class RobotContainer {
     dt = new Drivetrain();
     arm = new ArmExtension();
 
-    driveWithController = new c_driveWithController(dt,xboxController);
-    extendArm = new cm_ExtendArm(arm, xboxController);
+    driveWtithJoysticks = new cm_driveWithJoysticks(dt,m_JoystickLeft, m_JoystickRight);
+    extendArm = new cm_ExtendArm(arm, operator);
 
     // Configure the trigger bindings
     configureBindings();
@@ -69,7 +73,7 @@ public class RobotContainer {
     // cancelling on release.
 
     // Makes controller driving the default command
-    dt.setDefaultCommand(driveWithController);
+    dt.setDefaultCommand(driveWtithJoysticks);
     arm.setDefaultCommand(extendArm);
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }

@@ -14,6 +14,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -50,6 +51,9 @@ public class RobotContainer {
 
     driveWtithJoysticks = new cm_driveWithJoysticks(dt,m_JoystickLeft, m_JoystickRight);
     extendArm = new cm_ExtendArm(arm, operator);
+
+    // Put the drive train sendable values onto the networktables / dashboard
+    SmartDashboard.putData(dt);
 
     // Configure the trigger bindings
     configureBindings();

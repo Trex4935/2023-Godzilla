@@ -1,0 +1,52 @@
+
+----------------------------------------------------------
+If you need help with gyro:
+----------------------------------------------------------
+
+Imports:
+
+import com.kauailabs.navx.frc.AHRS;
+
+----------------------------------------------------------
+
+Gyro Objects:
+
+public static AHRS ahrs; (AHRS is a system of sensors, which includes the three axes.)
+
+----------------------------------------------------------
+
+Gyro Attributes
+
+             Z/Yaw | (Top)
+                   |
+                   |
+X = Roll           |
+Y = Pitch          |
+Z = Yaw            |______________ Y/Pitch (Side)
+                  /
+                 /
+                /
+            X/Roll
+          (Front) 
+----------------------------------------------------------
+
+Gyro Functions
+
+Reset:
+public void resetGyro() {
+    ahrs.reset();
+}
+
+Get X Angle:
+public Float getXAngle() {
+    return ahrs.getRoll();
+}
+
+Get Y Angle:
+public Float getYAngle() {
+    return ahrs.getPitch();
+}
+
+public Float getZAngle() {
+    return ahrs.getYaw();
+}

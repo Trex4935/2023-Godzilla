@@ -6,6 +6,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+//Gyro Imports
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,6 +24,7 @@ import frc.robot.extensions.Talon;
 /** Add your docs here. */
 public class Drivetrain extends SubsystemBase {
 
+    // Declaring Motors
     WPI_TalonSRX FLMotor;
     WPI_TalonSRX FRMotor;
     WPI_TalonSRX MLMotor;
@@ -27,12 +32,16 @@ public class Drivetrain extends SubsystemBase {
     WPI_TalonSRX BLMotor;
     WPI_TalonSRX BRMotor;
 
+    //Declaring Motor Groups
     MotorControllerGroup leftMotors;
     MotorControllerGroup rightMotors;
 
     DifferentialDrive diffdrive;
 
     XboxController xboxController;
+
+    // Declaring Gyro Objects
+    public static AHRS ahrs;
 
     // Max speed value for the motors ... default comes from constants
     Double m_MaxSpeed = MovementConstraints.dtmaxspeed;
@@ -53,6 +62,28 @@ public class Drivetrain extends SubsystemBase {
 
         diffdrive.setMaxOutput(m_MaxSpeed);
 
+        // Creating gyro object
+        ahrs = new AHRS(SPI.Port.kMXP);
+    }
+
+    // Resets the gyro
+    public void resetGyro() {
+        ahrs.reset();
+    }
+
+    // Gets Roll(X) angle from Gyro
+    public Float getXAngle() {
+        return ahrs.getRoll();
+    }
+    
+    // Gets Pitch(Y) angle from Gyro
+    public Float getYAngle() {
+        return ahrs.getPitch();
+    }
+
+    // Gets Yaw(Z) angle from Gyro
+    public Float getZAngle() {
+        return ahrs.getYaw();
     }
 
     public void driveWithController(double leftSpeed, double rightSpeed) {

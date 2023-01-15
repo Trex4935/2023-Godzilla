@@ -32,10 +32,14 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain dt;
-  private final ArmRotation ar;
+  private final ArmRotation armRotation;
+
+
   private final c_driveWithController driveWithController;
 
   private final XboxController xboxController = new XboxController(0);
+
+  
   
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -46,12 +50,14 @@ public class RobotContainer {
   public RobotContainer() {
     
     dt = new Drivetrain();
-    ar = new ArmRotation();
-
+    armRotation = new ArmRotation();
+    
     driveWithController = new c_driveWithController(dt,xboxController);
-
+    
+   
     // Configure the trigger bindings
     configureBindings();
+    
   }
 
   /**
@@ -75,6 +81,16 @@ public class RobotContainer {
     dt.setDefaultCommand(driveWithController);
 
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
+
+
+     /** Arm Rotation Controls */
+    // X (move backwards)
+    new JoystickButton(xboxController, Button.kX.value)
+    .whileTrue(new c_armRotationBackwards(armRotation));
+    // B (move forwards)
+    new JoystickButton(xboxController, Button.kB.value)
+    .whileTrue(new c_armRotation(armRotation));
   }
 
   /**
@@ -86,14 +102,7 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
   }
-  public static void XboxControls(XboxController xboxController){
-    // X (move backwards)
-    new JoystickButton(xboxController, Button.kX.value)
-    .whileTrue(new c_armRotationBackwards(ArmRotation));
-    // B (move forwards)
- new JoystickButton(xboxController, Button.kB.value)
- .whileTrue(c_armRotation());
-  }
+
 }
 
   

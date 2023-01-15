@@ -50,21 +50,14 @@ public final class Constants {
   /** Class for the speed and acceleration limits of the robot. */
   public static class MovementConstraints {
     public static final double dtmaxaccel = 1;
-    public static final double dtmaxspeed = 1;
+    public static final double dtmaxspeed = 0.75;
     
   }
 
   // class for Arm Rotation CAN IDs
   public static class ArmRotationConstants {
-    public static final int armRotationCAN = 5;
+    public static final int armRotationCAN = 1;
     
   }
-
-/**Class for the speed and acceleration limits of the robot.*/
-public static class MovementConstraints {
-public static final double dtmaxaccel = 1;
-public static final double dtmaxspeed = 0.75;
-}
-
 
 }

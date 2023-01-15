@@ -34,29 +34,27 @@ public class RobotContainer {
   private final ArmExtension arm;
   private final ArmRotation armRotation;
   private final cm_driveWithJoysticks driveWithJoysticks;
-  private final cm_ExtendArm extendArm;
+  // private final cm_ExtendArm extendArm;
 
   private final Joystick m_JoystickLeft = new Joystick(0);
   private final Joystick m_JoystickRight = new Joystick(1);
 
-  private final XboxController operator = new XboxController(2);
+  private CommandXboxController operator = new CommandXboxController(2);
 
   // Declare the arm rotation command objects
   private final cm_armRotationForward armRotationForward;
   private final cm_armRotationBackward armRotationBackward;
 
-  
-  
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     
+    // Create subsystem objects
     dt = new Drivetrain();
     arm = new ArmExtension();
+    armRotation = new ArmRotation();
 
     driveWithJoysticks = new cm_driveWithJoysticks(dt,m_JoystickLeft, m_JoystickRight);
-    extendArm = new cm_ExtendArm(arm, operator);
-    armRotation = new ArmRotation();
+    // extendArm = new cm_ExtendArm(arm, operator);
 
     // Create the arm rotation command objects
     armRotationForward = new cm_armRotationForward(armRotation);
@@ -64,8 +62,6 @@ public class RobotContainer {
     
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(dt);
-    
-    Trigger xButton = new JoystickButton(operator, XboxController.Button.kX.value);
    
     // Configure the trigger bindings
     configureBindings();
@@ -74,28 +70,14 @@ public class RobotContainer {
 
   /** Use to define trigger->command mappings.*/
   private void configureBindings() {
-    
-  new Trigger(armRotation::).whileTrue(new armRotationForward(armRotation));
 
     // Makes controller driving the default command
     dt.setDefaultCommand(driveWithJoysticks);
-    arm.setDefaultCommand(extendArm);
+    // arm.setDefaultCommand(extendArm);
     
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
-
-
-    // trigger when X is pressed the armRotationForward command
-
-    
-    operator.x().whileTrue(armRotationForward);
-
-    // trigger when b is pressed the armRotationBackward command
-    Trigger.b().whileTrue(armRotationBackward);
-    
-
-
-  
+    operator.b().whileTrue(armRotationForward);
+    operator.x().whileTrue(armRotationBackward);  
   }
 
   /**

@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 // Logging Imports
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.util.datalog.DataLog;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to

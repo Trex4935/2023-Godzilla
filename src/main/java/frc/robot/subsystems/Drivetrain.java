@@ -66,24 +66,29 @@ public class Drivetrain extends SubsystemBase {
         ahrs = new AHRS(SPI.Port.kMXP);
     }
 
-    // Resets the gyro
+    /** Resets the gyro */
     public void resetGyro() {
         ahrs.reset();
     }
 
-    // Gets Roll(X) angle from Gyro
+    /** Gets Roll(X) angle from Gyro */
     public Float getXAngle() {
         return ahrs.getRoll();
     }
     
-    // Gets Pitch(Y) angle from Gyro
+    /**  Gets Pitch(Y) angle from Gyro */
     public Float getYAngle() {
         return ahrs.getPitch();
     }
 
-    // Gets Yaw(Z) angle from Gyro
+    /** Gets Yaw(Z) angle from Gyro */
     public Float getZAngle() {
         return ahrs.getYaw();
+    }
+
+    /** Creates an array of the roll, pitch, and yaw values */
+    public float[] PrincipalAxisValues() {
+        return new float[] {getXAngle(), getYAngle(), getZAngle()};
     }
 
     public void driveWithController(double leftSpeed, double rightSpeed) {
@@ -100,12 +105,12 @@ public class Drivetrain extends SubsystemBase {
         rightMotors.set(0);
     }
 
-    // Sets the max speed value (sendable)
+    /** Sets the max speed value (sendable) */ 
     public void setMaxSpeed(double MaxSpeed) {
         m_MaxSpeed = MaxSpeed;
     }
 
-    // Get the Max speed value (sendable)
+    /** Get the Max speed value (sendable) */ 
     public double getMaxSpeed() {
         return m_MaxSpeed;
     }
@@ -116,5 +121,6 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
+        builder.addFloatArrayProperty("Roll, Pitch, and Yaw Values", this::PrincipalAxisValues, null);
     }
 }

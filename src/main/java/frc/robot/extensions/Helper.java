@@ -4,8 +4,6 @@
 
 package frc.robot.extensions;
 
-import frc.robot.Constants;
-
 /** Add your docs here. */
 public class Helper {
 

@@ -10,24 +10,24 @@ import frc.robot.Constants;
 import frc.robot.Constants.ArmRotationConstants;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import frc.robot.extensions.*;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
 
 
 public class ArmRotation extends SubsystemBase {
   CANSparkMax ArmRotation;
   XboxController xboxController;
 
-  //init a DigitalInput on channels 0 and 1; top is forward and bottom is backward
-  DigitalInput forwardlimitSwitch = new DigitalInput(0);
-  DigitalInput backwardlimitSwitch = new DigitalInput(1);
+
+  DigitalInput forwardlimitSwitch;
+  DigitalInput backwardlimitSwitch;
 
   /** Creates a new ArmRotation. */
   public ArmRotation() {
     // init motor
     ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
+ forwardlimitSwitch = new DigitalInput(0);
+ backwardlimitSwitch = new DigitalInput(1);
        // sets the speed that the arm moves forward (now declares the limit switch)
   }
 

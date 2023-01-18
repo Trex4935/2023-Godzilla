@@ -11,22 +11,19 @@ import frc.robot.subsystems.Drivetrain;
 public class ca_ForwardHalfSpeed extends CommandBase {
 
   private final Drivetrain drivetrain;
-
-  Timer timer = new Timer();
+  private Timer timer = new Timer();
 
   /** Creates a new ca_ForwardHalfSpeed. */
   public ca_ForwardHalfSpeed(Drivetrain dt) {
-
     drivetrain = dt;
-  
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(drivetrain);
 
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
     timer.start();
   }
 

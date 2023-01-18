@@ -75,4 +75,8 @@ public final class Constants {
   public static class JoystickAxis {
     public static final int joystickAxis = 1;
   }
+  public static class MotorLimits {
+  public static final int ArmRotationConstants = 0;
+  }
 }
+

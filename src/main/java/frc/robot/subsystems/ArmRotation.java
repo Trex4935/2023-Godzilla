@@ -10,6 +10,7 @@ import frc.robot.Constants.ArmRotationConstants;
 import com.revrobotics.CANSparkMax;
 import frc.robot.extensions.*;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.XboxController;
 
 
 public class ArmRotation extends SubsystemBase {

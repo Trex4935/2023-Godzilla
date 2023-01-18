@@ -91,6 +91,11 @@ public class Drivetrain extends SubsystemBase {
         return new float[] {getXAngle(), getYAngle(), getZAngle()};
     }
 
+    public void HalfSpeed(){
+        leftMotors.set(0.5);
+        rightMotors.set(0.5);
+    }
+
     public void driveWithController(double leftSpeed, double rightSpeed) {
         diffdrive.tankDrive(leftSpeed, rightSpeed);
     }

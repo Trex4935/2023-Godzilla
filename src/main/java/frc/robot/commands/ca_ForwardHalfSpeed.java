@@ -12,6 +12,8 @@ public class ca_ForwardHalfSpeed extends CommandBase {
 
   private final Drivetrain drivetrain;
 
+  Timer timer = new Timer();
+
   /** Creates a new ca_ForwardHalfSpeed. */
   public ca_ForwardHalfSpeed(Drivetrain dt) {
 
@@ -23,7 +25,10 @@ public class ca_ForwardHalfSpeed extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer.reset();
+    timer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -40,9 +45,8 @@ public class ca_ForwardHalfSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    Timer timer = new Timer();
     if (timer.get() > 15) {
-    return true;}
+      return true;}
     else {
       return false;
     }

@@ -11,6 +11,7 @@ import frc.robot.subsystems.ArmRotation;
 
 // Commands
 import frc.robot.commands.cm_armRotationForward;
+import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
 
@@ -34,6 +35,7 @@ public class RobotContainer {
   // private final cm_ExtendArm extendArm;
   private final cm_armRotationForward armRotationForward;
   private final cm_armRotationBackward armRotationBackward;
+  private final ca_ForwardHalfSpeed forwardHalfSpeed;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(0);
@@ -55,6 +57,7 @@ public class RobotContainer {
     armRotationForward = new cm_armRotationForward(armrotation);
     armRotationBackward = new cm_armRotationBackward(armrotation);
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
+    forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
 
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(drivetrain);
@@ -87,7 +90,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // A command will be run in autonomous
-    return null;
+    return forwardHalfSpeed;
   }
 
 }

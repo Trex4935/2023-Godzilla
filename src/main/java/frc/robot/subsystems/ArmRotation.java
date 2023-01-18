@@ -21,39 +21,34 @@ public class ArmRotation extends SubsystemBase {
   XboxController xboxController;
 
   //init a DigitalInput on channels 0 and 1; top is forward and bottom is backward
-  DigitalInput toplimitSwitch = new DigitalInput(0);
-  DigitalInput bottomlimitSwitch = new DigitalInput(1);
+  DigitalInput forwardlimitSwitch = new DigitalInput(0);
+  DigitalInput backwardlimitSwitch = new DigitalInput(1);
 
   /** Creates a new ArmRotation. */
   public ArmRotation() {
     // init motor
     ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
-   
-  
-
-    // sets the speed that the arm moves forward (now declares the limit switch)
+       // sets the speed that the arm moves forward (now declares the limit switch)
   }
 
   public void moveArmForward() {
-    if (toplimitSwitch.get() == true && xboxController.getRawAxis(4) >= 0) {
+    if (forwardlimitSwitch.get()) {
       // if the toplimitSwitch is true, stop the motors
        ArmRotation.stopMotor();
     } else {
         // if the toplimitSwitch is false, then allow motor to keep moving
-        ArmRotation.set(1);
+        ArmRotation.set(0.25);
       }
-    }
-    
-  
+    }  
 
   // sets the speed that the arm moves backward (now declares the limit switch)
   public void moveArmBackward() {
-    if ( bottomlimitSwitch.get() == true && xboxController.getRawAxis(4) <= 0) {
+    if ( backwardlimitSwitch.get()) {
       // if the bottomlimitSwitch is true,stop the motor 
       ArmRotation.stopMotor();
     } else {
         //if the bottomlimitSwitch is false, then allow the motor to keep moving
-        ArmRotation.set(1);
+        ArmRotation.set(0.25);
       }
     }
   

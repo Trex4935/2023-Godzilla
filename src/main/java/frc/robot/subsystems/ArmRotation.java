@@ -26,28 +26,28 @@ public class ArmRotation extends SubsystemBase {
   public ArmRotation() {
     // init motor
     ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
- forwardlimitSwitch = new DigitalInput(0);
- backwardlimitSwitch = new DigitalInput(1);
-       // sets the speed that the arm moves forward (now declares the limit switch)
+    forwardlimitSwitch = new DigitalInput(0);
+    backwardlimitSwitch = new DigitalInput(1);
+       
   }
-
+ // sets the speed that the arm moves forward
   public void moveArmForward() {
     if (forwardlimitSwitch.get()) {
-      // if the toplimitSwitch is true, stop the motors
+      // if the forwardlimitSwitch is true, stop the motors
        ArmRotation.stopMotor();
     } else {
-        // if the toplimitSwitch is false, then allow motor to keep moving
+        // if the forwardlimitSwitch is false, then allow motor to keep moving
         ArmRotation.set(0.25);
       }
     }  
 
-  // sets the speed that the arm moves backward (now declares the limit switch)
+  // sets the speed that the arm moves backward
   public void moveArmBackward() {
     if ( backwardlimitSwitch.get()) {
-      // if the bottomlimitSwitch is true,stop the motor 
+      // if the backwardimitSwitch is true,stop the motor 
       ArmRotation.stopMotor();
     } else {
-        //if the bottomlimitSwitch is false, then allow the motor to keep moving
+        //if the backwardlimitSwitch is false, then allow the motor to keep moving
         ArmRotation.set(0.25);
       }
     }

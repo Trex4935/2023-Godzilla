@@ -33,46 +33,38 @@ public class ArmRotation extends SubsystemBase {
   }
 
   public void moveArmForward() {
-    ArmRotation.set(1);
+    if (toplimitSwitch.get() == true) {
+      // if the toplimitSwitch is true, stop the motors
+      if (toplimitSwitch.get()){
+       ArmRotation.set(.01);
+      }else{
+        // if the toplimitSwitch is false, then allow motor to keep moving
+        ArmRotation.set(1);
+      }
+    }
+    
   }
 
   // sets the speed that the arm moves backward
   public void moveArmBackward() {
     ArmRotation.set(-1);
+    if ( bottomlimitSwitch.get() == true) {
+      // if the bottomlimitSwitch is true,stop the motor 
+      if(bottomlimitSwitch.get()){
+        ArmRotation.set(.01);
+      
+      }else{
+        //if the bottomlimitSwitch is false, then allow the motor to keep moving
+        ArmRotation.set(1);
+      }
+    }
   }
 
   // stops the ArmRotation motor
   public void stopArmRotation() {
     ArmRotation.stopMotor();
   }
-  public void MotorAngleForwards(double angle){
-    if (angle > 270) {
-      // if the angle is greater than 270, stop the motor(dont set to 0, then what other value?)
-      if (toplimitSwitch.get()){
-       ArmRotation.set(.01);
-      }else{
-        // if the angle is below that, then allow motor to keep moving
-        ArmRotation.set(1);
-      }
-    
-    }
-    if (angle < 0) {
-      // if the angle is less than 0, slow down/stop the motor (decide what value to use)
-      if(bottomlimitSwitch.get()){
-        ArmRotation.set(.01);
-      
-      }else{
-        //if the angle is above that, then allow the motor to keep moving
-        ArmRotation.set(1);
-      }
-    }
-        
-      }
-    
-    
-  
-  
- 
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

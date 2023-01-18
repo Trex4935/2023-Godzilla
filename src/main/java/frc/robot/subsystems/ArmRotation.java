@@ -9,33 +9,48 @@ import frc.robot.Constants.ArmRotationConstants;
 
 import com.revrobotics.CANSparkMax;
 import frc.robot.extensions.*;
+import edu.wpi.first.wpilibj.DigitalInput;
+
 
 public class ArmRotation extends SubsystemBase {
   CANSparkMax ArmRotation;
+  XboxController xboxController;
+
+
+  DigitalInput forwardLimitSwitch;
+  DigitalInput backwardLimitSwitch;
 
   /** Creates a new ArmRotation. */
   public ArmRotation() {
     // init motor
     ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
-
-    // sets the speed that the arm moves forward ()
+    forwardLimitSwitch = new DigitalInput(0);
+    backwardLimitSwitch = new DigitalInput(1);
+       
   }
-
+ // sets the speed that the arm moves forward
   public void moveArmForward() {
-    ArmRotation.set(1);
-  }
+    if (forwardLimitSwitch.get()) {
+      // if the forwardLimitSwitch is true, stop the motors
+       ArmRotation.stopMotor();
+    } else {
+        // if the forwardLimitSwitch is false, then allow motor to keep moving
+        ArmRotation.set(0.25);
+      }
+    }  
 
   // sets the speed that the arm moves backward
   public void moveArmBackward() {
-    ArmRotation.set(-1);
-  }
+    if ( backwardLimitSwitch.get()) {
+      // if the backwardimitSwitch is true,stop the motor 
+      ArmRotation.stopMotor();
+    } else {
+        //if the backwardLimitSwitch is false, then allow the motor to keep moving
+        ArmRotation.set(0.25);
+      }
+    }
+  
 
-  /*
-   * Rotates the arm by using buttons
-   * public void RotateArmWithButtons(XboxController xboxController){
-   * 
-   * }
-   */
   // stops the ArmRotation motor
   public void stopArmRotation() {
     ArmRotation.stopMotor();

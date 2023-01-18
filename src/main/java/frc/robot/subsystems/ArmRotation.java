@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ArmRotationConstants;
 
 import com.revrobotics.CANSparkMax;
@@ -19,35 +18,35 @@ public class ArmRotation extends SubsystemBase {
   XboxController xboxController;
 
 
-  DigitalInput forwardlimitSwitch;
-  DigitalInput backwardlimitSwitch;
+  DigitalInput forwardLimitSwitch;
+  DigitalInput backwardLimitSwitch;
 
   /** Creates a new ArmRotation. */
   public ArmRotation() {
     // init motor
     ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
-    forwardlimitSwitch = new DigitalInput(0);
-    backwardlimitSwitch = new DigitalInput(1);
+    forwardLimitSwitch = new DigitalInput(0);
+    backwardLimitSwitch = new DigitalInput(1);
        
   }
  // sets the speed that the arm moves forward
   public void moveArmForward() {
-    if (forwardlimitSwitch.get()) {
-      // if the forwardlimitSwitch is true, stop the motors
+    if (forwardLimitSwitch.get()) {
+      // if the forwardLimitSwitch is true, stop the motors
        ArmRotation.stopMotor();
     } else {
-        // if the forwardlimitSwitch is false, then allow motor to keep moving
+        // if the forwardLimitSwitch is false, then allow motor to keep moving
         ArmRotation.set(0.25);
       }
     }  
 
   // sets the speed that the arm moves backward
   public void moveArmBackward() {
-    if ( backwardlimitSwitch.get()) {
+    if ( backwardLimitSwitch.get()) {
       // if the backwardimitSwitch is true,stop the motor 
       ArmRotation.stopMotor();
     } else {
-        //if the backwardlimitSwitch is false, then allow the motor to keep moving
+        //if the backwardLimitSwitch is false, then allow the motor to keep moving
         ArmRotation.set(0.25);
       }
     }

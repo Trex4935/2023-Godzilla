@@ -74,8 +74,9 @@ public class Drivetrain extends SubsystemBase {
         leftEncoder = new Encoder(4, 5);
         rightEncoder = new Encoder(6, 7);
 
-        leftEncoder.setDistancePerPulse((DrivetrainConstants.wheelDiameter * Math.PI)(inches) / DrivetrainConstants.encoderTicks);
-        rightEncoder.setDistancePerPulse((DrivetrainConstants.wheelDiameter * Math.PI)(inches) / DrivetrainConstants.encoderTicks);
+        // in Inches
+        leftEncoder.setDistancePerPulse((DrivetrainConstants.wheelDiameter * Math.PI) / DrivetrainConstants.encoderTicks);
+        rightEncoder.setDistancePerPulse((DrivetrainConstants.wheelDiameter * Math.PI) / DrivetrainConstants.encoderTicks);
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
@@ -135,27 +136,33 @@ public class Drivetrain extends SubsystemBase {
         return m_MaxSpeed;
     }
 
+    /** Resets both encoders to 0 */
     public void resetEncoders() {
         leftEncoder.reset();
         rightEncoder.reset();
     }
 
+    /** Gets the amount of ticks since reset/init based on setDistancePerPulse */
     public double getLeftEncoderTicks() {
         return leftEncoder.getDistance();
     }
 
+    /** Gets the amount of ticks since reset/init based on setDistancePerPulse */
     public double getRightEncoderTicks() {
         return rightEncoder.getDistance();
     }
 
+    /** Gets the speed based on setDistancePerPulse */
     public double getLeftEncoderSpeed() {
         return leftEncoder.getRate();
     }
 
+    /** Gets the speed based on setDistancePerPulse */
     public double getRightEncoderSpeed() {
         return rightEncoder.getRate();
     }
 
+    /** Converts inches to ticks for motors */
     public double inchesToTicks(double inches) {
         // 6 diameter wheel
         // 2048 ticks per motor rotation.

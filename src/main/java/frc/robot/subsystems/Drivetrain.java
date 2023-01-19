@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.JoystickAxis;
 import frc.robot.Constants.MovementConstraints;
 import frc.robot.Constants.WheelIDConstants;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -72,6 +73,9 @@ public class Drivetrain extends SubsystemBase {
 
         leftEncoder = new Encoder(4, 5);
         rightEncoder = new Encoder(6, 7);
+
+        leftEncoder.setDistancePerPulse((DrivetrainConstants.wheelDiameter * Math.PI)(inches) / DrivetrainConstants.encoderTicks);
+        rightEncoder.setDistancePerPulse((DrivetrainConstants.wheelDiameter * Math.PI)(inches) / DrivetrainConstants.encoderTicks);
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
@@ -131,12 +135,25 @@ public class Drivetrain extends SubsystemBase {
         return m_MaxSpeed;
     }
 
-    public void resetLeftEncoder() {
+    public void resetEncoders() {
         leftEncoder.reset();
+        rightEncoder.reset();
     }
 
     public double getLeftEncoderTicks() {
         return leftEncoder.getDistance();
+    }
+
+    public double getRightEncoderTicks() {
+        return rightEncoder.getDistance();
+    }
+
+    public double getLeftEncoderSpeed() {
+        return leftEncoder.getRate();
+    }
+
+    public double getRightEncoderSpeed() {
+        return rightEncoder.getRate();
     }
 
     public double inchesToTicks(double inches) {

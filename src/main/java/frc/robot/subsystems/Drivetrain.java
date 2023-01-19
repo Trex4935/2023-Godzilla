@@ -131,6 +131,28 @@ public class Drivetrain extends SubsystemBase {
         return m_MaxSpeed;
     }
 
+    public void resetLeftEncoder() {
+        leftEncoder.reset();
+    }
+
+    public double getLeftEncoderTicks() {
+        return leftEncoder.getDistance();
+    }
+
+    public double inchesToTicks(double inches) {
+        // 6 diameter wheel
+        // 2048 ticks per motor rotation.
+        // Gear ratio - 44:30
+            // Driver and driven unknown
+        // 18.85 inches of travel per rotation of the wheel   
+        // 1.47 motor rotations = 18.85 inches of travel
+        // 3011 ticks per wheel rotation
+        // 3011 ticks per 18.85 inches
+        // 160 ticks per 1 inch of travel
+        
+        return inches * 160;
+    }
+
     // Sendable override
     // Anything put here will be added to the network tables and thus can be added
     // to the dashboard / consumed by the LED controller

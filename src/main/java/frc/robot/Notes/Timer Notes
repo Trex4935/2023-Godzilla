@@ -1,0 +1,32 @@
+
+----------------------------------------------------------
+If you need help with Timer:
+----------------------------------------------------------
+
+Imports:
+
+import edu.wpi.first.wpilibj.Timer;
+
+----------------------------------------------------------
+
+Timer Attributes:
+
+Timer counts in seconds, as such, 1 = 1 second.
+
+----------------------------------------------------------
+
+Timer Objects:
+
+Timer (Create as private to localize inside the command/file):
+private Timer timer_name = new Timer();
+
+----------------------------------------------------------
+
+Timer Functions:
+
+Start the timer:
+timer_name.start();
+
+Reset the timer:
+timer_name.reset();
+

@@ -8,9 +8,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 //Gyro Imports
 import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DigitalSource;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -32,12 +35,16 @@ public class Drivetrain extends SubsystemBase {
     WPI_TalonSRX BLMotor;
     WPI_TalonSRX BRMotor;
 
-    //Declaring Motor Groups
+    // Declaring Motor Groups
     MotorControllerGroup leftMotors;
     MotorControllerGroup rightMotors;
 
     DifferentialDrive diffdrive;
 
+    // Declaring encoders
+    Encoder leftEncoder;
+    Encoder rightEncoder;
+    
     XboxController xboxController;
 
     // Declaring Gyro Objects
@@ -47,6 +54,7 @@ public class Drivetrain extends SubsystemBase {
     Double m_MaxSpeed = MovementConstraints.dtmaxspeed;
 
     public Drivetrain() {
+        
         // Creates new motor objects and configures the talons in a separate method
         FLMotor = Talon.createDefaultTalon(WheelIDConstants.FLMotorID);
         FRMotor = Talon.createDefaultTalon(WheelIDConstants.FRMotorID);
@@ -61,6 +69,9 @@ public class Drivetrain extends SubsystemBase {
         diffdrive = new DifferentialDrive(leftMotors, rightMotors);
 
         diffdrive.setMaxOutput(m_MaxSpeed);
+
+        leftEncoder = new Encoder(4, 5);
+        rightEncoder = new Encoder(6, 7);
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);

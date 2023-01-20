@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /** Add your docs here. */
 public class Gripper extends SubsystemBase{
@@ -31,13 +30,22 @@ public class Gripper extends SubsystemBase{
     // This method will be called once per scheduler run
     }
 
+    /** Closes the gripper */
     public void gripClose() {
-        DataLogManager.log("MESSAGE");
+        DataLogManager.log("/_\\ GRIPPER CLOSE /_\\");
         gripper.set(Value.kForward);
     }
 
+    /** Opens the gripper */
     public void gripOpen() {
+        DataLogManager.log("\\_/ GRIPPER OPEN \\_/");
         gripper.set(Value.kReverse);
+    }
+
+    /** Turns off the gripper */
+    public void disableGrip() {
+        DataLogManager.log("|_| GRIPPER OFF |_|");
+        gripper.set(Value.kOff);
     }
     
 }

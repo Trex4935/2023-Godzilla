@@ -142,13 +142,23 @@ public class Drivetrain extends SubsystemBase {
         rightEncoder.reset();
     }
 
-    /** Gets the amount of ticks since reset/init based on setDistancePerPulse */
+    /** Gets the amount of ticks since reset/init */
     public double getLeftEncoderTicks() {
+        return leftEncoder.get();
+    }
+
+    /** Gets the amount of ticks since reset/init */
+    public double getRightEncoderTicks() {
+        return rightEncoder.get();
+    }
+
+    /** Gets the distance since reset/init based on setDistancePerPulse */
+    public double getLeftEncoderDistance() {
         return leftEncoder.getDistance();
     }
 
-    /** Gets the amount of ticks since reset/init based on setDistancePerPulse */
-    public double getRightEncoderTicks() {
+    /** Gets the distance since reset/init based on setDistancePerPulse */
+    public double getRightEncoderDistance() {
         return rightEncoder.getDistance();
     }
 

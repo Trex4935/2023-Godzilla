@@ -20,7 +20,7 @@ public class Gripper extends SubsystemBase{
 
     public Gripper() {
         /** Creates new pneumatic objects. */
-        gripper = new DoubleSolenoid(0, PneumaticsModuleType.CTREPCM, 0, 1);
+        gripper = new DoubleSolenoid(9, PneumaticsModuleType.CTREPCM, 0, 1);
         compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
         compressor.enableDigital();
     }

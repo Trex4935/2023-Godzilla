@@ -31,6 +31,11 @@ public final class Constants {
     public final static int BRMotorID = 6;
   }
 
+  public static class DrivetrainConstants {
+    public final static int wheelDiameter = 6;
+    public final static int encoderTicks = 8192;
+  }
+
   /** Class for the Limelight constants. */
   public static class LimeLightConstants {
     public static final double h1 = 1;
@@ -75,6 +80,7 @@ public final class Constants {
   public static class JoystickAxis {
     public static final int joystickAxis = 1;
   }
+  
   public static class MotorLimits {
   public static final int ArmRotationConstants = 0;
   }

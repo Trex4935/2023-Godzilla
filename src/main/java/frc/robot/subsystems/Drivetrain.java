@@ -71,8 +71,8 @@ public class Drivetrain extends SubsystemBase {
 
         diffdrive.setMaxOutput(m_MaxSpeed);
 
-        leftEncoder = new Encoder(4, 5);
-        rightEncoder = new Encoder(6, 7);
+        leftEncoder = new Encoder(7, 8);
+        rightEncoder = new Encoder(5, 6);
 
         // in Inches
         leftEncoder.setDistancePerPulse((DrivetrainConstants.wheelDiameter * Math.PI) / DrivetrainConstants.encoderTicks);
@@ -194,5 +194,8 @@ public class Drivetrain extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
         builder.addFloatArrayProperty("Roll, Pitch, and Yaw Values", this::PrincipalAxisValues, null);
+        builder.addDoubleProperty("RightEncoder",this::getRightEncoderTicks,null);
+        builder.addDoubleProperty("LeftEncoder", this::getLeftEncoderTicks, null);
+
     }
 }

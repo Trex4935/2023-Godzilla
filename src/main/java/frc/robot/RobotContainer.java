@@ -12,12 +12,25 @@ import frc.robot.subsystems.Gripper;
 
 // Commands
 import frc.robot.commands.cm_armRotationForward;
+import frc.robot.Constants.MovementConstraints;
 import frc.robot.commands.ca_ForwardHalfSpeed;
+import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 // Other
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +38,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 // Robot Base Class
@@ -42,8 +57,11 @@ public class RobotContainer {
   private final cm_armRotationForward armRotationForward;
   private final cm_armRotationBackward armRotationBackward;
   private final ca_ForwardHalfSpeed forwardHalfSpeed;
+
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
+  private final ca_autoTrajectory autoTrajectory;
+
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(0);
@@ -73,6 +91,22 @@ public class RobotContainer {
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(drivetrain);
 
+
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+      MovementConstraints.dtmaxspeed, MovementConstraints.dtmaxaccel);
+
+      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of(
+        new Translation2d(0, 0.25),
+        new Translation2d(0, 0.5)),
+        //new Translation2d(xn, yn),
+      new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
+      trajectoryConfig);
+
+      autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
+
+
     // Configure the trigger bindings
     configureBindings();
 
@@ -101,8 +135,37 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+
+    
+      
+
+      //Fill in once we have more info/constants
+      /* RamseteCommand ramseteCommand =
+      new RamseteCommand(
+          trajectory,
+          drivetrain::getPose,
+          new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
+          new SimpleMotorFeedforward(
+              Constants.ksVolts,
+              Constants.kvVoltSecondsPerMeter,
+              Constants.kaVoltSecondsSquaredPerMeter),
+          Constants.kDriveKinematics,
+          drivetrain::getWheelSpeeds,
+          new PIDController(Constants.kPDriveVel, 0, 0),
+          new PIDController(Constants.kPDriveVel, 0, 0),
+          // RamseteCommand passes volts to the callback
+          drivetrain::tankDriveVolts,
+          drivetrain);
+
+    drivetrain.resetOdometry(trajectory.getInitialPose());
+
+    return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
+ */
+
+    return autoTrajectory;
+
     // A command will be run in autonomous
-    return forwardHalfSpeed;
+    //return forwardHalfSpeed;
   }
 
 }

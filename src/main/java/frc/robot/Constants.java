@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -54,9 +58,12 @@ public final class Constants {
   /** Class for the speed and acceleration limits of the robot. */
   public static class MovementConstraints {
     public static final double dtmaxaccel = 1;
-    public static final double dtmaxspeed = 0.75;
+    public static final double dtmaxspeed = 0.6;
     
   }
+
+  public static final TrapezoidProfile.Constraints thetaConstraints =
+  new Constraints(MovementConstraints.dtmaxspeed, MovementConstraints.dtmaxaccel);
 
   // class for Arm Rotation CAN IDs
   public static class ArmRotationConstants {
@@ -80,9 +87,25 @@ public final class Constants {
   public static class JoystickAxis {
     public static final int joystickAxis = 1;
   }
+
+
+// Subject to change
+  public static class TrajectoryConstants {
+    public static final double ksVolts = 0.22;
+    public static final double kvVoltSecondsPerMeter = 1.98;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+    public static final double kPDriveVel = 8.5;
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kTrackWidthMeters = 0.584; // 0.584 testing> .65
+    public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
+            kTrackWidthMeters);
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+  }
   
   public static class MotorLimits {
-  public static final int ArmRotationConstants = 0;
+    public static final int ArmRotationConstants = 0;
   }
 }
 

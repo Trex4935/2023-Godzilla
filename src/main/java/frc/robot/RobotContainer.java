@@ -11,6 +11,7 @@ import frc.robot.subsystems.ArmRotation;
 
 // Commands
 import frc.robot.commands.cm_armRotationForward;
+import frc.robot.commands.ca_AutoArmRotation0;
 import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
@@ -36,6 +37,7 @@ public class RobotContainer {
   private final cm_armRotationForward armRotationForward;
   private final cm_armRotationBackward armRotationBackward;
   private final ca_ForwardHalfSpeed forwardHalfSpeed;
+  private final ca_AutoArmRotation0 armRotation0;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(0);
@@ -56,6 +58,7 @@ public class RobotContainer {
     // extendArm = new cm_ExtendArm(armextension, 0.0);
     armRotationForward = new cm_armRotationForward(armrotation);
     armRotationBackward = new cm_armRotationBackward(armrotation);
+    armRotation0 = new ca_AutoArmRotation0(armrotation);
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
     forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
 
@@ -76,11 +79,11 @@ public class RobotContainer {
     // Creates command to move the arm in and out
     new RunCommand(() -> armextension.extendArm(operator.getRightX()));
 
-    
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     operator.b().whileTrue(armRotationForward);
     operator.x().whileTrue(armRotationBackward);
-    
+    operator.start().whileTrue(armRotation0);
+
   }
 
   /**

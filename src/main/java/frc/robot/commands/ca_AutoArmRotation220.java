@@ -7,13 +7,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmRotation;
 
-public class ca_AutoArmRotation extends CommandBase {
+public class ca_AutoArmRotation220 extends CommandBase {
 
   private final ArmRotation arm;
 
 
   /** Creates a new ca_AutoArmRotation. */
-  public ca_AutoArmRotation(ArmRotation ar) {
+  public ca_AutoArmRotation220(ArmRotation ar) {
     arm = ar;
     addRequirements(arm);
   }
@@ -24,7 +24,7 @@ public class ca_AutoArmRotation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.AutoArmRotation(90);
+    arm.AutoArmRotation(1);
 
   }
 

@@ -108,7 +108,7 @@ public class RobotContainer {
       trajectoryConfig);
 
       autoTrajectory = new ca_autoTrajectoryKinematic(drivetrain, trajectory);
-      autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, 90.0); // testing 90 degree Turn;
+      autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, - 135.0); // testing 90 degree Turn;
 
 
     // Configure the trigger bindings

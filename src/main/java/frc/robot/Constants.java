@@ -48,7 +48,7 @@ public final class Constants {
   public static final int armRotationCAN = 13;
 
   /** Motor Rotation Limits */
-  public static final int ArmRotationConstants = 0;
+  public static final int ArmRotationLowerLimit = 0;
 
 
 // ARM EXTENSION

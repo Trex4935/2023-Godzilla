@@ -38,6 +38,7 @@ public final class Constants {
   public static class DrivetrainConstants {
     public final static int wheelDiameter = 6;
     public final static int encoderTicks = 8192;
+    public final static double trackWidth = .641 ; // Meters
   }
 
   /** Class for the Limelight constants. */

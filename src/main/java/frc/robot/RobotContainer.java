@@ -12,7 +12,6 @@ import frc.robot.subsystems.Gripper;
 
 // Commands
 import frc.robot.commands.cm_armRotationForward;
-import frc.robot.Constants.MovementConstraints;
 import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.cm_armRotationBackward;
@@ -31,13 +30,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-// Other
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -64,9 +61,9 @@ public class RobotContainer {
 
 
   // Declare Other
-  private final Joystick m_JoystickLeft = new Joystick(0);
-  private final Joystick m_JoystickRight = new Joystick(1);
-  private CommandXboxController operator = new CommandXboxController(2);
+  private final Joystick m_JoystickLeft = new Joystick(Constants.joystickLeft);
+  private final Joystick m_JoystickRight = new Joystick(Constants.joystickRight);
+  private CommandXboxController operator = new CommandXboxController(Constants.controllerID);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -93,7 +90,7 @@ public class RobotContainer {
 
 
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-      MovementConstraints.dtmaxspeed, MovementConstraints.dtmaxaccel);
+      Constants.dtmaxspeed, Constants.dtmaxaccel);
 
       Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, new Rotation2d(0)),

@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -59,6 +60,9 @@ public class Drivetrain extends SubsystemBase {
     //Kinemtatics
     DifferentialDriveKinematics kin;
 
+    //Simulate
+    public double zSimAngle;
+
     public Drivetrain() {
         
         // Creates new motor objects and configures the talons in a separate method
@@ -88,6 +92,9 @@ public class Drivetrain extends SubsystemBase {
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
         kin = new DifferentialDriveKinematics(DrivetrainConstants.trackWidth);
+
+        // initiate simulate gyro Position
+        zSimAngle = 0;
         
     }
 
@@ -208,6 +215,12 @@ public class Drivetrain extends SubsystemBase {
         double chassisSpeedy = 0;
         DifferentialDriveWheelSpeeds wheelSpeed = kin.toWheelSpeeds(new ChassisSpeeds(chassisSpeedx,chassisSpeedy, chassisAngularRate));;
         return wheelSpeed.rightMetersPerSecond;
+    }
+
+    public void simulateGyro(double leftSpeed, double rightSpeed, Timer timer){
+
+        ChassisSpeeds chassisSpeed = kin.toChassisSpeeds(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
+        zSimAngle = chassisSpeed.omegaRadiansPerSecond * 0.02 + zSimAngle;
     }
 
     // Sendable override

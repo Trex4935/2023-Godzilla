@@ -39,6 +39,7 @@ public final class Constants {
     public final static int wheelDiameter = 6;
     public final static int encoderTicks = 8192;
     public final static double trackWidth = .641 ; // Meters
+    
   }
 
   /** Class for the Limelight constants. */
@@ -60,6 +61,8 @@ public final class Constants {
   public static class MovementConstraints {
     public static final double dtmaxaccel = 1;
     public static final double dtmaxspeed = 0.6;
+    public static final double dtmaxomega = 0.6;
+
     
   }
 

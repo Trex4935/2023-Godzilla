@@ -13,6 +13,7 @@ import frc.robot.subsystems.ArmRotation;
 import frc.robot.commands.cm_armRotationForward;
 import frc.robot.Constants.MovementConstraints;
 import frc.robot.commands.ca_ForwardHalfSpeed;
+import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
 
@@ -50,6 +51,7 @@ public class RobotContainer {
   private final cm_armRotationForward armRotationForward;
   private final cm_armRotationBackward armRotationBackward;
   private final ca_ForwardHalfSpeed forwardHalfSpeed;
+  private final ca_autoTrajectory autoTrajectory;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(0);
@@ -75,6 +77,22 @@ public class RobotContainer {
 
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(drivetrain);
+
+
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+      MovementConstraints.dtmaxspeed, MovementConstraints.dtmaxaccel);
+
+      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of(
+        new Translation2d(0, 0.25),
+        new Translation2d(0, 0.5)),
+        //new Translation2d(xn, yn),
+      new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
+      trajectoryConfig);
+
+      autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
+
 
     // Configure the trigger bindings
     configureBindings();
@@ -104,18 +122,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-      MovementConstraints.dtmaxspeed, MovementConstraints.dtmaxaccel);
-
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)),
-      List.of(
-        new Translation2d(0, 1),
-        new Translation2d(1, 0),
-        new Translation2d(2, -2)),
-        //new Translation2d(xn, yn),
-      new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
-      trajectoryConfig);
+    
+      
 
       //Fill in once we have more info/constants
       /* RamseteCommand ramseteCommand =
@@ -140,9 +148,10 @@ public class RobotContainer {
     return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
  */
 
+    return autoTrajectory;
 
     // A command will be run in autonomous
-    return forwardHalfSpeed;
+    //return forwardHalfSpeed;
   }
 
 }

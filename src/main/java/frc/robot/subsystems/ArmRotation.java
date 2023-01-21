@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmRotationConstants;
 
 import com.revrobotics.CANSparkMax;
@@ -16,6 +17,7 @@ import frc.robot.extensions.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 // BYEAH \*<>*/
+import edu.wpi.first.wpilibj.event.EventLoop;
 
 public class ArmRotation extends SubsystemBase {
   CANSparkMax ArmRotation;
@@ -93,6 +95,8 @@ ArmRotation.set(0.5);
 else {
 ArmRotation.stopMotor();
 }
+
+
 }
 
 /**
@@ -112,3 +116,5 @@ ArmRotation.stopMotor();
   }
 
 }
+// 0, 1, 5, 50 , 60 (Normal arm side degrees)
+// 270, 269, 265, 220, 210 (Opposite arm side degrees)

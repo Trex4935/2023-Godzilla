@@ -8,15 +8,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmRotationConstants;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder.Type;
+
 import frc.robot.extensions.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
-
+// BYEAH \*<>*/
 
 public class ArmRotation extends SubsystemBase {
   CANSparkMax ArmRotation;
   XboxController xboxController;
-
+  RelativeEncoder armEncoder;
 
   DigitalInput forwardLimitSwitch;
   DigitalInput backwardLimitSwitch;
@@ -27,7 +31,7 @@ public class ArmRotation extends SubsystemBase {
     ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
     forwardLimitSwitch = new DigitalInput(0);
     backwardLimitSwitch = new DigitalInput(1);
-       
+    armEncoder = ArmRotation.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 42);
   }
  // sets the speed that the arm moves forward
   public void moveArmForward() {
@@ -61,4 +65,23 @@ public class ArmRotation extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  // 1.Neo x
+  // 2.Gear Ration(math)x
+  // 3.Limit Switches x
+  // 4.Encoder
+
+ //Ticks per rotation, 42
+ //Gear Ratio Reduction, 144:1
+ //Gear has 30 teeth, sprocket has 12
+ //  12 degrees per tooth? 
+ // 144 degrees
+ // 0.83 degrees per rotation = 42 ticks?
+ // .002 degrees per tick
+ // 500 ticks for every degree
+ public void AutoArmRotation(int angle) {
+ int AmountTurn = angle * 500;
+ //ArmRotation.moveArmForward(AmountTurn);
+ }
+
 }

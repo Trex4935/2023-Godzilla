@@ -15,6 +15,7 @@ import frc.robot.commands.cm_armRotationForward;
 import frc.robot.Constants.MovementConstraints;
 import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.ca_autoTrajectory;
+import frc.robot.commands.ca_autoTrajectoryKinematic;
 import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.commands.cm_GripperClose;
@@ -60,7 +61,7 @@ public class RobotContainer {
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
-  private final ca_autoTrajectory autoTrajectory;
+  private final ca_autoTrajectoryKinematic autoTrajectory;
 
 
   // Declare Other
@@ -104,7 +105,7 @@ public class RobotContainer {
       new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
       trajectoryConfig);
 
-      autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
+      autoTrajectory = new ca_autoTrajectoryKinematic(drivetrain, trajectory);
 
 
     // Configure the trigger bindings

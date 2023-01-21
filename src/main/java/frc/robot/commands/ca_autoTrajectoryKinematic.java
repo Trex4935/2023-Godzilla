@@ -46,7 +46,7 @@ public class ca_autoTrajectoryKinematic extends CommandBase {
     Double rightSpeedWheel = dt.getRightpeedKin(velocityTarget, 0);
     dt.driveWithController(leftSpeedWheel, rightSpeedWheel);
     System.out.println("Time: "+ timer.get() + " Velocity: " + velocityTarget +
-    " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + "RightSpeed: " + rightSpeedWheel);
+    " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel);
 
   }
 

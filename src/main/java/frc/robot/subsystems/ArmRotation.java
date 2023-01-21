@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.XboxController;
 public class ArmRotation extends SubsystemBase {
   CANSparkMax ArmRotation;
   XboxController xboxController;
-  RelativeEncoder armEncoder;
+  RelativeEncoder CurrentValue;
 
   DigitalInput forwardLimitSwitch;
   DigitalInput backwardLimitSwitch;
@@ -31,7 +31,7 @@ public class ArmRotation extends SubsystemBase {
     ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
     forwardLimitSwitch = new DigitalInput(0);
     backwardLimitSwitch = new DigitalInput(1);
-    armEncoder = ArmRotation.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 42);
+    CurrentValue = ArmRotation.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 42);
   }
  // sets the speed that the arm moves forward
   public void moveArmForward() {
@@ -66,22 +66,33 @@ public class ArmRotation extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  // 1.Neo x
-  // 2.Gear Ration(math)x
-  // 3.Limit Switches x
-  // 4.Encoder
+ /*  ====MATH====
+ Ticks per rotation, 42
+  Gear Ratio Reduction, 144:1
+  Gear has 30 teeth, sprocket has 12
+  12 degrees per tooth? 
+  144 degrees
+  0.83 degrees per rotation = 42 ticks?
+  .002 degrees per tick
+  500 ticks for every degree */
 
- //Ticks per rotation, 42
- //Gear Ratio Reduction, 144:1
- //Gear has 30 teeth, sprocket has 12
- //  12 degrees per tooth? 
- // 144 degrees
- // 0.83 degrees per rotation = 42 ticks?
- // .002 degrees per tick
- // 500 ticks for every degree
- public void AutoArmRotation(int angle) {
- int AmountTurn = angle * 500;
- //ArmRotation.moveArmForward(AmountTurn);
- }
+ /* Preset Arm Positions during Auto
+ (Takes in angle we need to get to) - (current encoder value) = angle we need to move
+-> angle we need to move * 500 = ticks we need to move
+EXAMPLE: (90 degrees) - (0 degrees) = 90 degrees ... 90 degrees * 500 = 4500 ticks
+->>> Then the rotation motor is moved until it reaches 4500 ticks.
+ */
+ public void AutoArmRotation(double TargetAngle) {
+  // GET POSITION NEEDS TESTING
+double EncoderValue = CurrentValue.getPosition();
+double AngleToMove = (TargetAngle - (EncoderValue/500));
+double AmountToMove = AngleToMove * 500;
+if(EncoderValue != AmountToMove){
+ArmRotation.set(0.5);
+}
+else {
+ArmRotation.stopMotor();
+}
+}
 
 }

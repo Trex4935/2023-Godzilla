@@ -20,25 +20,64 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
+
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
 
-  /** Class for the wheel ID constants. */
-  public static class WheelIDConstants {
-    public final static int FLMotorID = 1;
-    public final static int FRMotorID = 2;
-    public final static int MLMotorID = 3;
-    public final static int MRMotorID = 4;
-    public final static int BLMotorID = 5;
-    public final static int BRMotorID = 6;
-  }
+// DRIVETRAIN Constants
+ 
+  /** Wheel ID Constants */
+  public final static int FLMotorID = 1; //LEFT
+  public final static int FRMotorID = 2; //RIGHT
+  public final static int MLMotorID = 3; //LEFT
+  public final static int MRMotorID = 4; //RIGHT
+  public final static int BLMotorID = 5; //LEFT
+  public final static int BRMotorID = 6; //RIGHT
 
-  public static class DrivetrainConstants {
-    public final static int wheelDiameter = 6;
-    public final static int encoderTicks = 8192;
-  }
+  /** Measurement Constants */
+  public final static int wheelDiameter = 6;
+  public final static int encoderTicks = 8192;
+
+  /** Movement Constants */
+  public static final double dtmaxaccel = 1; // Acceleration Limit
+  public static final double dtmaxspeed = 0.6; // Speed Limit
+
+
+// ARM ROTATION Constants
+
+  /** Motor ID */
+  public static final int armRotationCAN = 13;
+
+  /** Motor Rotation Limits */
+  public static final int ArmRotationConstants = 0;
+
+
+// ARM EXTENSION
+  public static final int armExtensionCAN = 33; // Motor CAN ID
+
+
+// DRIVER/CONTROLLER Constants
+
+  /** Driver Constants */
+  //(Differentiates the joysticks inputs by assigning different ID ports)
+  public static final int joystickLeft = 0; // Left Joystick ID
+  public static final int joystickRight = 1; // Right Joystick ID
+
+  public static final int joystickAxis = 1; // Actual Joystick Axis ID
+  
+  /** Controller Constants */
+  public static final int controllerID = 2; // Controller ID
+
+  // XBOX Controller Constants (SUBJECT TO CHANGE)
+  public static final int LeftJoystickX = 0; // Side to side
+  public static final int LeftJoystickY = 1; // Front and back
+
+  public static final int RightJoystickX = 4; // Side to side
+  public static final int RightJoystickY = 5; // Front and back
+
+  public static final int LeftTrigger = 2;
+  public static final int RightTrigger = 3;
+
+
 
   /** Class for the Limelight constants. */
   public static class LimeLightConstants {
@@ -48,46 +87,8 @@ public final class Constants {
 
   }
 
-  /** Class for Xbox Controller ID constants. */
-  public static class AxisIDConstants {
-    public static final int leftIDAxis = 1;
-    public static final int rightIDAxis = 5;
-
-  }
-
-  /** Class for the speed and acceleration limits of the robot. */
-  public static class MovementConstraints {
-    public static final double dtmaxaccel = 1;
-    public static final double dtmaxspeed = 0.6;
-    
-  }
-
   public static final TrapezoidProfile.Constraints thetaConstraints =
-  new Constraints(MovementConstraints.dtmaxspeed, MovementConstraints.dtmaxaccel);
-
-  // class for Arm Rotation CAN IDs
-  public static class ArmRotationConstants {
-    public static final int armRotationCAN = 33;
-    
-  }
-
-  // class for Arm Rotation CAN IDs
-  public static class ArmExtensionConstants {
-    public static final int armExtensionCAN = 6;
-    
-  }
-
-  public static class JoystickIDConstants {
-    //differentiates the joysticks inputs by assigning different ID ports
-    public static final int joystickLeft = 0;
-    public static final int joystickRight = 1;
-  }
-
-  //Both joysticks use the same Axis value
-  public static class JoystickAxis {
-    public static final int joystickAxis = 1;
-  }
-
+  new Constraints(Constants.dtmaxspeed, Constants.dtmaxaccel);
 
 // Subject to change
   public static class TrajectoryConstants {
@@ -104,8 +105,5 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
   
-  public static class MotorLimits {
-    public static final int ArmRotationConstants = 0;
-  }
 }
 

@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ArmRotationConstants;
+import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMax;
 import frc.robot.extensions.*;
@@ -24,7 +24,7 @@ public class ArmRotation extends SubsystemBase {
   /** Creates a new ArmRotation. */
   public ArmRotation() {
     // init motor
-    ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
+    ArmRotation = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
     forwardLimitSwitch = new DigitalInput(0);
     backwardLimitSwitch = new DigitalInput(1);
        

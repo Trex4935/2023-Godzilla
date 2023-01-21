@@ -67,6 +67,6 @@ public class ca_autoTurnKinematic extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return  eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) <= 1.0 && eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) >= - 1.0  ||  timer.get() > 10; 
+    return  eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) <= 2.0 && eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) >= - 2.0  ||  timer.get() > 10; 
   }
 }

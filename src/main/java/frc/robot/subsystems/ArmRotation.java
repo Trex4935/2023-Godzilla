@@ -95,4 +95,20 @@ ArmRotation.stopMotor();
 }
 }
 
+/**
+~12 rotations per degree
+
+*/
+  public void ArmRotationPreset(double TargetAngle) {
+    double CurrentAngle = CurrentValue.getPosition() * (42/500);
+    double AngleMoveAmount = TargetAngle - CurrentAngle;
+    double RotationsMoveAmount = AngleMoveAmount * (500/42);
+    double TargetPosition = CurrentValue.getPosition() + RotationsMoveAmount;
+    
+    while(CurrentValue.getPosition() != TargetPosition) {
+      ArmRotation.set(0.5);
+    }
+    
+  }
+
 }

@@ -8,6 +8,7 @@ package frc.robot;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ArmRotation;
+import frc.robot.subsystems.Gripper;
 
 // Commands
 import frc.robot.commands.cm_armRotationForward;
@@ -16,6 +17,8 @@ import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
+import frc.robot.commands.cm_GripperClose;
+import frc.robot.commands.cm_GripperOpen;
 
 import java.util.List;
 
@@ -32,9 +35,11 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 // Robot Base Class
@@ -44,6 +49,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain;
   private final ArmExtension armextension;
   private final ArmRotation armrotation;
+  private final Gripper gripper;
 
   // Declare Commands
   private final cm_driveWithJoysticks driveWithJoysticks;
@@ -51,7 +57,11 @@ public class RobotContainer {
   private final cm_armRotationForward armRotationForward;
   private final cm_armRotationBackward armRotationBackward;
   private final ca_ForwardHalfSpeed forwardHalfSpeed;
+
+  private final cm_GripperClose gripperClose;
+  private final cm_GripperOpen gripperOpen;
   private final ca_autoTrajectory autoTrajectory;
+
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(0);
@@ -67,6 +77,7 @@ public class RobotContainer {
     drivetrain = new Drivetrain();
     armextension = new ArmExtension();
     armrotation = new ArmRotation();
+    gripper = new Gripper();
 
     // Create Command objects
     // extendArm = new cm_ExtendArm(armextension, 0.0);
@@ -74,6 +85,8 @@ public class RobotContainer {
     armRotationBackward = new cm_armRotationBackward(armrotation);
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
     forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
+    gripperOpen = new cm_GripperOpen(gripper);
+    gripperClose = new cm_GripperClose(gripper);
 
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(drivetrain);
@@ -113,6 +126,7 @@ public class RobotContainer {
     operator.b().whileTrue(armRotationForward);
     operator.x().whileTrue(armRotationBackward);
     
+    operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
   }
 
   /**

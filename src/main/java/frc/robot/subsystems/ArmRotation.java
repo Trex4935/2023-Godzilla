@@ -9,6 +9,7 @@ import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMax;
 import frc.robot.extensions.*;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -56,6 +57,14 @@ public class ArmRotation extends SubsystemBase {
   public void stopArmRotation() {
     ArmRotation.stopMotor();
   }
+
+        // Sendable override
+    // Anything put here will be added to the network tables and thus can be added
+    // to the dashboard / consumed by the LED controller
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("Angle", null, null);
+    }
 
   @Override
   public void periodic() {

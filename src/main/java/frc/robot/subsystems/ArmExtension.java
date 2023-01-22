@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -34,6 +35,14 @@ public class ArmExtension extends SubsystemBase {
 
     return true;
   }
+
+      // Sendable override
+    // Anything put here will be added to the network tables and thus can be added
+    // to the dashboard / consumed by the LED controller
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("Extension", null, null);
+    }
 
   @Override
   public void periodic() {

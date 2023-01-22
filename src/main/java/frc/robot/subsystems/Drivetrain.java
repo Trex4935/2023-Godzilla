@@ -15,14 +15,10 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.JoystickAxis;
-import frc.robot.Constants.MovementConstraints;
-import frc.robot.Constants.WheelIDConstants;
-import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants;
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -46,23 +42,21 @@ public class Drivetrain extends SubsystemBase {
     Encoder leftEncoder;
     Encoder rightEncoder;
     
-    XboxController xboxController;
-
     // Declaring Gyro Objects
     public static AHRS ahrs;
 
     // Max speed value for the motors ... default comes from constants
-    Double m_MaxSpeed = MovementConstraints.dtmaxspeed;
+    Double m_MaxSpeed = Constants.dtmaxspeed;
 
     public Drivetrain() {
         
         // Creates new motor objects and configures the talons in a separate method
-        FLMotor = Talon.createDefaultTalon(WheelIDConstants.FLMotorID);
-        FRMotor = Talon.createDefaultTalon(WheelIDConstants.FRMotorID);
-        MLMotor = Talon.createDefaultTalon(WheelIDConstants.MLMotorID);
-        MRMotor = Talon.createDefaultTalon(WheelIDConstants.MRMotorID);
-        BLMotor = Talon.createDefaultTalon(WheelIDConstants.BLMotorID);
-        BRMotor = Talon.createDefaultTalon(WheelIDConstants.BRMotorID);
+        FLMotor = Talon.createDefaultTalon(Constants.FLMotorID);
+        FRMotor = Talon.createDefaultTalon(Constants.FRMotorID);
+        MLMotor = Talon.createDefaultTalon(Constants.MLMotorID);
+        MRMotor = Talon.createDefaultTalon(Constants.MRMotorID);
+        BLMotor = Talon.createDefaultTalon(Constants.BLMotorID);
+        BRMotor = Talon.createDefaultTalon(Constants.BRMotorID);
         // Sets up motor controller groups
         leftMotors = new MotorControllerGroup(FLMotor, MLMotor, BLMotor);
         rightMotors = new MotorControllerGroup(FRMotor, MRMotor, BRMotor);
@@ -71,12 +65,12 @@ public class Drivetrain extends SubsystemBase {
 
         diffdrive.setMaxOutput(m_MaxSpeed);
 
-        leftEncoder = new Encoder(4, 5);
-        rightEncoder = new Encoder(6, 7);
+        leftEncoder = new Encoder(7, 8);
+        rightEncoder = new Encoder(5, 6);
 
         // in Inches
-        leftEncoder.setDistancePerPulse((DrivetrainConstants.wheelDiameter * Math.PI) / DrivetrainConstants.encoderTicks);
-        rightEncoder.setDistancePerPulse((DrivetrainConstants.wheelDiameter * Math.PI) / DrivetrainConstants.encoderTicks);
+        leftEncoder.setDistancePerPulse((Constants.wheelDiameter * Math.PI) / Constants.encoderTicks);
+        rightEncoder.setDistancePerPulse((Constants.wheelDiameter * Math.PI) / Constants.encoderTicks);
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
@@ -117,8 +111,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
-        diffdrive.tankDrive(joystick1.getRawAxis(JoystickAxis.joystickAxis),
-                joystick2.getRawAxis(JoystickAxis.joystickAxis));
+        diffdrive.tankDrive(joystick1.getRawAxis(Constants.joystickAxis),
+                joystick2.getRawAxis(Constants.joystickAxis));
     }
 
     public void stopMotors() {
@@ -194,5 +188,8 @@ public class Drivetrain extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
         builder.addFloatArrayProperty("Roll, Pitch, and Yaw Values", this::PrincipalAxisValues, null);
+        builder.addDoubleProperty("RightEncoder",this::getRightEncoderTicks,null);
+        builder.addDoubleProperty("LeftEncoder", this::getLeftEncoderTicks, null);
+
     }
 }

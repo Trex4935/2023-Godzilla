@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ArmExtensionConstants;
+import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import frc.robot.extensions.*;
@@ -16,7 +16,7 @@ public class ArmExtension extends SubsystemBase {
   /** Creates a new motor. */
   public ArmExtension() {
     // Arm Extension
-    ArmExtensionMotor = Falcon.createDefaultFalcon(ArmExtensionConstants.armExtensionCAN);
+    ArmExtensionMotor = Falcon.createDefaultFalcon(Constants.armExtensionCAN);
     /// Need Encoder based soft limits implemented
   }
 

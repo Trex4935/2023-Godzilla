@@ -34,7 +34,7 @@ public class ArmRotation extends SubsystemBase {
     armEncoder = armRotationMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 42);
   }
 
-  // sets the speed that the arm moves forward
+  /** Sets the speed that the arm moves forward */
   public void moveArmForward() {
     if (forwardLimitSwitch.get()) {
       // if the forwardLimitSwitch is true, stop the motors
@@ -45,7 +45,7 @@ public class ArmRotation extends SubsystemBase {
     }
   }
 
-  // sets the speed that the arm moves backward
+  /** sets the speed that the arm moves backward */
   public void moveArmBackward() {
     if (backwardLimitSwitch.get()) {
       // if the backwardimitSwitch is true,stop the motor
@@ -56,7 +56,7 @@ public class ArmRotation extends SubsystemBase {
     }
   }
 
-  // stops the ArmRotation motor
+  /** stops the ArmRotation motor */
   public void stopArmRotation() {
     armRotationMotor.stopMotor();
   }

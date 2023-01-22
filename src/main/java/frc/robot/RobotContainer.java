@@ -12,6 +12,7 @@ import frc.robot.subsystems.Gripper;
 
 // Commands
 import frc.robot.commands.cm_armRotationForward;
+import frc.robot.commands.ca_AutoArmExtensionDistance;
 import frc.robot.commands.ca_AutoArmRotationAngle;
 import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.ca_autoTrajectory;
@@ -54,11 +55,11 @@ public class RobotContainer {
   private final ca_AutoArmRotationAngle armRotationPreset135;
   private final ca_AutoArmRotationAngle armRotationPreset180;
   private final ca_AutoArmRotationAngle armRotationPreset270;
+  private final ca_AutoArmExtensionDistance armExtensionDistance0;
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
   private final ca_autoTrajectory autoTrajectory;
-
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.joystickLeft);
@@ -85,6 +86,7 @@ public class RobotContainer {
     armRotationPreset135 = new ca_AutoArmRotationAngle(armrotation, 135);
     armRotationPreset180 = new ca_AutoArmRotationAngle(armrotation, 180);
     armRotationPreset270 = new ca_AutoArmRotationAngle(armrotation, 270);
+    armExtensionDistance0 = new ca_AutoArmExtensionDistance(armextension, 0);
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
     forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
     gripperOpen = new cm_GripperOpen(gripper);
@@ -96,21 +98,19 @@ public class RobotContainer {
     SmartDashboard.putData(armrotation);
     SmartDashboard.putData(gripper);
 
-
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-      Constants.dtmaxspeed, Constants.dtmaxaccel);
+        Constants.dtmaxspeed, Constants.dtmaxaccel);
 
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)),
-      List.of(
-        new Translation2d(0, 0.25),
-        new Translation2d(0, 0.5)),
-        //new Translation2d(xn, yn),
-      new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
-      trajectoryConfig);
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(
+            new Translation2d(0, 0.25),
+            new Translation2d(0, 0.5)),
+        // new Translation2d(xn, yn),
+        new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
+        trajectoryConfig);
 
-      autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
-
+    autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
 
     // Configure the trigger bindings
     configureBindings();
@@ -124,14 +124,14 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(driveWithJoysticks);
 
     // Creates command to move the arm in and out
-    new RunCommand(() -> armextension.extendArm(operator.getRightX()));
+    new RunCommand(() -> armextension.extendArmSetSpeed(operator.getRightX()));
 
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     operator.b().whileTrue(armRotationForward);
     operator.x().whileTrue(armRotationBackward);
 
     operator.start().whileTrue(armRotationPreset0);
-    
+
     operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
 
   }
@@ -143,36 +143,35 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
+
     
-      
-
-      //Fill in once we have more info/constants
-      /* RamseteCommand ramseteCommand =
+    // Fill in once we have more info/constants
+    /* RamseteCommand ramseteCommand =
       new RamseteCommand(
-          trajectory,
-          drivetrain::getPose,
-          new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-          new SimpleMotorFeedforward(
-              Constants.ksVolts,
-              Constants.kvVoltSecondsPerMeter,
-              Constants.kaVoltSecondsSquaredPerMeter),
-          Constants.kDriveKinematics,
-          drivetrain::getWheelSpeeds,
-          new PIDController(Constants.kPDriveVel, 0, 0),
-          new PIDController(Constants.kPDriveVel, 0, 0),
-          // RamseteCommand passes volts to the callback
-          drivetrain::tankDriveVolts,
-          drivetrain);
-
-    drivetrain.resetOdometry(trajectory.getInitialPose());
-
-    return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
- */
+      trajectory,
+      drivetrain::getPose,
+      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
+      new SimpleMotorFeedforward(
+      Constants.ksVolts,
+      Constants.kvVoltSecondsPerMeter,
+      Constants.kaVoltSecondsSquaredPerMeter),
+      Constants.kDriveKinematics,
+      drivetrain::getWheelSpeeds,
+      new PIDController(Constants.kPDriveVel, 0, 0),
+      new PIDController(Constants.kPDriveVel, 0, 0),
+      // RamseteCommand passes volts to the callback
+      drivetrain::tankDriveVolts,
+      drivetrain);
+      
+      drivetrain.resetOdometry(trajectory.getInitialPose());
+      
+      return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
+     */
 
     return autoTrajectory;
 
     // A command will be run in autonomous
-    //return forwardHalfSpeed;
+    // return forwardHalfSpeed;
   }
 
 }

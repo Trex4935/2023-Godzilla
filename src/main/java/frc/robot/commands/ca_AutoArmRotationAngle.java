@@ -7,14 +7,14 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmRotation;
 
-public class ca_ArmRotationPresets extends CommandBase {
+public class ca_AutoArmRotationAngle extends CommandBase {
 
   private final ArmRotation arm;
   private final double m_angle;
   private boolean finCheck;
 
-  /** Creates a new ca_AutoArmRotation. */
-  public ca_ArmRotationPresets(ArmRotation ar, double angle) {
+  /** Creates a new ca_AutoArmRotationAngle. */
+  public ca_AutoArmRotationAngle(ArmRotation ar, double angle) {
     arm = ar;
     addRequirements(arm);
     m_angle = angle;
@@ -28,7 +28,7 @@ public class ca_ArmRotationPresets extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    finCheck = arm.AutoArmRotationPreset(m_angle);
+    finCheck = arm.AutoArmRotation(m_angle);
   }
 
   // Called once the command ends or is interrupted.

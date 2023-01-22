@@ -16,9 +16,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class ArmRotation extends SubsystemBase {
-  CANSparkMax ArmRotation;
+  CANSparkMax armRotationMotor;
   XboxController xboxController;
-  RelativeEncoder CurrentValue;
+  RelativeEncoder armEncoder;
 
   DigitalInput forwardLimitSwitch;
   DigitalInput backwardLimitSwitch;
@@ -26,20 +26,20 @@ public class ArmRotation extends SubsystemBase {
   /** Creates a new ArmRotation. */
   public ArmRotation() {
     // init motor
-    ArmRotation = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
+    armRotationMotor = SparkMax.createDefaultCANSparkMax(ArmRotationConstants.armRotationCAN);
     forwardLimitSwitch = new DigitalInput(0);
     backwardLimitSwitch = new DigitalInput(1);
-    CurrentValue = ArmRotation.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 42);
+    armEncoder = armRotationMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 42);
   }
 
   // sets the speed that the arm moves forward
   public void moveArmForward() {
     if (forwardLimitSwitch.get()) {
       // if the forwardLimitSwitch is true, stop the motors
-      ArmRotation.stopMotor();
+      armRotationMotor.stopMotor();
     } else {
       // if the forwardLimitSwitch is false, then allow motor to keep moving
-      ArmRotation.set(0.25);
+      armRotationMotor.set(0.25);
     }
   }
 
@@ -47,21 +47,16 @@ public class ArmRotation extends SubsystemBase {
   public void moveArmBackward() {
     if (backwardLimitSwitch.get()) {
       // if the backwardimitSwitch is true,stop the motor
-      ArmRotation.stopMotor();
+      armRotationMotor.stopMotor();
     } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
-      ArmRotation.set(0.25);
+      armRotationMotor.set(0.25);
     }
   }
 
   // stops the ArmRotation motor
   public void stopArmRotation() {
-    ArmRotation.stopMotor();
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+    armRotationMotor.stopMotor();
   }
 
   /*
@@ -86,17 +81,25 @@ public class ArmRotation extends SubsystemBase {
    * ->>> Then the rotation motor is moved until it reaches 4500 ticks.
    */
 
-  public boolean AutoArmRotationPreset(double TargetAngle) {
-    double EncoderValueTicks = CurrentValue.getPosition();
-    double TargetAngleTicks = TargetAngle * 500;
-    double changesign = Math.signum(EncoderValueTicks - TargetAngleTicks);
+  public boolean AutoArmRotation(double TargetAngle) {
+    double encoderValueTicks = armEncoder.getPosition();
+    double targetAngleTicks = TargetAngle * 500;
+    double changesign = Math.signum(encoderValueTicks - targetAngleTicks);
+    // determine direction of arm movement based on sign of encoder differences
     if (changesign > 0) {
       moveArmForward();
-      return Helper.RangeCompare(TargetAngleTicks + 100, TargetAngleTicks - 100, EncoderValueTicks);
+      // return boolean based on if current encoder value is within +- 100 ticks of target
+      return Helper.RangeCompare(targetAngleTicks + 100, targetAngleTicks - 100, encoderValueTicks);
     } else {
       moveArmBackward();
-      return Helper.RangeCompare(TargetAngleTicks + 100, TargetAngleTicks - 100, EncoderValueTicks);
+      // return boolean based on if current encoder value is within +- 100 ticks of target
+      return Helper.RangeCompare(targetAngleTicks + 100, targetAngleTicks - 100, encoderValueTicks);
     }
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
   }
 
 }

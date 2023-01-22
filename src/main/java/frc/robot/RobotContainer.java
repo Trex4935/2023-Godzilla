@@ -21,10 +21,6 @@ import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 
 import java.util.List;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -36,8 +32,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 // Robot Base Class
@@ -98,6 +92,9 @@ public class RobotContainer {
 
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(drivetrain);
+    SmartDashboard.putData(armextension);
+    SmartDashboard.putData(armrotation);
+    SmartDashboard.putData(gripper);
 
 
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(

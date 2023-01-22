@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -12,7 +13,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Add your docs here. */
-public class Gripper extends SubsystemBase{
+public class Gripper extends SubsystemBase {
 
     /** Declares new pneumatic objects. */
     DoubleSolenoid gripper;
@@ -23,11 +24,6 @@ public class Gripper extends SubsystemBase{
         gripper = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 0, 1);
         compressor = new Compressor(1, PneumaticsModuleType.REVPH);
         compressor.enableDigital();
-    }
-    
-    @Override
-    public void periodic() {
-    // This method will be called once per scheduler run
     }
 
     /** Closes the gripper */
@@ -47,5 +43,18 @@ public class Gripper extends SubsystemBase{
         DataLogManager.log("|_| GRIPPER OFF |_|");
         gripper.set(Value.kOff);
     }
-    
+
+    // Sendable override
+    // Anything put here will be added to the network tables and thus can be added
+    // to the dashboard / consumed by the LED controller
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("GripperState", null, null);
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
+
 }

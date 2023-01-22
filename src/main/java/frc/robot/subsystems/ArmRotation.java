@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 
 import frc.robot.extensions.*;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -97,6 +98,14 @@ public class ArmRotation extends SubsystemBase {
       return Helper.RangeCompare(targetAngleTicks + 100, targetAngleTicks - 100, encoderValueTicks);
     }
   }
+
+        // Sendable override
+    // Anything put here will be added to the network tables and thus can be added
+    // to the dashboard / consumed by the LED controller
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("Angle", null, null);
+    }
 
   @Override
   public void periodic() {

@@ -7,34 +7,39 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmRotation;
 
-public class ca_AutoArmRotation220 extends CommandBase {
+public class ca_ArmRotationPresets extends CommandBase {
 
   private final ArmRotation arm;
-
+  private final double m_angle;
+  private boolean finCheck;
 
   /** Creates a new ca_AutoArmRotation. */
-  public ca_AutoArmRotation220(ArmRotation ar) {
+  public ca_ArmRotationPresets(ArmRotation ar, double angle) {
     arm = ar;
     addRequirements(arm);
+    m_angle = angle;
   }
+
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.AutoArmRotation(1);
-
+    finCheck = arm.AutoArmRotationPreset(m_angle);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    arm.stopArmRotation();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return finCheck;
   }
 }

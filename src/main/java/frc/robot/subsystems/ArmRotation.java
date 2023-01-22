@@ -35,28 +35,28 @@ public class ArmRotation extends SubsystemBase {
     backwardLimitSwitch = new DigitalInput(1);
     CurrentValue = ArmRotation.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 42);
   }
- // sets the speed that the arm moves forward
+
+  // sets the speed that the arm moves forward
   public void moveArmForward() {
     if (forwardLimitSwitch.get()) {
       // if the forwardLimitSwitch is true, stop the motors
-       ArmRotation.stopMotor();
+      ArmRotation.stopMotor();
     } else {
-        // if the forwardLimitSwitch is false, then allow motor to keep moving
-        ArmRotation.set(0.25);
-      }
-    }  
+      // if the forwardLimitSwitch is false, then allow motor to keep moving
+      ArmRotation.set(0.25);
+    }
+  }
 
   // sets the speed that the arm moves backward
   public void moveArmBackward() {
-    if ( backwardLimitSwitch.get()) {
-      // if the backwardimitSwitch is true,stop the motor 
+    if (backwardLimitSwitch.get()) {
+      // if the backwardimitSwitch is true,stop the motor
       ArmRotation.stopMotor();
     } else {
-        //if the backwardLimitSwitch is false, then allow the motor to keep moving
-        ArmRotation.set(0.25);
-      }
+      // if the backwardLimitSwitch is false, then allow the motor to keep moving
+      ArmRotation.set(0.25);
     }
-  
+  }
 
   // stops the ArmRotation motor
   public void stopArmRotation() {
@@ -68,51 +68,39 @@ public class ArmRotation extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
- /*  ====MATH====
- Ticks per rotation, 42
-  Gear Ratio Reduction, 144:1
-  Gear has 30 teeth, sprocket has 12
-  12 degrees per tooth? 
-  144 degrees
-  0.83 degrees per rotation = 42 ticks?
-  .002 degrees per tick
-  500 ticks for every degree */
+  /*
+   * ====MATH====
+   * Ticks per rotation, 42
+   * Gear Ratio Reduction, 144:1
+   * Gear has 30 teeth, sprocket has 12
+   * 12 degrees per tooth?
+   * 144 degrees
+   * 0.83 degrees per rotation = 42 ticks?
+   * .002 degrees per tick
+   * 500 ticks for every degree
+   */
 
- /* Preset Arm Positions during Auto
- (Takes in angle we need to get to) - (current encoder value) = angle we need to move
--> angle we need to move * 500 = ticks we need to move
-EXAMPLE: (90 degrees) - (0 degrees) = 90 degrees ... 90 degrees * 500 = 4500 ticks
-->>> Then the rotation motor is moved until it reaches 4500 ticks.
- */
- public void AutoArmRotation(double TargetAngle) {
-  // GET POSITION NEEDS TESTING
-double EncoderValue = CurrentValue.getPosition();
-double AngleToMove = (TargetAngle - (EncoderValue/500));
-double AmountToMove = AngleToMove * 500;
-if(EncoderValue != AmountToMove){
-ArmRotation.set(0.5);
-}
-else {
-ArmRotation.stopMotor();
-}
+  /*
+   * Preset Arm Positions during Auto
+   * (Takes in angle we need to get to) - (current encoder value) = angle we need
+   * to move
+   * -> angle we need to move * 500 = ticks we need to move
+   * EXAMPLE: (90 degrees) - (0 degrees) = 90 degrees ... 90 degrees * 500 = 4500
+   * ticks
+   * ->>> Then the rotation motor is moved until it reaches 4500 ticks.
+   */
 
-
-}
-
-/**
-~12 rotations per degree
-
-*/
-  public void ArmRotationPreset(double TargetAngle) {
-    double CurrentAngle = CurrentValue.getPosition() * (42/500);
-    double AngleMoveAmount = TargetAngle - CurrentAngle;
-    double RotationsMoveAmount = AngleMoveAmount * (500/42);
-    double TargetPosition = CurrentValue.getPosition() + RotationsMoveAmount;
-    
-    while(CurrentValue.getPosition() != TargetPosition) {
-      ArmRotation.set(0.5);
+  public boolean AutoArmRotationPreset(double TargetAngle) {
+    double EncoderValueTicks = CurrentValue.getPosition();
+    double TargetAngleTicks = TargetAngle * 500;
+    double changesign = Math.signum(EncoderValueTicks - TargetAngleTicks);
+    if (changesign > 0) {
+      moveArmForward();
+      return Helper.RangeCompare(TargetAngleTicks + 100, TargetAngleTicks - 100, EncoderValueTicks);
+    } else {
+      moveArmBackward();
+      return Helper.RangeCompare(TargetAngleTicks + 100, TargetAngleTicks - 100, EncoderValueTicks);
     }
-    
   }
 
 }

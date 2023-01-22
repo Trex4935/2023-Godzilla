@@ -1,0 +1,48 @@
+
+----------------------------------------------------------
+If you need help with trajectory:
+----------------------------------------------------------
+
+Imports:
+
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import java.util.List;
+
+----------------------------------------------------------
+
+Trajectory Objects:
+
+TrajectoryConfig trajectoryConfig = new TrajectoryConfig(maxSpeed, maxAcceleration); 
+   -> (Configures a trajectory based on a TrapezoidProfile)
+
+Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+new Pose2d(startX, startY, new Rotation2d(startAngle)),
+    // -> Takes in the starting postion and rotation angle
+        // -> Uses Pose2D, which makes a pose based on translation and rotation on a 2D coordinate plane
+            // -> Uses Rotation2D, which makes a rotation on a 2D coordinate plane
+List.of(
+    new Translation2d(midX1, midY1),
+    new Translation2d(midX2, midY2),
+    new Translation2d(midXN, midYN))
+    // -> Takes in the desired midpoints
+        // -> Uses Translation2D, which makes a translation on a 2D coordinate plane
+new Pose2d(endX, endY, new Rotation2d(endAngle)),
+    // -> Takes in the end position and rotation angle
+trajectoryConfig
+    // -> Bases trajectory on specified configuration
+);
+
+
+----------------------------------------------------------
+
+Trajectory Attributes
+
+Trajectory moves and rotates the robot based on given points and rotation.
+
+----------------------------------------------------------
+

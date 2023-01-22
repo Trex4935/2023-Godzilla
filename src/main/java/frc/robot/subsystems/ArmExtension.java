@@ -66,6 +66,7 @@ public class ArmExtension extends SubsystemBase {
   }
 
   /** Extends or retracts the the arm */
+  // Distance Unit is: ?????
   public boolean AutoArmExtension(double TargetDistance) {
     double encoderValueTicks = ArmExtensionMotor.getSelectedSensorPosition();
     double targetDistanceTicks = TargetDistance * 2048;

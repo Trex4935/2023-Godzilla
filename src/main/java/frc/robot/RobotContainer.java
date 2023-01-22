@@ -12,6 +12,7 @@ import frc.robot.subsystems.Gripper;
 
 // Commands
 import frc.robot.commands.cm_armRotationForward;
+import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.ca_AutoArmExtensionDistance;
 import frc.robot.commands.ca_AutoArmRotationAngle;
 import frc.robot.commands.ca_ForwardHalfSpeed;
@@ -57,6 +58,10 @@ public class RobotContainer {
   private final ca_AutoArmRotationAngle armRotationPreset270;
   private final ca_AutoArmExtensionDistance armExtensionDistance0;
 
+  //Combo of Rotate and Extend:
+  // private final ca_ArmMovementCombo armMovementCombo;
+  private final ca_ArmMovementCombo armMovementComboDefault;
+
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
   private final ca_autoTrajectory autoTrajectory;
@@ -79,6 +84,7 @@ public class RobotContainer {
 
     // Create Command objects
     // extendArm = new cm_ExtendArm(armextension, 0.0);
+    // Arm Rotation
     armRotationForward = new cm_armRotationForward(armrotation);
     armRotationBackward = new cm_armRotationBackward(armrotation);
     armRotationPreset0 = new ca_AutoArmRotationAngle(armrotation, 0);
@@ -86,9 +92,14 @@ public class RobotContainer {
     armRotationPreset135 = new ca_AutoArmRotationAngle(armrotation, 135);
     armRotationPreset180 = new ca_AutoArmRotationAngle(armrotation, 180);
     armRotationPreset270 = new ca_AutoArmRotationAngle(armrotation, 270);
+    //Arm Extension
     armExtensionDistance0 = new ca_AutoArmExtensionDistance(armextension, 0);
+    // Arm Combo
+    armMovementComboDefault = new ca_ArmMovementCombo(armextension, armrotation, 0, 0);
+    // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
     forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
+    // Gripper
     gripperOpen = new cm_GripperOpen(gripper);
     gripperClose = new cm_GripperClose(gripper);
 
@@ -131,6 +142,7 @@ public class RobotContainer {
     operator.x().whileTrue(armRotationBackward);
 
     operator.start().whileTrue(armRotationPreset0);
+    operator.back().whileTrue(armExtensionDistance0);
 
     operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
 

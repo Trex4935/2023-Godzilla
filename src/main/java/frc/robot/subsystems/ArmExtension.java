@@ -70,7 +70,7 @@ public class ArmExtension extends SubsystemBase {
   public boolean AutoArmExtension(double TargetDistance) {
     double encoderValueTicks = ArmExtensionMotor.getSelectedSensorPosition();
     double targetDistanceTicks = TargetDistance * 2048;
-    double changesign = Math.signum(encoderValueTicks - targetDistanceTicks);
+    double changesign = Math.signum(targetDistanceTicks - encoderValueTicks);
     // determine direction of arm movement based on sign of encoder differences
     if (changesign > 0) {
       extendArm();

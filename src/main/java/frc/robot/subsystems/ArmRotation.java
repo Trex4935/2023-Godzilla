@@ -86,7 +86,7 @@ public class ArmRotation extends SubsystemBase {
   public boolean AutoArmRotation(double TargetAngle) {
     double encoderValueTicks = armEncoder.getPosition();
     double targetAngleTicks = TargetAngle * 500;
-    double changesign = Math.signum(encoderValueTicks - targetAngleTicks);
+    double changesign = Math.signum(targetAngleTicks - encoderValueTicks);
     // determine direction of arm movement based on sign of encoder differences
     if (changesign > 0) {
       moveArmForward();

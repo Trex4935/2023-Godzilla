@@ -4,26 +4,24 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.extensions.ArmPosition;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
+import frc.robot.Constants;
 
 public class ca_ArmMovementCombo extends CommandBase {
-
+  
   private final ArmExtension m_extend;
   private final ArmRotation m_rotate;
-  private final double m_distance;
-  private final double m_angle;
-  private boolean finExtendCheck;
-  private boolean finRotateCheck;
+  public ArmPosition Button;
 
   /** Creates a new ca_ArmMovementCombo. */
-  public ca_ArmMovementCombo(ArmExtension extend, ArmRotation rotate, double distance, double angle) {
+  public ca_ArmMovementCombo(ArmExtension extend, ArmRotation rotate) {
     m_extend = extend;
     m_rotate = rotate;
-    m_distance = distance;
-    m_angle = angle;
-    
+    Button = ArmPosition.HIGH;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(extend, rotate);
   }
@@ -35,8 +33,15 @@ public class ca_ArmMovementCombo extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    finExtendCheck = m_extend.AutoArmExtension(m_distance);
-    finRotateCheck = m_rotate.AutoArmRotation(m_angle);
+    switch (Button) {
+      case HIGH:
+        m_rotate.AutoArmRotation(Constants.ArmHighAngle);
+        m_extend.AutoArmExtension(Constants.ArmHighDistance);
+    
+      default:
+        m_rotate.AutoArmRotation(Constants.ArmCarryAngle);
+        m_extend.AutoArmExtension(Constants.ArmCarryDistance);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -46,6 +51,6 @@ public class ca_ArmMovementCombo extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (finExtendCheck && finRotateCheck);
+    return false;
   }
 }

@@ -50,9 +50,22 @@ public final class Constants {
   /** Motor Rotation Limits */
   public static final int ArmRotationLowerLimit = 0;
 
+  /** Arm Angles */
+  public static final int ArmHighAngle = 60;
+  public static final int ArmMiddleAngle = 40;
+  public static final int ArmLowAngle = 0;
+  public static final int ArmCarryAngle = 20;
 
 // ARM EXTENSION
   public static final int armExtensionCAN = 33; // Motor CAN ID
+
+  /** Arm Distances */
+  // Units = Inches (Subject to change)
+  public static final int ArmHighDistance = 66;
+  public static final int ArmMiddleDistance = 57;
+  public static final int ArmLowDistance = 48;
+  public static final int ArmCarryDistance = 0;
+
 
 
 // DRIVER/CONTROLLER Constants

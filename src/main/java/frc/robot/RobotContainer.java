@@ -15,6 +15,9 @@ import frc.robot.commands.cm_armRotationForward;
 import frc.robot.commands.ca_AutoArmRotationAngle;
 import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.ca_autoTrajectory;
+import frc.robot.commands.ca_autoTrajectoryKinematic;
+import frc.robot.commands.ca_autoTurnKinematic;
+import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.commands.cm_GripperClose;
@@ -57,7 +60,9 @@ public class RobotContainer {
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
-  private final ca_autoTrajectory autoTrajectory;
+  private final ca_autoTrajectoryKinematic autoTrajectory;
+  private final ca_autoTurnKinematic autoTurnTrajectory;
+  private final ca_driveAutoSquare autoSquare;
 
 
   // Declare Other
@@ -109,7 +114,9 @@ public class RobotContainer {
       new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
       trajectoryConfig);
 
-      autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
+      autoTrajectory = new ca_autoTrajectoryKinematic(drivetrain, trajectory);
+      autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, - 135.0); // testing 90 degree Turn;
+      autoSquare = new ca_driveAutoSquare(drivetrain, trajectory);
 
 
     // Configure the trigger bindings
@@ -169,7 +176,7 @@ public class RobotContainer {
     return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
  */
 
-    return autoTrajectory;
+    return autoSquare;
 
     // A command will be run in autonomous
     //return forwardHalfSpeed;

@@ -12,7 +12,7 @@ import frc.robot.subsystems.Gripper;
 
 // Commands
 import frc.robot.commands.cm_armRotationForward;
-import frc.robot.Constants.MovementConstraints;
+import frc.robot.commands.ca_AutoArmRotationAngle;
 import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
@@ -24,25 +24,17 @@ import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 
 import java.util.List;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-// Other
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 // Robot Base Class
@@ -60,6 +52,11 @@ public class RobotContainer {
   private final cm_armRotationForward armRotationForward;
   private final cm_armRotationBackward armRotationBackward;
   private final ca_ForwardHalfSpeed forwardHalfSpeed;
+  private final ca_AutoArmRotationAngle armRotationPreset0;
+  private final ca_AutoArmRotationAngle armRotationPreset90;
+  private final ca_AutoArmRotationAngle armRotationPreset135;
+  private final ca_AutoArmRotationAngle armRotationPreset180;
+  private final ca_AutoArmRotationAngle armRotationPreset270;
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
@@ -69,9 +66,9 @@ public class RobotContainer {
 
 
   // Declare Other
-  private final Joystick m_JoystickLeft = new Joystick(0);
-  private final Joystick m_JoystickRight = new Joystick(1);
-  private CommandXboxController operator = new CommandXboxController(2);
+  private final Joystick m_JoystickLeft = new Joystick(Constants.joystickLeft);
+  private final Joystick m_JoystickRight = new Joystick(Constants.joystickRight);
+  private CommandXboxController operator = new CommandXboxController(Constants.controllerID);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -88,6 +85,11 @@ public class RobotContainer {
     // extendArm = new cm_ExtendArm(armextension, 0.0);
     armRotationForward = new cm_armRotationForward(armrotation);
     armRotationBackward = new cm_armRotationBackward(armrotation);
+    armRotationPreset0 = new ca_AutoArmRotationAngle(armrotation, 0);
+    armRotationPreset90 = new ca_AutoArmRotationAngle(armrotation, 90);
+    armRotationPreset135 = new ca_AutoArmRotationAngle(armrotation, 135);
+    armRotationPreset180 = new ca_AutoArmRotationAngle(armrotation, 180);
+    armRotationPreset270 = new ca_AutoArmRotationAngle(armrotation, 270);
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
     forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
     gripperOpen = new cm_GripperOpen(gripper);
@@ -95,10 +97,13 @@ public class RobotContainer {
 
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(drivetrain);
+    SmartDashboard.putData(armextension);
+    SmartDashboard.putData(armrotation);
+    SmartDashboard.putData(gripper);
 
 
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-      MovementConstraints.dtmaxspeed, MovementConstraints.dtmaxaccel);
+      Constants.dtmaxspeed, Constants.dtmaxaccel);
 
       Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, new Rotation2d(0)),
@@ -128,12 +133,14 @@ public class RobotContainer {
     // Creates command to move the arm in and out
     new RunCommand(() -> armextension.extendArm(operator.getRightX()));
 
-    
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     operator.b().whileTrue(armRotationForward);
     operator.x().whileTrue(armRotationBackward);
+
+    operator.start().whileTrue(armRotationPreset0);
     
     operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
+
   }
 
   /**

@@ -162,7 +162,7 @@ public class Falcon {
      * 
      * @return Configured WPI_TalonFX motor
      */
-    public static WPI_TalonFX configMotinoMagic(WPI_TalonFX motorObject, double kP, double kI, double kD, double kF,
+    public static WPI_TalonFX configMotionMagic(WPI_TalonFX motorObject, double kP, double kI, double kD, double kF,
             double CruiseVelocity, double Acceleration) {
 
         // Auxilary motor

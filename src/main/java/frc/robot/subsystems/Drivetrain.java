@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 //Gyro Imports
@@ -11,9 +13,16 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.Encoder;
@@ -22,6 +31,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -215,6 +225,39 @@ public class Drivetrain extends SubsystemBase {
 
         ChassisSpeeds chassisSpeed = kin.toChassisSpeeds(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
         zSimAngle = chassisSpeed.omegaRadiansPerSecond * 0.02 + zSimAngle;
+    }
+
+    public void transformTrajectory(Transform2d transform2d) {
+        Trajectory trajectory = new Trajectory();
+        trajectory.transformBy(transform2d);
+    }
+
+    public void changeTrajectory(Pose2d pose2d) {
+        Trajectory trajectory = new Trajectory();
+        trajectory.relativeTo(pose2d);
+    }
+
+    public Trajectory trajectoryCalculator(Pose2d pose2d) {
+        TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+      Constants.dtmaxspeed, Constants.dtmaxaccel);
+        double poseX = pose2d.getX();
+        double poseY = pose2d.getY();
+        Trajectory trajectoryX = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)),
+            List.of(
+              new Translation2d(0.25 * poseX, 0),
+              new Translation2d(0.75 * poseX, 0)),
+            new Pose2d(poseX, 0, Rotation2d.fromDegrees(90)),
+            trajectoryConfig);
+        Trajectory trajectoryY = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(poseX, 0, Rotation2d.fromDegrees(90)),
+            List.of(
+              new Translation2d(poseX, 0.25 * poseY),
+              new Translation2d(poseX, 0.75 * poseY)),
+            new Pose2d(poseX, poseY, Rotation2d.fromDegrees(90)),
+            trajectoryConfig);
+            Trajectory trajectory = trajectoryX.concatenate(trajectoryY);
+        return trajectory;
     }
 
     // Sendable override

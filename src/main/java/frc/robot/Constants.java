@@ -33,6 +33,14 @@ public final class Constants {
   public final static int BLMotorID = 5; //LEFT
   public final static int BRMotorID = 6; //RIGHT
 
+
+  public static class DrivetrainConstants {
+    public final static int wheelDiameter = 6;
+    public final static int encoderTicks = 8192;
+    public final static double trackWidth = .641 ; // Meters
+    
+  }
+
   /** Measurement Constants */
   public final static int wheelDiameter = 6;
   public final static int encoderTicks = 8192;
@@ -47,6 +55,16 @@ public final class Constants {
   /** Motor ID */
   public static final int armRotationCAN = 13;
 
+
+  /** Class for the speed and acceleration limits of the robot. */
+  public static class MovementConstraints {
+    public static final double dtmaxaccel = 1;
+    public static final double dtmaxspeed = 0.6;
+    public static final double dtmaxomega = 0.6;
+
+    
+  }
+
   /** Motor Rotation Limits */
   public static final int ArmRotationLowerLimit = 0;
 
@@ -55,6 +73,7 @@ public final class Constants {
   public static final int ArmMiddleAngle = 40;
   public static final int ArmLowAngle = 0;
   public static final int ArmCarryAngle = 20;
+
 
 // ARM EXTENSION
   public static final int armExtensionCAN = 33; // Motor CAN ID

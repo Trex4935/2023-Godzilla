@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.extensions.ArmPosition;
+import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
 import frc.robot.Constants;
@@ -32,14 +33,27 @@ public class ca_ArmMovementCombo extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    switch (Robot.selectedArmPosition) {
-      case HIGH:
-        m_rotate.AutoArmRotation(Constants.ArmHighAngle);
-        m_extend.AutoArmExtension(Constants.ArmHighDistance);
-        
-      default:
-        m_rotate.AutoArmRotation(Constants.ArmCarryAngle);
-        m_extend.AutoArmExtension(Constants.ArmCarryDistance);
+    if(Robot.selectedArmSideOrientation == ArmSideOrientation.CompressorSide) {
+      switch (Robot.selectedArmPosition) {
+        case HIGH:
+          m_rotate.AutoArmRotation(Constants.ArmHighAngle);
+          m_extend.AutoArmExtension(Constants.ArmHighDistance);
+          break;
+
+        case MIDDLE:
+          m_rotate.AutoArmRotation(Constants.ArmMiddleAngle);
+          m_extend.AutoArmExtension(Constants.ArmMiddleDistance);
+          break;
+
+        case LOW:
+          m_rotate.AutoArmRotation(Constants.ArmLowAngle);
+          m_extend.AutoArmExtension(Constants.ArmLowDistance);
+          break;
+
+        default:
+          m_rotate.AutoArmRotation(Constants.ArmCarryAngle);
+          m_extend.AutoArmExtension(Constants.ArmCarryDistance);
+      }
     }
   }
 

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.TrajectoryConstants;
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -85,7 +86,7 @@ public class Drivetrain extends SubsystemBase {
         ahrs = new AHRS(SPI.Port.kMXP);
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
-        kin = new DifferentialDriveKinematics(DrivetrainConstants.trackWidth);
+        kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);
 
         // initiate simulate gyro Position
         zSimAngle = 0;

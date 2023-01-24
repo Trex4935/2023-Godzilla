@@ -33,7 +33,9 @@ public class ca_ArmMovementCombo extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    /**If Robot arm is on CompressorSide (The Front), then run switch case. */
     if(Robot.selectedArmSideOrientation == ArmSideOrientation.CompressorSide) {
+      /** Switch case runs different height presets when selectedArmPosition changes. */
       switch (Robot.selectedArmPosition) {
         case HIGH:
           m_rotate.AutoArmRotation(Constants.ArmHighAngle);
@@ -50,8 +52,31 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_extend.AutoArmExtension(Constants.ArmLowDistance);
           break;
 
-        default:
+        default: // Carry Position is default
           m_rotate.AutoArmRotation(Constants.ArmCarryAngle);
+          m_extend.AutoArmExtension(Constants.ArmCarryDistance);
+      }
+    } else {
+      switch (Robot.selectedArmPosition) {
+        /** 270 is max rotation, when subtracted gets the mirror angle. 
+         * i.e. Low: 0 + 20 |Mirrored| 270 - 20 */
+        case HIGH:
+          m_rotate.AutoArmRotation(270 - Constants.ArmHighAngle);
+          m_extend.AutoArmExtension(Constants.ArmHighDistance);
+          break;
+
+        case MIDDLE:
+          m_rotate.AutoArmRotation(270 - Constants.ArmMiddleAngle);
+          m_extend.AutoArmExtension(Constants.ArmMiddleDistance);
+          break;
+
+        case LOW:
+          m_rotate.AutoArmRotation(270 - Constants.ArmLowAngle);
+          m_extend.AutoArmExtension(Constants.ArmLowDistance);
+          break;
+
+        default: // Carry Position is default
+          m_rotate.AutoArmRotation(270 - Constants.ArmCarryAngle);
           m_extend.AutoArmExtension(Constants.ArmCarryDistance);
       }
     }

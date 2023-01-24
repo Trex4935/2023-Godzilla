@@ -139,7 +139,6 @@ public class RobotContainer {
     operator.back().whileTrue(armExtensionDistance0);
 
     operator.y().whileTrue(armRotationPreset0.alongWith(armExtensionDistance0));
-
     operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
 
   }

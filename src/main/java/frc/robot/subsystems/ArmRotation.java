@@ -30,19 +30,7 @@ public class ArmRotation extends SubsystemBase {
   public ArmRotation() {
     // init motor
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
-    armRotationPID = armRotationMotor.getPIDController();
-
-    armRotationPID.setSmartMotionAllowedClosedLoopError(0, 0);
-    armRotationPID.setSmartMotionMaxAccel(0, 0);
-    armRotationPID.setSmartMotionMaxVelocity(0, 0);
-    armRotationPID.setSmartMotionMinOutputVelocity(0, 0);
-    armRotationPID.setP(0);
-    armRotationPID.setI(0);
-    armRotationPID.setIAccum(0);
-    armRotationPID.setIZone(0);
-    armRotationPID.setD(0);
-    armRotationPID.setDFilter(0);
-    armRotationPID.setFF(0);
+    armRotationMotor = SparkMax.configPIDwithSmartMotion(armRotationMotor, 0, 0, 0, 0, 0, 0, 0, 0);
 
     forwardLimitSwitch = new DigitalInput(0);
     backwardLimitSwitch = new DigitalInput(1);

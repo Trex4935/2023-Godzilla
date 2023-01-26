@@ -30,7 +30,7 @@ public class ArmRotation extends SubsystemBase {
   public ArmRotation() {
     // init motor
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
-    armRotationMotor = SparkMax.configPIDwithSmartMotion(armRotationMotor, 0, 0, 0, 0, 0, 0, 0, 0);
+    armRotationMotor = SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.03, 0, 0, 0, 0, 10000, 400, 0);
 
     forwardLimitSwitch = new DigitalInput(0);
     backwardLimitSwitch = new DigitalInput(1);

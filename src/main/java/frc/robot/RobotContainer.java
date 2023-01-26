@@ -66,7 +66,8 @@ public class RobotContainer {
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
-  private final ca_autoTrajectoryKinematic autoTrajectory;
+  private final ca_autoTrajectoryKinematic autoTrajectoryKinematic;
+  private final ca_autoTrajectory autoTrajectory;
   private final ca_autoTurnKinematic autoTurnTrajectory;
   private final ca_driveAutoSquare autoSquare;
 
@@ -116,7 +117,17 @@ public class RobotContainer {
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
         Constants.dtmaxspeed, Constants.dtmaxaccel);
 
-      autoTrajectory = new ca_autoTrajectoryKinematic(drivetrain, trajectory);
+        
+      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(
+          new Translation2d(0, 0.25),
+          new Translation2d(0, 0.5)),
+        //new Translation2d(xn, yn),
+        new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
+        trajectoryConfig);
+
+      autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, trajectory);
       autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, - 135.0); // testing 90 degree Turn;
       autoSquare = new ca_driveAutoSquare(drivetrain, trajectory);
 

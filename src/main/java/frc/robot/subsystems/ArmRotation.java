@@ -9,6 +9,7 @@ import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxRelativeEncoder;
 
 import frc.robot.extensions.*;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.XboxController;
 
 public class ArmRotation extends SubsystemBase {
   CANSparkMax armRotationMotor;
+  SparkMaxPIDController armRotationPID;
   XboxController xboxController;
   RelativeEncoder armEncoder;
 
@@ -28,6 +30,19 @@ public class ArmRotation extends SubsystemBase {
   public ArmRotation() {
     // init motor
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
+    armRotationPID = armRotationMotor.getPIDController();
+
+    armRotationPID.setSmartMotionAllowedClosedLoopError(0, 0);
+    armRotationPID.setSmartMotionMaxAccel(0, 0);
+    armRotationPID.setSmartMotionMaxVelocity(0, 0);
+    armRotationPID.setSmartMotionMinOutputVelocity(0, 0);
+    armRotationPID.setP(0);
+    armRotationPID.setI(0);
+    armRotationPID.setIAccum(0);
+    armRotationPID.setIZone(0);
+    armRotationPID.setD(0);
+    armRotationPID.setDFilter(0);
+    armRotationPID.setFF(0);
 
     forwardLimitSwitch = new DigitalInput(0);
     backwardLimitSwitch = new DigitalInput(1);

@@ -24,7 +24,9 @@ import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
+import frc.robot.commands.ca_ArmMovementCombo;
 
+// Misc
 import java.util.List;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -60,6 +62,7 @@ public class RobotContainer {
   private final ca_AutoArmRotationAngle armRotationPreset180;
   private final ca_AutoArmRotationAngle armRotationPreset270;
   private final ca_AutoArmExtensionDistance armExtensionDistance0;
+  private final ca_ArmMovementCombo armMovementCombo;
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
@@ -96,6 +99,8 @@ public class RobotContainer {
     armRotationPreset270 = new ca_AutoArmRotationAngle(armrotation, 270);
     //Arm Extension
     armExtensionDistance0 = new ca_AutoArmExtensionDistance(armextension, 0);
+    //Combo
+    armMovementCombo = new ca_ArmMovementCombo(armextension, armrotation);
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
     forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
@@ -139,6 +144,8 @@ public class RobotContainer {
 
     // Makes controller driving the default command
     drivetrain.setDefaultCommand(driveWithJoysticks);
+
+    armMovementCombo.repeatedly();
 
     // Creates command to move the arm in and out
     new RunCommand(() -> armextension.extendArmSetSpeed(operator.getRightX()));

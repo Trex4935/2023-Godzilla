@@ -7,7 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.extensions.ArmPosition;
+import frc.robot.extensions.ArmSideOrientation;
 // Logging Imports
 import edu.wpi.first.wpilibj.DataLogManager;
 
@@ -25,6 +27,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   public static ArmPosition selectedArmPosition;
+  public static ArmSideOrientation selectedArmSideOrientation;
 
   /**
    * This function is run when the robot is first started up and should be used

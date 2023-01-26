@@ -33,17 +33,10 @@ public final class Constants {
   public final static int BLMotorID = 5; //LEFT
   public final static int BRMotorID = 6; //RIGHT
 
-
-  public static class DrivetrainConstants {
-    public final static int wheelDiameter = 6;
-    public final static int encoderTicks = 8192;
-    public final static double trackWidth = .641 ; // Meters
-    
-  }
-
   /** Measurement Constants */
   public final static int wheelDiameter = 6;
   public final static int encoderTicks = 8192;
+  public final static double trackWidth = .641; // Meters
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit

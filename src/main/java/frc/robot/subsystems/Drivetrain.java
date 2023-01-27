@@ -234,28 +234,6 @@ public class Drivetrain extends SubsystemBase {
         zSimAngle = chassisSpeed.omegaRadiansPerSecond * 0.02 + zSimAngle;
     }
 
-    public Trajectory trajectoryCalculator(Pose2d pose2d) {
-        TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-                Constants.dtmaxspeed, Constants.dtmaxaccel);
-        double poseX = pose2d.getX();
-        double poseY = pose2d.getY();
-        Trajectory trajectoryX = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                        new Translation2d(0.25 * poseX, 0),
-                        new Translation2d(0.75 * poseX, 0)),
-                new Pose2d(poseX, 0, Rotation2d.fromDegrees(90)),
-                trajectoryConfig);
-        Trajectory trajectoryY = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(poseX, 0, Rotation2d.fromDegrees(90)),
-                List.of(
-                        new Translation2d(poseX, 0.25 * poseY),
-                        new Translation2d(poseX, 0.75 * poseY)),
-                new Pose2d(poseX, poseY, Rotation2d.fromDegrees(90)),
-                trajectoryConfig);
-        Trajectory trajectory = trajectoryX.concatenate(trajectoryY);
-        return trajectory;
-    }
 
     public direction[] calculateTrajEnum(Translation2d goal) {
         direction[] pointMap = {};

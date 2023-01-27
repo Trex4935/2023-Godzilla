@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.List;
+import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -32,6 +33,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.direction;
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -54,21 +56,21 @@ public class Drivetrain extends SubsystemBase {
     // Declaring encoders
     Encoder leftEncoder;
     Encoder rightEncoder;
-    
+
     // Declaring Gyro Objects
     public static AHRS ahrs;
 
     // Max speed value for the motors ... default comes from constants
     Double m_MaxSpeed = Constants.dtmaxspeed;
 
-    //Kinemtatics
+    // Kinemtatics
     DifferentialDriveKinematics kin;
 
-    //Simulate
+    // Simulate
     public double zSimAngle;
 
     public Drivetrain() {
-        
+
         // Creates new motor objects and configures the talons in a separate method
         FLMotor = Talon.createDefaultTalon(Constants.FLMotorID);
         FRMotor = Talon.createDefaultTalon(Constants.FRMotorID);
@@ -99,7 +101,7 @@ public class Drivetrain extends SubsystemBase {
 
         // initiate simulate gyro Position
         zSimAngle = 0;
-        
+
     }
 
     /** Resets the gyro */
@@ -111,8 +113,8 @@ public class Drivetrain extends SubsystemBase {
     public Float getXAngle() {
         return ahrs.getRoll();
     }
-    
-    /**  Gets Pitch(Y) angle from Gyro */
+
+    /** Gets Pitch(Y) angle from Gyro */
     public Float getYAngle() {
         return ahrs.getPitch();
     }
@@ -124,10 +126,10 @@ public class Drivetrain extends SubsystemBase {
 
     /** Creates an array of the roll, pitch, and yaw values */
     public float[] PrincipalAxisValues() {
-        return new float[] {getXAngle(), getYAngle(), getZAngle()};
+        return new float[] { getXAngle(), getYAngle(), getZAngle() };
     }
 
-    public void HalfSpeed(){
+    public void HalfSpeed() {
         leftMotors.set(0.5);
         rightMotors.set(0.5);
     }
@@ -146,12 +148,12 @@ public class Drivetrain extends SubsystemBase {
         rightMotors.set(0);
     }
 
-    /** Sets the max speed value (sendable) */ 
+    /** Sets the max speed value (sendable) */
     public void setMaxSpeed(double MaxSpeed) {
         m_MaxSpeed = MaxSpeed;
     }
 
-    /** Get the Max speed value (sendable) */ 
+    /** Get the Max speed value (sendable) */
     public double getMaxSpeed() {
         return m_MaxSpeed;
     }
@@ -197,67 +199,97 @@ public class Drivetrain extends SubsystemBase {
         // 6 diameter wheel
         // 2048 ticks per motor rotation.
         // Gear ratio - 44:30
-            // Driver and driven unknown
-        // 18.85 inches of travel per rotation of the wheel   
+        // Driver and driven unknown
+        // 18.85 inches of travel per rotation of the wheel
         // 1.47 motor rotations = 18.85 inches of travel
         // 3011 ticks per wheel rotation
         // 3011 ticks per 18.85 inches
         // 160 ticks per 1 inch of travel
-        
+
         return inches * 160;
     }
 
-    // takes in chasis speed and chasis angular rate or rotation and return the left speed of the wheel;
-    public double getLeftSpeedKin( double chassisSpeedx, double chassisAngularRate){
+    // takes in chasis speed and chasis angular rate or rotation and return the left
+    // speed of the wheel;
+    public double getLeftSpeedKin(double chassisSpeedx, double chassisAngularRate) {
         double chassisSpeedy = 0;
-        DifferentialDriveWheelSpeeds wheelSpeed = kin.toWheelSpeeds(new ChassisSpeeds(chassisSpeedx,chassisSpeedy, chassisAngularRate));
+        DifferentialDriveWheelSpeeds wheelSpeed = kin
+                .toWheelSpeeds(new ChassisSpeeds(chassisSpeedx, chassisSpeedy, chassisAngularRate));
         return wheelSpeed.leftMetersPerSecond;
     }
 
-    // takes in chasis speed and chasis angular rate or rotation and return the right speed of the wheel;
-    public double getRightpeedKin(double chassisSpeedx, double chassisAngularRate){
+    // takes in chasis speed and chasis angular rate or rotation and return the
+    // right speed of the wheel;
+    public double getRightpeedKin(double chassisSpeedx, double chassisAngularRate) {
         double chassisSpeedy = 0;
-        DifferentialDriveWheelSpeeds wheelSpeed = kin.toWheelSpeeds(new ChassisSpeeds(chassisSpeedx,chassisSpeedy, chassisAngularRate));;
+        DifferentialDriveWheelSpeeds wheelSpeed = kin
+                .toWheelSpeeds(new ChassisSpeeds(chassisSpeedx, chassisSpeedy, chassisAngularRate));
+        ;
         return wheelSpeed.rightMetersPerSecond;
     }
 
-    public void simulateGyro(double leftSpeed, double rightSpeed, Timer timer){
+    public void simulateGyro(double leftSpeed, double rightSpeed, Timer timer) {
 
         ChassisSpeeds chassisSpeed = kin.toChassisSpeeds(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
         zSimAngle = chassisSpeed.omegaRadiansPerSecond * 0.02 + zSimAngle;
     }
 
-    public void transformTrajectory(Transform2d transform2d) {
-        Trajectory trajectory = new Trajectory();
-        trajectory.transformBy(transform2d);
-    }
-
-    public void changeTrajectory(Pose2d pose2d) {
-        Trajectory trajectory = new Trajectory();
-        trajectory.relativeTo(pose2d);
-    }
-
     public Trajectory trajectoryCalculator(Pose2d pose2d) {
         TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-      Constants.dtmaxspeed, Constants.dtmaxaccel);
+                Constants.dtmaxspeed, Constants.dtmaxaccel);
         double poseX = pose2d.getX();
         double poseY = pose2d.getY();
         Trajectory trajectoryX = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(
-              new Translation2d(0.25 * poseX, 0),
-              new Translation2d(0.75 * poseX, 0)),
-            new Pose2d(poseX, 0, Rotation2d.fromDegrees(90)),
-            trajectoryConfig);
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                        new Translation2d(0.25 * poseX, 0),
+                        new Translation2d(0.75 * poseX, 0)),
+                new Pose2d(poseX, 0, Rotation2d.fromDegrees(90)),
+                trajectoryConfig);
         Trajectory trajectoryY = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(poseX, 0, Rotation2d.fromDegrees(90)),
-            List.of(
-              new Translation2d(poseX, 0.25 * poseY),
-              new Translation2d(poseX, 0.75 * poseY)),
-            new Pose2d(poseX, poseY, Rotation2d.fromDegrees(90)),
-            trajectoryConfig);
-            Trajectory trajectory = trajectoryX.concatenate(trajectoryY);
+                new Pose2d(poseX, 0, Rotation2d.fromDegrees(90)),
+                List.of(
+                        new Translation2d(poseX, 0.25 * poseY),
+                        new Translation2d(poseX, 0.75 * poseY)),
+                new Pose2d(poseX, poseY, Rotation2d.fromDegrees(90)),
+                trajectoryConfig);
+        Trajectory trajectory = trajectoryX.concatenate(trajectoryY);
         return trajectory;
+    }
+
+    public direction[] calculateTrajEnum(Translation2d goal) {
+        direction[] pointMap = {};
+        int start = 1;
+
+        // Turn
+        if (goal.getX() < 0) {
+            pointMap[0] = direction.LEFT;
+        } else if (goal.getX() > 0) {
+            pointMap[0] = direction.RIGHT;
+        } else {
+            start = 0;
+        }
+
+        // Front
+        int j = 0;
+        for (int i = start; i < goal.getX(); i++) {
+            pointMap[i] = direction.FRONT;
+            j = i;
+        }
+        // Turn
+        if (goal.getY() < 0) {
+            pointMap[j] = direction.LEFT;
+        } else if (goal.getY() > 0) {
+            pointMap[j] = direction.RIGHT;
+        } else {
+            start = j;
+        }
+
+        for (int i = start; i < goal.getY(); i++) {
+            pointMap[i] = direction.FRONT;
+        }
+
+        return pointMap;
     }
 
     // Sendable override
@@ -267,7 +299,7 @@ public class Drivetrain extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
         builder.addFloatArrayProperty("Roll, Pitch, and Yaw Values", this::PrincipalAxisValues, null);
-        builder.addDoubleProperty("RightEncoder",this::getRightEncoderTicks,null);
+        builder.addDoubleProperty("RightEncoder", this::getRightEncoderTicks, null);
         builder.addDoubleProperty("LeftEncoder", this::getLeftEncoderTicks, null);
 
     }

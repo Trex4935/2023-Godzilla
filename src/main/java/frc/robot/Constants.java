@@ -23,22 +23,21 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 public final class Constants {
 
-// DRIVETRAIN Constants
- 
-  /** Wheel ID Constants */
-  public final static int FLMotorID = 1; //LEFT
-  public final static int FRMotorID = 2; //RIGHT
-  public final static int MLMotorID = 3; //LEFT
-  public final static int MRMotorID = 4; //RIGHT
-  public final static int BLMotorID = 5; //LEFT
-  public final static int BRMotorID = 6; //RIGHT
+  // DRIVETRAIN Constants
 
+  /** Wheel ID Constants */
+  public final static int FLMotorID = 1; // LEFT
+  public final static int FRMotorID = 2; // RIGHT
+  public final static int MLMotorID = 3; // LEFT
+  public final static int MRMotorID = 4; // RIGHT
+  public final static int BLMotorID = 5; // LEFT
+  public final static int BRMotorID = 6; // RIGHT
 
   public static class DrivetrainConstants {
     public final static int wheelDiameter = 6;
     public final static int encoderTicks = 8192;
-    public final static double trackWidth = .641 ; // Meters
-    
+    public final static double trackWidth = .641; // Meters
+
   }
 
   /** Measurement Constants */
@@ -49,12 +48,10 @@ public final class Constants {
   public static final double dtmaxaccel = 1; // Acceleration Limit
   public static final double dtmaxspeed = 0.6; // Speed Limit
 
-
-// ARM ROTATION Constants
+  // ARM ROTATION Constants
 
   /** Motor ID */
   public static final int armRotationCAN = 13;
-
 
   /** Class for the speed and acceleration limits of the robot. */
   public static class MovementConstraints {
@@ -62,27 +59,23 @@ public final class Constants {
     public static final double dtmaxspeed = 0.6;
     public static final double dtmaxomega = 0.6;
 
-    
   }
 
   /** Motor Rotation Limits */
   public static final int ArmRotationLowerLimit = 0;
 
-
-
-// ARM EXTENSION
+  // ARM EXTENSION
   public static final int armExtensionCAN = 33; // Motor CAN ID
 
-
-// DRIVER/CONTROLLER Constants
+  // DRIVER/CONTROLLER Constants
 
   /** Driver Constants */
-  //(Differentiates the joysticks inputs by assigning different ID ports)
+  // (Differentiates the joysticks inputs by assigning different ID ports)
   public static final int joystickLeft = 0; // Left Joystick ID
   public static final int joystickRight = 1; // Right Joystick ID
 
   public static final int joystickAxis = 1; // Actual Joystick Axis ID
-  
+
   /** Controller Constants */
   public static final int controllerID = 2; // Controller ID
 
@@ -96,8 +89,6 @@ public final class Constants {
   public static final int LeftTrigger = 2;
   public static final int RightTrigger = 3;
 
-
-
   /** Class for the Limelight constants. */
   public static class LimeLightConstants {
     public static final double h1 = 1;
@@ -106,10 +97,10 @@ public final class Constants {
 
   }
 
-  public static final TrapezoidProfile.Constraints thetaConstraints =
-  new Constraints(Constants.dtmaxspeed, Constants.dtmaxaccel);
+  public static final TrapezoidProfile.Constraints thetaConstraints = new Constraints(Constants.dtmaxspeed,
+      Constants.dtmaxaccel);
 
-// Subject to change
+  // Subject to change
   public static class TrajectoryConstants {
     public static final double ksVolts = 0.22;
     public static final double kvVoltSecondsPerMeter = 1.98;
@@ -119,10 +110,17 @@ public final class Constants {
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kTrackWidthMeters = 0.584; // 0.584 testing> .65
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
-            kTrackWidthMeters);
+        kTrackWidthMeters);
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
   }
-  
-}
 
+  // Direction
+  public enum direction {
+    FRONT,
+    BACK,
+    RIGHT,
+    LEFT
+  }
+
+}

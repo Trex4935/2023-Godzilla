@@ -13,9 +13,11 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxAlternateEncoder;
 
 import frc.robot.extensions.*;
+import edu.wpi.first.networktables.NTSendableBuilder;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmRotation extends SubsystemBase {
   CANSparkMax armRotationMotor;
@@ -71,6 +73,16 @@ public class ArmRotation extends SubsystemBase {
     }
   }
 
+ /** Returns the encoder value */
+  public double getEncoderValue() {
+    return armEncoder.getPosition();
+  }
+
+  /** Returns the angle */
+  public double getArmAngle() {
+    return getEncoderValue() / 500;
+  }
+
   /** stops the ArmRotation motor */
   public void stopArmRotation() {
     armRotationMotor.stopMotor();
@@ -119,7 +131,8 @@ public class ArmRotation extends SubsystemBase {
     // to the dashboard / consumed by the LED controller
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("Angle", null, null);
+        builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);
+        builder.addDoubleProperty("Encoder Value", this::getEncoderValue, null);
     }
 
   @Override

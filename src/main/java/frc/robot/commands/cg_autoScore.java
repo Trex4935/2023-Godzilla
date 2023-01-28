@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ArmRotation;
+import frc.robot.extensions.ArmPosition;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.Gripper;
 
@@ -39,10 +40,8 @@ public class cg_autoScore extends SequentialCommandGroup {
     addCommands(
       new cm_GripperClose(gripper), // Closes on game piece
       new ca_autoTrajectory(drivetrain, trajectory), // Moves to target
-      new ca_setArmPositionToMiddle(),
-      new cm_GripperOpen(gripper), // Drops the game piece
-      new ca_SetArmPositionToCarry()
-
+      new ca_setArmPosition(ArmPosition.MIDDLE),
+      new cm_GripperOpen(gripper) // Drops the game piece
       
     );
   }

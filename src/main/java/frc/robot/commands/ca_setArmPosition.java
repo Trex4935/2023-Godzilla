@@ -5,13 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
+import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
 
-public class ca_setArmPositionToMiddle extends CommandBase {
-  /** Creates a new ca_setArmPositionToMiddle. */
-  public ca_setArmPositionToMiddle() {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class ca_setArmPosition extends CommandBase {
+  ArmPosition m_armState;
+
+  /** Creates a new ca_setArmPosition. */
+  public ca_setArmPosition(ArmPosition armState) {
+    m_armState = armState;
   }
 
   // Called when the command is initially scheduled.
@@ -21,7 +23,7 @@ public class ca_setArmPositionToMiddle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Robot.selectedArmPosition = ArmPosition.MIDDLE;
+    Constants.selectedArmState = m_armState;
   }
 
   // Called once the command ends or is interrupted.

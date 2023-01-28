@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import frc.robot.extensions.ArmPosition;
+import frc.robot.extensions.ArmSideOrientation;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -22,6 +24,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
  */
 
 public final class Constants {
+
+  public static ArmPosition selectedArmState;
+  public static ArmSideOrientation selectedArmSideOrientation;
 
 // DRIVETRAIN Constants
  

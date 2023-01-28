@@ -34,9 +34,9 @@ public class ca_ArmMovementCombo extends CommandBase {
   @Override
   public void execute() {
     /**If Robot arm is on CompressorSide (The Front), then run switch case. */
-    if(Robot.selectedArmSideOrientation == ArmSideOrientation.CompressorSide) {
+    if(Constants.selectedArmSideOrientation == ArmSideOrientation.CompressorSide) {
       /** Switch case runs different height presets when selectedArmPosition changes. */
-      switch (Robot.selectedArmPosition) {
+      switch (Constants.selectedArmState) {
         case HIGH:
           m_rotate.AutoArmRotation(Constants.ArmHighAngle);
           m_extend.AutoArmExtension(Constants.ArmHighDistance);
@@ -57,7 +57,7 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_extend.AutoArmExtension(Constants.ArmCarryDistance);
       }
     } else {
-      switch (Robot.selectedArmPosition) {
+      switch (Constants.selectedArmState) {
         /** 270 is max rotation, when subtracted gets the mirror angle. 
          * i.e. Low: 0 + 20 |Mirrored| 270 - 20 */
         case HIGH:
@@ -80,6 +80,8 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_extend.AutoArmExtension(Constants.ArmCarryDistance);
       }
     }
+
+    Constants.selectedArmState = ArmPosition.CARRY;
   }
 
   // Called once the command ends or is interrupted.

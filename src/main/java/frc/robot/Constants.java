@@ -26,13 +26,13 @@ public final class Constants {
 // DRIVETRAIN Constants
  
   /** Wheel ID Constants */
-  public final static int FLMotorID = 1; //LEFT
-  public final static int FRMotorID = 2; //RIGHT
-  public final static int MLMotorID = 3; //LEFT
-  public final static int MRMotorID = 4; //RIGHT
-  public final static int BLMotorID = 5; //LEFT
-  public final static int BRMotorID = 6; //RIGHT
-
+  public final static int FRMotorID = 1; //RIGHT
+  public final static int FLMotorID = 2; //LEFT
+  public final static int MRMotorID = 3; //RIGHT
+  public final static int MLMotorID = 4; //LEFT
+  public final static int BRMotorID = 5; //RIGHT
+  public final static int BLMotorID = 6; //LEFT
+  
   /** Measurement Constants */
   public final static int wheelDiameter = 6;
   public final static int encoderTicks = 8192;
@@ -50,12 +50,10 @@ public final class Constants {
 
 
   /** Class for the speed and acceleration limits of the robot. */
-  public static class MovementConstraints {
+  public static class AutoMovementConstraints {
     public static final double dtmaxaccel = 1;
     public static final double dtmaxspeed = 0.6;
-    public static final double dtmaxomega = 0.6;
-
-    
+    public static final double dtmaxomega = 2;    
   }
 
   /** Motor Rotation Limits */
@@ -101,8 +99,6 @@ public final class Constants {
 
   public static final int LeftTrigger = 2;
   public static final int RightTrigger = 3;
-
-
 
   /** Class for the Limelight constants. */
   public static class LimeLightConstants {

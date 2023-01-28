@@ -10,7 +10,7 @@ import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 
 import frc.robot.extensions.*;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -46,7 +46,7 @@ public class ArmRotation extends SubsystemBase {
 
     forwardLimitSwitch = new DigitalInput(0);
     backwardLimitSwitch = new DigitalInput(1);
-    armEncoder = armRotationMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 42);
+    armEncoder = armRotationMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 42);
   }
 
   /** Sets the speed that the arm moves forward */

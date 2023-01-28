@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.MovementConstraints;
+import frc.robot.Constants.AutoMovementConstraints;
 import frc.robot.subsystems.Drivetrain;
 
 public class ca_autoTurnKinematic extends CommandBase {
@@ -42,9 +42,9 @@ public class ca_autoTurnKinematic extends CommandBase {
     Double comega = 0.0;
     // if Start > End  ,  go left, w +
     if ( Math.toDegrees(dt.zSimAngle) > eAngle) {
-      comega = - MovementConstraints.dtmaxomega ;
+      comega = - AutoMovementConstraints.dtmaxomega ;
     } else { // if Start < End, go right, w -
-      comega = MovementConstraints.dtmaxomega;
+      comega = AutoMovementConstraints.dtmaxomega;
     }
      // Constant for now
     Double leftSpeed = dt.getLeftSpeedKin(chassisSpeed, comega);

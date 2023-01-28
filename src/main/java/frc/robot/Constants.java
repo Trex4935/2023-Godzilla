@@ -73,8 +73,8 @@ public final class Constants {
 
   /** Arm Distances */
   // Units = Inches (Subject to change)
-  public static final int ArmHighDistance = 66;
-  public static final int ArmMiddleDistance = 57;
+  public static final int ArmHighDistance = 48;
+  public static final int ArmMiddleDistance = 36;
   public static final int ArmLowDistance = 48;
   public static final int ArmCarryDistance = 0;
 

@@ -228,6 +228,5 @@ public class Drivetrain extends SubsystemBase {
         builder.addFloatArrayProperty("Roll, Pitch, and Yaw Values", this::PrincipalAxisValues, null);
         builder.addDoubleProperty("RightEncoder",this::getRightEncoderTicks,null);
         builder.addDoubleProperty("LeftEncoder", this::getLeftEncoderTicks, null);
-
     }
 }

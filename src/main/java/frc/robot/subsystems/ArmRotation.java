@@ -49,25 +49,35 @@ public class ArmRotation extends SubsystemBase {
     armEncoder = armRotationMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 42);
   }
 
+  /** determines if the arm is in the red zone or not, and if it is extended or not */
+  public boolean armRedZone() {
+    // if arm is in red zone and it is extended
+    if (Helper.RangeCompare(10500, 7500, armEncoder.getPosition()) && (Constants.isRetracted == false)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /** Sets the speed that the arm moves forward */
   public void moveArmForward() {
-    if (forwardLimitSwitch.get()) {
-      // if the forwardLimitSwitch is true, stop the motors
+    // if either fwrd limit switch or it is in red zone and extended, stop motor
+    if (forwardLimitSwitch.get() || (armRedZone() == true)) {
       armRotationMotor.stopMotor();
     } else {
       // if the forwardLimitSwitch is false, then allow motor to keep moving
-      armRotationMotor.set(0.25);
+      armRotationMotor.set(Constants.armRotateSpeed);
     }
   }
 
   /** sets the speed that the arm moves backward */
   public void moveArmBackward() {
-    if (backwardLimitSwitch.get()) {
-      // if the backwardimitSwitch is true,stop the motor
+    // if either bckwrd limit switch or it is in red zone and extended, stop motor
+    if (backwardLimitSwitch.get() || (armRedZone() == true)) {
       armRotationMotor.stopMotor();
     } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
-      armRotationMotor.set(0.25);
+      armRotationMotor.set(Constants.armRotateSpeed);
     }
   }
 
@@ -105,22 +115,25 @@ public class ArmRotation extends SubsystemBase {
     // determine direction of arm movement based on sign of encoder differences
     if (changesign > 0) {
       moveArmForward();
-      // return boolean based on if current encoder value is within +- 100 ticks of target
+      // return boolean based on if current encoder value is within +- 100 ticks of
+      // target
       return Helper.RangeCompare(targetAngleTicks + 100, targetAngleTicks - 100, encoderValueTicks);
     } else {
       moveArmBackward();
-      // return boolean based on if current encoder value is within +- 100 ticks of target
+      // return boolean based on if current encoder value is within +- 100 ticks of
+      // target
       return Helper.RangeCompare(targetAngleTicks + 100, targetAngleTicks - 100, encoderValueTicks);
     }
   }
 
-        // Sendable override
-    // Anything put here will be added to the network tables and thus can be added
-    // to the dashboard / consumed by the LED controller
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("Angle", null, null);
-    }
+  // Sendable override
+  // Anything put here will be added to the network tables and thus can be added
+  // to the dashboard / consumed by the LED controller
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.addDoubleProperty("Angle", null, null);
+    builder.addBooleanProperty("RedZone",this::armRedZone, null);
+  }
 
   @Override
   public void periodic() {

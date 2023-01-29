@@ -45,7 +45,7 @@ public final class Constants {
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
-  public static final double dtmaxspeed = 0.6; // Speed Limit
+  public static final double dtmaxspeed = 0.25; // Speed Limit
 
 
 // ARM ROTATION Constants

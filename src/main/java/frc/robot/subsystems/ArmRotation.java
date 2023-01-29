@@ -13,11 +13,9 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxAlternateEncoder;
 
 import frc.robot.extensions.*;
-import edu.wpi.first.networktables.NTSendableBuilder;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmRotation extends SubsystemBase {
   CANSparkMax armRotationMotor;
@@ -55,8 +53,10 @@ public class ArmRotation extends SubsystemBase {
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
     if (Helper.RangeCompare(90000, 45000, armEncoder.getPosition()) && (Constants.isRetracted == false)) {
+      Constants.inRedZone = true; // Updates global variable
       return true;
     } else {
+      Constants.inRedZone = false; // Updates global variable
       return false;
     }
   }
@@ -64,7 +64,7 @@ public class ArmRotation extends SubsystemBase {
   /** Sets the speed that the arm moves forward */
   public void moveArmForward() {
     // if either fwrd limit switch or it is in red zone and extended, stop motor
-    if (forwardLimitSwitch.get() || (armRedZone() == true)) {
+    if (forwardLimitSwitch.get() || (armRedZone())) {
       armRotationMotor.stopMotor();
     } else {
       // if the forwardLimitSwitch is false, then allow motor to keep moving
@@ -75,7 +75,7 @@ public class ArmRotation extends SubsystemBase {
   /** sets the speed that the arm moves backward */
   public void moveArmBackward() {
     // if either bckwrd limit switch or it is in red zone and extended, stop motor
-    if (backwardLimitSwitch.get() || (armRedZone() == true)) {
+    if (backwardLimitSwitch.get() || (armRedZone())) {
       armRotationMotor.stopMotor();
     } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving

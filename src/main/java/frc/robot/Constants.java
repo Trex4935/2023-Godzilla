@@ -54,7 +54,8 @@ public final class Constants {
   public static final int armRotationCAN = 13;
 
   public static final double armRotateSpeed = 0.25; // Arm Rotation Speed
-
+  
+  public static boolean inRedZone = false;
 
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {

@@ -20,8 +20,10 @@ import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
 import frc.robot.commands.ca_autoTurnKinematic;
 import frc.robot.commands.ca_driveAutoSquare;
+import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
+import frc.robot.extensions.ArmPosition;
 import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 import frc.robot.commands.ca_ArmMovementCombo;
@@ -52,17 +54,10 @@ public class RobotContainer {
 
   // Declare Commands
   private final cm_driveWithJoysticks driveWithJoysticks;
-  // private final cm_ExtendArm extendArm;
-  private final cm_armRotationForward armRotationForward;
-  private final cm_armRotationBackward armRotationBackward;
-  private final ca_ForwardHalfSpeed forwardHalfSpeed;
-  private final ca_AutoArmRotationAngle armRotationPreset0;
-  private final ca_AutoArmRotationAngle armRotationPreset90;
-  private final ca_AutoArmRotationAngle armRotationPreset135;
-  private final ca_AutoArmRotationAngle armRotationPreset180;
-  private final ca_AutoArmRotationAngle armRotationPreset270;
-  private final ca_AutoArmExtensionDistance armExtensionDistance0;
   private final ca_ArmMovementCombo armMovementCombo;
+  private final ca_setArmPosition setArmPositionHigh;
+  private final ca_setArmPosition setArmPositionMiddle;
+  private final ca_setArmPosition setArmPositionLow;
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
@@ -88,22 +83,16 @@ public class RobotContainer {
     gripper = new Gripper();
 
     // Create Command objects
-    // extendArm = new cm_ExtendArm(armextension, 0.0);
-    // Arm Rotation
-    armRotationForward = new cm_armRotationForward(armrotation);
-    armRotationBackward = new cm_armRotationBackward(armrotation);
-    armRotationPreset0 = new ca_AutoArmRotationAngle(armrotation, 0);
-    armRotationPreset90 = new ca_AutoArmRotationAngle(armrotation, 90);
-    armRotationPreset135 = new ca_AutoArmRotationAngle(armrotation, 135);
-    armRotationPreset180 = new ca_AutoArmRotationAngle(armrotation, 180);
-    armRotationPreset270 = new ca_AutoArmRotationAngle(armrotation, 270);
-    //Arm Extension
-    armExtensionDistance0 = new ca_AutoArmExtensionDistance(armextension, 0);
+    
     //Combo
     armMovementCombo = new ca_ArmMovementCombo(armextension, armrotation);
+    setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
+    setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
+    setArmPositionLow = new ca_setArmPosition(ArmPosition.LOW);
+    
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
-    forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
+    
     // Gripper
     gripperOpen = new cm_GripperOpen(gripper);
     gripperClose = new cm_GripperClose(gripper);
@@ -145,20 +134,18 @@ public class RobotContainer {
     // Makes controller driving the default command
     drivetrain.setDefaultCommand(driveWithJoysticks);
 
+    // Run arm movement combo and restart if it ends
     armMovementCombo.repeatedly();
 
-    // Creates command to move the arm in and out
-    new RunCommand(() -> armextension.extendArmSetSpeed(operator.getRightX()));
-
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    operator.b().whileTrue(armRotationForward);
-    operator.x().whileTrue(armRotationBackward);
+    
+    // Adjust the Combo state machine to High/Middle/Low based on button press
+    operator.y().whileTrue(setArmPositionHigh);
+    operator.x().whileTrue(setArmPositionMiddle);
+    operator.a().whileTrue(setArmPositionLow);
 
-    operator.start().whileTrue(armRotationPreset0);
-    operator.back().whileTrue(armExtensionDistance0);
 
-    operator.y().whileTrue(armRotationPreset0.alongWith(armExtensionDistance0));
-    operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
+    operator.b().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
 
   }
 

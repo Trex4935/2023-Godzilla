@@ -70,6 +70,9 @@ public class Drivetrain extends SubsystemBase {
         // Sets up motor controller groups
         leftMotors = new MotorControllerGroup(FLMotor, MLMotor, BLMotor);
         rightMotors = new MotorControllerGroup(FRMotor, MRMotor, BRMotor);
+        // Inverts direction of motors/wheels.
+        leftMotors.setInverted(true);
+        rightMotors.setInverted(false);
 
         diffdrive = new DifferentialDrive(leftMotors, rightMotors);
 

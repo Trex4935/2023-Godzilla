@@ -94,6 +94,24 @@ public class ArmExtension extends SubsystemBase {
     }
   }
 
+  // Sendable Methods
+  /** Gets Encoder Ticks for Extension Encoder (Sendable) */
+  public double getExtensionEncoderTicks() {
+    return ArmExtensionMotor.getSelectedSensorPosition();
+  }
+
+  /** Gets Speed of Arm Extension Motor (Sendable) */
+  public double getExtensionMotorSpeed() {
+    return ArmExtensionMotor.get();
+  }
+
+  public String getExtensionPosition() {
+
+    
+    return "Error";
+  }
+
+
   // Sendable override
   /*
    * Anything put here will be added to the network tables and thus can be added
@@ -101,6 +119,10 @@ public class ArmExtension extends SubsystemBase {
    */
   @Override
   public void initSendable(SendableBuilder builder) {
+    builder.addDoubleProperty("Extension", null, null);
+    builder.addDoubleProperty("Extension Encoder Position", this::getExtensionEncoderTicks, null);
+    builder.addDoubleProperty("Extension Motor Rotation", this::getExtensionMotorSpeed, null);
+    builder.addStringProperty("Arm Extension Position", this::getExtensionPosition, null);
     builder.addBooleanProperty("Is Retracted", this::fullyRetracted, null);
   }
 

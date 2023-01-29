@@ -10,12 +10,14 @@ import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 
 import frc.robot.extensions.*;
+import edu.wpi.first.networktables.NTSendableBuilder;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmRotation extends SubsystemBase {
   CANSparkMax armRotationMotor;
@@ -46,7 +48,7 @@ public class ArmRotation extends SubsystemBase {
 
     forwardLimitSwitch = new DigitalInput(0);
     backwardLimitSwitch = new DigitalInput(1);
-    armEncoder = armRotationMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 42);
+    armEncoder = armRotationMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 42);
   }
 
   /** determines if the arm is in the red zone or not, and if it is extended or not */
@@ -79,6 +81,16 @@ public class ArmRotation extends SubsystemBase {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
       armRotationMotor.set(Constants.armRotateSpeed * (-1));
     }
+  }
+
+ /** Returns the encoder value */
+  public double getEncoderValue() {
+    return armEncoder.getPosition();
+  }
+
+  /** Returns the angle */
+  public double getArmAngle() {
+    return getEncoderValue() / 500;
   }
 
   /** stops the ArmRotation motor */
@@ -131,9 +143,10 @@ public class ArmRotation extends SubsystemBase {
   // to the dashboard / consumed by the LED controller
   @Override
   public void initSendable(SendableBuilder builder) {
-    builder.addDoubleProperty("Angle", null, null);
-    builder.addBooleanProperty("RedZone",this::armRedZone, null);
-  }
+      builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);
+      builder.addDoubleProperty("Encoder Value", this::getEncoderValue, null);
+      builder.addBooleanProperty("RedZone",this::armRedZone, null);
+    }
 
   @Override
   public void periodic() {

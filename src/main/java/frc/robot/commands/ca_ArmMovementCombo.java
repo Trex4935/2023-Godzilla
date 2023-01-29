@@ -10,7 +10,6 @@ import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
 import frc.robot.Constants;
-import frc.robot.Robot;
 
 public class ca_ArmMovementCombo extends CommandBase {
 

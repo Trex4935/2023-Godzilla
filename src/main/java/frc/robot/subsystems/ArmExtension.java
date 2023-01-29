@@ -77,20 +77,19 @@ public class ArmExtension extends SubsystemBase {
   } 
 
   /** Extends or retracts the the arm */
-  // Distance Unit is: ?????
-  public boolean AutoArmExtension(double TargetDistance) {
-    double encoderValueTicks = ArmExtensionMotor.getSelectedSensorPosition();
-    double targetDistanceTicks = TargetDistance * 2048;
-    double changesign = Math.signum(targetDistanceTicks - encoderValueTicks);
+  public void AutoArmExtension(double TargetDistance) { // Distance Unit is: ?????
+    double encoderValueTicks = ArmExtensionMotor.getSelectedSensorPosition(); // Gets ticks
+    double targetDistanceTicks = TargetDistance * 2048; // Converts target distance to ticks.
+    double checkSign = Math.signum(targetDistanceTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
-    if (changesign > 0) {
-      extendArm();
-      // return boolean based on if current encoder value is within +- 100 ticks (change later?) of target
-      return Helper.RangeCompare(targetDistanceTicks + 100, targetDistanceTicks - 100, encoderValueTicks);
-    } else {
-      retractArm();
-      // return boolean based on if current encoder value is within +- 100 ticks (change later?) of target
-      return Helper.RangeCompare(targetDistanceTicks + 100, targetDistanceTicks - 100, encoderValueTicks);
+    if (Helper.RangeCompare(targetDistanceTicks + 100, targetDistanceTicks - 100, encoderValueTicks) == false) { // If not in range then move...
+      if (checkSign > 0) { // If sign is positive move forward.
+        extendArm();
+      } else { // If sign not positive move backward.
+        retractArm();
+      }
+    } else { // If in range then stop motor.
+      stopExtensionMotor();
     }
   }
 

@@ -11,17 +11,12 @@ import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Gripper;
 
 // Commands
-import frc.robot.commands.cm_armRotationForward;
 import frc.robot.commands.ca_ArmMovementCombo;
-import frc.robot.commands.ca_AutoArmExtensionDistance;
-import frc.robot.commands.ca_AutoArmRotationAngle;
-import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
 import frc.robot.commands.ca_autoTurnKinematic;
 import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.ca_setArmPosition;
-import frc.robot.commands.cm_armRotationBackward;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.commands.cm_GripperClose;
@@ -40,7 +35,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 // Robot Base Class

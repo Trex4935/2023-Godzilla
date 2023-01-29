@@ -101,7 +101,7 @@ public class ArmExtension extends SubsystemBase {
    */
   @Override
   public void initSendable(SendableBuilder builder) {
-    builder.addDoubleProperty("Extension", null, null);
+    builder.addBooleanProperty("Is Retracted", this::fullyRetracted, null);
   }
 
   @Override

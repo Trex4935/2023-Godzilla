@@ -52,7 +52,7 @@ public class ArmRotation extends SubsystemBase {
   /** determines if the arm is in the red zone or not, and if it is extended or not */
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
-    if (Helper.RangeCompare(10500, 7500, armEncoder.getPosition()) && (Constants.isRetracted == false)) {
+    if (Helper.RangeCompare(90000, 45000, armEncoder.getPosition()) && (Constants.isRetracted == false)) {
       return true;
     } else {
       return false;
@@ -77,7 +77,7 @@ public class ArmRotation extends SubsystemBase {
       armRotationMotor.stopMotor();
     } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
-      armRotationMotor.set(Constants.armRotateSpeed);
+      armRotationMotor.set(Constants.armRotateSpeed * (-1));
     }
   }
 

@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -42,13 +41,14 @@ public final class Constants {
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
   public static final double dtmaxspeed = 0.6; // Speed Limit
-  public static final double armRotateSpeed = 0.25; // Arm Rotation Speed
 
 
 // ARM ROTATION Constants
 
   /** Motor ID */
   public static final int armRotationCAN = 13;
+
+  public static final double armRotateSpeed = 0.25; // Arm Rotation Speed
 
 
   /** Class for the speed and acceleration limits of the robot. */
@@ -72,6 +72,8 @@ public final class Constants {
 
 // ARM EXTENSION
   public static final int armExtensionCAN = 33; // Motor CAN ID
+
+  public static boolean isRetracted = true;
 
   /** Arm Distances */
   // Units = Inches (Subject to change)
@@ -131,8 +133,7 @@ public final class Constants {
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
   }
- 
-public static boolean isRetracted = true;
+
 }
 
 

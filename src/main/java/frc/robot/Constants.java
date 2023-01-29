@@ -53,6 +53,8 @@ public final class Constants {
   /** Motor ID */
   public static final int armRotationCAN = 13;
 
+  public static final double armRotateSpeed = 0.25; // Arm Rotation Speed
+
 
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {
@@ -73,6 +75,8 @@ public final class Constants {
 
 // ARM EXTENSION
   public static final int armExtensionCAN = 33; // Motor CAN ID
+
+  public static boolean isRetracted = true;
 
   /** Arm Distances */
   // Units = Inches (Subject to change)
@@ -130,6 +134,8 @@ public final class Constants {
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
   }
-  
+
 }
+
+
 

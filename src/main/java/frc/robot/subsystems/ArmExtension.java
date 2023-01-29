@@ -64,6 +64,17 @@ public class ArmExtension extends SubsystemBase {
       ArmExtensionMotor.set(0.25);
     }
   }
+// method that determines if the arm is retracted or not
+  public boolean fullyRetracted() {
+    if (innerLimitSwitch.get()) {
+      // updating global
+      Constants.isRetracted = true;
+      return true;
+    } else {
+      Constants.isRetracted = false;
+      return false;
+    }
+  } 
 
   /** Extends or retracts the the arm */
   // Distance Unit is: ?????
@@ -112,6 +123,7 @@ public class ArmExtension extends SubsystemBase {
     builder.addDoubleProperty("Extension Encoder Position", this::getExtensionEncoderTicks, null);
     builder.addDoubleProperty("Extension Motor Rotation", this::getExtensionMotorSpeed, null);
     builder.addStringProperty("Arm Extension Position", this::getExtensionPosition, null);
+    builder.addBooleanProperty("Is Retracted", this::fullyRetracted, null);
   }
 
   @Override

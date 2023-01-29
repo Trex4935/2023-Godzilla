@@ -7,10 +7,10 @@ package frc.robot.extensions;
 /** Add your docs here. */
 public class Helper {
 
-    /**Compares a value to a maximimum and minimum and return if it is within that range*/
+    /**Compares a value to a maximum and minimum and return if it is within that range*/
 
-    public static boolean RangeCompare(double maximimum, double minimum, double value) {
-        if (value > minimum && value <= maximimum) {
+    public static boolean RangeCompare(double maximum, double minimum, double value) {
+        if (value >= minimum && value <= maximum) {
             return true;
         }
         else {
@@ -18,7 +18,5 @@ public class Helper {
         }
         
     }
-        
-
 
 }

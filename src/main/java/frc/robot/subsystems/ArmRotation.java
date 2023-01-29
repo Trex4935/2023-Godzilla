@@ -108,21 +108,20 @@ public class ArmRotation extends SubsystemBase {
    * ->>> Then the rotation motor is moved until it reaches 4500 ticks.
    */
 
-  public boolean AutoArmRotation(double TargetAngle) {
-    double encoderValueTicks = armEncoder.getPosition();
-    double targetAngleTicks = TargetAngle * 500;
-    double changesign = Math.signum(targetAngleTicks - encoderValueTicks);
+  /** Rotates the arm */
+  public void AutoArmRotation(double TargetAngle) {
+    double encoderValueTicks = armEncoder.getPosition(); // Gets ticks
+    double targetAngleTicks = TargetAngle * 500; // Converts target angle to ticks.
+    double checkSign = Math.signum(targetAngleTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
-    if (changesign > 0) {
-      moveArmForward();
-      // return boolean based on if current encoder value is within +- 100 ticks of
-      // target
-      return Helper.RangeCompare(targetAngleTicks + 100, targetAngleTicks - 100, encoderValueTicks);
-    } else {
-      moveArmBackward();
-      // return boolean based on if current encoder value is within +- 100 ticks of
-      // target
-      return Helper.RangeCompare(targetAngleTicks + 100, targetAngleTicks - 100, encoderValueTicks);
+    if (Helper.RangeCompare(targetAngleTicks + 100, targetAngleTicks - 100, encoderValueTicks) == false) { // If not in range then move...
+      if (checkSign > 0) { // If sign is positive rotate compressor-side.
+        moveArmForward();
+      } else { // If sign not positive rotate battery-side.
+        moveArmBackward();
+      }
+    } else { // If in range then stop motor.
+      stopArmRotation();
     }
   }
 

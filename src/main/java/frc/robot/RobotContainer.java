@@ -12,6 +12,7 @@ import frc.robot.subsystems.Gripper;
 
 // Commands
 import frc.robot.commands.ca_ArmMovementCombo;
+import frc.robot.commands.ca_autoBalance;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
 import frc.robot.commands.ca_autoTurnKinematic;
@@ -23,6 +24,7 @@ import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 import frc.robot.commands.ca_ArmMovementCombo;
 
+import java.sql.Driver;
 // Misc
 import java.util.List;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -36,6 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 // Robot Base Class
 public class RobotContainer {
@@ -59,6 +62,7 @@ public class RobotContainer {
   private final ca_autoTrajectory autoTrajectory;
   private final ca_autoTurnKinematic autoTurnTrajectory;
   private final ca_driveAutoSquare autoSquare;
+  private final ca_autoBalance autoBalance;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.joystickLeft);
@@ -86,6 +90,7 @@ public class RobotContainer {
     
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
+    autoBalance = new ca_autoBalance(drivetrain);
     
     // Gripper
     gripperOpen = new cm_GripperOpen(gripper);
@@ -140,7 +145,9 @@ public class RobotContainer {
 
 
     operator.b().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
-
+    
+    new JoystickButton(m_JoystickLeft, 1).toggleOnTrue(autoBalance);
+    
   }
 
   /**

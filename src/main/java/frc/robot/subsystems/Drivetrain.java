@@ -11,6 +11,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -22,7 +23,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TrajectoryConstants;
-
+import frc.robot.extensions.PID;
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -45,6 +46,9 @@ public class Drivetrain extends SubsystemBase {
     // Declaring encoders
     Encoder leftEncoder;
     Encoder rightEncoder;
+
+    // PID
+    PIDController drivePID;
     
     // Declaring Gyro Objects
     public static AHRS ahrs;
@@ -93,6 +97,8 @@ public class Drivetrain extends SubsystemBase {
 
         // initiate simulate gyro Position
         zSimAngle = 0;
+
+        drivePID = new PIDController(0.03, 0.0, 0);
         
     }
 
@@ -135,6 +141,7 @@ public class Drivetrain extends SubsystemBase {
                 joystick2.getRawAxis(Constants.joystickAxis));
     }
 
+    /** Stops all Drivetrain motor groups. */
     public void stopMotors() {
         leftMotors.set(0);
         rightMotors.set(0);
@@ -154,6 +161,13 @@ public class Drivetrain extends SubsystemBase {
     public void resetEncoders() {
         leftEncoder.reset();
         rightEncoder.reset();
+    }
+
+    /** Move the robot based on its pitch/y axis */
+    public void autoBalance() {
+        // Set motors speed using PID controller to get Y-axis to 0 degrees
+        leftMotors.set(drivePID.calculate(getYAngle(), 0));
+        rightMotors.set(drivePID.calculate(getYAngle(), 0));
     }
 
     /** Gets the amount of ticks since reset/init */

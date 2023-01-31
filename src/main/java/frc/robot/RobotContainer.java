@@ -17,11 +17,14 @@ import frc.robot.commands.ca_autoTrajectoryKinematic;
 import frc.robot.commands.ca_autoTurnKinematic;
 import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.ca_setArmPosition;
+import frc.robot.commands.ca_setSideOrientation;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.extensions.ArmPosition;
+import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 import frc.robot.commands.ca_ArmMovementCombo;
+import frc.robot.commands.cm_setGamePieceType;
 
 // Misc
 import java.util.List;
@@ -34,8 +37,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 // Robot Base Class
 public class RobotContainer {
@@ -55,15 +57,21 @@ public class RobotContainer {
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
+  private final ca_setSideOrientation setSideOrientationCompressor;
+  private final ca_setSideOrientation setSideOrientationBattery;
+  /** Sets the game piece type to CubeTrue */
+  private final cm_setGamePieceType setGamePieceTypeCubeTrue;
+  /** Sets the game piece type to CubeFalse */
+  private final cm_setGamePieceType setGamePieceTypeCubeFalse;
   private final ca_autoTrajectoryKinematic autoTrajectoryKinematic;
   private final ca_autoTrajectory autoTrajectory;
   private final ca_autoTurnKinematic autoTurnTrajectory;
   private final ca_driveAutoSquare autoSquare;
 
   // Declare Other
-  private final Joystick m_JoystickLeft = new Joystick(Constants.joystickLeft);
-  private final Joystick m_JoystickRight = new Joystick(Constants.joystickRight);
-  private CommandXboxController operator = new CommandXboxController(Constants.controllerID);
+  private final Joystick m_JoystickLeft = new Joystick(Constants.LeftJoystickX);
+  private final Joystick m_JoystickRight = new Joystick(Constants.LeftJoystickY);
+  private final Joystick m_ArduinoController = new Joystick(Constants.controllerID);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -83,7 +91,14 @@ public class RobotContainer {
     setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
     setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
     setArmPositionLow = new ca_setArmPosition(ArmPosition.LOW);
-    
+
+    // Robot
+    setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide);
+    setSideOrientationBattery = new ca_setSideOrientation(ArmSideOrientation.BatterySide);
+
+    setGamePieceTypeCubeTrue = new cm_setGamePieceType(gripper, true);
+    setGamePieceTypeCubeFalse = new cm_setGamePieceType(gripper, false);
+
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
     
@@ -133,13 +148,19 @@ public class RobotContainer {
 
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     
-    // Adjust the Combo state machine to High/Middle/Low based on button press
-    operator.y().whileTrue(setArmPositionHigh);
-    operator.x().whileTrue(setArmPositionMiddle);
-    operator.a().whileTrue(setArmPositionLow);
 
+    // Arduino Controller Button Mapping
+    // Arm Presets
+    new JoystickButton(m_ArduinoController, Constants.groundButtonID).whileTrue(setArmPositionLow);
+    new JoystickButton(m_ArduinoController, Constants.middleButtonID).whileTrue(setArmPositionMiddle);
+    new JoystickButton(m_ArduinoController, Constants.highButtonID).whileTrue(setArmPositionHigh);
 
-    operator.b().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
+    // Toggle Switches
+    new JoystickButton(m_ArduinoController, Constants.gamePieceID).onTrue(setGamePieceTypeCubeTrue).onFalse(setGamePieceTypeCubeFalse);
+
+    new JoystickButton(m_ArduinoController, Constants.robotSideID).whileTrue(setSideOrientationBattery).whileFalse(setSideOrientationCompressor);
+
+    new JoystickButton(m_ArduinoController, Constants.gripperID).whileTrue(gripperOpen).whileFalse(gripperClose);
 
   }
 

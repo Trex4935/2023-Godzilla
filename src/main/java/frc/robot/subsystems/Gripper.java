@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /** Add your docs here. */
 public class Gripper extends SubsystemBase {
@@ -44,12 +45,17 @@ public class Gripper extends SubsystemBase {
         gripper.set(Value.kOff);
     }
 
+    public boolean getIsCube() {
+        return Constants.isCube;
+    }
+
     // Sendable override
     // Anything put here will be added to the network tables and thus can be added
     // to the dashboard / consumed by the LED controller
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("GripperState", null, null);
+        builder.addBooleanProperty("isCube", this::getIsCube, null);
     }
 
     @Override

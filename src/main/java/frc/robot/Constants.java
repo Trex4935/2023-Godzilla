@@ -28,6 +28,11 @@ public final class Constants {
   public static ArmPosition selectedArmState;
   public static ArmSideOrientation selectedArmSideOrientation;
 
+
+// ROBOT Constants
+  public static Boolean isCube;
+
+
 // DRIVETRAIN Constants
  
   /** Wheel ID Constants */
@@ -92,8 +97,8 @@ public final class Constants {
 
   /** Driver Constants */
   //(Differentiates the joysticks inputs by assigning different ID ports)
-  public static final int joystickLeft = 0; // Left Joystick ID
-  public static final int joystickRight = 1; // Right Joystick ID
+  public static final int leftJoystick = 0; // Left Joystick ID
+  public static final int rightJoystick = 1; // Right Joystick ID
 
   public static final int joystickAxis = 1; // Actual Joystick Axis ID
   
@@ -109,6 +114,22 @@ public final class Constants {
 
   public static final int LeftTrigger = 2;
   public static final int RightTrigger = 3;
+
+  /** Arduino Controller Constants */
+  // Push Buttons
+  public static final int groundButtonID = 1;
+  public static final int middleButtonID = 2;
+  public static final int highButtonID = 3;
+  // Joystick
+  public static final int ardJoystickUp = 4;
+  public static final int ardJoystickDown = 5;
+  public static final int ardJoystickLeft = 6;
+  public static final int ardJoystickRight = 7;
+
+  public static final int gamePieceID = 8;
+  public static final int robotSideID = 9;
+  public static final int gripperID = 10;
+
 
   /** Class for the Limelight constants. */
   public static class LimeLightConstants {

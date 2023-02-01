@@ -18,6 +18,7 @@ import frc.robot.commands.ca_autoTurnKinematic;
 import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.ca_setSideOrientation;
+import frc.robot.commands.cg_autoDoubleScore;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
@@ -67,6 +68,7 @@ public class RobotContainer {
   private final ca_autoTrajectory autoTrajectory;
   private final ca_autoTurnKinematic autoTurnTrajectory;
   private final ca_driveAutoSquare autoSquare;
+  private final cg_autoDoubleScore autoDoubleScore;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.LeftJoystickX);
@@ -128,6 +130,7 @@ public class RobotContainer {
       autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, trajectory);
       autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, - 135.0); // testing 90 degree Turn;
       autoSquare = new ca_driveAutoSquare(drivetrain, trajectory);
+      autoDoubleScore = new cg_autoDoubleScore(drivetrain, armrotation, armextension, gripper);
 
 
     autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
@@ -196,7 +199,7 @@ public class RobotContainer {
       return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
      */
 
-    return autoSquare;
+    return autoDoubleScore;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

@@ -17,6 +17,7 @@ import frc.robot.subsystems.ArmRotation;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.Gripper;
+import frc.robot.commands.ca_autoTurnKinematic;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -39,10 +40,10 @@ public class cg_autoScore extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new cm_GripperClose(gripper), // Closes on game piece
-      new ca_autoTrajectory(drivetrain, trajectory), // Moves to target
       new ca_setArmPosition(ArmPosition.MIDDLE),
-      new cm_GripperOpen(gripper) // Drops the game piece
-      
+      new cm_GripperOpen(gripper), // Drops the game piece
+      new ca_autoTrajectoryKinematic(drivetrain, trajectory) // Moves for mobility points
+
     );
   }
 }

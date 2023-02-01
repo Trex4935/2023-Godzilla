@@ -30,7 +30,7 @@ public final class Constants {
 
 
 // ROBOT Constants
-  public static Boolean isCube;
+  public static Boolean isCube = true;
 
 
 // DRIVETRAIN Constants

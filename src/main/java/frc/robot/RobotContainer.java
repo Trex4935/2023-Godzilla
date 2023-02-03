@@ -19,12 +19,16 @@ import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.ca_setSideOrientation;
 import frc.robot.commands.cm_driveWithJoysticks;
+import frc.robot.commands.cm_moveArmBattery;
+import frc.robot.commands.cm_moveArmCompressor;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.cm_setGamePieceType;
+import frc.robot.commands.cm_moveArmLeft;
+import frc.robot.commands.cm_moveArmRight;
 
 // Misc
 import java.util.List;
@@ -54,6 +58,15 @@ public class RobotContainer {
   private final ca_setArmPosition setArmPositionHigh;
   private final ca_setArmPosition setArmPositionMiddle;
   private final ca_setArmPosition setArmPositionLow;
+
+// __________________________
+
+private final cm_moveArmCompressor moveArmCompressor;
+private final cm_moveArmBattery moveArmBattery;
+private final cm_moveArmLeft moveArmLeft;
+private final cm_moveArmRight moveArmRight;
+
+// __________________________
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
@@ -86,6 +99,15 @@ public class RobotContainer {
 
     // Create Command objects
     
+// __________________________
+
+moveArmCompressor = new cm_moveArmCompressor(armrotation);
+moveArmBattery = new cm_moveArmBattery(armrotation);
+moveArmLeft = new cm_moveArmLeft(armextension);
+moveArmRight = new cm_moveArmRight(armextension);
+
+// __________________________
+
     //Combo
     armMovementCombo = new ca_ArmMovementCombo(armextension, armrotation);
     setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
@@ -161,6 +183,16 @@ public class RobotContainer {
     new JoystickButton(m_ArduinoController, Constants.robotSideID).whileTrue(setSideOrientationBattery).whileFalse(setSideOrientationCompressor);
 
     new JoystickButton(m_ArduinoController, Constants.gripperID).whileTrue(gripperOpen).whileFalse(gripperClose);
+
+// __________________________
+
+new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(moveArmCompressor);
+new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(moveArmBattery);
+new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(moveArmLeft);
+new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(moveArmRight);
+
+
+// __________________________
 
   }
 

@@ -83,7 +83,8 @@ public final class Constants {
   public static final int armExtensionCAN = 33; // Motor CAN ID
 
   public static boolean isRetracted = true;
-
+// arm extension speed? not sure if needed
+  public static final double armExtensionSpeed = 0.25;
   /** Arm Distances */
   // Units = Inches (Subject to change)
   public static final int ArmHighDistance = 48;

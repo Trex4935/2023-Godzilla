@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -23,7 +24,7 @@ public class ArmExtension extends SubsystemBase {
   /** Creates a new motor. */
   public ArmExtension() {
     // Arm Extension
-    ArmExtensionMotor = Falcon.createDefaultFalcon(Constants.armExtensionCAN);
+    ArmExtensionMotor = Falcon.createDefaultFalcon(21);
     /// Need Encoder based soft limits implemented
 
     outerLimitSwitch = new DigitalInput(2);
@@ -50,7 +51,7 @@ public class ArmExtension extends SubsystemBase {
       ArmExtensionMotor.stopMotor();
     } else {
       // if the forwardLimitSwitch is false, then allow motor to keep moving
-      ArmExtensionMotor.set(0.25);
+      ArmExtensionMotor.set(Constants.armExtensionSpeed);
     }
   }
 
@@ -61,9 +62,23 @@ public class ArmExtension extends SubsystemBase {
       ArmExtensionMotor.stopMotor();
     } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
-      ArmExtensionMotor.set(0.25);
+      ArmExtensionMotor.set(Constants.armExtensionSpeed);
     }
   }
+  // __________________________
+// rename later as extend and retract 
+public void moveArmLeft() {
+  ArmExtensionMotor.set(Constants.armExtensionSpeed);
+  DataLogManager.log("MOVING LEFT");
+}
+
+public void moveArmRight() {
+  ArmExtensionMotor.set((-1) * Constants.armExtensionSpeed);
+  DataLogManager.log("MOVING RIGHT");
+}
+
+// __________________________
+
 // method that determines if the arm is retracted or not
   public boolean fullyRetracted() {
     if (innerLimitSwitch.get()) {

@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 
-public class ArmRotation extends SubsystemBase {
+public class ArmRotation_old extends SubsystemBase {
   CANSparkMax armRotationMotor;
   SparkMaxPIDController armRotationPID;
   XboxController xboxController;
@@ -28,7 +28,7 @@ public class ArmRotation extends SubsystemBase {
   DigitalInput backwardLimitSwitch;
 
   /** Creates a new ArmRotation. */
-  public ArmRotation() {
+  public ArmRotation_old() {
     // init motor
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
    // armRotationMotor = SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.03, 0, 0, 0, 0, 10000, 400, 0);

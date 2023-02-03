@@ -14,7 +14,9 @@ public class SparkMax {
      * @return
      */
     public static CANSparkMax createDefaultCANSparkMax(int CANID) {
-        return new CANSparkMax(CANID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        CANSparkMax sparkValue = new CANSparkMax(CANID, CANSparkMaxLowLevel.MotorType.kBrushless);  
+      
+        return sparkValue;
     }
 
     /**

@@ -14,6 +14,7 @@ import com.revrobotics.SparkMaxAlternateEncoder;
 
 import frc.robot.extensions.*;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -30,11 +31,11 @@ public class ArmRotation extends SubsystemBase {
   public ArmRotation() {
     // init motor
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
-    armRotationMotor = SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.03, 0, 0, 0, 0, 10000, 400, 0);
+   // armRotationMotor = SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.03, 0, 0, 0, 0, 10000, 400, 0);
 
     forwardLimitSwitch = new DigitalInput(0);
     backwardLimitSwitch = new DigitalInput(1);
-    armEncoder = armRotationMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 42);
+    armEncoder = armRotationMotor.getEncoder();
   }
 
   /** determines if the arm is in the red zone or not, and if it is extended or not */
@@ -70,6 +71,20 @@ public class ArmRotation extends SubsystemBase {
       armRotationMotor.set(Constants.armRotateSpeed * (-1));
     }
   }
+
+// __________________________
+
+public void moveArmCompressor() {
+  armRotationMotor.set(Constants.armRotateSpeed);
+  DataLogManager.log("MOVING COMP");
+}
+
+public void moveArmBattery() {
+  armRotationMotor.set((-1) * Constants.armRotateSpeed);
+  DataLogManager.log("MOVING BATT");
+}
+
+// __________________________
 
  /** Returns the encoder value */
   public double getEncoderValue() {

@@ -55,7 +55,7 @@ public class Gripper extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("GripperState", null, null);
-        builder.addBooleanProperty("isCube", this::getIsCube, null);
+//        builder.addBooleanProperty("isCube", this::getIsCube, null);
     }
 
     @Override

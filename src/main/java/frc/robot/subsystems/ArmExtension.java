@@ -51,7 +51,7 @@ public class ArmExtension extends SubsystemBase {
       ArmExtensionMotor.stopMotor();
     } else {
       // if the forwardLimitSwitch is false, then allow motor to keep moving
-      ArmExtensionMotor.set(0.25);
+      ArmExtensionMotor.set(Constants.armExtensionSpeed);
     }
   }
 
@@ -62,7 +62,7 @@ public class ArmExtension extends SubsystemBase {
       ArmExtensionMotor.stopMotor();
     } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
-      ArmExtensionMotor.set(0.25);
+      ArmExtensionMotor.set(Constants.armExtensionSpeed);
     }
   }
   // __________________________

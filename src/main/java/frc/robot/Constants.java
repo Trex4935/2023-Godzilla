@@ -58,7 +58,7 @@ public final class Constants {
   /** Motor ID */
   public static final int armRotationCAN = 13;
 
-  public static final double armRotateSpeed = 0.25; // Arm Rotation Speed
+  public static final double armRotateSpeed = 0.4; // Arm Rotation Speed
   
   public static boolean inRedZone = false;
 
@@ -73,11 +73,15 @@ public final class Constants {
   public static final int ArmRotationLowerLimit = 0;
 
   /** Arm Angles */
-  public static final int ArmHighAngle = 60;
-  public static final int ArmMiddleAngle = 40;
-  public static final int ArmLowAngle = 0;
-  public static final int ArmCarryAngle = 20;
+  public static final int ArmHighAngleCompressor = 126;
+  public static final int ArmMiddleAngleCompressor = 106;
+  public static final int ArmLowAngleCompressor = 20;
+  public static final int ArmCarryAngleCompressor = 5;
 
+  public static final double ArmCarryAngleBattery = 276;
+  public static final double ArmHighAngleBattery = 276; 
+  public static final double ArmMiddleAngleBattery = 276;
+  public static final double ArmLowAngleBattery = 276;
 
 // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID
@@ -90,9 +94,7 @@ public final class Constants {
   public static final int ArmHighDistance = 48;
   public static final int ArmMiddleDistance = 36;
   public static final int ArmLowDistance = 48;
-  public static final int ArmCarryDistance = 0;
-
-
+  public static final int ArmCarryDistance = 1;
 
 // DRIVER/CONTROLLER Constants
 
@@ -158,8 +160,8 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
-  public static int inchPerExtentionTicks = 193008;
-  public static double degreesPerRotationTicks = 44.86;
+  public static int inchPerExtentionTicks = -5000;
+  public static double degreesPerRotationTicks = 1;
 
 }
 

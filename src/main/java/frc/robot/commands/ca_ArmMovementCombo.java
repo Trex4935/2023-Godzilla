@@ -41,25 +41,25 @@ public class ca_ArmMovementCombo extends CommandBase {
       switch (Constants.selectedArmState) {
         case HIGH:
         System.out.println("HIGH-C");
-          m_arm.AutoArmRotation(Constants.ArmHighAngle);
+          m_arm.AutoArmRotation(Constants.ArmHighAngleCompressor);
           m_arm.AutoArmExtension(Constants.ArmHighDistance);
           break;
 
         case MIDDLE:
         System.out.println("MIDDLE-C");
-          m_arm.AutoArmRotation(Constants.ArmMiddleAngle);
+          m_arm.AutoArmRotation(Constants.ArmMiddleAngleCompressor);
           m_arm.AutoArmExtension(Constants.ArmMiddleDistance);
           break;
 
         case LOW:
         System.out.println("LOW-C");
-          m_arm.AutoArmRotation(Constants.ArmLowAngle);
+          m_arm.AutoArmRotation(Constants.ArmLowAngleCompressor);
           m_arm.AutoArmExtension(Constants.ArmLowDistance);
           break;
 
         default: // Carry Position is default
         System.out.println("DEFAULT-C");
-          m_arm.AutoArmRotation(Constants.ArmCarryAngle);
+          m_arm.AutoArmRotation(Constants.ArmCarryAngleCompressor);
           m_arm.AutoArmExtension(Constants.ArmCarryDistance);
       }
     } else {
@@ -68,25 +68,25 @@ public class ca_ArmMovementCombo extends CommandBase {
          * i.e. Low: 0 + 20 |Mirrored| 270 - 20 */
         case HIGH:
         System.out.println("HIGH-B");
-          m_arm.AutoArmRotation(270 - Constants.ArmHighAngle);
+          m_arm.AutoArmRotation(Constants.ArmHighAngleBattery);
           m_arm.AutoArmExtension(Constants.ArmHighDistance);
           break;
 
         case MIDDLE:
         System.out.println("MIDDLE-B");
-          m_arm.AutoArmRotation(270 - Constants.ArmMiddleAngle);
+          m_arm.AutoArmRotation(Constants.ArmMiddleAngleBattery);
           m_arm.AutoArmExtension(Constants.ArmMiddleDistance);
           break;
 
         case LOW:
         System.out.println("LOW-B");
-          m_arm.AutoArmRotation(270 - Constants.ArmLowAngle);
+          m_arm.AutoArmRotation(Constants.ArmLowAngleBattery);
           m_arm.AutoArmExtension(Constants.ArmLowDistance);
           break;
 
         default: // Carry Position is default
-        System.out.println("DEFAULT-B");
-          m_arm.AutoArmRotation(270 - Constants.ArmCarryAngle);
+          // System.out.println("DEFAULT-B");
+          m_arm.AutoArmRotation(Constants.ArmCarryAngleBattery);
           m_arm.AutoArmExtension(Constants.ArmCarryDistance);
       }
     }

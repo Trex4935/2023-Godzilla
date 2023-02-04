@@ -158,6 +158,9 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
+  public static int inchPerExtentionTicks = 193008;
+  public static double degreesPerRotationTicks = 44.86;
+
 }
 
 

@@ -69,12 +69,13 @@ public class Arm extends SubsystemBase {
 
   /** Sets the speed that the arm moves backward */
   public void retractArm() {
-    if (armRetractedLimitSwitch.get()) {
+    //if (armRetractedLimitSwitch.get()) {
       // if the backwardimitSwitch is true,stop the motor
-      ArmExtensionMotor.stopMotor();
-    } else {
+    //  ArmExtensionMotor.stopMotor();
+   // } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
       ArmExtensionMotor.set(Constants.armExtensionSpeed);
+   // }
     }
   }
   // __________________________

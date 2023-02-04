@@ -153,23 +153,23 @@ public void moveArmRight() {
   /** Sets the speed that the arm moves forward */
   public void moveArmForward() {
     // if either fwrd limit switch or it is in red zone and extended, stop motor
-    if (compressorSideLimitSwitch.get() || (armRedZone())) {
-      armRotationMotor.stopMotor();
-    } else {
+    // if (compressorSideLimitSwitch.get() || (armRedZone())) {
+    //   armRotationMotor.stopMotor();
+    // } else {
       // if the forwardLimitSwitch is false, then allow motor to keep moving
       armRotationMotor.set(Constants.armRotateSpeed);
-    }
+    // }
   }
 
   /** sets the speed that the arm moves backward */
   public void moveArmBackward() {
     // if either bckwrd limit switch or it is in red zone and extended, stop motor
-    if (batterySideLimitSwitch.get() || (armRedZone())) {
-      armRotationMotor.stopMotor();
-    } else {
+    // if (batterySideLimitSwitch.get() || (armRedZone())) {
+    //  armRotationMotor.stopMotor();
+    // } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
       armRotationMotor.set(Constants.armRotateSpeed * (-1));
-    }
+    // }
   }
 
 // __________________________
@@ -226,7 +226,7 @@ public void moveArmBattery() {
   /** Rotates the arm */
   public void AutoArmRotation(double TargetAngle) {
     double encoderValueTicks = armRotationEncoder.getPosition(); // Gets ticks
-    double targetAngleTicks = TargetAngle * 500; // Converts target angle to ticks.
+    double targetAngleTicks = TargetAngle * 50; // Converts target angle to ticks.
     double checkSign = Math.signum(targetAngleTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
     if (!Helper.RangeCompare(targetAngleTicks + 100, targetAngleTicks - 100, encoderValueTicks)) { // If not in range then move...
@@ -255,7 +255,7 @@ public void moveArmBattery() {
 
 // Arm Rotation Sendables
       builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);
-      builder.addDoubleProperty("Encoder Value", this::getEncoderValue, null);
+      builder.addDoubleProperty("Rotation Encoder", this::getEncoderValue, null);
       builder.addBooleanProperty("RedZone",this::armRedZone, null);
   }
 

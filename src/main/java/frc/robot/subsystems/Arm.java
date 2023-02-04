@@ -234,7 +234,7 @@ public void moveArmBattery() {
   /** Rotates the arm */
   public void AutoArmRotation(double TargetAngle) {
     double encoderValueTicks = armRotationEncoder.getPosition(); // Gets ticks
-    double targetAngleTicks = TargetAngle * 50; // Converts target angle to ticks.
+    double targetAngleTicks = TargetAngle * Constants.degreesPerRotationTicks; // Converts target angle to ticks.
     double checkSign = Math.signum(targetAngleTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
     if (!Helper.RangeCompare(targetAngleTicks + 10, targetAngleTicks - 10, encoderValueTicks)) { // If not in range then move...

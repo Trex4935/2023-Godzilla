@@ -25,12 +25,12 @@ import frc.robot.extensions.ArmSideOrientation;
 
 public final class Constants {
 
-  public static ArmPosition selectedArmState;
-  public static ArmSideOrientation selectedArmSideOrientation;
+  public static ArmPosition selectedArmState = ArmPosition.CARRY;
+  public static ArmSideOrientation selectedArmSideOrientation = ArmSideOrientation.CompressorSide;
 
 
 // ROBOT Constants
-  public static Boolean isCube;
+  public static Boolean isCube = false;
 
 
 // DRIVETRAIN Constants
@@ -80,7 +80,7 @@ public final class Constants {
 
 
 // ARM EXTENSION
-  public static final int armExtensionCAN = 33; // Motor CAN ID
+  public static final int armExtensionCAN = 21; // Motor CAN ID
 
   public static boolean isRetracted = true;
 // arm extension speed? not sure if needed

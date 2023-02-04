@@ -13,9 +13,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ArmRotation;
 import frc.robot.extensions.ArmPosition;
-import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Gripper;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -34,7 +33,7 @@ public class cg_autoScore extends SequentialCommandGroup {
     new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
     trajectoryConfig);
 
-  public cg_autoScore(Drivetrain drivetrain, ArmRotation armRotation, ArmExtension armExtension, Gripper gripper) {
+  public cg_autoScore(Drivetrain drivetrain, Arm arm, Gripper gripper) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

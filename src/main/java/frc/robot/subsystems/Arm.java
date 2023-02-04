@@ -77,7 +77,7 @@ public class Arm extends SubsystemBase {
       ArmExtensionMotor.set(Constants.armExtensionSpeed);
    // }
     }
-  }
+
   // __________________________
 // rename later as extend and retract 
 public void moveArmLeft() {

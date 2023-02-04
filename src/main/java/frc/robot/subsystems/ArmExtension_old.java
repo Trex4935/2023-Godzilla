@@ -13,7 +13,7 @@ import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import frc.robot.extensions.*;
 
-public class ArmExtension extends SubsystemBase {
+public class ArmExtension_old extends SubsystemBase {
   // Motor
   private WPI_TalonFX ArmExtensionMotor;
 
@@ -22,7 +22,7 @@ public class ArmExtension extends SubsystemBase {
   DigitalInput innerLimitSwitch;
 
   /** Creates a new motor. */
-  public ArmExtension() {
+  public ArmExtension_old() {
     // Arm Extension
     ArmExtensionMotor = Falcon.createDefaultFalcon(21);
     /// Need Encoder based soft limits implemented

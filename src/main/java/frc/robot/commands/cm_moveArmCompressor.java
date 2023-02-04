@@ -5,13 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmRotation;
+import frc.robot.subsystems.Arm;
 
 public class cm_moveArmCompressor extends CommandBase {
-  ArmRotation m_armRotation;
+  Arm m_arm;
   /** Creates a new cm_moveArmCompressor. */
-  public cm_moveArmCompressor(ArmRotation armRotation) {
-    m_armRotation = armRotation;
+  public cm_moveArmCompressor(Arm arm) {
+    m_arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -22,13 +22,13 @@ public class cm_moveArmCompressor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armRotation.moveArmCompressor();
+    m_arm.moveArmCompressor();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_armRotation.stopArmRotation();
+    m_arm.stopArmRotation();
   }
 
   // Returns true when the command should end.

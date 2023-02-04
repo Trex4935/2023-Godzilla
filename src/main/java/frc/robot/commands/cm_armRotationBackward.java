@@ -5,14 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmRotation;
+import frc.robot.subsystems.Arm;
 
 public class cm_armRotationBackward extends CommandBase {
 
-  private final ArmRotation arm;
+  private final Arm arm;
 
   /** Creates a new c_armRotationBackwards. */
-  public cm_armRotationBackward(ArmRotation ar) {
+  public cm_armRotationBackward(Arm ar) {
     arm = ar;
     addRequirements(arm);
   }

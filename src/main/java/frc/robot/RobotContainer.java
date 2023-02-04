@@ -5,11 +5,9 @@
 package frc.robot;
 
 // Subsystems
-import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Gripper;
-
+import frc.robot.subsystems.Arm;
 // Commands
 import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.ca_autoTrajectory;
@@ -43,13 +41,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+
 // Robot Base Class
 public class RobotContainer {
 
   // Declare Subsystems
   private final Drivetrain drivetrain;
-  private final ArmExtension armextension;
-  private final ArmRotation armrotation;
+  private final Arm arm;
   private final Gripper gripper;
 
   // Declare Commands
@@ -93,23 +91,22 @@ private final cm_moveArmRight moveArmRight;
 
     // Create Subsystem objects
     drivetrain = new Drivetrain();
-    armextension = new ArmExtension();
-    armrotation = new ArmRotation();
+    arm = new Arm();
     gripper = new Gripper();
 
     // Create Command objects
     
 // __________________________
 
-moveArmCompressor = new cm_moveArmCompressor(armrotation);
-moveArmBattery = new cm_moveArmBattery(armrotation);
-moveArmLeft = new cm_moveArmLeft(armextension);
-moveArmRight = new cm_moveArmRight(armextension);
+moveArmCompressor = new cm_moveArmCompressor(arm);
+moveArmBattery = new cm_moveArmBattery(arm);
+moveArmLeft = new cm_moveArmLeft(arm);
+moveArmRight = new cm_moveArmRight(arm);
 
 // __________________________
 
     //Combo
-    armMovementCombo = new ca_ArmMovementCombo(armextension, armrotation);
+    armMovementCombo = new ca_ArmMovementCombo(arm);
     setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
     setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
     setArmPositionLow = new ca_setArmPosition(ArmPosition.LOW);
@@ -130,8 +127,7 @@ moveArmRight = new cm_moveArmRight(armextension);
 
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(drivetrain);
-    SmartDashboard.putData(armextension);
-    SmartDashboard.putData(armrotation);
+    SmartDashboard.putData(arm);
     SmartDashboard.putData(gripper);
 
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
@@ -165,8 +161,8 @@ moveArmRight = new cm_moveArmRight(armextension);
     // Makes controller driving the default command
     drivetrain.setDefaultCommand(driveWithJoysticks);
 
-    // Run arm movement combo and restart if it ends
-    armMovementCombo.repeatedly();
+    // Run arm movement combo and restart if it end
+    arm.setDefaultCommand(armMovementCombo);
 
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     

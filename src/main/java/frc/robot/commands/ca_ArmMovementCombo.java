@@ -29,15 +29,17 @@ public class ca_ArmMovementCombo extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /**If Robot arm is on CompressorSide (The Front), then run switch case. */
+    /** If Robot arm is on CompressorSide (The Front), then run switch case. */
     Constants.inRedZone = false;
     // Suppresses the ArmMovementCombo if the arm is in the RedZone.
     if (Constants.inRedZone) {
       Constants.selectedArmState = ArmPosition.CARRY;
     }
 
-    if(Constants.selectedArmSideOrientation == ArmSideOrientation.CompressorSide) {
-      /** Switch case runs different height presets when selectedArmPosition changes. */
+    if (Constants.selectedArmSideOrientation == ArmSideOrientation.CompressorSide) {
+      /**
+       * Switch case runs different height presets when selectedArmPosition changes.
+       */
       switch (Constants.selectedArmState) {
         case HIGH:
           // System.out.println("HIGH-C");
@@ -64,8 +66,10 @@ public class ca_ArmMovementCombo extends CommandBase {
       }
     } else {
       switch (Constants.selectedArmState) {
-        /** 270 is max rotation, when subtracted gets the mirror angle. 
-         * i.e. Low: 0 + 20 |Mirrored| 270 - 20 */
+        /**
+         * 270 is max rotation, when subtracted gets the mirror angle.
+         * i.e. Low: 0 + 20 |Mirrored| 270 - 20
+         */
         case HIGH:
           // System.out.println("HIGH-B");
           m_arm.AutoArmRotation(Constants.ArmHighAngleBattery);

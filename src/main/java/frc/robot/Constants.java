@@ -28,21 +28,19 @@ public final class Constants {
   public static ArmPosition selectedArmState = ArmPosition.CARRY;
   public static ArmSideOrientation selectedArmSideOrientation = ArmSideOrientation.CompressorSide;
 
-
-// ROBOT Constants
+  // ROBOT Constants
   public static Boolean isCube = false;
 
+  // DRIVETRAIN Constants
 
-// DRIVETRAIN Constants
- 
   /** Wheel ID Constants */
-  public final static int FRMotorID = 1; //RIGHT
-  public final static int FLMotorID = 2; //LEFT
-  public final static int MRMotorID = 3; //RIGHT
-  public final static int MLMotorID = 4; //LEFT
-  public final static int BRMotorID = 5; //RIGHT
-  public final static int BLMotorID = 6; //LEFT
-  
+  public final static int FRMotorID = 1; // RIGHT
+  public final static int FLMotorID = 2; // LEFT
+  public final static int MRMotorID = 3; // RIGHT
+  public final static int MLMotorID = 4; // LEFT
+  public final static int BRMotorID = 5; // RIGHT
+  public final static int BLMotorID = 6; // LEFT
+
   /** Measurement Constants */
   public final static int wheelDiameter = 6;
   public final static int encoderTicks = 8192;
@@ -52,21 +50,20 @@ public final class Constants {
   public static final double dtmaxaccel = 1; // Acceleration Limit
   public static final double dtmaxspeed = 0.25; // Speed Limit
 
-
-// ARM ROTATION Constants
+  // ARM ROTATION Constants
 
   /** Motor ID */
   public static final int armRotationCAN = 13;
 
   public static final double armRotateSpeed = 0.4; // Arm Rotation Speed
-  
+
   public static boolean inRedZone = false;
 
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {
     public static final double dtmaxaccel = 1;
     public static final double dtmaxspeed = 0.6;
-    public static final double dtmaxomega = 2;    
+    public static final double dtmaxomega = 2;
   }
 
   /** Motor Rotation Limits */
@@ -83,11 +80,11 @@ public final class Constants {
   public static final double ArmMiddleAngleBattery = 276;
   public static final double ArmLowAngleBattery = 276;
 
-// ARM EXTENSION
+  // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID
 
   public static boolean isRetracted = true;
-// arm extension speed? not sure if needed
+  // arm extension speed? not sure if needed
   public static final double armExtensionSpeed = 0.25;
   /** Arm Distances */
   // Units = Inches (Subject to change)
@@ -96,15 +93,15 @@ public final class Constants {
   public static final int ArmLowDistance = 48;
   public static final int ArmCarryDistance = 1;
 
-// DRIVER/CONTROLLER Constants
+  // DRIVER/CONTROLLER Constants
 
   /** Driver Constants */
-  //(Differentiates the joysticks inputs by assigning different ID ports)
+  // (Differentiates the joysticks inputs by assigning different ID ports)
   public static final int leftJoystick = 0; // Left Joystick ID
   public static final int rightJoystick = 1; // Right Joystick ID
 
   public static final int joystickAxis = 1; // Actual Joystick Axis ID
-  
+
   /** Controller Constants */
   public static final int controllerID = 2; // Controller ID
 
@@ -133,7 +130,6 @@ public final class Constants {
   public static final int robotSideID = 9;
   public static final int gripperID = 10;
 
-
   /** Class for the Limelight constants. */
   public static class LimeLightConstants {
     public static final double h1 = 1;
@@ -142,10 +138,10 @@ public final class Constants {
 
   }
 
-  public static final TrapezoidProfile.Constraints thetaConstraints =
-  new Constraints(Constants.dtmaxspeed, Constants.dtmaxaccel);
+  public static final TrapezoidProfile.Constraints thetaConstraints = new Constraints(Constants.dtmaxspeed,
+      Constants.dtmaxaccel);
 
-// Subject to change
+  // Subject to change
   public static class TrajectoryConstants {
     public static final double ksVolts = 0.22;
     public static final double kvVoltSecondsPerMeter = 1.98;
@@ -155,7 +151,7 @@ public final class Constants {
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kTrackWidthMeters = 0.641; // 0.584 testing> .65
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
-            kTrackWidthMeters);
+        kTrackWidthMeters);
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
   }
@@ -164,6 +160,3 @@ public final class Constants {
   public static double degreesPerRotationTicks = 1;
 
 }
-
-
-

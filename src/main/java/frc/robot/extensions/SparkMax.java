@@ -3,6 +3,7 @@ package frc.robot.extensions;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
 public class SparkMax {
@@ -15,7 +16,7 @@ public class SparkMax {
      */
     public static CANSparkMax createDefaultCANSparkMax(int CANID) {
         CANSparkMax sparkValue = new CANSparkMax(CANID, CANSparkMaxLowLevel.MotorType.kBrushless);  
-      
+        sparkValue.setIdleMode(IdleMode.kBrake);
         return sparkValue;
     }
 

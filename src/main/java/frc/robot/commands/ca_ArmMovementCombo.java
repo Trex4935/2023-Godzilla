@@ -40,25 +40,25 @@ public class ca_ArmMovementCombo extends CommandBase {
       /** Switch case runs different height presets when selectedArmPosition changes. */
       switch (Constants.selectedArmState) {
         case HIGH:
-        System.out.println("HIGH-C");
+          // System.out.println("HIGH-C");
           m_arm.AutoArmRotation(Constants.ArmHighAngleCompressor);
           m_arm.AutoArmExtension(Constants.ArmHighDistance);
           break;
 
         case MIDDLE:
-        System.out.println("MIDDLE-C");
+          // System.out.println("MIDDLE-C");
           m_arm.AutoArmRotation(Constants.ArmMiddleAngleCompressor);
           m_arm.AutoArmExtension(Constants.ArmMiddleDistance);
           break;
 
         case LOW:
-        System.out.println("LOW-C");
+          // System.out.println("LOW-C");
           m_arm.AutoArmRotation(Constants.ArmLowAngleCompressor);
           m_arm.AutoArmExtension(Constants.ArmLowDistance);
           break;
 
         default: // Carry Position is default
-        System.out.println("DEFAULT-C");
+          // System.out.println("DEFAULT-C");
           m_arm.AutoArmRotation(Constants.ArmCarryAngleCompressor);
           m_arm.AutoArmExtension(Constants.ArmCarryDistance);
       }
@@ -67,19 +67,19 @@ public class ca_ArmMovementCombo extends CommandBase {
         /** 270 is max rotation, when subtracted gets the mirror angle. 
          * i.e. Low: 0 + 20 |Mirrored| 270 - 20 */
         case HIGH:
-        System.out.println("HIGH-B");
+          // System.out.println("HIGH-B");
           m_arm.AutoArmRotation(Constants.ArmHighAngleBattery);
           m_arm.AutoArmExtension(Constants.ArmHighDistance);
           break;
 
         case MIDDLE:
-        System.out.println("MIDDLE-B");
+          // System.out.println("MIDDLE-B");
           m_arm.AutoArmRotation(Constants.ArmMiddleAngleBattery);
           m_arm.AutoArmExtension(Constants.ArmMiddleDistance);
           break;
 
         case LOW:
-        System.out.println("LOW-B");
+          // System.out.println("LOW-B");
           m_arm.AutoArmRotation(Constants.ArmLowAngleBattery);
           m_arm.AutoArmExtension(Constants.ArmLowDistance);
           break;

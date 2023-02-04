@@ -64,7 +64,7 @@ public class Arm extends SubsystemBase {
 
   /** Sets the speed that the arm moves outward */
   public void extendArm() {
-      ArmExtensionMotor.set(Constants.armExtensionSpeed);
+    ArmExtensionMotor.set(-Constants.armExtensionSpeed);
   }
 
   /** Sets the speed that the arm moves backward */
@@ -109,11 +109,11 @@ public void moveArmRight() {
     double targetDistanceTicks = TargetDistance * Constants.inchPerExtentionTicks; // Converts target distance to ticks.
     double checkSign = Math.signum(targetDistanceTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
-    if (Helper.RangeCompare(targetDistanceTicks + 100, targetDistanceTicks - 100, encoderValueTicks) == false) { // If not in range then move...
+    if (!Helper.RangeCompare(targetDistanceTicks + 500, targetDistanceTicks - 500, encoderValueTicks)) {
       if (checkSign > 0) { // If sign is positive move forward.
-        extendArm();
-      } else { // If sign not positive move backward.
         retractArm();
+      } else { // If sign not positive move backward.
+        extendArm();
       }
     } else { // If in range then stop motor.
       stopExtensionMotor();
@@ -211,8 +211,9 @@ public void moveArmBattery() {
    * 0.83 degrees per rotation = 42 ticks?
    * .002 degrees per tick-?
    * 
-   *  fixed math 2/4/23
-   *  small gear has 15 (40/15 ratio = 2.67), big circle (gear?) has 40... apparently its 9 degrees per tooth now?
+   * fixed math 2/4/23
+   * small gear has 15 (40/15 ratio = 2.67), big circle (gear?) has 40...
+   * apparently its 9 degrees per tooth now?
    * every 6048 encoder ticks, small gear turns 2.67 times, big gear moves once
    * every 44.86 ticks, we move one degree
    * 144 x 42 = 6048
@@ -237,7 +238,8 @@ public void moveArmBattery() {
     double targetAngleTicks = TargetAngle * Constants.degreesPerRotationTicks; // Converts target angle to ticks.
     double checkSign = Math.signum(targetAngleTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
-    if (!Helper.RangeCompare(targetAngleTicks + 10, targetAngleTicks - 10, encoderValueTicks)) { // If not in range then move...
+    if (!Helper.RangeCompare(targetAngleTicks + 2, targetAngleTicks - 2, encoderValueTicks)) { // If not in range then
+                                                                                               // move...
       if (checkSign > 0) { // If sign is positive rotate compressor-side.
         moveArmForward();
       } else { // If sign not positive rotate battery-side.
@@ -264,7 +266,7 @@ public void moveArmBattery() {
 // Arm Rotation Sendables
       builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);
       builder.addDoubleProperty("Rotation Encoder", this::getEncoderValue, null);
-      builder.addBooleanProperty("RedZone",this::armRedZone, null);
+    builder.addBooleanProperty("RedZone", this::armRedZone, null);
   }
 
   @Override

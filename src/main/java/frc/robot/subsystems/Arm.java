@@ -205,12 +205,20 @@ public void moveArmBattery() {
    * ====MATH====
    * Ticks per rotation, 42
    * Gear Ratio Reduction, 144:1
-   * Gear has 30 teeth, sprocket has 12
-   * 12 degrees per tooth?
-   * 144 degrees
+   * Gear has 40 teeth, sprocket has 12
+   * 12 degrees per tooth
+   * 144 degrees-?
    * 0.83 degrees per rotation = 42 ticks?
-   * .002 degrees per tick
-   * 500 ticks for every degree
+   * .002 degrees per tick-?
+   * 
+   *  fixed math 2/4/23
+   *  small gear has 15 (40/15 ratio = 2.67), big circle (gear?) has 40... apparently its 9 degrees per tooth now?
+   * every 6048 encoder ticks, small gear turns 2.67 times, big gear moves once
+   * every 44.86 ticks, we move one degree
+   * 144 x 42 = 6048
+   * 6048 x 2.67 = 16148.16
+   * 16148.16 / 360 = 44.856 rounded 44.86
+   * 
    */
 
   /*
@@ -226,10 +234,10 @@ public void moveArmBattery() {
   /** Rotates the arm */
   public void AutoArmRotation(double TargetAngle) {
     double encoderValueTicks = armRotationEncoder.getPosition(); // Gets ticks
-    double targetAngleTicks = TargetAngle * 500; // Converts target angle to ticks.
+    double targetAngleTicks = TargetAngle * 44.86; // Converts target angle to ticks.
     double checkSign = Math.signum(targetAngleTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
-    if (!Helper.RangeCompare(targetAngleTicks + 100, targetAngleTicks - 100, encoderValueTicks)) { // If not in range then move...
+    if (!Helper.RangeCompare(targetAngleTicks + 10, targetAngleTicks - 10, encoderValueTicks)) { // If not in range then move...
       if (checkSign > 0) { // If sign is positive rotate compressor-side.
         moveArmForward();
       } else { // If sign not positive rotate battery-side.

@@ -71,9 +71,9 @@ public final class Constants {
 
   /** Arm Angles */
   public static final double ArmHighAngleCompressor = 126;
-  public static final double ArmMiddleAngleCompressor = 106;
+  public static final double ArmMiddleAngleCompressor = 95;
   public static final double ArmLowAngleCompressor = 20;
-  public static final double ArmCarryAngleCompressor = 5;
+  public static double ArmCarryAngleCompressor = 5;
 
   public static final double ArmCarryAngleBattery = 276;
   public static final double ArmHighAngleBattery = 276; 

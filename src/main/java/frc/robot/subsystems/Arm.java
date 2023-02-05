@@ -31,8 +31,6 @@ public class Arm extends SubsystemBase {
   DigitalInput compressorSideLimitSwitch;
   DigitalInput batterySideLimitSwitch;
 
-  double m_defaultAngle = Constants.ArmCarryAngleCompressor;
-
   /** Creates a new Arm. */
   public Arm() {
     // init motors
@@ -129,13 +127,22 @@ public class Arm extends SubsystemBase {
     return "Error";
   }
 
+  public void setEncoder() {
+  
+    if(true){
+ArmExtensionMotor.setSelectedSensorPosition(0,0,20);
+    }else{
+
+    }
+    
+  }
   // Arm Rotation Methods
   /**
    * determines if the arm is in the red zone or not, and if it is extended or not
    */
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
-    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition()) && (armRetractedLimitSwitch == false)) {
+    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition()) && (getArmRetractedLimitSwitch() == false)) {
       Constants.inRedZone = true; // Updates global variable
       return true;
     } else {
@@ -196,18 +203,19 @@ public class Arm extends SubsystemBase {
   }
 
   /** Sets the default angle value (sendable) */ 
-  public void setDefaultAngle(double ArmCarryAngleCompressor) {
-    m_defaultAngle = ArmCarryAngleCompressor;
+  public void setDefaultAngle(double m_defaultAngle) {
+     Constants.ArmCarryAngleCompressor = m_defaultAngle;
 }
 
 /** Get the default angle value (sendable) */ 
 public double getDefaultAngle() {
-    return m_defaultAngle;
+    return Constants.ArmCarryAngleCompressor;
 }
 
 public boolean getArmRetractedLimitSwitch () {
 return armRetractedLimitSwitch.get();
 }
+
   /*
    * ====MATH====
    * Ticks per rotation, 42

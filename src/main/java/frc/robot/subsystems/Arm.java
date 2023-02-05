@@ -96,12 +96,9 @@ public class Arm extends SubsystemBase {
   // method that determines if the arm is retracted or not
   public boolean fullyRetracted() {
     if (armRetractedLimitSwitch.get()) {
-      // updating global
-      Constants.isRetracted = true;
       return true;
     } else {
-      Constants.isRetracted = false;
-      return false;
+     return false;
     }
   }
 
@@ -144,7 +141,7 @@ public class Arm extends SubsystemBase {
    */
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
-    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition()) && (Constants.isRetracted == false)) {
+    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition()) && (fullyRetracted() == false)) {
       Constants.inRedZone = true; // Updates global variable
       return true;
     } else {

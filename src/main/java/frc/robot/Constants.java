@@ -83,7 +83,6 @@ public final class Constants {
   // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID
 
-  public static boolean isRetracted = true;
   // arm extension speed? not sure if needed
   public static final double armExtensionSpeed = 0.25;
   /** Arm Distances */

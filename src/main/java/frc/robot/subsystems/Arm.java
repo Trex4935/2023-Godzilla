@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.Falcon;
+import frc.robot.extensions.FlippedDIO;
 import frc.robot.extensions.Helper;
 import frc.robot.extensions.SparkMax;
 
@@ -38,10 +39,10 @@ public class Arm extends SubsystemBase {
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
 
     // Arm Extension Limit Switches
-    armRetractedLimitSwitch = new DigitalInput(3);
+    armRetractedLimitSwitch = new FlippedDIO(0);
     // Arm Rotation Limit Switches
-    compressorSideLimitSwitch = new DigitalInput(0);
-    batterySideLimitSwitch = new DigitalInput(1);
+    compressorSideLimitSwitch = new DigitalInput(5);
+    batterySideLimitSwitch = new DigitalInput(6);
 
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();

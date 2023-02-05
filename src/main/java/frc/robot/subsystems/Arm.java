@@ -68,13 +68,14 @@ public class Arm extends SubsystemBase {
 
   /** Sets the speed that the arm moves backward */
   public void retractArm() {
-    // if (armRetractedLimitSwitch.get()) {
-    // if the backwardimitSwitch is true,stop the motor
-    // ArmExtensionMotor.stopMotor();
-    // } else {
-    // if the backwardLimitSwitch is false, then allow the motor to keep moving
-    armExtensionMotor.set(Constants.armExtensionSpeed);
-    // }
+    if (armRetractedLimitSwitch.get()) {
+      // if the backwardimitSwitch is true,stop the motor
+      armExtensionMotor.stopMotor();
+      zeroEncoder();
+    } else {
+      // if the backwardLimitSwitch is false, then allow the motor to keep moving
+      armExtensionMotor.set(Constants.armExtensionSpeed);
+    }
   }
 
   // __________________________
@@ -126,22 +127,8 @@ public class Arm extends SubsystemBase {
     return "Error";
   }
 
-  public void defaultArmExtension(){
-
-    retractArm(); // no matter where arm is retract arm fully
-    if (armRetractedLimitSwitch.get()) {
-      stopExtensionMotor(); // when limit switch = true stop retracting
-      zeroEncoder(); // when limit switch = true set encoder position = 0 on falcon
-    }
-
-  }
-
   public void zeroEncoder() {
-
-    if (true) {
-      armExtensionMotor.setSelectedSensorPosition(0, 0, 20);
-    }
-
+    armExtensionMotor.setSelectedSensorPosition(0, 0, 20);
   }
 
   // Arm Rotation Methods

@@ -28,13 +28,6 @@ import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.cm_setGamePieceType;
 
 // Misc
-import java.util.List;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -114,26 +107,14 @@ public class RobotContainer {
     SmartDashboard.putData(armrotation);
     SmartDashboard.putData(gripper);
 
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-        Constants.dtmaxspeed, Constants.dtmaxaccel);
 
-        
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-          new Translation2d(0, 0.25),
-          new Translation2d(0, 0.5)),
-        //new Translation2d(xn, yn),
-        new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
-
-      autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, trajectory);
+      autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.pigeontraj);
       autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, - 135.0); // testing 90 degree Turn;
-      autoSquare = new ca_driveAutoSquare(drivetrain, trajectory);
+      autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryf);
       autoDoubleScore = new cg_autoDoubleScore(drivetrain, armrotation, armextension, gripper);
 
 
-    autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
+    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj);
 
     // Configure the trigger bindings
     configureBindings();

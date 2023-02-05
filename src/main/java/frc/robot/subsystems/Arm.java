@@ -20,7 +20,7 @@ import frc.robot.extensions.SparkMax;
 public class Arm extends SubsystemBase {
 
   // Arm Extension
-  private WPI_TalonFX ArmExtensionMotor;
+  private WPI_TalonFX armExtensionMotor;
 
   DigitalInput armRetractedLimitSwitch;
 
@@ -34,7 +34,7 @@ public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
   public Arm() {
     // init motors
-    ArmExtensionMotor = Falcon.createDefaultFalcon(Constants.armExtensionCAN);
+    armExtensionMotor = Falcon.createDefaultFalcon(Constants.armExtensionCAN);
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
 
     // Arm Extension Limit Switches
@@ -51,19 +51,19 @@ public class Arm extends SubsystemBase {
 
   /** Stops the extension motor */
   public void stopExtensionMotor() {
-    ArmExtensionMotor.stopMotor();
+    armExtensionMotor.stopMotor();
   }
 
   /**
    * Takes a speed values from -1 to 1 and set the extension motor to that value
    */
   public void extendArmSetSpeed(Double speed) {
-    ArmExtensionMotor.set(speed);
+    armExtensionMotor.set(speed);
   }
 
   /** Sets the speed that the arm moves outward */
   public void extendArm() {
-    ArmExtensionMotor.set(-Constants.armExtensionSpeed);
+    armExtensionMotor.set(-Constants.armExtensionSpeed);
   }
 
   /** Sets the speed that the arm moves backward */
@@ -73,19 +73,19 @@ public class Arm extends SubsystemBase {
     // ArmExtensionMotor.stopMotor();
     // } else {
     // if the backwardLimitSwitch is false, then allow the motor to keep moving
-    ArmExtensionMotor.set(Constants.armExtensionSpeed);
+    armExtensionMotor.set(Constants.armExtensionSpeed);
     // }
   }
 
   // __________________________
   // rename later as extend and retract
   public void moveArmLeft() {
-    ArmExtensionMotor.set(Constants.armExtensionSpeed);
+    armExtensionMotor.set(Constants.armExtensionSpeed);
     DataLogManager.log("MOVING LEFT");
   }
 
   public void moveArmRight() {
-    ArmExtensionMotor.set((-1) * Constants.armExtensionSpeed);
+    armExtensionMotor.set((-1) * Constants.armExtensionSpeed);
     DataLogManager.log("MOVING RIGHT");
   }
 
@@ -95,7 +95,7 @@ public class Arm extends SubsystemBase {
 
   /** Extends or retracts the the arm */
   public void AutoArmExtension(double TargetDistance) { // Distance Unit is: ?????
-    double encoderValueTicks = ArmExtensionMotor.getSelectedSensorPosition(); // Gets ticks
+    double encoderValueTicks = armExtensionMotor.getSelectedSensorPosition(); // Gets ticks
     double targetDistanceTicks = TargetDistance * Constants.inchPerExtentionTicks; // Converts target distance to ticks.
     double checkSign = Math.signum(targetDistanceTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
@@ -113,12 +113,12 @@ public class Arm extends SubsystemBase {
   // Sendable Methods
   /** Gets Encoder Ticks for Extension Encoder (Sendable) */
   public double getExtensionEncoderTicks() {
-    return ArmExtensionMotor.getSelectedSensorPosition();
+    return armExtensionMotor.getSelectedSensorPosition();
   }
 
   /** Gets Speed of Arm Extension Motor (Sendable) */
   public double getExtensionMotorSpeed() {
-    return ArmExtensionMotor.get();
+    return armExtensionMotor.get();
   }
 
   public String getExtensionPosition() {
@@ -127,19 +127,19 @@ public class Arm extends SubsystemBase {
   }
 
   public void defaultArmExtension(){
-    /*
-     * 1 - no matter where arm is retract arm fully
-     * 2 - when limit switch = true stop retracting
-     * 3 - when limit switch = true set encoder position = 0 on falcon
-     */
+
+    retractArm(); // no matter where arm is retract arm fully
+    if (armRetractedLimitSwitch.get()) {
+      stopExtensionMotor(); // when limit switch = true stop retracting
+      zeroEncoder(); // when limit switch = true set encoder position = 0 on falcon
+    }
+
   }
 
-  public void setEncoder() {
+  public void zeroEncoder() {
 
     if (true) {
-      ArmExtensionMotor.setSelectedSensorPosition(0, 0, 20);
-    } else {
-
+      armExtensionMotor.setSelectedSensorPosition(0, 0, 20);
     }
 
   }

@@ -94,13 +94,7 @@ public class Arm extends SubsystemBase {
   // __________________________
 
   // method that determines if the arm is retracted or not
-  public boolean fullyRetracted() {
-    if (armRetractedLimitSwitch.get()) {
-      return true;
-    } else {
-     return false;
-    }
-  }
+ 
 
   /** Extends or retracts the the arm */
   public void AutoArmExtension(double TargetDistance) { // Distance Unit is: ?????
@@ -141,7 +135,7 @@ public class Arm extends SubsystemBase {
    */
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
-    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition()) && (fullyRetracted() == false)) {
+    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition()) && (armRetractedLimitSwitch == false)) {
       Constants.inRedZone = true; // Updates global variable
       return true;
     } else {
@@ -211,6 +205,9 @@ public double getDefaultAngle() {
     return m_defaultAngle;
 }
 
+public boolean getArmRetractedLimitSwitch () {
+return armRetractedLimitSwitch.get();
+}
   /*
    * ====MATH====
    * Ticks per rotation, 42
@@ -271,7 +268,7 @@ public double getDefaultAngle() {
     builder.addDoubleProperty("Extension Encoder Position", this::getExtensionEncoderTicks, null);
     builder.addDoubleProperty("Extension Motor Rotation", this::getExtensionMotorSpeed, null);
     builder.addStringProperty("Arm Extension Position", this::getExtensionPosition, null);
-    builder.addBooleanProperty("Is Retracted", this::fullyRetracted, null);
+    builder.addBooleanProperty("Is Retracted", this::getArmRetractedLimitSwitch, null);
 
     // Arm Rotation Sendables
     builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);

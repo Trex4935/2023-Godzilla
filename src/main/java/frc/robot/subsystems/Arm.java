@@ -68,13 +68,13 @@ public class Arm extends SubsystemBase {
 
   /** Sets the speed that the arm moves backward */
   public void retractArm() {
-    //if (armRetractedLimitSwitch.get()) {
-      // if the backwardimitSwitch is true,stop the motor
-    //  ArmExtensionMotor.stopMotor();
-   // } else {
-      // if the backwardLimitSwitch is false, then allow the motor to keep moving
-      ArmExtensionMotor.set(Constants.armExtensionSpeed);
-   // }
+    // if (armRetractedLimitSwitch.get()) {
+    // if the backwardimitSwitch is true,stop the motor
+    // ArmExtensionMotor.stopMotor();
+    // } else {
+    // if the backwardLimitSwitch is false, then allow the motor to keep moving
+    ArmExtensionMotor.set(Constants.armExtensionSpeed);
+    // }
   }
 
   // __________________________
@@ -92,7 +92,6 @@ public class Arm extends SubsystemBase {
   // __________________________
 
   // method that determines if the arm is retracted or not
- 
 
   /** Extends or retracts the the arm */
   public void AutoArmExtension(double TargetDistance) { // Distance Unit is: ?????
@@ -127,22 +126,32 @@ public class Arm extends SubsystemBase {
     return "Error";
   }
 
+  public void defaultArmExtension(){
+    /*
+     * 1 - no matter where arm is retract arm fully
+     * 2 - when limit switch = true stop retracting
+     * 3 - when limit switch = true set encoder position = 0 on falcon
+     */
+  }
+
   public void setEncoder() {
-  
-    if(true){
-ArmExtensionMotor.setSelectedSensorPosition(0,0,20);
-    }else{
+
+    if (true) {
+      ArmExtensionMotor.setSelectedSensorPosition(0, 0, 20);
+    } else {
 
     }
-    
+
   }
+
   // Arm Rotation Methods
   /**
    * determines if the arm is in the red zone or not, and if it is extended or not
    */
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
-    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition()) && (getArmRetractedLimitSwitch() == false)) {
+    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition())
+        && (getArmRetractedLimitSwitch() == false)) {
       Constants.inRedZone = true; // Updates global variable
       return true;
     } else {
@@ -202,19 +211,19 @@ ArmExtensionMotor.setSelectedSensorPosition(0,0,20);
     armRotationMotor.stopMotor();
   }
 
-  /** Sets the default angle value (sendable) */ 
+  /** Sets the default angle value (sendable) */
   public void setDefaultAngle(double m_defaultAngle) {
-     Constants.ArmCarryAngleCompressor = m_defaultAngle;
-}
+    Constants.ArmCarryAngleCompressor = m_defaultAngle;
+  }
 
-/** Get the default angle value (sendable) */ 
-public double getDefaultAngle() {
+  /** Get the default angle value (sendable) */
+  public double getDefaultAngle() {
     return Constants.ArmCarryAngleCompressor;
-}
+  }
 
-public boolean getArmRetractedLimitSwitch () {
-return armRetractedLimitSwitch.get();
-}
+  public boolean getArmRetractedLimitSwitch() {
+    return armRetractedLimitSwitch.get();
+  }
 
   /*
    * ====MATH====

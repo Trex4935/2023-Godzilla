@@ -31,6 +31,8 @@ public class Arm extends SubsystemBase {
   DigitalInput compressorSideLimitSwitch;
   DigitalInput batterySideLimitSwitch;
 
+  double m_defaultAngle = Constants.ArmCarryAngleCompressor;
+
   /** Creates a new Arm. */
   public Arm() {
     // init motors
@@ -202,6 +204,16 @@ public class Arm extends SubsystemBase {
     armRotationMotor.stopMotor();
   }
 
+  /** Sets the default angle value (sendable) */ 
+  public void setDefaultAngle(double ArmCarryAngleCompressor) {
+    m_defaultAngle = ArmCarryAngleCompressor;
+}
+
+/** Get the default angle value (sendable) */ 
+public double getDefaultAngle() {
+    return m_defaultAngle;
+}
+
   /*
    * ====MATH====
    * Ticks per rotation, 42
@@ -268,6 +280,7 @@ public class Arm extends SubsystemBase {
     builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);
     builder.addDoubleProperty("Rotation Encoder", this::getEncoderValue, null);
     builder.addBooleanProperty("RedZone", this::armRedZone, null);
+    builder.addDoubleProperty("Default Angle", this::getDefaultAngle, this::setDefaultAngle);
   }
 
   @Override

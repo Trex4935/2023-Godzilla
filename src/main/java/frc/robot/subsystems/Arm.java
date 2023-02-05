@@ -19,18 +19,17 @@ import frc.robot.extensions.SparkMax;
 
 public class Arm extends SubsystemBase {
 
- // Arm Extension 
- private WPI_TalonFX ArmExtensionMotor;
+  // Arm Extension
+  private WPI_TalonFX ArmExtensionMotor;
 
- DigitalInput armRetractedLimitSwitch;
+  DigitalInput armRetractedLimitSwitch;
 
- // Arm Rotation 
- CANSparkMax armRotationMotor;
- RelativeEncoder armRotationEncoder;
+  // Arm Rotation
+  CANSparkMax armRotationMotor;
+  RelativeEncoder armRotationEncoder;
 
- DigitalInput compressorSideLimitSwitch;
- DigitalInput batterySideLimitSwitch;
-
+  DigitalInput compressorSideLimitSwitch;
+  DigitalInput batterySideLimitSwitch;
 
   /** Creates a new Arm. */
   public Arm() {
@@ -44,13 +43,13 @@ public class Arm extends SubsystemBase {
     compressorSideLimitSwitch = new DigitalInput(0);
     batterySideLimitSwitch = new DigitalInput(1);
 
-   // rotation encoder init
-   armRotationEncoder = armRotationMotor.getEncoder(); 
+    // rotation encoder init
+    armRotationEncoder = armRotationMotor.getEncoder();
   }
 
-   // Arm Extension Methods
+  // Arm Extension Methods
 
-   /** Stops the extension motor */
+  /** Stops the extension motor */
   public void stopExtensionMotor() {
     ArmExtensionMotor.stopMotor();
   }
@@ -64,34 +63,35 @@ public class Arm extends SubsystemBase {
 
   /** Sets the speed that the arm moves outward */
   public void extendArm() {
-      ArmExtensionMotor.set(Constants.armExtensionSpeed);
+    ArmExtensionMotor.set(-Constants.armExtensionSpeed);
   }
 
   /** Sets the speed that the arm moves backward */
   public void retractArm() {
-    if (armRetractedLimitSwitch.get()) {
+    //if (armRetractedLimitSwitch.get()) {
       // if the backwardimitSwitch is true,stop the motor
-      ArmExtensionMotor.stopMotor();
-    } else {
+    //  ArmExtensionMotor.stopMotor();
+   // } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
       ArmExtensionMotor.set(Constants.armExtensionSpeed);
-    }
+   // }
   }
+
   // __________________________
-// rename later as extend and retract 
-public void moveArmLeft() {
-  ArmExtensionMotor.set(Constants.armExtensionSpeed);
-  DataLogManager.log("MOVING LEFT");
-}
+  // rename later as extend and retract
+  public void moveArmLeft() {
+    ArmExtensionMotor.set(Constants.armExtensionSpeed);
+    DataLogManager.log("MOVING LEFT");
+  }
 
-public void moveArmRight() {
-  ArmExtensionMotor.set((-1) * Constants.armExtensionSpeed);
-  DataLogManager.log("MOVING RIGHT");
-}
+  public void moveArmRight() {
+    ArmExtensionMotor.set((-1) * Constants.armExtensionSpeed);
+    DataLogManager.log("MOVING RIGHT");
+  }
 
-// __________________________
+  // __________________________
 
-// method that determines if the arm is retracted or not
+  // method that determines if the arm is retracted or not
   public boolean fullyRetracted() {
     if (armRetractedLimitSwitch.get()) {
       // updating global
@@ -101,7 +101,7 @@ public void moveArmRight() {
       Constants.isRetracted = false;
       return false;
     }
-  } 
+  }
 
   /** Extends or retracts the the arm */
   public void AutoArmExtension(double TargetDistance) { // Distance Unit is: ?????
@@ -109,11 +109,11 @@ public void moveArmRight() {
     double targetDistanceTicks = TargetDistance * Constants.inchPerExtentionTicks; // Converts target distance to ticks.
     double checkSign = Math.signum(targetDistanceTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
-    if (Helper.RangeCompare(targetDistanceTicks + 100, targetDistanceTicks - 100, encoderValueTicks) == false) { // If not in range then move...
+    if (!Helper.RangeCompare(targetDistanceTicks + 500, targetDistanceTicks - 500, encoderValueTicks)) {
       if (checkSign > 0) { // If sign is positive move forward.
-        extendArm();
-      } else { // If sign not positive move backward.
         retractArm();
+      } else { // If sign not positive move backward.
+        extendArm();
       }
     } else { // If in range then stop motor.
       stopExtensionMotor();
@@ -133,12 +133,13 @@ public void moveArmRight() {
 
   public String getExtensionPosition() {
 
-    
     return "Error";
   }
 
-   // Arm Rotation Methods
-/** determines if the arm is in the red zone or not, and if it is extended or not */
+  // Arm Rotation Methods
+  /**
+   * determines if the arm is in the red zone or not, and if it is extended or not
+   */
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
     if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition()) && (Constants.isRetracted == false)) {
@@ -154,10 +155,10 @@ public void moveArmRight() {
   public void moveArmForward() {
     // if either fwrd limit switch or it is in red zone and extended, stop motor
     // if (compressorSideLimitSwitch.get() || (armRedZone())) {
-    //   armRotationMotor.stopMotor();
+    // armRotationMotor.stopMotor();
     // } else {
-      // if the forwardLimitSwitch is false, then allow motor to keep moving
-      armRotationMotor.set(Constants.armRotateSpeed);
+    // if the forwardLimitSwitch is false, then allow motor to keep moving
+    armRotationMotor.set(Constants.armRotateSpeed);
     // }
   }
 
@@ -165,28 +166,28 @@ public void moveArmRight() {
   public void moveArmBackward() {
     // if either bckwrd limit switch or it is in red zone and extended, stop motor
     // if (batterySideLimitSwitch.get() || (armRedZone())) {
-    //  armRotationMotor.stopMotor();
+    // armRotationMotor.stopMotor();
     // } else {
-      // if the backwardLimitSwitch is false, then allow the motor to keep moving
-      armRotationMotor.set(Constants.armRotateSpeed * (-1));
+    // if the backwardLimitSwitch is false, then allow the motor to keep moving
+    armRotationMotor.set(Constants.armRotateSpeed * (-1));
     // }
   }
 
-// __________________________
+  // __________________________
 
-public void moveArmCompressor() {
-  armRotationMotor.set(Constants.armRotateSpeed);
-  DataLogManager.log("MOVING COMP");
-}
+  public void moveArmCompressor() {
+    armRotationMotor.set(Constants.armRotateSpeed);
+    DataLogManager.log("MOVING COMP");
+  }
 
-public void moveArmBattery() {
-  armRotationMotor.set((-1) * Constants.armRotateSpeed);
-  DataLogManager.log("MOVING BATT");
-}
+  public void moveArmBattery() {
+    armRotationMotor.set((-1) * Constants.armRotateSpeed);
+    DataLogManager.log("MOVING BATT");
+  }
 
-// __________________________
+  // __________________________
 
- /** Returns the encoder value */
+  /** Returns the encoder value */
   public double getEncoderValue() {
     return armRotationEncoder.getPosition();
   }
@@ -211,8 +212,9 @@ public void moveArmBattery() {
    * 0.83 degrees per rotation = 42 ticks?
    * .002 degrees per tick-?
    * 
-   *  fixed math 2/4/23
-   *  small gear has 15 (40/15 ratio = 2.67), big circle (gear?) has 40... apparently its 9 degrees per tooth now?
+   * fixed math 2/4/23
+   * small gear has 15 (40/15 ratio = 2.67), big circle (gear?) has 40...
+   * apparently its 9 degrees per tooth now?
    * every 6048 encoder ticks, small gear turns 2.67 times, big gear moves once
    * every 44.86 ticks, we move one degree
    * 144 x 42 = 6048
@@ -237,7 +239,8 @@ public void moveArmBattery() {
     double targetAngleTicks = TargetAngle * Constants.degreesPerRotationTicks; // Converts target angle to ticks.
     double checkSign = Math.signum(targetAngleTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
-    if (!Helper.RangeCompare(targetAngleTicks + 10, targetAngleTicks - 10, encoderValueTicks)) { // If not in range then move...
+    if (!Helper.RangeCompare(targetAngleTicks + 2, targetAngleTicks - 2, encoderValueTicks)) { // If not in range then
+                                                                                               // move...
       if (checkSign > 0) { // If sign is positive rotate compressor-side.
         moveArmForward();
       } else { // If sign not positive rotate battery-side.
@@ -253,18 +256,18 @@ public void moveArmBattery() {
   // to the dashboard / consumed by the LED controller
   @Override
   public void initSendable(SendableBuilder builder) {
-      
-// Arm Extension Sendables
+
+    // Arm Extension Sendables
     builder.addDoubleProperty("Extension", null, null);
     builder.addDoubleProperty("Extension Encoder Position", this::getExtensionEncoderTicks, null);
     builder.addDoubleProperty("Extension Motor Rotation", this::getExtensionMotorSpeed, null);
     builder.addStringProperty("Arm Extension Position", this::getExtensionPosition, null);
     builder.addBooleanProperty("Is Retracted", this::fullyRetracted, null);
 
-// Arm Rotation Sendables
-      builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);
-      builder.addDoubleProperty("Rotation Encoder", this::getEncoderValue, null);
-      builder.addBooleanProperty("RedZone",this::armRedZone, null);
+    // Arm Rotation Sendables
+    builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);
+    builder.addDoubleProperty("Rotation Encoder", this::getEncoderValue, null);
+    builder.addBooleanProperty("RedZone", this::armRedZone, null);
   }
 
   @Override
@@ -273,6 +276,6 @@ public void moveArmBattery() {
   }
 
 }
-         // Arm Rotation Notes
+// Arm Rotation Notes
 // 0, 1, 5, 50 , 60 (Normal arm side degrees)
 // 270, 269, 265, 220, 210 (Opposite arm side degrees)

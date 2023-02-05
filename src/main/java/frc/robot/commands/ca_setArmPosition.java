@@ -25,7 +25,7 @@ public class ca_setArmPosition extends CommandBase {
   @Override
   public void execute() {
     Constants.selectedArmState = m_armState;
-    System.out.println(m_armState);
+    // System.out.println(m_armState);
   }
 
   // Called once the command ends or is interrupted.

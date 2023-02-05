@@ -22,20 +22,20 @@ public class Gripper extends SubsystemBase {
 
     public Gripper() {
         /** Creates new pneumatic objects. */
-       // gripper = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 0, 1);
+       gripper = new DoubleSolenoid(15, PneumaticsModuleType.REVPH, 0, 1);
         compressor = new Compressor(15, PneumaticsModuleType.REVPH);
         compressor.enableDigital();
     }
 
     /** Closes the gripper */
     public void gripClose() {
-        DataLogManager.log("/_\\ GRIPPER CLOSE /_\\");
+        // DataLogManager.log("/_\\ GRIPPER CLOSE /_\\");
         gripper.set(Value.kForward);
     }
 
     /** Opens the gripper */
     public void gripOpen() {
-        DataLogManager.log("\\_/ GRIPPER OPEN \\_/");
+        // DataLogManager.log("\\_/ GRIPPER OPEN \\_/");
         gripper.set(Value.kReverse);
     }
 

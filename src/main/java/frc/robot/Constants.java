@@ -70,10 +70,10 @@ public final class Constants {
   public static final int ArmRotationLowerLimit = 0;
 
   /** Arm Angles */
-  public static final int ArmHighAngleCompressor = 126;
-  public static final int ArmMiddleAngleCompressor = 106;
-  public static final int ArmLowAngleCompressor = 20;
-  public static final int ArmCarryAngleCompressor = 5;
+  public static final double ArmHighAngleCompressor = 126;
+  public static final double ArmMiddleAngleCompressor = 95;
+  public static final double ArmLowAngleCompressor = 20;
+  public static double ArmCarryAngleCompressor = 5;
 
   public static final double ArmCarryAngleBattery = 276;
   public static final double ArmHighAngleBattery = 276; 
@@ -83,7 +83,6 @@ public final class Constants {
   // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID
 
-  public static boolean isRetracted = true;
   // arm extension speed? not sure if needed
   public static final double armExtensionSpeed = 0.25;
   /** Arm Distances */

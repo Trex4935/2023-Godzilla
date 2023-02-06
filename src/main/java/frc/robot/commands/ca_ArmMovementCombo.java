@@ -62,7 +62,7 @@ public class ca_ArmMovementCombo extends CommandBase {
         default: // Carry Position is default
           // System.out.println("DEFAULT-C");
           m_arm.AutoArmRotation(Constants.ArmCarryAngleCompressor);
-          m_arm.AutoArmExtension(Constants.ArmCarryDistance);
+          m_arm.retractArm();
       }
     } else {
       switch (Constants.selectedArmState) {
@@ -91,7 +91,7 @@ public class ca_ArmMovementCombo extends CommandBase {
         default: // Carry Position is default
           // System.out.println("DEFAULT-B");
           m_arm.AutoArmRotation(Constants.ArmCarryAngleBattery);
-          m_arm.AutoArmExtension(Constants.ArmCarryDistance);
+          m_arm.retractArm();
       }
     }
 

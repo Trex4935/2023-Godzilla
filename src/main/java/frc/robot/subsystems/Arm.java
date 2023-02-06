@@ -14,13 +14,14 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.Falcon;
+import frc.robot.extensions.FlippedDIO;
 import frc.robot.extensions.Helper;
 import frc.robot.extensions.SparkMax;
 
 public class Arm extends SubsystemBase {
 
   // Arm Extension
-  private WPI_TalonFX ArmExtensionMotor;
+  private WPI_TalonFX armExtensionMotor;
 
   DigitalInput armRetractedLimitSwitch;
 
@@ -34,14 +35,14 @@ public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
   public Arm() {
     // init motors
-    ArmExtensionMotor = Falcon.createDefaultFalcon(Constants.armExtensionCAN);
+    armExtensionMotor = Falcon.createDefaultFalcon(Constants.armExtensionCAN);
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
 
     // Arm Extension Limit Switches
-    armRetractedLimitSwitch = new DigitalInput(3);
+    armRetractedLimitSwitch = new FlippedDIO(0);
     // Arm Rotation Limit Switches
-    compressorSideLimitSwitch = new DigitalInput(0);
-    batterySideLimitSwitch = new DigitalInput(1);
+    compressorSideLimitSwitch = new DigitalInput(5);
+    batterySideLimitSwitch = new DigitalInput(6);
 
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();
@@ -51,61 +52,52 @@ public class Arm extends SubsystemBase {
 
   /** Stops the extension motor */
   public void stopExtensionMotor() {
-    ArmExtensionMotor.stopMotor();
+    armExtensionMotor.stopMotor();
   }
 
   /**
    * Takes a speed values from -1 to 1 and set the extension motor to that value
    */
   public void extendArmSetSpeed(Double speed) {
-    ArmExtensionMotor.set(speed);
+    armExtensionMotor.set(speed);
   }
 
   /** Sets the speed that the arm moves outward */
   public void extendArm() {
-    ArmExtensionMotor.set(-Constants.armExtensionSpeed);
+    armExtensionMotor.set(-Constants.armExtensionSpeed);
   }
 
   /** Sets the speed that the arm moves backward */
   public void retractArm() {
-    //if (armRetractedLimitSwitch.get()) {
+    if (armRetractedLimitSwitch.get()) {
       // if the backwardimitSwitch is true,stop the motor
-    //  ArmExtensionMotor.stopMotor();
-   // } else {
+      armExtensionMotor.stopMotor();
+      zeroEncoder();
+    } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
-      ArmExtensionMotor.set(Constants.armExtensionSpeed);
-   // }
+      armExtensionMotor.set(Constants.armExtensionSpeed);
+    }
   }
 
   // __________________________
   // rename later as extend and retract
   public void moveArmLeft() {
-    ArmExtensionMotor.set(Constants.armExtensionSpeed);
+    armExtensionMotor.set(Constants.armExtensionSpeed);
     DataLogManager.log("MOVING LEFT");
   }
 
   public void moveArmRight() {
-    ArmExtensionMotor.set((-1) * Constants.armExtensionSpeed);
+    armExtensionMotor.set((-1) * Constants.armExtensionSpeed);
     DataLogManager.log("MOVING RIGHT");
   }
 
   // __________________________
 
   // method that determines if the arm is retracted or not
-  public boolean fullyRetracted() {
-    if (armRetractedLimitSwitch.get()) {
-      // updating global
-      Constants.isRetracted = true;
-      return true;
-    } else {
-      Constants.isRetracted = false;
-      return false;
-    }
-  }
 
   /** Extends or retracts the the arm */
   public void AutoArmExtension(double TargetDistance) { // Distance Unit is: ?????
-    double encoderValueTicks = ArmExtensionMotor.getSelectedSensorPosition(); // Gets ticks
+    double encoderValueTicks = armExtensionMotor.getSelectedSensorPosition(); // Gets ticks
     double targetDistanceTicks = TargetDistance * Constants.inchPerExtentionTicks; // Converts target distance to ticks.
     double checkSign = Math.signum(targetDistanceTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
@@ -123,17 +115,21 @@ public class Arm extends SubsystemBase {
   // Sendable Methods
   /** Gets Encoder Ticks for Extension Encoder (Sendable) */
   public double getExtensionEncoderTicks() {
-    return ArmExtensionMotor.getSelectedSensorPosition();
+    return armExtensionMotor.getSelectedSensorPosition();
   }
 
   /** Gets Speed of Arm Extension Motor (Sendable) */
   public double getExtensionMotorSpeed() {
-    return ArmExtensionMotor.get();
+    return armExtensionMotor.get();
   }
 
   public String getExtensionPosition() {
 
     return "Error";
+  }
+
+  public void zeroEncoder() {
+    armExtensionMotor.setSelectedSensorPosition(0, 0, 20);
   }
 
   // Arm Rotation Methods
@@ -142,7 +138,8 @@ public class Arm extends SubsystemBase {
    */
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
-    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition()) && (Constants.isRetracted == false)) {
+    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition())
+        && (getArmRetractedLimitSwitch() == false)) {
       Constants.inRedZone = true; // Updates global variable
       return true;
     } else {
@@ -200,6 +197,20 @@ public class Arm extends SubsystemBase {
   /** stops the ArmRotation motor */
   public void stopArmRotation() {
     armRotationMotor.stopMotor();
+  }
+
+  /** Sets the default angle value (sendable) */
+  public void setDefaultAngle(double m_defaultAngle) {
+    Constants.ArmCarryAngleCompressor = m_defaultAngle;
+  }
+
+  /** Get the default angle value (sendable) */
+  public double getDefaultAngle() {
+    return Constants.ArmCarryAngleCompressor;
+  }
+
+  public boolean getArmRetractedLimitSwitch() {
+    return armRetractedLimitSwitch.get();
   }
 
   /*
@@ -262,12 +273,13 @@ public class Arm extends SubsystemBase {
     builder.addDoubleProperty("Extension Encoder Position", this::getExtensionEncoderTicks, null);
     builder.addDoubleProperty("Extension Motor Rotation", this::getExtensionMotorSpeed, null);
     builder.addStringProperty("Arm Extension Position", this::getExtensionPosition, null);
-    builder.addBooleanProperty("Is Retracted", this::fullyRetracted, null);
+    builder.addBooleanProperty("Is Retracted", this::getArmRetractedLimitSwitch, null);
 
     // Arm Rotation Sendables
     builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);
     builder.addDoubleProperty("Rotation Encoder", this::getEncoderValue, null);
     builder.addBooleanProperty("RedZone", this::armRedZone, null);
+    builder.addDoubleProperty("Default Angle", this::getDefaultAngle, this::setDefaultAngle);
   }
 
   @Override

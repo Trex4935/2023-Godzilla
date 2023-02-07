@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -32,6 +33,8 @@ public class Arm extends SubsystemBase {
   DigitalInput compressorSideLimitSwitch;
   DigitalInput batterySideLimitSwitch;
 
+  private WPI_TalonFX _talon;
+
   /** Creates a new Arm. */
   public Arm() {
     // init motors
@@ -46,6 +49,8 @@ public class Arm extends SubsystemBase {
 
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();
+    Falcon.configMotionMagic(armExtensionMotor, 1,0,0,0,0,0);
+
   }
 
   // Arm Extension Methods
@@ -65,6 +70,11 @@ public class Arm extends SubsystemBase {
   /** Sets the speed that the arm moves outward */
   public void extendArm() {
     armExtensionMotor.set(-Constants.armExtensionSpeed);
+  }
+
+  // Using motion magic set the arm to a given position
+  public void setArmPostionMM(double armPosistionTicks){
+    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPosistionTicks);
   }
 
   /** Sets the speed that the arm moves backward */
@@ -112,6 +122,10 @@ public class Arm extends SubsystemBase {
     }
   }
 
+  public void AutoArmExtensionMM(double targetTicks){
+    // armExtensionMotor.setSelectedSensorPosition(targetTicks, 0, 20);
+  }
+
   // Sendable Methods
   /** Gets Encoder Ticks for Extension Encoder (Sendable) */
   public double getExtensionEncoderTicks() {
@@ -131,7 +145,7 @@ public class Arm extends SubsystemBase {
   public void zeroEncoder() {
     armExtensionMotor.setSelectedSensorPosition(0, 0, 20);
   }
-
+  
   // Arm Rotation Methods
   /**
    * determines if the arm is in the red zone or not, and if it is extended or not

@@ -101,7 +101,7 @@ public class Arm extends SubsystemBase {
     double targetDistanceTicks = TargetDistance * Constants.inchPerExtentionTicks; // Converts target distance to ticks.
     double checkSign = Math.signum(targetDistanceTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
-    if (!Helper.RangeCompare(targetDistanceTicks + 500, targetDistanceTicks - 500, encoderValueTicks)) {
+    if (!Helper.RangeCompare(targetDistanceTicks + 200, targetDistanceTicks - 200, encoderValueTicks)) {
       if (checkSign > 0) { // If sign is positive move forward.
         retractArm();
       } else { // If sign not positive move backward.
@@ -138,7 +138,7 @@ public class Arm extends SubsystemBase {
    */
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
-    if (Helper.RangeCompare(90000, 45000, armRotationEncoder.getPosition())
+    if (Helper.RangeCompare(225, 91, armRotationEncoder.getPosition())
         && (getArmRetractedLimitSwitch() == false)) {
       Constants.inRedZone = true; // Updates global variable
       return true;
@@ -151,23 +151,23 @@ public class Arm extends SubsystemBase {
   /** Sets the speed that the arm moves forward */
   public void moveArmForward() {
     // if either fwrd limit switch or it is in red zone and extended, stop motor
-    // if (compressorSideLimitSwitch.get() || (armRedZone())) {
-    // armRotationMotor.stopMotor();
-    // } else {
+    if (!compressorSideLimitSwitch.get() || (armRedZone())) {
+      armRotationMotor.stopMotor();
+    } else {
     // if the forwardLimitSwitch is false, then allow motor to keep moving
     armRotationMotor.set(Constants.armRotateSpeed);
-    // }
+    }
   }
 
   /** sets the speed that the arm moves backward */
   public void moveArmBackward() {
     // if either bckwrd limit switch or it is in red zone and extended, stop motor
-    // if (batterySideLimitSwitch.get() || (armRedZone())) {
-    // armRotationMotor.stopMotor();
-    // } else {
+    if (batterySideLimitSwitch.get() || (armRedZone())) {
+      armRotationMotor.stopMotor();
+    } else {
     // if the backwardLimitSwitch is false, then allow the motor to keep moving
     armRotationMotor.set(Constants.armRotateSpeed * (-1));
-    // }
+    }
   }
 
   // __________________________
@@ -213,6 +213,13 @@ public class Arm extends SubsystemBase {
     return armRetractedLimitSwitch.get();
   }
 
+  public void setArmLength(Double m_tempArmDistance) {
+    Constants.tempArmDistance = m_tempArmDistance;
+  }
+
+  public double getArmLength(){
+    return Constants.tempArmDistance;
+  }
   /*
    * ====MATH====
    * Ticks per rotation, 42
@@ -274,6 +281,8 @@ public class Arm extends SubsystemBase {
     builder.addDoubleProperty("Extension Motor Rotation", this::getExtensionMotorSpeed, null);
     builder.addStringProperty("Arm Extension Position", this::getExtensionPosition, null);
     builder.addBooleanProperty("Is Retracted", this::getArmRetractedLimitSwitch, null);
+
+    builder.addDoubleProperty("Arm Length", this::getArmLength, this::setArmLength);
 
     // Arm Rotation Sendables
     builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);

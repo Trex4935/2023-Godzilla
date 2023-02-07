@@ -82,8 +82,8 @@ public class Drivetrain extends SubsystemBase {
 
         diffdrive.setMaxOutput(m_MaxSpeed);
 
-        leftEncoder = new Encoder(7, 8);
-        rightEncoder = new Encoder(5, 6);
+        leftEncoder = new Encoder(1, 2);
+        rightEncoder = new Encoder(3, 4);
 
         // in Inches
         leftEncoder.setDistancePerPulse((Constants.wheelDiameter * Math.PI) / Constants.encoderTicks);

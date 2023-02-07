@@ -4,17 +4,19 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Gripper;
 import frc.robot.Constants;
-import frc.robot.extensions.ArmPosition;
 
-public class ca_setArmPosition extends CommandBase {
-  ArmPosition m_armState;
+public class cm_setGamePieceType extends CommandBase {
+  Gripper m_gripper;
+  Boolean m_gamePieceType;
+  /** Creates a new cm_setGamePieceType. */
+  public cm_setGamePieceType(Gripper gripper, Boolean gamePieceType) {
+    m_gripper = gripper;
+    m_gamePieceType = gamePieceType;
 
-  /** Creates a new ca_setArmPosition. */
-  public ca_setArmPosition(ArmPosition armState) {
-    m_armState = armState;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -24,8 +26,7 @@ public class ca_setArmPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Constants.selectedArmState = m_armState;
-    // System.out.println(m_armState);
+    Constants.isCube = m_gamePieceType;
   }
 
   // Called once the command ends or is interrupted.

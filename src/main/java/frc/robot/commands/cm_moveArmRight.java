@@ -4,17 +4,15 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.extensions.ArmPosition;
+import frc.robot.subsystems.Arm;
 
-public class ca_setArmPosition extends CommandBase {
-  ArmPosition m_armState;
-
-  /** Creates a new ca_setArmPosition. */
-  public ca_setArmPosition(ArmPosition armState) {
-    m_armState = armState;
+public class cm_moveArmRight extends CommandBase {
+  Arm m_Arm;
+  /** Creates a new cm_moveArmRight. */
+  public cm_moveArmRight(Arm arm) {
+   m_Arm = arm;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +22,14 @@ public class ca_setArmPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Constants.selectedArmState = m_armState;
-    // System.out.println(m_armState);
+    m_Arm.moveArmRight();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_Arm.stopExtensionMotor();
+  }
 
   // Returns true when the command should end.
   @Override

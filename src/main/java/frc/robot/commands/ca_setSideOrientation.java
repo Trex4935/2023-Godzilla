@@ -4,17 +4,16 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.extensions.ArmPosition;
+import frc.robot.extensions.ArmSideOrientation;
 
-public class ca_setArmPosition extends CommandBase {
-  ArmPosition m_armState;
-
-  /** Creates a new ca_setArmPosition. */
-  public ca_setArmPosition(ArmPosition armState) {
-    m_armState = armState;
+public class ca_setSideOrientation extends CommandBase {
+  ArmSideOrientation m_armSide;
+  /** Creates a new ca_setSideOrientation. */
+  public ca_setSideOrientation(ArmSideOrientation armSide) {
+    m_armSide = armSide;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -24,8 +23,7 @@ public class ca_setArmPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Constants.selectedArmState = m_armState;
-    // System.out.println(m_armState);
+    Constants.selectedArmSideOrientation = m_armSide;
   }
 
   // Called once the command ends or is interrupted.

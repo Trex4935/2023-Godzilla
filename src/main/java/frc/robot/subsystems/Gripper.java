@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /** Add your docs here. */
 public class Gripper extends SubsystemBase {
@@ -21,20 +22,20 @@ public class Gripper extends SubsystemBase {
 
     public Gripper() {
         /** Creates new pneumatic objects. */
-        gripper = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 0, 1);
-        compressor = new Compressor(1, PneumaticsModuleType.REVPH);
+       gripper = new DoubleSolenoid(15, PneumaticsModuleType.REVPH, 1, 0);
+        compressor = new Compressor(15, PneumaticsModuleType.REVPH);
         compressor.enableDigital();
     }
 
     /** Closes the gripper */
     public void gripClose() {
-        DataLogManager.log("/_\\ GRIPPER CLOSE /_\\");
+        // DataLogManager.log("/_\\ GRIPPER CLOSE /_\\");
         gripper.set(Value.kForward);
     }
 
     /** Opens the gripper */
     public void gripOpen() {
-        DataLogManager.log("\\_/ GRIPPER OPEN \\_/");
+        // DataLogManager.log("\\_/ GRIPPER OPEN \\_/");
         gripper.set(Value.kReverse);
     }
 
@@ -44,12 +45,17 @@ public class Gripper extends SubsystemBase {
         gripper.set(Value.kOff);
     }
 
+    public boolean getIsCube() {
+        return Constants.isCube;
+    }
+
     // Sendable override
     // Anything put here will be added to the network tables and thus can be added
     // to the dashboard / consumed by the LED controller
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("GripperState", null, null);
+//        builder.addBooleanProperty("isCube", this::getIsCube, null);
     }
 
     @Override

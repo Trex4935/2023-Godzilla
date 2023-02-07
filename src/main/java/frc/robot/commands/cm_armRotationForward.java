@@ -26,7 +26,7 @@ public class cm_armRotationForward extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.moveArmForward();    
+    arm.moveArmCompressor();    
   }
 
   // Called once the command ends or is interrupted.

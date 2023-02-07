@@ -24,12 +24,8 @@ public class ca_setArmPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Constants.inRedZone) {
-
-    } else {
       Constants.selectedArmState = m_armState;
     // System.out.println(m_armState);
-    }
   }
 
   // Called once the command ends or is interrupted.

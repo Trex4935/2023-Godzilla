@@ -45,6 +45,7 @@ public class ca_ArmMovementCombo extends CommandBase {
           // System.out.println("HIGH-C");
           m_arm.AutoArmRotation(Constants.ArmHighAngleCompressor);
           m_arm.AutoArmExtension(Constants.ArmHighDistance);
+      
           break;
 
         case MIDDLE:

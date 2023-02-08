@@ -16,6 +16,7 @@ import frc.robot.commands.ca_autoTurnKinematic;
 import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.ca_setSideOrientation;
+import frc.robot.commands.cg_autoDoubleScore;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.commands.cm_moveArmBattery;
 import frc.robot.commands.cm_moveArmCompressor;
@@ -29,13 +30,6 @@ import frc.robot.commands.cm_moveArmLeft;
 import frc.robot.commands.cm_moveArmRight;
 
 // Misc
-import java.util.List;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -78,6 +72,7 @@ private final cm_moveArmRight moveArmRight;
   private final ca_autoTrajectory autoTrajectory;
   private final ca_autoTurnKinematic autoTurnTrajectory;
   private final ca_driveAutoSquare autoSquare;
+  private final cg_autoDoubleScore autoDoubleScore;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.LeftJoystickX);
@@ -130,25 +125,14 @@ moveArmRight = new cm_moveArmRight(arm);
     SmartDashboard.putData(arm);
     SmartDashboard.putData(gripper);
 
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-        Constants.dtmaxspeed, Constants.dtmaxaccel);
 
-        
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-          new Translation2d(0, 0.25),
-          new Translation2d(0, 0.5)),
-        //new Translation2d(xn, yn),
-        new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
-
-      autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, trajectory);
+      autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.pigeontraj);
       autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, - 135.0); // testing 90 degree Turn;
-      autoSquare = new ca_driveAutoSquare(drivetrain, trajectory);
+      autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryf);
+      autoDoubleScore = new cg_autoDoubleScore(drivetrain, armrotation, armextension, gripper);
 
 
-    autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
+    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj);
 
     // Configure the trigger bindings
     configureBindings();
@@ -224,7 +208,7 @@ new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(mo
       return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
      */
 
-    return autoSquare;
+    return autoDoubleScore;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

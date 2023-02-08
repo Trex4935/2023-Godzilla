@@ -73,8 +73,8 @@ public class Arm extends SubsystemBase {
   }
 
   // Using motion magic set the arm to a given position
-  public void setArmPostionMM(double armPosistionTicks){
-    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPosistionTicks);
+  public void setArmPostionMM(double armPositionTicks){
+    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks);
   }
 
   /** Sets the speed that the arm moves backward */

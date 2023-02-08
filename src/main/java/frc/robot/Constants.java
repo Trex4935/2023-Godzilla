@@ -84,7 +84,7 @@ public final class Constants {
   public static final int armExtensionCAN = 21; // Motor CAN ID
 
   // arm extension speed? not sure if needed
-  public static final double armExtensionSpeed = 0.25;
+  public static final double armExtensionSpeed = 0.5;
   /** Arm Distances */
   // Units = Inches (Converting to ticks)
   // Math: 1 in. = -5000 ticks
@@ -162,7 +162,7 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
-  public static int inchPerExtentionTicks = -5000;
+  public static int inchPerExtentionTicks = 5000;
   public static double degreesPerRotationTicks = 1;
   
 

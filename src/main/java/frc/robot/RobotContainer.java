@@ -13,6 +13,7 @@ import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
 import frc.robot.commands.ca_autoTurnKinematic;
+import frc.robot.commands.ca_autoTurnKinematicGyro;
 import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.ca_setSideOrientation;
@@ -71,6 +72,7 @@ public class RobotContainer {
   private final ca_autoTrajectoryKinematic autoTrajectoryKinematic;
   private final ca_autoTrajectory autoTrajectory;
   private final ca_autoTurnKinematic autoTurnTrajectory;
+  private final ca_autoTurnKinematicGyro autoTurnTrajectoryWithGyro;
   private final ca_driveAutoSquare autoSquare;
   private final cg_autoDoubleScore autoDoubleScore;
   private final cg_autoScore autoScore;
@@ -138,7 +140,9 @@ public class RobotContainer {
 
     // Be able to turn
 
-    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, -135.0); // testing 90 degree Turn;
+    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, 135.0); // testing 90 degree Turn;
+
+    autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 90.0); // testing 90 degree Turn;
 
     // Make a point & go Backword-mobility.
 

@@ -33,8 +33,6 @@ public class Arm extends SubsystemBase {
   DigitalInput compressorSideLimitSwitch;
   DigitalInput batterySideLimitSwitch;
 
-  private WPI_TalonFX _talon;
-
   /** Creates a new Arm. */
   public Arm() {
     // init motors
@@ -49,7 +47,7 @@ public class Arm extends SubsystemBase {
 
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();
-    Falcon.configMotionMagic(armExtensionMotor, 0.001,0,0,0.1,500,500);
+    Falcon.configMotionMagic(armExtensionMotor, 0.01,0,0, 0,32000,16000);
 
   }
 
@@ -73,8 +71,8 @@ public class Arm extends SubsystemBase {
   }
 
   // Using motion magic set the arm to a given position
-  public void setArmPostionMM(double armPosistionTicks){
-    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPosistionTicks);
+  public void setArmExtensionMM(double armPositionTicks){
+    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks);
   }
 
   /** Sets the speed that the arm moves backward */
@@ -106,12 +104,11 @@ public class Arm extends SubsystemBase {
   // method that determines if the arm is retracted or not
 
   /** Extends or retracts the the arm */
-  public void AutoArmExtension(double TargetDistance) { // Distance Unit is: ?????
+  public void AutoArmExtension(double TargetTicks) { // -5000 ticks per inch
     double encoderValueTicks = armExtensionMotor.getSelectedSensorPosition(); // Gets ticks
-    double targetDistanceTicks = TargetDistance * Constants.inchPerExtentionTicks; // Converts target distance to ticks.
-    double checkSign = Math.signum(targetDistanceTicks - encoderValueTicks); // Determines the sign of the direction
+    double checkSign = Math.signum(TargetTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
-    if (!Helper.RangeCompare(targetDistanceTicks + 200, targetDistanceTicks - 200, encoderValueTicks)) {
+    if (!Helper.RangeCompare(TargetTicks + 200, TargetTicks - 200, encoderValueTicks)) {
       if (checkSign > 0) { // If sign is positive move forward.
         retractArm();
       } else { // If sign not positive move backward.
@@ -120,10 +117,6 @@ public class Arm extends SubsystemBase {
     } else { // If in range then stop motor.
       stopExtensionMotor();
     }
-  }
-
-  public void AutoArmExtensionMM(double targetTicks){
-    // armExtensionMotor.setSelectedSensorPosition(targetTicks, 0, 20);
   }
 
   // Sendable Methods

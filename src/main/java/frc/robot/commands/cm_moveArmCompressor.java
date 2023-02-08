@@ -22,7 +22,7 @@ public class cm_moveArmCompressor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.moveArmCompressor();
+    m_arm.manualMoveArmCompressor();
   }
 
   // Called once the command ends or is interrupted.

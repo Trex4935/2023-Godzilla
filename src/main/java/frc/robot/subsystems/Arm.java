@@ -152,8 +152,7 @@ public class Arm extends SubsystemBase {
    */
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
-    if (Helper.RangeCompare(225, 91, armRotationEncoder.getPosition())
-        && (getArmRetractedLimitSwitch() == false)) {
+    if (Helper.RangeCompare(225, 91, armRotationEncoder.getPosition())) {
       Constants.inRedZone = true; // Updates global variable
       return true;
     } else {
@@ -163,35 +162,66 @@ public class Arm extends SubsystemBase {
   }
 
   /** Sets the speed that the arm moves forward */
-  public void moveArmForward() {
-    // if either fwrd limit switch or it is in red zone and extended, stop motor
-    if (!compressorSideLimitSwitch.get() || (armRedZone())) {
-      armRotationMotor.stopMotor();
-    } else {
-    // if the forwardLimitSwitch is false, then allow motor to keep moving
-    armRotationMotor.set(Constants.armRotateSpeed);
+  public void moveArmCompressor() {
+  
+    // Check if we are in the red
+    if (armRedZone()){
+      // If arm is retracted then we can move
+      if (getArmRetractedLimitSwitch()){
+        armRotationMotor.set(-Constants.armRotateSpeed);
+      }
+      // if not retracted then stop moving
+      else {
+        armRotationMotor.stopMotor();
+      }
+    }
+    // For when we are not in red zone
+    else {
+      // If we are not in the red zone then we just need to stop if the limit is hit
+      if (!getCompressorLimitSwitch()){
+        armRotationMotor.stopMotor();
+      }
+      // else we can move
+      else {
+        armRotationMotor.set(-Constants.armRotateSpeed);
+      }
     }
   }
 
-  /** sets the speed that the arm moves backward */
-  public void moveArmBackward() {
-    // if either bckwrd limit switch or it is in red zone and extended, stop motor
-    if (batterySideLimitSwitch.get() || (armRedZone())) {
-      armRotationMotor.stopMotor();
-    } else {
-    // if the backwardLimitSwitch is false, then allow the motor to keep moving
-    armRotationMotor.set(Constants.armRotateSpeed * (-1));
+  /** sets the speed that the arm moves battery-side */
+  public void moveArmBattery() {
+    // Check if we are in the red
+    if (armRedZone()){
+      // If arm is retracted then we can move
+      if (getArmRetractedLimitSwitch()){
+        armRotationMotor.set(Constants.armRotateSpeed);
+      }
+      // if not retracted then stop moving
+      else {
+        armRotationMotor.stopMotor();
+      }
+    }
+    // For when we are not in red zone
+    else {
+      // If we are not in the red zone then we just need to stop if the limit is hit
+      if (getBatteryLimitSwitch()){
+        armRotationMotor.stopMotor();
+      }
+      // else we can move
+      else {
+        armRotationMotor.set(Constants.armRotateSpeed);
+      }
     }
   }
 
   // __________________________
 
-  public void moveArmCompressor() {
+  public void manualMoveArmCompressor() {
     armRotationMotor.set(Constants.armRotateSpeed);
     DataLogManager.log("MOVING COMP");
   }
 
-  public void moveArmBattery() {
+  public void manualMoveArmBattery() {
     armRotationMotor.set((-1) * Constants.armRotateSpeed);
     DataLogManager.log("MOVING BATT");
   }
@@ -225,6 +255,14 @@ public class Arm extends SubsystemBase {
 
   public boolean getArmRetractedLimitSwitch() {
     return armRetractedLimitSwitch.get();
+  }
+
+  public boolean getCompressorLimitSwitch() {
+    return compressorSideLimitSwitch.get();
+  }
+  
+  public boolean getBatteryLimitSwitch() {
+    return batterySideLimitSwitch.get();
   }
 
   public void setArmLength(Double m_tempArmDistance) {
@@ -273,10 +311,10 @@ public class Arm extends SubsystemBase {
     // determine direction of arm movement based on sign of encoder differences
     if (!Helper.RangeCompare(targetAngleTicks + 2, targetAngleTicks - 2, encoderValueTicks)) { // If not in range then
                                                                                                // move...
-      if (checkSign > 0) { // If sign is positive rotate compressor-side.
-        moveArmForward();
+      if (checkSign < 0) { // If sign is positive rotate compressor-side.
+        moveArmCompressor();
       } else { // If sign not positive rotate battery-side.
-        moveArmBackward();
+        moveArmBattery();
       }
     } else { // If in range then stop motor.
       stopArmRotation();
@@ -303,6 +341,9 @@ public class Arm extends SubsystemBase {
     builder.addDoubleProperty("Rotation Encoder", this::getEncoderValue, null);
     builder.addBooleanProperty("RedZone", this::armRedZone, null);
     builder.addDoubleProperty("Default Angle", this::getDefaultAngle, this::setDefaultAngle);
+
+    builder.addBooleanProperty("Comp LS", this::getCompressorLimitSwitch, null);
+    builder.addBooleanProperty("Batt LS", this::getBatteryLimitSwitch, null);
   }
 
   @Override

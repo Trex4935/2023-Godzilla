@@ -97,6 +97,7 @@ public class Falcon {
         falcon.configForwardSoftLimitThreshold(config.forwardSoftLimit);
         falcon.configReverseSoftLimitThreshold(config.reverseSoftLimit);
 
+        falcon.setSelectedSensorPosition(0);
         // Return the configured motor object
         return falcon;
     }

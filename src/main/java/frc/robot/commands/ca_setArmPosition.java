@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
@@ -23,7 +24,8 @@ public class ca_setArmPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Constants.selectedArmState = m_armState;
+      Constants.selectedArmState = m_armState;
+    // System.out.println(m_armState);
   }
 
   // Called once the command ends or is interrupted.

@@ -6,9 +6,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ArmRotation;
 import frc.robot.extensions.ArmPosition;
-import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Gripper;
 import frc.robot.TrajectoryContainer;
 import frc.robot.commands.ca_autoTurnKinematic;
@@ -19,7 +18,9 @@ import frc.robot.commands.ca_autoTurnKinematic;
 public class cg_autoScore extends SequentialCommandGroup {
   /** Creates a new cg_autoScore. */
   
+
   public cg_autoScore(Drivetrain drivetrain, ArmRotation armRotation, ArmExtension armExtension, Gripper gripper) {
+
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

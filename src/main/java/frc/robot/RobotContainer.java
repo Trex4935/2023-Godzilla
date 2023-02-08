@@ -5,11 +5,9 @@
 package frc.robot;
 
 // Subsystems
-import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Gripper;
-
+import frc.robot.subsystems.Arm;
 // Commands
 import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.ca_autoTrajectory;
@@ -20,12 +18,16 @@ import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.ca_setSideOrientation;
 import frc.robot.commands.cg_autoDoubleScore;
 import frc.robot.commands.cm_driveWithJoysticks;
+import frc.robot.commands.cm_moveArmBattery;
+import frc.robot.commands.cm_moveArmCompressor;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.cm_setGamePieceType;
+import frc.robot.commands.cm_moveArmLeft;
+import frc.robot.commands.cm_moveArmRight;
 
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
@@ -33,13 +35,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+
 // Robot Base Class
 public class RobotContainer {
 
   // Declare Subsystems
   private final Drivetrain drivetrain;
-  private final ArmExtension armextension;
-  private final ArmRotation armrotation;
+  private final Arm arm;
   private final Gripper gripper;
 
   // Declare Commands
@@ -48,6 +50,15 @@ public class RobotContainer {
   private final ca_setArmPosition setArmPositionHigh;
   private final ca_setArmPosition setArmPositionMiddle;
   private final ca_setArmPosition setArmPositionLow;
+
+// __________________________
+
+private final cm_moveArmCompressor moveArmCompressor;
+private final cm_moveArmBattery moveArmBattery;
+private final cm_moveArmLeft moveArmLeft;
+private final cm_moveArmRight moveArmRight;
+
+// __________________________
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
@@ -75,14 +86,22 @@ public class RobotContainer {
 
     // Create Subsystem objects
     drivetrain = new Drivetrain();
-    armextension = new ArmExtension();
-    armrotation = new ArmRotation();
+    arm = new Arm();
     gripper = new Gripper();
 
     // Create Command objects
     
+// __________________________
+
+moveArmCompressor = new cm_moveArmCompressor(arm);
+moveArmBattery = new cm_moveArmBattery(arm);
+moveArmLeft = new cm_moveArmLeft(arm);
+moveArmRight = new cm_moveArmRight(arm);
+
+// __________________________
+
     //Combo
-    armMovementCombo = new ca_ArmMovementCombo(armextension, armrotation);
+    armMovementCombo = new ca_ArmMovementCombo(arm);
     setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
     setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
     setArmPositionLow = new ca_setArmPosition(ArmPosition.LOW);
@@ -103,8 +122,7 @@ public class RobotContainer {
 
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(drivetrain);
-    SmartDashboard.putData(armextension);
-    SmartDashboard.putData(armrotation);
+    SmartDashboard.putData(arm);
     SmartDashboard.putData(gripper);
 
 
@@ -127,8 +145,8 @@ public class RobotContainer {
     // Makes controller driving the default command
     drivetrain.setDefaultCommand(driveWithJoysticks);
 
-    // Run arm movement combo and restart if it ends
-    armMovementCombo.repeatedly();
+    // Run arm movement combo and restart if it end
+    arm.setDefaultCommand(armMovementCombo);
 
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     
@@ -145,6 +163,16 @@ public class RobotContainer {
     new JoystickButton(m_ArduinoController, Constants.robotSideID).whileTrue(setSideOrientationBattery).whileFalse(setSideOrientationCompressor);
 
     new JoystickButton(m_ArduinoController, Constants.gripperID).whileTrue(gripperOpen).whileFalse(gripperClose);
+
+// __________________________
+
+new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(moveArmCompressor);
+new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(moveArmBattery);
+new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(moveArmLeft);
+new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(moveArmRight);
+
+
+// __________________________
 
   }
 

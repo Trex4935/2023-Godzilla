@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.TrajectoryConstants;
-
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -78,8 +78,8 @@ public class Drivetrain extends SubsystemBase {
 
         diffdrive.setMaxOutput(m_MaxSpeed);
 
-        leftEncoder = new Encoder(7, 8);
-        rightEncoder = new Encoder(5, 6);
+        leftEncoder = new Encoder(1, 2);
+        rightEncoder = new Encoder(3, 4);
 
         // in Inches
         leftEncoder.setDistancePerPulse((Constants.wheelDiameter * Math.PI) / Constants.encoderTicks);

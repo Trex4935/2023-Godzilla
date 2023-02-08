@@ -152,11 +152,18 @@ public class RobotContainer {
 
     autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
 
+    // Do autobalancing.
+
     // Go backword and do autobalancing.
 
     // Go in a simple L shape and do auto balancing.
 
     // Make 2 points and go in a simple L shape and do auto balancing.
+
+    // Follow L Path using point-map.
+
+    // Make 2 points and go in a simple L shape using point map and do auto
+    // balancing.
 
     // Configure the trigger bindings
     configureBindings();
@@ -207,7 +214,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    return autoTrajectory;
+    return autoTurnTrajectory;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

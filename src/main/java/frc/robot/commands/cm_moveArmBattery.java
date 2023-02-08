@@ -22,7 +22,7 @@ public class cm_moveArmBattery extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.moveArmBattery();
+    m_arm.manualMoveArmBattery();
   }
 
   // Called once the command ends or is interrupted.

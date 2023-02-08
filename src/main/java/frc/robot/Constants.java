@@ -31,7 +31,9 @@ public final class Constants {
   // ROBOT Constants
   public static Boolean isCube = false;
 
+
   // DRIVETRAIN Constants
+
 
   /** Wheel ID Constants */
   public final static int FRMotorID = 1; // RIGHT
@@ -84,13 +86,18 @@ public final class Constants {
   public static final int armExtensionCAN = 21; // Motor CAN ID
 
   // arm extension speed? not sure if needed
-  public static final double armExtensionSpeed = 0.25;
+  public static final double armExtensionSpeed = 0.5;
   /** Arm Distances */
-  // Units = Inches (Subject to change)
-  public static final double ArmHighDistance = 33;
-  public static final double ArmMiddleDistance = 10;
-  public static final double ArmLowDistance = 20;
-  public static final double ArmCarryDistance = 1;
+  // Units = Inches (Converting to ticks)
+  // Math: 1 in. = -5000 ticks
+  // 33 in -> -165000 ticks
+  public static final double ArmHighDistance = -165000; 
+  // 10 in -> -50000
+  public static final double ArmMiddleDistance = -50000; 
+  // 20 in -> -100000
+  public static final double ArmLowDistance = -100000; 
+  // 1 in -> -5000
+  public static final double ArmCarryDistance = -5000; 
 
   public static double tempArmDistance = 10;
 
@@ -157,7 +164,7 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
-  public static int inchPerExtentionTicks = -5000;
+  public static int inchPerExtentionTicks = 5000;
   public static double degreesPerRotationTicks = 1;
   
 

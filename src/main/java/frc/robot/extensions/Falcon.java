@@ -170,7 +170,7 @@ public class Falcon {
         motorObject.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0,
                 kTimeout);
         motorObject.configNeutralDeadband(0.001, kTimeout);
-        motorObject.configOpenloopRamp(1);
+        motorObject.configOpenloopRamp(0);
 
         /* Set Motion Magic gains in slot0 - see documentation */
         motorObject.selectProfileSlot(0, 0);

@@ -23,7 +23,9 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TrajectoryConstants;
+
 import frc.robot.extensions.PID;
+
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -47,23 +49,24 @@ public class Drivetrain extends SubsystemBase {
     Encoder leftEncoder;
     Encoder rightEncoder;
 
+
     // PID
     PIDController drivePID;
-    
+
     // Declaring Gyro Objects
     public static AHRS ahrs;
 
     // Max speed value for the motors ... default comes from constants
     Double m_MaxSpeed = Constants.dtmaxspeed;
 
-    //Kinemtatics
+    // Kinemtatics
     DifferentialDriveKinematics kin;
 
-    //Simulate
+    // Simulate
     public double zSimAngle;
 
     public Drivetrain() {
-        
+
         // Creates new motor objects and configures the talons in a separate method
         FLMotor = Talon.createDefaultTalon(Constants.FLMotorID);
         FRMotor = Talon.createDefaultTalon(Constants.FRMotorID);
@@ -99,7 +102,7 @@ public class Drivetrain extends SubsystemBase {
         zSimAngle = 0;
 
         drivePID = new PIDController(0.03, 0.0, 0);
-        
+
     }
 
     /** Resets the gyro */
@@ -111,8 +114,8 @@ public class Drivetrain extends SubsystemBase {
     public Float getXAngle() {
         return ahrs.getRoll();
     }
-    
-    /**  Gets Pitch(Y) angle from Gyro */
+
+    /** Gets Pitch(Y) angle from Gyro */
     public Float getYAngle() {
         return ahrs.getPitch();
     }
@@ -124,10 +127,10 @@ public class Drivetrain extends SubsystemBase {
 
     /** Creates an array of the roll, pitch, and yaw values */
     public float[] PrincipalAxisValues() {
-        return new float[] {getXAngle(), getYAngle(), getZAngle()};
+        return new float[] { getXAngle(), getYAngle(), getZAngle() };
     }
 
-    public void HalfSpeed(){
+    public void HalfSpeed() {
         leftMotors.set(0.5);
         rightMotors.set(0.5);
     }
@@ -147,12 +150,12 @@ public class Drivetrain extends SubsystemBase {
         rightMotors.set(0);
     }
 
-    /** Sets the max speed value (sendable) */ 
+    /** Sets the max speed value (sendable) */
     public void setMaxSpeed(double MaxSpeed) {
         m_MaxSpeed = MaxSpeed;
     }
 
-    /** Get the Max speed value (sendable) */ 
+    /** Get the Max speed value (sendable) */
     public double getMaxSpeed() {
         return m_MaxSpeed;
     }
@@ -205,31 +208,36 @@ public class Drivetrain extends SubsystemBase {
         // 6 diameter wheel
         // 2048 ticks per motor rotation.
         // Gear ratio - 44:30
-            // Driver and driven unknown
-        // 18.85 inches of travel per rotation of the wheel   
+        // Driver and driven unknown
+        // 18.85 inches of travel per rotation of the wheel
         // 1.47 motor rotations = 18.85 inches of travel
         // 3011 ticks per wheel rotation
         // 3011 ticks per 18.85 inches
         // 160 ticks per 1 inch of travel
-        
+
         return inches * 160;
     }
 
-    // takes in chasis speed and chasis angular rate or rotation and return the left speed of the wheel;
-    public double getLeftSpeedKin( double chassisSpeedx, double chassisAngularRate){
+    // takes in chasis speed and chasis angular rate or rotation and return the left
+    // speed of the wheel;
+    public double getLeftSpeedKin(double chassisSpeedx, double chassisAngularRate) {
         double chassisSpeedy = 0;
-        DifferentialDriveWheelSpeeds wheelSpeed = kin.toWheelSpeeds(new ChassisSpeeds(chassisSpeedx,chassisSpeedy, chassisAngularRate));
+        DifferentialDriveWheelSpeeds wheelSpeed = kin
+                .toWheelSpeeds(new ChassisSpeeds(chassisSpeedx, chassisSpeedy, chassisAngularRate));
         return wheelSpeed.leftMetersPerSecond;
     }
 
-    // takes in chasis speed and chasis angular rate or rotation and return the right speed of the wheel;
-    public double getRightpeedKin(double chassisSpeedx, double chassisAngularRate){
+    // takes in chasis speed and chasis angular rate or rotation and return the
+    // right speed of the wheel;
+    public double getRightpeedKin(double chassisSpeedx, double chassisAngularRate) {
         double chassisSpeedy = 0;
-        DifferentialDriveWheelSpeeds wheelSpeed = kin.toWheelSpeeds(new ChassisSpeeds(chassisSpeedx,chassisSpeedy, chassisAngularRate));;
+        DifferentialDriveWheelSpeeds wheelSpeed = kin
+                .toWheelSpeeds(new ChassisSpeeds(chassisSpeedx, chassisSpeedy, chassisAngularRate));
+        ;
         return wheelSpeed.rightMetersPerSecond;
     }
 
-    public void simulateGyro(double leftSpeed, double rightSpeed, Timer timer){
+    public void simulateGyro(double leftSpeed, double rightSpeed, Timer timer) {
 
         ChassisSpeeds chassisSpeed = kin.toChassisSpeeds(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
         zSimAngle = chassisSpeed.omegaRadiansPerSecond * 0.02 + zSimAngle;
@@ -242,7 +250,7 @@ public class Drivetrain extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
         builder.addFloatArrayProperty("Roll, Pitch, and Yaw Values", this::PrincipalAxisValues, null);
-        builder.addDoubleProperty("RightEncoder",this::getRightEncoderTicks,null);
+        builder.addDoubleProperty("RightEncoder", this::getRightEncoderTicks, null);
         builder.addDoubleProperty("LeftEncoder", this::getLeftEncoderTicks, null);
     }
 }

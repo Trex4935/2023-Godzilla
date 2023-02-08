@@ -24,7 +24,7 @@ public class ca_setArmPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Constants.selectedArmState = m_armState;
+      Constants.selectedArmState = m_armState;
     // System.out.println(m_armState);
   }
 

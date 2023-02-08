@@ -14,9 +14,12 @@ import frc.robot.commands.ca_autoBalance;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
 import frc.robot.commands.ca_autoTurnKinematic;
+import frc.robot.commands.ca_autoTurnKinematicGyro;
 import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.ca_setSideOrientation;
+import frc.robot.commands.cg_autoDoubleScore;
+import frc.robot.commands.cg_autoScore;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.commands.cm_moveArmBattery;
 import frc.robot.commands.cm_moveArmCompressor;
@@ -31,13 +34,6 @@ import frc.robot.commands.cm_moveArmRight;
 
 import java.sql.Driver;
 // Misc
-import java.util.List;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -80,8 +76,11 @@ public class RobotContainer {
   private final ca_autoTrajectoryKinematic autoTrajectoryKinematic;
   private final ca_autoTrajectory autoTrajectory;
   private final ca_autoTurnKinematic autoTurnTrajectory;
+  private final ca_autoTurnKinematicGyro autoTurnTrajectoryWithGyro;
   private final ca_driveAutoSquare autoSquare;
   private final ca_autoBalance autoBalance;
+  private final cg_autoDoubleScore autoDoubleScore;
+  private final cg_autoScore autoScore;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.LeftJoystickX);
@@ -135,23 +134,36 @@ public class RobotContainer {
     SmartDashboard.putData(arm);
     SmartDashboard.putData(gripper);
 
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-        Constants.dtmaxspeed, Constants.dtmaxaccel);
+    // Auto Bench-Test
 
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(0, 0.25),
-            new Translation2d(0, 0.5)),
-        // new Translation2d(xn, yn),
-        new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
+    autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryf);
 
-    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, trajectory);
-    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, -135.0); // testing 90 degree Turn;
-    autoSquare = new ca_driveAutoSquare(drivetrain, trajectory);
+    // Going Backword-mobility.
 
-    autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
+    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj);
+
+    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.pigeontraj);
+
+    // Be able to turn
+
+    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, 135.0); // testing 90 degree Turn;
+
+    autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 90.0); // testing 90 degree Turn;
+
+    // Make a point & go Backword-mobility.
+
+
+    autoScore = new cg_autoScore(drivetrain, arm, gripper);
+
+    // Make 2 point and go Backword-mobility.
+
+    autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
+
+    // Go backword and do autobalancing.
+
+    // Go in a simple L shape and do auto balancing.
+
+    // Make 2 points and go in a simple L shape and do auto balancing.
 
     // Configure the trigger bindings
     configureBindings();
@@ -196,6 +208,7 @@ public class RobotContainer {
 
     // new JoystickButton(m_JoystickLeft, 1).toggleOnTrue(autoBalance);
 
+
   }
 
   /**
@@ -205,31 +218,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    // Fill in once we have more info/constants
-    /*
-     * RamseteCommand ramseteCommand =
-     * new RamseteCommand(
-     * trajectory,
-     * drivetrain::getPose,
-     * new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-     * new SimpleMotorFeedforward(
-     * Constants.ksVolts,
-     * Constants.kvVoltSecondsPerMeter,
-     * Constants.kaVoltSecondsSquaredPerMeter),
-     * Constants.kDriveKinematics,
-     * drivetrain::getWheelSpeeds,
-     * new PIDController(Constants.kPDriveVel, 0, 0),
-     * new PIDController(Constants.kPDriveVel, 0, 0),
-     * // RamseteCommand passes volts to the callback
-     * drivetrain::tankDriveVolts,
-     * drivetrain);
-     * 
-     * drivetrain.resetOdometry(trajectory.getInitialPose());
-     * 
-     * return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
-     */
+    return autoTrajectory;
 
-    return autoSquare;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

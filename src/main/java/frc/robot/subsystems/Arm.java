@@ -147,70 +147,56 @@ public class Arm extends SubsystemBase {
     }
   }
 
-  public void temp(){
-  if (armRedZone()){
-    if (getArmRetractedLimitSwitch()){
-      armRotationMotor.set(0.4);
-    }
-    else {
-      armRotationMotor.stopMotor();
-    }
-  }
-  else {
-    if (getBatteryLimitSwitch()){
-      armRotationMotor.stopMotor();
-    }
-  }
-}
-
-
-
-
-
-
-
   /** Sets the speed that the arm moves forward */
   public void moveArmCompressor() {
-    // if limit switch is false, stop motor (bang will be removed later and will be similar to below)
-    if (!compressorSideLimitSwitch.get()) {
-      armRotationMotor.stopMotor();
-      System.out.println("C - STOP");
-      // if the arm is in the red zone and arm retracted is false, stop motor
-    }
-    else{}
-    if (armRedZone()) {
-      System.out.println("C - RED ZONE");
-      if (!getArmRetractedLimitSwitch()) {
-        armRotationMotor.stopMotor();
-        System.out.println("C - AR TRUE");
+  
+    // Check if we are in the red
+    if (armRedZone()){
+      // If arm is retracted then we can move
+      if (getArmRetractedLimitSwitch()){
+        armRotationMotor.set(-Constants.armRotateSpeed);
       }
-      // if arm isn't in red zone, then move
-    } else {
-      armRotationMotor.set(-Constants.armRotateSpeed);
-      System.out.println("C - MOVE");
-    }  
+      // if not retracted then stop moving
+      else {
+        armRotationMotor.stopMotor();
+      }
+    }
+    // For when we are not in red zone
+    else {
+      // If we are not in the red zone then we just need to stop if the limit is hit
+      if (!getCompressorLimitSwitch()){
+        armRotationMotor.stopMotor();
+      }
+      // else we can move
+      else {
+        armRotationMotor.set(-Constants.armRotateSpeed);
+      }
+    }
   }
 
-  /** sets the speed that the arm moves backward */
+  /** sets the speed that the arm moves battery-side */
   public void moveArmBattery() {
-    // if the limit switch is true, stop motor
-    if (batterySideLimitSwitch.get()) {
-      armRotationMotor.stopMotor();
-      System.out.println("B - STOP");
-      // if the arm is in the red zone and arm retracted is false, stop motor
-    } 
-    else {}
-    if (armRedZone()) {
-     System.out.println("B - RED ZONE");
-      if (!getArmRetractedLimitSwitch()) {
-        armRotationMotor.stopMotor();
-        System.out.println("B - AR TRUE");
+    // Check if we are in the red
+    if (armRedZone()){
+      // If arm is retracted then we can move
+      if (getArmRetractedLimitSwitch()){
+        armRotationMotor.set(Constants.armRotateSpeed);
       }
-      // if arm isn't in red zone, then move
-    } 
+      // if not retracted then stop moving
+      else {
+        armRotationMotor.stopMotor();
+      }
+    }
+    // For when we are not in red zone
     else {
-      armRotationMotor.set(Constants.armRotateSpeed);
-      System.out.println("B - MOVE");
+      // If we are not in the red zone then we just need to stop if the limit is hit
+      if (getBatteryLimitSwitch()){
+        armRotationMotor.stopMotor();
+      }
+      // else we can move
+      else {
+        armRotationMotor.set(Constants.armRotateSpeed);
+      }
     }
   }
 

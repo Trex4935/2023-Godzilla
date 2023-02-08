@@ -51,7 +51,7 @@ public class ca_ArmMovementCombo extends CommandBase {
           // System.out.println("MIDDLE-C");
           m_arm.AutoArmRotation(Constants.ArmMiddleAngleCompressor);
           // m_arm.AutoArmExtension(Constants.ArmMiddleDistance);
-          m_arm.setArmPostionMM(Constants.ArmMiddleDistance * -5000);
+          m_arm.setArmExtensionMM(Constants.ArmMiddleDistance);
           break;
 
         case LOW:

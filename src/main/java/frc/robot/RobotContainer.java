@@ -10,6 +10,7 @@ import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Arm;
 // Commands
 import frc.robot.commands.ca_ArmMovementCombo;
+import frc.robot.commands.ca_autoBalance;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
 import frc.robot.commands.ca_autoTurnKinematic;
@@ -31,10 +32,13 @@ import frc.robot.commands.cm_setGamePieceType;
 import frc.robot.commands.cm_moveArmLeft;
 import frc.robot.commands.cm_moveArmRight;
 
+import java.sql.Driver;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 // Robot Base Class
@@ -74,6 +78,7 @@ public class RobotContainer {
   private final ca_autoTurnKinematic autoTurnTrajectory;
   private final ca_autoTurnKinematicGyro autoTurnTrajectoryWithGyro;
   private final ca_driveAutoSquare autoSquare;
+  private final ca_autoBalance autoBalance;
   private final cg_autoDoubleScore autoDoubleScore;
   private final cg_autoScore autoScore;
 
@@ -118,6 +123,7 @@ public class RobotContainer {
 
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
+    autoBalance = new ca_autoBalance(drivetrain);
 
     // Gripper
     gripperOpen = new cm_GripperOpen(gripper);
@@ -145,6 +151,7 @@ public class RobotContainer {
     autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 90.0); // testing 90 degree Turn;
 
     // Make a point & go Backword-mobility.
+
 
     autoScore = new cg_autoScore(drivetrain, arm, gripper);
 
@@ -196,7 +203,11 @@ public class RobotContainer {
     new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(moveArmLeft);
     new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(moveArmRight);
 
-    // __________________________
+    // operator.b().toggleOnTrue(Commands.startEnd(gripper::gripOpen,
+    // gripper::gripClose, gripper));
+
+    // new JoystickButton(m_JoystickLeft, 1).toggleOnTrue(autoBalance);
+
 
   }
 
@@ -208,6 +219,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     return autoTrajectory;
+
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

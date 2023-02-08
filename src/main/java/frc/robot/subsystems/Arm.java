@@ -49,7 +49,7 @@ public class Arm extends SubsystemBase {
 
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();
-    Falcon.configMotionMagic(armExtensionMotor, 1,0,0,0,0,0);
+    Falcon.configMotionMagic(armExtensionMotor, 0.001,0,0,0.1,500,500);
 
   }
 

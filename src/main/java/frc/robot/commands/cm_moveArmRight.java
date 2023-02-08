@@ -7,14 +7,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class cm_armRotationBackward extends CommandBase {
-
-  private final Arm arm;
-
-  /** Creates a new c_armRotationBackwards. */
-  public cm_armRotationBackward(Arm ar) {
-    arm = ar;
-    addRequirements(arm);
+public class cm_moveArmRight extends CommandBase {
+  Arm m_Arm;
+  /** Creates a new cm_moveArmRight. */
+  public cm_moveArmRight(Arm arm) {
+   m_Arm = arm;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +22,13 @@ public class cm_armRotationBackward extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.moveArmBattery();
+    m_Arm.moveArmRight();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.stopArmRotation();
+    m_Arm.stopExtensionMotor();
   }
 
   // Returns true when the command should end.

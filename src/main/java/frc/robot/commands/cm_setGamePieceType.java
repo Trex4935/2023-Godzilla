@@ -5,16 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Gripper;
+import frc.robot.Constants;
 
-public class cm_armRotationBackward extends CommandBase {
+public class cm_setGamePieceType extends CommandBase {
+  Gripper m_gripper;
+  Boolean m_gamePieceType;
+  /** Creates a new cm_setGamePieceType. */
+  public cm_setGamePieceType(Gripper gripper, Boolean gamePieceType) {
+    m_gripper = gripper;
+    m_gamePieceType = gamePieceType;
 
-  private final Arm arm;
-
-  /** Creates a new c_armRotationBackwards. */
-  public cm_armRotationBackward(Arm ar) {
-    arm = ar;
-    addRequirements(arm);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -24,14 +26,12 @@ public class cm_armRotationBackward extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.moveArmBattery();
+    Constants.isCube = m_gamePieceType;
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    arm.stopArmRotation();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

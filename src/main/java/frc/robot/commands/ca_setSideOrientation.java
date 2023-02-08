@@ -5,16 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.Constants;
+import frc.robot.extensions.ArmSideOrientation;
 
-public class cm_armRotationBackward extends CommandBase {
-
-  private final Arm arm;
-
-  /** Creates a new c_armRotationBackwards. */
-  public cm_armRotationBackward(Arm ar) {
-    arm = ar;
-    addRequirements(arm);
+public class ca_setSideOrientation extends CommandBase {
+  ArmSideOrientation m_armSide;
+  /** Creates a new ca_setSideOrientation. */
+  public ca_setSideOrientation(ArmSideOrientation armSide) {
+    m_armSide = armSide;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -24,14 +23,12 @@ public class cm_armRotationBackward extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.moveArmBattery();
+    Constants.selectedArmSideOrientation = m_armSide;
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    arm.stopArmRotation();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

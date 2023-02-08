@@ -17,6 +17,7 @@ import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.ca_setSideOrientation;
 import frc.robot.commands.cg_autoDoubleScore;
+import frc.robot.commands.cg_autoScore;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.commands.cm_moveArmBattery;
 import frc.robot.commands.cm_moveArmCompressor;
@@ -35,7 +36,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-
 // Robot Base Class
 public class RobotContainer {
 
@@ -51,14 +51,14 @@ public class RobotContainer {
   private final ca_setArmPosition setArmPositionMiddle;
   private final ca_setArmPosition setArmPositionLow;
 
-// __________________________
+  // __________________________
 
-private final cm_moveArmCompressor moveArmCompressor;
-private final cm_moveArmBattery moveArmBattery;
-private final cm_moveArmLeft moveArmLeft;
-private final cm_moveArmRight moveArmRight;
+  private final cm_moveArmCompressor moveArmCompressor;
+  private final cm_moveArmBattery moveArmBattery;
+  private final cm_moveArmLeft moveArmLeft;
+  private final cm_moveArmRight moveArmRight;
 
-// __________________________
+  // __________________________
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
@@ -73,6 +73,7 @@ private final cm_moveArmRight moveArmRight;
   private final ca_autoTurnKinematic autoTurnTrajectory;
   private final ca_driveAutoSquare autoSquare;
   private final cg_autoDoubleScore autoDoubleScore;
+  private final cg_autoScore autoScore;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.LeftJoystickX);
@@ -90,17 +91,17 @@ private final cm_moveArmRight moveArmRight;
     gripper = new Gripper();
 
     // Create Command objects
-    
-// __________________________
 
-moveArmCompressor = new cm_moveArmCompressor(arm);
-moveArmBattery = new cm_moveArmBattery(arm);
-moveArmLeft = new cm_moveArmLeft(arm);
-moveArmRight = new cm_moveArmRight(arm);
+    // __________________________
 
-// __________________________
+    moveArmCompressor = new cm_moveArmCompressor(arm);
+    moveArmBattery = new cm_moveArmBattery(arm);
+    moveArmLeft = new cm_moveArmLeft(arm);
+    moveArmRight = new cm_moveArmRight(arm);
 
-    //Combo
+    // __________________________
+
+    // Combo
     armMovementCombo = new ca_ArmMovementCombo(arm);
     setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
     setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
@@ -115,7 +116,7 @@ moveArmRight = new cm_moveArmRight(arm);
 
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
-    
+
     // Gripper
     gripperOpen = new cm_GripperOpen(gripper);
     gripperClose = new cm_GripperClose(gripper);
@@ -125,14 +126,33 @@ moveArmRight = new cm_moveArmRight(arm);
     SmartDashboard.putData(arm);
     SmartDashboard.putData(gripper);
 
+    // Auto Bench-Test
 
-      autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.pigeontraj);
-      autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, - 135.0); // testing 90 degree Turn;
-      autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryf);
-      autoDoubleScore = new cg_autoDoubleScore(drivetrain, armrotation, armextension, gripper);
+    autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryf);
 
+    // Going Backword-mobility.
 
     autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj);
+
+    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.pigeontraj);
+
+    // Be able to turn
+
+    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, -135.0); // testing 90 degree Turn;
+
+    // Make a point & go Backword-mobility.
+
+    autoScore = new cg_autoScore(drivetrain, arm, gripper);
+
+    // Make 2 point and go Backword-mobility.
+
+    autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
+
+    // Go backword and do autobalancing.
+
+    // Go in a simple L shape and do auto balancing.
+
+    // Make 2 points and go in a simple L shape and do auto balancing.
 
     // Configure the trigger bindings
     configureBindings();
@@ -149,7 +169,6 @@ moveArmRight = new cm_moveArmRight(arm);
     arm.setDefaultCommand(armMovementCombo);
 
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    
 
     // Arduino Controller Button Mapping
     // Arm Presets
@@ -158,21 +177,22 @@ moveArmRight = new cm_moveArmRight(arm);
     new JoystickButton(m_ArduinoController, Constants.highButtonID).whileTrue(setArmPositionHigh);
 
     // Toggle Switches
-    new JoystickButton(m_ArduinoController, Constants.gamePieceID).onTrue(setGamePieceTypeCubeTrue).onFalse(setGamePieceTypeCubeFalse);
+    new JoystickButton(m_ArduinoController, Constants.gamePieceID).onTrue(setGamePieceTypeCubeTrue)
+        .onFalse(setGamePieceTypeCubeFalse);
 
-    new JoystickButton(m_ArduinoController, Constants.robotSideID).whileTrue(setSideOrientationBattery).whileFalse(setSideOrientationCompressor);
+    new JoystickButton(m_ArduinoController, Constants.robotSideID).whileTrue(setSideOrientationBattery)
+        .whileFalse(setSideOrientationCompressor);
 
     new JoystickButton(m_ArduinoController, Constants.gripperID).whileTrue(gripperOpen).whileFalse(gripperClose);
 
-// __________________________
+    // __________________________
 
-new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(moveArmCompressor);
-new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(moveArmBattery);
-new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(moveArmLeft);
-new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(moveArmRight);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(moveArmCompressor);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(moveArmBattery);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(moveArmLeft);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(moveArmRight);
 
-
-// __________________________
+    // __________________________
 
   }
 
@@ -183,32 +203,7 @@ new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(mo
    */
   public Command getAutonomousCommand() {
 
-
-    
-    // Fill in once we have more info/constants
-    /* RamseteCommand ramseteCommand =
-      new RamseteCommand(
-      trajectory,
-      drivetrain::getPose,
-      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-      new SimpleMotorFeedforward(
-      Constants.ksVolts,
-      Constants.kvVoltSecondsPerMeter,
-      Constants.kaVoltSecondsSquaredPerMeter),
-      Constants.kDriveKinematics,
-      drivetrain::getWheelSpeeds,
-      new PIDController(Constants.kPDriveVel, 0, 0),
-      new PIDController(Constants.kPDriveVel, 0, 0),
-      // RamseteCommand passes volts to the callback
-      drivetrain::tankDriveVolts,
-      drivetrain);
-      
-      drivetrain.resetOdometry(trajectory.getInitialPose());
-      
-      return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
-     */
-
-    return autoDoubleScore;
+    return autoTrajectory;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

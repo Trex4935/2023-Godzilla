@@ -17,17 +17,16 @@ import frc.robot.commands.ca_autoTurnKinematic;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class cg_autoScore extends SequentialCommandGroup {
   /** Creates a new cg_autoScore. */
-  
 
-  public cg_autoScore(Drivetrain drivetrain, ArmRotation armRotation, ArmExtension armExtension, Gripper gripper) {
+  public cg_autoScore(Drivetrain drivetrain, Arm arm, Gripper gripper) {
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new cm_GripperClose(gripper), // Closes on game piece
-      new ca_setArmPosition(ArmPosition.MIDDLE),
-      new cm_GripperOpen(gripper), // Drops the game piece
-      new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryf) // Moves for mobility points
+        new cm_GripperClose(gripper), // Closes on game piece
+        new ca_setArmPosition(ArmPosition.MIDDLE),
+        new cm_GripperOpen(gripper), // Drops the game piece
+        new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryf) // Moves for mobility points
 
     );
   }

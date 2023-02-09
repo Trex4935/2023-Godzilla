@@ -15,6 +15,7 @@ import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
 import frc.robot.commands.ca_autoTurnKinematic;
 import frc.robot.commands.ca_autoTurnKinematicGyro;
+import frc.robot.commands.ca_doSimpleL;
 import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.ca_setSideOrientation;
@@ -38,6 +39,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -80,7 +82,11 @@ public class RobotContainer {
   private final ca_driveAutoSquare autoSquare;
   private final ca_autoBalance autoBalance;
   private final cg_autoDoubleScore autoDoubleScore;
+  private final ca_doSimpleL autoSimpleL;
   private final cg_autoScore autoScore;
+  private final SequentialCommandGroup backwordAndAutoBalancing;
+  private final SequentialCommandGroup doLAndAutoBalancing;
+  private final SequentialCommandGroup autoDoubleScoreAndBalancing;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.LeftJoystickX);
@@ -123,7 +129,6 @@ public class RobotContainer {
 
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
-    autoBalance = new ca_autoBalance(drivetrain);
 
     // Gripper
     gripperOpen = new cm_GripperOpen(gripper);
@@ -152,7 +157,6 @@ public class RobotContainer {
 
     // Make a point & go Backword-mobility.
 
-
     autoScore = new cg_autoScore(drivetrain, arm, gripper);
 
     // Make 2 point and go Backword-mobility.
@@ -161,16 +165,33 @@ public class RobotContainer {
 
     // Do autobalancing.
 
+    autoBalance = new ca_autoBalance(drivetrain);
+
     // Go backword and do autobalancing.
+
+    backwordAndAutoBalancing = new SequentialCommandGroup(autoTrajectory, autoBalance);
+
+    // Go in a simple L
+
+    autoSimpleL = new ca_doSimpleL(drivetrain);
 
     // Go in a simple L shape and do auto balancing.
 
+    doLAndAutoBalancing = new SequentialCommandGroup(autoSimpleL, autoBalance);
+
     // Make 2 points and go in a simple L shape and do auto balancing.
+
+    autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore, doLAndAutoBalancing, autoBalance);
 
     // Follow L Path using point-map.
 
     // Make 2 points and go in a simple L shape using point map and do auto
     // balancing.
+
+    // Add encoder for real length measures to auto.
+
+    
+    // Add PID to auo.
 
     // Configure the trigger bindings
     configureBindings();
@@ -215,7 +236,6 @@ public class RobotContainer {
 
     // new JoystickButton(m_JoystickLeft, 1).toggleOnTrue(autoBalance);
 
-
   }
 
   /**
@@ -226,7 +246,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     return autoTurnTrajectory;
-
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

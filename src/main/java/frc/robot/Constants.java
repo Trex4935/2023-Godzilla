@@ -161,6 +161,6 @@ public final class Constants {
 
   public static int inchPerExtentionTicks = -5000;
   public static double degreesPerRotationTicks = 1;
-  
+  public static double addExtend = 0;
 
 }

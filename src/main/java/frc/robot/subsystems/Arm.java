@@ -48,6 +48,7 @@ public class Arm extends SubsystemBase {
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();
     Falcon.configMotionMagic(armExtensionMotor, 0.01,0,0, 0,32000,16000);
+    SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.01, 0, 0, 0, 0, 32000, 16000, 0);
 
   }
 
@@ -70,9 +71,15 @@ public class Arm extends SubsystemBase {
     armExtensionMotor.set(-Constants.armExtensionSpeed);
   }
 
-  // Using motion magic set the arm to a given position
+  /** Using MotionMagic set the arm to a given position */
   public void setArmExtensionMM(double armPositionTicks){
     armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks);
+  }
+
+  /** Using SmartMotion to set the arm to a given angle */
+
+  public void setArmRotationSM(double armRotationTicks) {
+    armRotationMotor.set(armRotationTicks);
   }
 
   /** Sets the speed that the arm moves backward */

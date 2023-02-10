@@ -18,13 +18,15 @@ public class ca_autoTrajectory extends CommandBase {
   Trajectory traj;
   State currState;
   Drivetrain dt;
+  Double end;
   
   /** Creates a new cm_autoTrajectory. */
-  public ca_autoTrajectory(Drivetrain drivetrain, Trajectory trajectory) {
+  public ca_autoTrajectory(Drivetrain drivetrain, Trajectory trajectory, Double endPoint) {
     timer = new Timer();
     traj = trajectory;
     currState =  new State(0,0,0, new Pose2d(new Translation2d(0,0),new Rotation2d(0)),0);
     dt = drivetrain;
+    end = endPoint;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);
   }
@@ -56,7 +58,7 @@ public class ca_autoTrajectory extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ( currState.poseMeters.getY() > 0.999 && currState.velocityMetersPerSecond < 0.001);
+    return ( currState.poseMeters.getY() > end - 0.001  && currState.velocityMetersPerSecond < 0.001);
   }
   
 }

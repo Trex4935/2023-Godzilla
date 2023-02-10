@@ -19,9 +19,9 @@ public class ca_doSimpleL extends SequentialCommandGroup {
     double squareAngle = 95;
     addCommands(
         new ca_autoTurnKinematic(drivetrain, 0.0, squareAngle),
-        new ca_autoTrajectory(drivetrain, TrajectoryContainer.trajectoryf),
+        new ca_autoTrajectory(drivetrain, TrajectoryContainer.trajectoryFront,TrajectoryContainer.trajFrontEnd),
         new ca_autoTurnKinematic(drivetrain, 0.0, squareAngle),
-        new ca_autoTrajectory(drivetrain, TrajectoryContainer.trajectoryf)
+        new ca_autoTrajectory(drivetrain, TrajectoryContainer.trajectoryFront, TrajectoryContainer.trajFrontEnd)
 
     );
   }

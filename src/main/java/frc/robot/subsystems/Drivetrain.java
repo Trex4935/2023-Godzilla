@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 //Gyro Imports
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
@@ -80,6 +82,12 @@ public class Drivetrain extends SubsystemBase {
         // Inverts direction of motors/wheels.
         leftMotors.setInverted(true);
         rightMotors.setInverted(false);
+        FLMotor.setNeutralMode(NeutralMode.Brake);
+        FRMotor.setNeutralMode(NeutralMode.Brake);
+        MLMotor.setNeutralMode(NeutralMode.Brake);
+        MRMotor.setNeutralMode(NeutralMode.Brake);
+        BLMotor.setNeutralMode(NeutralMode.Brake);
+        BRMotor.setNeutralMode(NeutralMode.Brake);
 
         diffdrive = new DifferentialDrive(leftMotors, rightMotors);
 

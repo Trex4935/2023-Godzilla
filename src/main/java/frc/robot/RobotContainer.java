@@ -80,13 +80,13 @@ public class RobotContainer {
   private final ca_autoTurnKinematic autoTurnTrajectory;
   private final ca_autoTurnKinematicGyro autoTurnTrajectoryWithGyro;
   private final ca_driveAutoSquare autoSquare;
-  private final ca_autoBalance autoBalance;
-  private final cg_autoDoubleScore autoDoubleScore;
-  private final ca_doSimpleL autoSimpleL;
+  //private final ca_autoBalance autoBalance;
+  //private final cg_autoDoubleScore autoDoubleScore;
+  //private final ca_doSimpleL autoSimpleL;
   private final cg_autoScore autoScore;
-  private final SequentialCommandGroup backwordAndAutoBalancing;
-  private final SequentialCommandGroup doLAndAutoBalancing;
-  private final SequentialCommandGroup autoDoubleScoreAndBalancing;
+  // private final SequentialCommandGroup backwordAndAutoBalancing;
+  // private final SequentialCommandGroup doLAndAutoBalancing;
+  // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.LeftJoystickX);
@@ -141,17 +141,17 @@ public class RobotContainer {
 
     // Auto Bench-Test
 
-    autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryf);
+    autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryFront,TrajectoryContainer.trajFrontEnd);
 
     // Going Backword-mobility.
 
-    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj);
+    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj, TrajectoryContainer.pigeontrajEnd);
 
-    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.pigeontraj);
+    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd);
 
     // Be able to turn
 
-    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, 135.0); // testing 90 degree Turn;
+    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, -110.0); // testing 90 degree Turn;
 
     autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 90.0); // testing 90 degree Turn;
 
@@ -161,27 +161,27 @@ public class RobotContainer {
 
     // Make 2 point and go Backword-mobility.
 
-    autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
+    //autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
 
     // Do autobalancing.
 
-    autoBalance = new ca_autoBalance(drivetrain);
+    //autoBalance = new ca_autoBalance(drivetrain);
 
     // Go backword and do autobalancing.
 
-    backwordAndAutoBalancing = new SequentialCommandGroup(autoTrajectory, autoBalance);
+    //backwordAndAutoBalancing = new SequentialCommandGroup(autoTrajectory, autoBalance);
 
     // Go in a simple L
 
-    autoSimpleL = new ca_doSimpleL(drivetrain);
+    //autoSimpleL = new ca_doSimpleL(drivetrain);
 
     // Go in a simple L shape and do auto balancing.
 
-    doLAndAutoBalancing = new SequentialCommandGroup(autoSimpleL, autoBalance);
+    //doLAndAutoBalancing = new SequentialCommandGroup(autoSimpleL, autoBalance);
 
     // Make 2 points and go in a simple L shape and do auto balancing.
 
-    autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore, doLAndAutoBalancing, autoBalance);
+    //autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore, doLAndAutoBalancing, autoBalance);
 
     // Follow L Path using point-map.
 
@@ -245,7 +245,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    return autoTurnTrajectory;
+    return autoTurnTrajectoryWithGyro;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

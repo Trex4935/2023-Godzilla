@@ -102,6 +102,7 @@ public class Drivetrain extends SubsystemBase {
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
+        ahrs.calibrate();
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
         kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);

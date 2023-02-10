@@ -47,7 +47,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
 
   // Declare Subsystems
-  private final Drivetrain drivetrain;
+  public final Drivetrain drivetrain;
   private final Arm arm;
   private final Gripper gripper;
 
@@ -102,6 +102,7 @@ public class RobotContainer {
     drivetrain = new Drivetrain();
     arm = new Arm();
     gripper = new Gripper();
+    drivetrain.resetGyro();
 
     // Create Command objects
 

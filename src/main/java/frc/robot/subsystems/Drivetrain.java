@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 //Gyro Imports
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
@@ -23,7 +25,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TrajectoryConstants;
-
+import frc.robot.extensions.Helper;
 import frc.robot.extensions.PID;
 
 import frc.robot.extensions.Talon;
@@ -80,6 +82,12 @@ public class Drivetrain extends SubsystemBase {
         // Inverts direction of motors/wheels.
         leftMotors.setInverted(true);
         rightMotors.setInverted(false);
+        FLMotor.setNeutralMode(NeutralMode.Brake);
+        FRMotor.setNeutralMode(NeutralMode.Brake);
+        MLMotor.setNeutralMode(NeutralMode.Brake);
+        MRMotor.setNeutralMode(NeutralMode.Brake);
+        BLMotor.setNeutralMode(NeutralMode.Brake);
+        BRMotor.setNeutralMode(NeutralMode.Brake);
 
         diffdrive = new DifferentialDrive(leftMotors, rightMotors);
 
@@ -94,7 +102,7 @@ public class Drivetrain extends SubsystemBase {
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
-        ahrs.calibrate()
+        ahrs.calibrate();
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
         kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);
@@ -102,7 +110,7 @@ public class Drivetrain extends SubsystemBase {
         // initiate simulate gyro Position
         zSimAngle = 0;
 
-        drivePID = new PIDController(0.03, 0.0, 0);
+        drivePID = new PIDController(0.01, 0.0, 0);
 
     }
 
@@ -121,9 +129,19 @@ public class Drivetrain extends SubsystemBase {
         return ahrs.getPitch();
     }
 
+
     /** Gets Yaw(Z) angle from Gyro */
     public Float getZAngle() {
-        return ahrs.getYaw();
+        return -ahrs.getYaw();
+
+    }
+
+
+    /** Gets Yaw(Z) angle from Gyro */
+    public double getZAngleConverted() {
+        Float yawBounded = -ahrs.getYaw();
+        double yawBoundedDouble = yawBounded.doubleValue();
+        return Helper.ConvertTo360(yawBoundedDouble);
     }
 
     /** Creates an array of the roll, pitch, and yaw values */
@@ -139,6 +157,15 @@ public class Drivetrain extends SubsystemBase {
     public void driveWithController(double leftSpeed, double rightSpeed) {
         diffdrive.tankDrive(leftSpeed, rightSpeed);
     }
+
+
+
+public void driveWithStraightWithGyro(double avgSpeed) {
+    double err = 0 - getZAngleConverted();
+    double P = 0.001;
+    double driftCorrection = err*P;
+    diffdrive.arcadeDrive(avgSpeed, driftCorrection);
+}
 
     public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
         diffdrive.tankDrive(joystick1.getRawAxis(Constants.joystickAxis),

@@ -18,13 +18,17 @@ public class ca_autoTrajectoryKinematic extends CommandBase {
   Trajectory traj;
   State currState;
   Drivetrain dt;
+  Double end;
+  Double sign;
   
   /** Creates a new cm_autoTrajectory. */
-  public ca_autoTrajectoryKinematic(Drivetrain drivetrain, Trajectory trajectory) {
+  public ca_autoTrajectoryKinematic(Drivetrain drivetrain, Trajectory trajectory, Double endPoint) {
     timer = new Timer();
     traj = trajectory;
     currState =  new State(0,0,0, new Pose2d(new Translation2d(0,0),new Rotation2d(0)),0);
     dt = drivetrain;
+    end = endPoint;
+    sign = 1.0;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);
   }
@@ -33,20 +37,37 @@ public class ca_autoTrajectoryKinematic extends CommandBase {
   @Override
   public void initialize() {
     timer.start();
+    if (end <= traj.getInitialPose().getY()) {
+
+      sign  = - 1.0;
+      
+    } else {
+      sign = 1.0;
+      
+    }
+
+    System.out.println(traj.getInitialPose().getY());
+    System.out.println(end);
+    System.out.println(sign);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+
     currState = traj.sample(timer.get());
-    Double velocityTarget = currState.velocityMetersPerSecond;
+
+    Double velocityTarget  = currState.velocityMetersPerSecond;
+
     // Rate is 0, because we are following a straight line, the speed varies depending of path, it follows a trapezoide curve.
-    Double leftSpeedWheel  = dt.getLeftSpeedKin(velocityTarget, 0);
-    Double rightSpeedWheel = dt.getRightpeedKin(velocityTarget, 0);
-    dt.driveWithController(leftSpeedWheel, rightSpeedWheel);
-    System.out.println("Time: "+ timer.get() + " Velocity: " + velocityTarget +
-    " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel);
+    Double leftSpeedWheel  =  dt.getLeftSpeedKin(velocityTarget, 0);
+    Double rightSpeedWheel =  dt.getRightpeedKin(velocityTarget, 0);
+    dt.driveWithController(leftSpeedWheel * Math.signum(end), rightSpeedWheel * Math.signum(end));
+    System.out.println(leftSpeedWheel);
+    System.out.println(rightSpeedWheel);
+    System.out.println(sign);
+    //System.out.println("Time: "+ timer.get() + " Velocity: " + velocityTarget +
+    //" Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel + "Sign:" + sign);
 
   }
 
@@ -59,7 +80,7 @@ public class ca_autoTrajectoryKinematic extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ( currState.poseMeters.getY() > 0.999 && currState.velocityMetersPerSecond < 0.001);
+    return ( (currState.poseMeters.getY() > end*Math.signum(end) - 0.001  || currState.poseMeters.getY() > end*Math.signum(end) + 0.001) && (currState.velocityMetersPerSecond < 0.001 ||  currState.velocityMetersPerSecond > -0.001));
   }
   
 }

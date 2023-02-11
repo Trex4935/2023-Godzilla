@@ -13,6 +13,7 @@ import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.ca_autoBalance;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
+import frc.robot.commands.ca_autoTrajectoryKinematicWithGyro;
 import frc.robot.commands.ca_autoTurnKinematic;
 import frc.robot.commands.ca_autoTurnKinematicGyro;
 import frc.robot.commands.ca_doSimpleL;
@@ -47,7 +48,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
 
   // Declare Subsystems
-  private final Drivetrain drivetrain;
+  public final Drivetrain drivetrain;
   private final Arm arm;
   private final Gripper gripper;
 
@@ -84,9 +85,11 @@ public class RobotContainer {
   private final cg_autoDoubleScore autoDoubleScore;
   private final ca_doSimpleL autoSimpleL;
   private final cg_autoScore autoScore;
-  private final SequentialCommandGroup backwordAndAutoBalancing;
-  private final SequentialCommandGroup doLAndAutoBalancing;
-  private final SequentialCommandGroup autoDoubleScoreAndBalancing;
+  private final ca_autoTrajectoryKinematicWithGyro driveStraight;
+  //private final SequentialCommandGroup autoDoubleScoreAndBalancing;
+  // private final SequentialCommandGroup backwordAndAutoBalancing;
+  // private final SequentialCommandGroup doLAndAutoBalancing;
+  // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.LeftJoystickX);
@@ -102,6 +105,7 @@ public class RobotContainer {
     drivetrain = new Drivetrain();
     arm = new Arm();
     gripper = new Gripper();
+    drivetrain.resetGyro();
 
     // Create Command objects
 
@@ -141,19 +145,21 @@ public class RobotContainer {
 
     // Auto Bench-Test
 
-    autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryf);
+    autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryFront,TrajectoryContainer.trajFrontEnd);
 
     // Going Backword-mobility.
 
-    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj);
+    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj, TrajectoryContainer.pigeontrajEnd);
 
-    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.pigeontraj);
+    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd);
+
+    driveStraight = new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd);
 
     // Be able to turn
 
-    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, 135.0); // testing 90 degree Turn;
+    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, -110.0); // testing 90 degree Turn;
 
-    autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 90.0); // testing 90 degree Turn;
+    autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 270.0); // testing 90 degree Turn;
 
     // Make a point & go Backword-mobility.
 
@@ -169,7 +175,7 @@ public class RobotContainer {
 
     // Go backword and do autobalancing.
 
-    backwordAndAutoBalancing = new SequentialCommandGroup(autoTrajectory, autoBalance);
+    //backwordAndAutoBalancing = new SequentialCommandGroup(autoTrajectory, autoBalance);
 
     // Go in a simple L
 
@@ -177,11 +183,11 @@ public class RobotContainer {
 
     // Go in a simple L shape and do auto balancing.
 
-    doLAndAutoBalancing = new SequentialCommandGroup(autoSimpleL, autoBalance);
+    //doLAndAutoBalancing = new SequentialCommandGroup(autoSimpleL, autoBalance);
 
     // Make 2 points and go in a simple L shape and do auto balancing.
 
-    autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore, doLAndAutoBalancing, autoBalance);
+    //autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore, autoSimpleL);
 
     // Follow L Path using point-map.
 
@@ -245,7 +251,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    return autoTurnTrajectory;
+   // return autoBalance.withTimeout(15);
+   return driveStraight;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

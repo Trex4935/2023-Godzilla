@@ -158,6 +158,15 @@ public class Drivetrain extends SubsystemBase {
         diffdrive.tankDrive(leftSpeed, rightSpeed);
     }
 
+
+
+public void driveWithStraightWithGyro(double avgSpeed) {
+    double err = 0 - getZAngleConverted();
+    double P = 0.001;
+    double driftCorrection = err*P;
+    diffdrive.arcadeDrive(avgSpeed, driftCorrection);
+}
+
     public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
         diffdrive.tankDrive(joystick1.getRawAxis(Constants.joystickAxis),
                 joystick2.getRawAxis(Constants.joystickAxis));

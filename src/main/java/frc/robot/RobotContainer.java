@@ -13,6 +13,7 @@ import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.ca_autoBalance;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
+import frc.robot.commands.ca_autoTrajectoryKinematicWithGyro;
 import frc.robot.commands.ca_autoTurnKinematic;
 import frc.robot.commands.ca_autoTurnKinematicGyro;
 import frc.robot.commands.ca_doSimpleL;
@@ -84,6 +85,7 @@ public class RobotContainer {
   private final cg_autoDoubleScore autoDoubleScore;
   private final ca_doSimpleL autoSimpleL;
   private final cg_autoScore autoScore;
+  private final ca_autoTrajectoryKinematicWithGyro driveStraight;
   //private final SequentialCommandGroup autoDoubleScoreAndBalancing;
   // private final SequentialCommandGroup backwordAndAutoBalancing;
   // private final SequentialCommandGroup doLAndAutoBalancing;
@@ -150,6 +152,8 @@ public class RobotContainer {
     autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj, TrajectoryContainer.pigeontrajEnd);
 
     autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd);
+
+    driveStraight = new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd);
 
     // Be able to turn
 
@@ -247,7 +251,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    return autoBalance.withTimeout(15);
+   // return autoBalance.withTimeout(15);
+   return driveStraight;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

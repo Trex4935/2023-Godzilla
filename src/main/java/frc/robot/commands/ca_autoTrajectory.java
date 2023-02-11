@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
+// Going straight autonomous using only trajectory and timer.
 public class ca_autoTrajectory extends CommandBase {
   Timer timer;
   Trajectory traj;

@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TrajectoryConstants;
-
+import frc.robot.extensions.Helper;
 import frc.robot.extensions.PID;
 
 import frc.robot.extensions.Talon;
@@ -129,9 +129,19 @@ public class Drivetrain extends SubsystemBase {
         return ahrs.getPitch();
     }
 
+
     /** Gets Yaw(Z) angle from Gyro */
     public Float getZAngle() {
         return -ahrs.getYaw();
+
+    }
+
+
+    /** Gets Yaw(Z) angle from Gyro */
+    public double getZAngleConverted() {
+        Float yawBounded = -ahrs.getYaw();
+        double yawBoundedDouble = yawBounded.doubleValue();
+        return Helper.ConvertTo360(yawBoundedDouble);
     }
 
     /** Creates an array of the roll, pitch, and yaw values */

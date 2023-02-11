@@ -28,8 +28,8 @@ import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.cm_setGamePieceType;
-import frc.robot.commands.cm_moveArmLeft;
-import frc.robot.commands.cm_moveArmRight;
+import frc.robot.commands.cm_manualExtendArm;
+import frc.robot.commands.cm_manualRetractArm;
 
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
@@ -56,8 +56,8 @@ public class RobotContainer {
 
   private final cm_moveArmCompressor moveArmCompressor;
   private final cm_moveArmBattery moveArmBattery;
-  private final cm_moveArmLeft moveArmLeft;
-  private final cm_moveArmRight moveArmRight;
+  private final cm_manualExtendArm manualExtendArm;
+  private final cm_manualRetractArm manualRetractArm;
 
   // __________________________
 
@@ -98,8 +98,8 @@ public class RobotContainer {
 
     moveArmCompressor = new cm_moveArmCompressor(arm);
     moveArmBattery = new cm_moveArmBattery(arm);
-    moveArmLeft = new cm_moveArmLeft(arm);
-    moveArmRight = new cm_moveArmRight(arm);
+    manualExtendArm = new cm_manualExtendArm(arm);
+    manualRetractArm = new cm_manualRetractArm(arm);
 
     // __________________________
 
@@ -193,8 +193,8 @@ public class RobotContainer {
 
     new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(moveArmCompressor);
     new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(moveArmBattery);
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(moveArmLeft);
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(moveArmRight);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(manualExtendArm);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(manualRetractArm);
 
     // __________________________
 

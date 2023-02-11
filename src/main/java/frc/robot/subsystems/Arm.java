@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -39,6 +40,8 @@ public class Arm extends SubsystemBase {
     armExtensionMotor = Falcon.createDefaultFalcon(Constants.armExtensionCAN);
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
 
+    armExtensionMotor.setNeutralMode(NeutralMode.Brake);
+
     // Arm Extension Limit Switches
     armRetractedLimitSwitch = new FlippedDIO(0);
     // Arm Rotation Limit Switches
@@ -47,7 +50,7 @@ public class Arm extends SubsystemBase {
 
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();
-    Falcon.configMotionMagic(armExtensionMotor, 0.01,0,0, 0,32000,16000);
+    Falcon.configMotionMagic(armExtensionMotor, 0.01, 0, 0, 0, 32000, 16000);
     SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.01, 0, 0, 0, 0, 32000, 16000, 0);
 
   }
@@ -72,7 +75,7 @@ public class Arm extends SubsystemBase {
   }
 
   /** Using MotionMagic set the arm to a given position */
-  public void setArmExtensionMM(double armPositionTicks){
+  public void setArmExtensionMM(double armPositionTicks) {
     armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks);
   }
 
@@ -96,12 +99,12 @@ public class Arm extends SubsystemBase {
 
   // __________________________
   // rename later as extend and retract
-  public void moveArmLeft() {
+  public void manualExtendArm() {
     armExtensionMotor.set(Constants.armExtensionSpeed);
     DataLogManager.log("MOVING LEFT");
   }
 
-  public void moveArmRight() {
+  public void manualRetractArm() {
     armExtensionMotor.set((-1) * Constants.armExtensionSpeed);
     DataLogManager.log("MOVING RIGHT");
   }
@@ -145,7 +148,7 @@ public class Arm extends SubsystemBase {
   public void zeroEncoder() {
     armExtensionMotor.setSelectedSensorPosition(0, 0, 20);
   }
-  
+
   // Arm Rotation Methods
   /**
    * determines if the arm is in the red zone or not, and if it is extended or not
@@ -163,11 +166,11 @@ public class Arm extends SubsystemBase {
 
   /** Sets the speed that the arm moves forward */
   public void moveArmCompressor() {
-  
+
     // Check if we are in the red
-    if (armRedZone()){
+    if (armRedZone()) {
       // If arm is retracted then we can move
-      if (getArmRetractedLimitSwitch()){
+      if (getArmRetractedLimitSwitch()) {
         armRotationMotor.set(-Constants.armRotateSpeed);
       }
       // if not retracted then stop moving
@@ -178,7 +181,7 @@ public class Arm extends SubsystemBase {
     // For when we are not in red zone
     else {
       // If we are not in the red zone then we just need to stop if the limit is hit
-      if (!getCompressorLimitSwitch()){
+      if (!getCompressorLimitSwitch()) {
         armRotationMotor.stopMotor();
       }
       // else we can move
@@ -191,9 +194,9 @@ public class Arm extends SubsystemBase {
   /** sets the speed that the arm moves battery-side */
   public void moveArmBattery() {
     // Check if we are in the red
-    if (armRedZone()){
+    if (armRedZone()) {
       // If arm is retracted then we can move
-      if (getArmRetractedLimitSwitch()){
+      if (getArmRetractedLimitSwitch()) {
         armRotationMotor.set(Constants.armRotateSpeed);
       }
       // if not retracted then stop moving
@@ -204,7 +207,7 @@ public class Arm extends SubsystemBase {
     // For when we are not in red zone
     else {
       // If we are not in the red zone then we just need to stop if the limit is hit
-      if (getBatteryLimitSwitch()){
+      if (getBatteryLimitSwitch()) {
         armRotationMotor.stopMotor();
       }
       // else we can move
@@ -260,7 +263,7 @@ public class Arm extends SubsystemBase {
   public boolean getCompressorLimitSwitch() {
     return compressorSideLimitSwitch.get();
   }
-  
+
   public boolean getBatteryLimitSwitch() {
     return batterySideLimitSwitch.get();
   }
@@ -269,7 +272,7 @@ public class Arm extends SubsystemBase {
     Constants.tempArmDistance = m_tempArmDistance;
   }
 
-  public double getArmLength(){
+  public double getArmLength() {
     return Constants.tempArmDistance;
   }
   /*

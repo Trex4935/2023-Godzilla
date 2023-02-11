@@ -131,7 +131,7 @@ public class Drivetrain extends SubsystemBase {
 
     /** Gets Yaw(Z) angle from Gyro */
     public Float getZAngle() {
-        return ahrs.getYaw();
+        return -ahrs.getYaw();
     }
 
     /** Creates an array of the roll, pitch, and yaw values */

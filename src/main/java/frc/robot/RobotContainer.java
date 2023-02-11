@@ -81,8 +81,8 @@ public class RobotContainer {
   private final ca_autoTurnKinematicGyro autoTurnTrajectoryWithGyro;
   private final ca_driveAutoSquare autoSquare;
   //private final ca_autoBalance autoBalance;
-  //private final cg_autoDoubleScore autoDoubleScore;
-  //private final ca_doSimpleL autoSimpleL;
+  private final cg_autoDoubleScore autoDoubleScore;
+  \private final ca_doSimpleL autoSimpleL;
   private final cg_autoScore autoScore;
   // private final SequentialCommandGroup backwordAndAutoBalancing;
   // private final SequentialCommandGroup doLAndAutoBalancing;
@@ -154,7 +154,7 @@ public class RobotContainer {
 
     autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, -110.0); // testing 90 degree Turn;
 
-    autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 90.0); // testing 90 degree Turn;
+    autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 270.0); // testing 90 degree Turn;
 
     // Make a point & go Backword-mobility.
 
@@ -162,7 +162,7 @@ public class RobotContainer {
 
     // Make 2 point and go Backword-mobility.
 
-    //autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
+    autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
 
     // Do autobalancing.
 
@@ -174,7 +174,7 @@ public class RobotContainer {
 
     // Go in a simple L
 
-    //autoSimpleL = new ca_doSimpleL(drivetrain);
+    autoSimpleL = new ca_doSimpleL(drivetrain);
 
     // Go in a simple L shape and do auto balancing.
 
@@ -182,7 +182,7 @@ public class RobotContainer {
 
     // Make 2 points and go in a simple L shape and do auto balancing.
 
-    //autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore, doLAndAutoBalancing, autoBalance);
+    autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore, autoSimpleL);
 
     // Follow L Path using point-map.
 
@@ -246,7 +246,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    return autoTurnTrajectoryWithGyro;
+    return autoDoubleScore;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

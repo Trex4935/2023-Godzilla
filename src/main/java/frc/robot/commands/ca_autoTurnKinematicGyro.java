@@ -43,9 +43,9 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
     Double comega = 0.0;
     // if Start > End , go left, w +
     if (dt.getZAngle() > eAngle) {
-      comega = -AutoMovementConstraints.dtmaxomega;
-    } else { // if Start < End, go right, w -
       comega = AutoMovementConstraints.dtmaxomega;
+    } else { // if Start < End, go right, w -
+      comega = -AutoMovementConstraints.dtmaxomega;
     }
     // Constant for now
     Double leftSpeed = dt.getLeftSpeedKin(chassisSpeed, comega);
@@ -68,7 +68,7 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return eAngle.doubleValue() - dt.getZAngle() <= 2.0 && eAngle.doubleValue() - dt.getZAngle() >= -2.0
+    return eAngle.doubleValue() - dt.getZAngle() <= 3.0 && eAngle.doubleValue() - dt.getZAngle() >= -3.0
         || timer.get() > 10;
   }
 }

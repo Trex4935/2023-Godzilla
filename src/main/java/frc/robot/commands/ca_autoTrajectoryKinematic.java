@@ -61,7 +61,7 @@ public class ca_autoTrajectoryKinematic extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ( currState.poseMeters.getY() > end - 0.001 && currState.velocityMetersPerSecond < 0.001);
+    return ( (currState.poseMeters.getY() > end - 0.001  || currState.poseMeters.getY() > end + 0.001) && (currState.velocityMetersPerSecond < 0.001 ||  currState.velocityMetersPerSecond > -0.001));
   }
   
 }

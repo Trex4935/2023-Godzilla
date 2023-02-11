@@ -31,16 +31,16 @@ public class TrajectoryContainer {
     new Pose2d(0, pigeontrajEnd, Rotation2d.fromDegrees(0)),
     trajectoryConfig);
 
-    public static final Double trajFrontEnd = 1.0;
+    public static final Double trajFrontEnd = 2.0;
     public static final Trajectory trajectoryFront = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0, 0, new Rotation2d(0)),
     List.of(),
     new Pose2d(0, trajFrontEnd, Rotation2d.fromDegrees(0)),
     trajectoryConfig);
 
-    public static final Double trajBackEnd = 0.0;
+    public static final Double trajBackEnd = -1.0;
     public static final Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
-    new Pose2d(0, 1, new Rotation2d(0)),
+    new Pose2d(0, 0, new Rotation2d(0)),
     List.of(),
     new Pose2d(0, trajBackEnd, Rotation2d.fromDegrees(0)),
     trajectoryConfig);

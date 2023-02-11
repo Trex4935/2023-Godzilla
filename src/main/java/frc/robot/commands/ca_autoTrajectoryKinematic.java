@@ -13,13 +13,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
+// Going straight autonomous using only trajectory, kinematics and timer.
 public class ca_autoTrajectoryKinematic extends CommandBase {
   Timer timer;
   Trajectory traj;
   State currState;
   Drivetrain dt;
   Double end;
-  Double sign;
   
   /** Creates a new cm_autoTrajectory. */
   public ca_autoTrajectoryKinematic(Drivetrain drivetrain, Trajectory trajectory, Double endPoint) {
@@ -28,7 +28,6 @@ public class ca_autoTrajectoryKinematic extends CommandBase {
     currState =  new State(0,0,0, new Pose2d(new Translation2d(0,0),new Rotation2d(0)),0);
     dt = drivetrain;
     end = endPoint;
-    sign = 1.0;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);
   }
@@ -37,18 +36,6 @@ public class ca_autoTrajectoryKinematic extends CommandBase {
   @Override
   public void initialize() {
     timer.start();
-    if (end <= traj.getInitialPose().getY()) {
-
-      sign  = - 1.0;
-      
-    } else {
-      sign = 1.0;
-      
-    }
-
-    System.out.println(traj.getInitialPose().getY());
-    System.out.println(end);
-    System.out.println(sign);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

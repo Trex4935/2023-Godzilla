@@ -56,18 +56,9 @@ public class ca_autoTrajectoryKinematic extends CommandBase {
   public void execute() {
 
     currState = traj.sample(timer.get());
+    Double time = timer.get();
+    dt.driveTankWithStateKinematicTraj( currState, end,  time);
 
-    Double velocityTarget  = currState.velocityMetersPerSecond;
-
-    // Rate is 0, because we are following a straight line, the speed varies depending of path, it follows a trapezoide curve.
-    Double leftSpeedWheel  =  dt.getLeftSpeedKin(velocityTarget, 0);
-    Double rightSpeedWheel =  dt.getRightpeedKin(velocityTarget, 0);
-    dt.driveWithController(leftSpeedWheel * Math.signum(end), rightSpeedWheel * Math.signum(end));
-    System.out.println(leftSpeedWheel);
-    System.out.println(rightSpeedWheel);
-    System.out.println(sign);
-    //System.out.println("Time: "+ timer.get() + " Velocity: " + velocityTarget +
-    //" Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel + "Sign:" + sign);
 
   }
 

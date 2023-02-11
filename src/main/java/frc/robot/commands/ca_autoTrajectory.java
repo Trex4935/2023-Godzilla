@@ -42,10 +42,8 @@ public class ca_autoTrajectory extends CommandBase {
   public void execute() {
     
     currState = traj.sample(timer.get());
-    Double velocityTarget = currState.velocityMetersPerSecond;
-    dt.driveWithController(velocityTarget, velocityTarget);
-    System.out.println("Time:"+ timer.get() + "Velocity:" + velocityTarget +
-    "Position:" + currState.poseMeters.getY());
+    Double currenttime = timer.get();
+    dt.driveTankWithStateTraj(currState, end, currenttime);
 
   }
 

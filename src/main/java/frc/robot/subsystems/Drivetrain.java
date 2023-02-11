@@ -17,6 +17,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -281,6 +282,35 @@ public void driveWithStraightWithGyro(double avgSpeed) {
           }
 
           return omega;
+    }
+
+    public void driveTankWithStateTraj(State currState, Double end, Double time){
+        Double velocityTarget = currState.velocityMetersPerSecond;
+        driveWithController(velocityTarget * Math.signum(end), velocityTarget * Math.signum(end));
+        System.out.println("Time:"+ time + "Velocity:" + velocityTarget +
+        "Position:" + currState.poseMeters.getY());
+    }
+
+    
+    public void driveTankWithStateKinematicTraj(State currState,Double end, Double time){
+        Double velocityTarget  = currState.velocityMetersPerSecond;
+        // Rate is 0, because we are following a straight line, the speed varies depending of path, it follows a trapezoide curve.
+        Double leftSpeedWheel  =  getLeftSpeedKin(velocityTarget, 0);
+        Double rightSpeedWheel =  getRightpeedKin(velocityTarget, 0);
+        driveWithController(leftSpeedWheel * Math.signum(end), rightSpeedWheel * Math.signum(end));
+        System.out.println("Time: "+ time + " Velocity: " + velocityTarget +
+        " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel);
+    }
+
+    public void driveArcadeWithStateKinematicGyroTraj(State currState, Double end, Double time){    
+        Double velocityTarget  = currState.velocityMetersPerSecond;
+        // Rate is 0, because we are following a straight line, the speed varies depending of path, it follows a trapezoide curve.
+        Double leftSpeedWheel  =  getLeftSpeedKin(velocityTarget, 0);
+        Double rightSpeedWheel =  getRightpeedKin(velocityTarget, 0);
+        driveWithStraightWithGyro(velocityTarget * Math.signum(end));
+        System.out.println("Time: "+ time + " Velocity: " + velocityTarget +
+        " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel);
+
     }
 
     // Sendable override

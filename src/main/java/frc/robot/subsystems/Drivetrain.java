@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AutoMovementConstraints;
 import frc.robot.Constants.TrajectoryConstants;
 import frc.robot.extensions.Helper;
 import frc.robot.extensions.PID;
@@ -269,6 +270,17 @@ public void driveWithStraightWithGyro(double avgSpeed) {
 
         ChassisSpeeds chassisSpeed = kin.toChassisSpeeds(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
         zSimAngle = chassisSpeed.omegaRadiansPerSecond * 0.02 + zSimAngle;
+    }
+
+    public double getOmega( double startAngle , double endAngle ){
+        double omega = 0;
+        if ( startAngle > endAngle) { // if Start > End  ,  go left, w +
+            omega = AutoMovementConstraints.dtmaxomega ;
+          } else { // if Start < End, go right, w -
+            omega = - AutoMovementConstraints.dtmaxomega;
+          }
+
+          return omega;
     }
 
     // Sendable override

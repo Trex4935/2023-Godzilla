@@ -42,32 +42,25 @@ public class ca_ArmMovementCombo extends CommandBase {
       switch (Constants.selectedArmState) {
         case HIGH:
           // System.out.println("HIGH-C");
-          //m_arm.AutoArmRotation(Constants.ArmHighAngleCompressor);
           m_arm.setArmRotationSM(Constants.ArmHighAngleCompressor);
-          // m_arm.AutoArmExtension(Constants.ArmHighDistance);
           m_arm.setArmExtensionMM(Constants.ArmHighDistance);
       
           break;
 
         case MIDDLE:
           // System.out.println("MIDDLE-C");
-          //m_arm.AutoArmRotation(Constants.ArmMiddleAngleCompressor);
           m_arm.setArmRotationSM(Constants.ArmMiddleAngleCompressor);
-          // m_arm.AutoArmExtension(Constants.ArmMiddleDistance);
           m_arm.setArmExtensionMM(Constants.ArmMiddleDistance);
           break;
 
         case LOW:
           // System.out.println("LOW-C");
-          //m_arm.AutoArmRotation(Constants.ArmLowAngleCompressor);
           m_arm.setArmRotationSM(Constants.ArmLowAngleCompressor);
-          // m_arm.AutoArmExtension(Constants.ArmLowDistance);
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
         default: // Carry Position is default
           // System.out.println("DEFAULT-C");
-          //m_arm.AutoArmRotation(Constants.ArmCarryAngleCompressor);
           m_arm.setArmRotationSM(Constants.ArmCarryAngleCompressor);
           m_arm.retractArm();
       }
@@ -80,25 +73,22 @@ public class ca_ArmMovementCombo extends CommandBase {
         case HIGH:
           // System.out.println("HIGH-B");
           m_arm.setArmRotationSM(Constants.ArmHighAngleBattery);
-          //cm_arm.AutoArmExtension(Constants.ArmHighDistance);
           m_arm.setArmExtensionMM(Constants.ArmHighDistance);
           break;
 
         case MIDDLE:
           // System.out.println("MIDDLE-B");
           m_arm.setArmRotationSM(Constants.ArmMiddleAngleBattery);
-          // m_arm.AutoArmExtension(Constants.ArmMiddleDistance);
           m_arm.setArmExtensionMM(Constants.ArmMiddleDistance);
           break;
 
         case LOW:
           // System.out.println("LOW-B");
           m_arm.setArmRotationSM(Constants.ArmLowAngleBattery);
-          // m_arm.AutoArmExtension(Constants.ArmLowDistance);
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
-        default: // Carry Position is default
+        default: // Carry Position is default when side switch is flipped.
           // System.out.println("DEFAULT-B");
           m_arm.setArmRotationSM(Constants.ArmCarryAngleBattery);
           m_arm.retractArm();

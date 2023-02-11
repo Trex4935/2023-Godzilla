@@ -9,6 +9,8 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -31,14 +33,19 @@ public class Arm extends SubsystemBase {
   CANSparkMax armRotationMotor;
   RelativeEncoder armRotationEncoder;
 
+  SparkMaxPIDController armRotationPID;
+
   DigitalInput compressorSideLimitSwitch;
   DigitalInput batterySideLimitSwitch;
+
+  public static boolean redZoneLatch = false;
 
   /** Creates a new Arm. */
   public Arm() {
     // init motors
     armExtensionMotor = Falcon.createDefaultFalcon(Constants.armExtensionCAN);
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
+    armRotationPID = armRotationMotor.getPIDController();
 
     armExtensionMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -50,8 +57,8 @@ public class Arm extends SubsystemBase {
 
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();
-    Falcon.configMotionMagic(armExtensionMotor, 0.01, 0, 0, 0, 32000, 16000);
-    SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.01, 0, 0, 0, 0, 32000, 16000, 0);
+    Falcon.configMotionMagic(armExtensionMotor, 0.01, 0, 0, 0, 32000, 32000);
+    SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.0001, 0, 0, 0, 0, 32000, 16000, 0);
 
   }
 
@@ -82,7 +89,29 @@ public class Arm extends SubsystemBase {
   /** Using SmartMotion to set the arm to a given angle */
 
   public void setArmRotationSM(double armRotationTicks) {
-    armRotationMotor.set(armRotationTicks);
+    // IF in REDZONE or not retracted, ENGAGE LATCH.
+    if (armRedZone() && getArmRetractedLimitSwitch() == false) {
+      redZoneLatch = true;
+    }
+
+    // if latched, STOP MOTOR. 
+    if (redZoneLatch) {
+      armRotationMotor.stopMotor();
+
+      // if latched but fully retracted, DISENGAGE LATCH.
+      if (getArmRetractedLimitSwitch()) {
+        redZoneLatch = false;
+      }
+        
+    } 
+    // if not latched, then if limit switch is hit, STOP MOTOR.
+    else if (getBatteryLimitSwitch() || getCompressorLimitSwitch()) {
+        armRotationPID.setReference(armRotationTicks, ControlType.kSmartMotion);
+    }
+      // if not latched or hit limit switch, MOVE MOTOR.
+    else {
+      armRotationPID.setReference(armRotationTicks, ControlType.kSmartMotion);
+    }
   }
 
   /** Sets the speed that the arm moves backward */
@@ -238,7 +267,7 @@ public class Arm extends SubsystemBase {
 
   /** Returns the angle */
   public double getArmAngle() {
-    return getEncoderValue() / 500;
+    return getEncoderValue();
   }
 
   /** stops the ArmRotation motor */

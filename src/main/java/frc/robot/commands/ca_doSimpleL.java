@@ -16,11 +16,11 @@ public class ca_doSimpleL extends SequentialCommandGroup {
   public ca_doSimpleL(Drivetrain drivetrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    double squareAngle = 95;
+    double squareAngle = 90;
     addCommands(
-        new ca_autoTurnKinematic(drivetrain, 0.0, squareAngle),
+        new ca_autoTurnKinematicGyro(drivetrain, 0.0, squareAngle),
         new ca_autoTrajectory(drivetrain, TrajectoryContainer.trajectoryFront,TrajectoryContainer.trajFrontEnd),
-        new ca_autoTurnKinematic(drivetrain, 0.0, squareAngle),
+        new ca_autoTurnKinematicGyro(drivetrain, 0.0, 0.0),
         new ca_autoTrajectory(drivetrain, TrajectoryContainer.trajectoryFront, TrajectoryContainer.trajFrontEnd)
 
     );

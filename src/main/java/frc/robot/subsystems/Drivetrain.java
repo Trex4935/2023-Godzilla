@@ -110,7 +110,7 @@ public class Drivetrain extends SubsystemBase {
         // initiate simulate gyro Position
         zSimAngle = 0;
 
-        drivePID = new PIDController(0.03, 0.0, 0);
+        drivePID = new PIDController(0.01, 0.0, 0);
 
     }
 

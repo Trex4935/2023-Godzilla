@@ -80,10 +80,11 @@ public class RobotContainer {
   private final ca_autoTurnKinematic autoTurnTrajectory;
   private final ca_autoTurnKinematicGyro autoTurnTrajectoryWithGyro;
   private final ca_driveAutoSquare autoSquare;
-  //private final ca_autoBalance autoBalance;
+  private final ca_autoBalance autoBalance;
   private final cg_autoDoubleScore autoDoubleScore;
-  \private final ca_doSimpleL autoSimpleL;
+  private final ca_doSimpleL autoSimpleL;
   private final cg_autoScore autoScore;
+  //private final SequentialCommandGroup autoDoubleScoreAndBalancing;
   // private final SequentialCommandGroup backwordAndAutoBalancing;
   // private final SequentialCommandGroup doLAndAutoBalancing;
   // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
@@ -166,7 +167,7 @@ public class RobotContainer {
 
     // Do autobalancing.
 
-    //autoBalance = new ca_autoBalance(drivetrain);
+    autoBalance = new ca_autoBalance(drivetrain);
 
     // Go backword and do autobalancing.
 
@@ -182,7 +183,7 @@ public class RobotContainer {
 
     // Make 2 points and go in a simple L shape and do auto balancing.
 
-    autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore, autoSimpleL);
+    //autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore, autoSimpleL);
 
     // Follow L Path using point-map.
 
@@ -246,7 +247,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    return autoDoubleScore;
+    return autoBalance.withTimeout(15);
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

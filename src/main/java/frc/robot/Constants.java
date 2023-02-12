@@ -50,7 +50,7 @@ public final class Constants {
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
-  public static final double dtmaxspeed = 1; // Speed Limit
+  public static final double dtmaxspeed = 0.75; // Speed Limit
 
   // ARM ROTATION Constants
 
@@ -76,9 +76,9 @@ public final class Constants {
   public static double ArmCarryAngleCompressor = 10;
 
   public static final double ArmCarryAngleBattery = 308;
-  public static final double ArmHighAngleBattery = 230; 
-  public static final double ArmMiddleAngleBattery = 243;
-  public static final double ArmLowAngleBattery = 296;
+  public static final double ArmHighAngleBattery = 240; 
+  public static final double ArmMiddleAngleBattery = 250;
+  public static final double ArmLowAngleBattery = 310;
 
   public static final int sideVal = 0;
 
@@ -93,9 +93,9 @@ public final class Constants {
   /** 33 in -> -165000 ticks */ 
   public static final double ArmHighDistance = -165000; 
   /** 10 in -> -50000 */
-  public static final double ArmMiddleDistance = -50000; 
+  public static final double ArmMiddleDistance = -90000; 
   /** 20 in -> -100000 */
-  public static final double ArmLowDistance = -100000; 
+  public static final double ArmLowDistance = -140000; 
   /** 1 in -> -5000 */
   public static final double ArmCarryDistance = -5000; 
 
@@ -170,7 +170,12 @@ public final class Constants {
 
   
   public static double degreesPerRotationTicks = 1;
+  /** Adds extension ticks */
   public static double addExtend = 0;
   public static boolean isAutonomous;
+
+  /** Adds rotation degrees */
+  public static double addRotate = 0;
+
 
 }

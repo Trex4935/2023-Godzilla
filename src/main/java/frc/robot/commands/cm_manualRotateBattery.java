@@ -7,12 +7,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class cm_increaseExtensionTicks extends CommandBase {
-  
-  private final Arm m_Arm;
-  /** Creates a new cm_increaseExtensionTicks. */
-  public cm_increaseExtensionTicks(Arm arm) {
-    m_Arm = arm;
+public class cm_manualRotateBattery extends CommandBase {
+  Arm m_arm;
+
+  /** Creates a new cm_manualRotateBattery. */
+  public cm_manualRotateBattery(Arm arm) {
+    m_arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -23,13 +23,12 @@ public class cm_increaseExtensionTicks extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.increaseTicks();
+    m_arm.manualRotateBattery();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

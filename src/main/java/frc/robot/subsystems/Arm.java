@@ -84,7 +84,7 @@ public class Arm extends SubsystemBase {
 
   /** Using MotionMagic set the arm to a given position */
   public void setArmExtensionMM(double armPositionTicks) {
-    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks);
+    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks + Constants.addExtend);
   }
 
   /** Using SmartMotion to set the arm to a given angle */
@@ -94,7 +94,7 @@ public class Arm extends SubsystemBase {
       redZoneLatch = true;
     }
 
-    // if latched, STOP MOTOR. 
+    // if latched, STOP MOTOR.
     if (redZoneLatch) {
       armRotationMotor.stopMotor();
 
@@ -102,15 +102,15 @@ public class Arm extends SubsystemBase {
       if (getArmRetractedLimitSwitch()) {
         redZoneLatch = false;
       }
-        
-    } 
+
+    }
     // if not latched, then if limit switch is hit, STOP MOTOR.
     else if (getBatteryLimitSwitch() || getCompressorLimitSwitch()) {
-        armRotationPID.setReference(armRotationTicks, ControlType.kSmartMotion);
+        armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
     }
-      // if not latched or hit limit switch, MOVE MOTOR.
+    // if not latched or hit limit switch, MOVE MOTOR.
     else {
-      armRotationPID.setReference(armRotationTicks, ControlType.kSmartMotion);
+      armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
     }
   }
 
@@ -127,7 +127,6 @@ public class Arm extends SubsystemBase {
   }
 
   // __________________________
-  // rename later as extend and retract
   public void manualExtendArm() {
     armExtensionMotor.set(Constants.armExtensionSpeed);
     DataLogManager.log("MOVING LEFT");
@@ -245,18 +244,32 @@ public class Arm extends SubsystemBase {
       }
     }
   }
+
   /** Increases addExtend */
   public void increaseTicks() {
-    Constants.addExtend -= 1000;
+    Constants.addExtend -= 500;
   }
 
-/** Decreases addExtend */
+  /** Decreases addExtend */
   public void decreaseTicks() {
-    Constants.addExtend += 1000;
+    Constants.addExtend += 500;
   }
-/** resets the addExtend value */
+
+  /** resets the addExtend value */
   public void resetExtensionAdditionTicks() {
     Constants.addExtend = 0;
+  }
+  /** Rotates the arm towards the battery by 0.5 degrees */
+  public void manualRotateBattery() {
+    Constants.addRotate += 0.5;
+  }
+  /** Rotates the arm towards the compressor by 0.5 degrees */
+  public void manualRotateCompressor() {
+    Constants.addRotate -= 0.5;
+  }
+
+  public void resetAddRotationAngle() {
+    Constants.addRotate = 0;
   }
   // __________________________
 
@@ -377,6 +390,10 @@ public class Arm extends SubsystemBase {
     }
   }
 
+  private double getAddExtend() {
+    return Constants.addExtend;
+  }
+
   // Sendable override
   // Anything put here will be added to the network tables and thus can be added
   // to the dashboard / consumed by the LED controller
@@ -389,8 +406,8 @@ public class Arm extends SubsystemBase {
     builder.addDoubleProperty("Extension Motor Rotation", this::getExtensionMotorSpeed, null);
     builder.addStringProperty("Arm Extension Position", this::getExtensionPosition, null);
     builder.addBooleanProperty("Is Retracted", this::getArmRetractedLimitSwitch, null);
-
     builder.addDoubleProperty("Arm Length", this::getArmLength, this::setArmLength);
+    builder.addDoubleProperty("AddExtension", this::getAddExtend, null);
 
     // Arm Rotation Sendables
     builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);

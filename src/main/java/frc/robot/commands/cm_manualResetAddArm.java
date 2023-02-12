@@ -7,12 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class cm_resetExtensionTicks extends CommandBase {
-
-private final Arm m_Arm;
-  /** Creates a new cm_resetExtensionTicks. */
-  public cm_resetExtensionTicks(Arm arm) {
-  m_Arm = arm;
+public class cm_manualResetAddArm extends CommandBase {
+  Arm m_arm;
+  /** Creates a new cm_manualResetRotationAngle. */
+  public cm_manualResetAddArm(Arm arm) {
+    m_arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -23,7 +22,8 @@ private final Arm m_Arm;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.resetExtensionAdditionTicks();
+    m_arm.resetAddRotationAngle();
+    m_arm.resetExtensionAdditionTicks();
   }
 
   // Called once the command ends or is interrupted.
@@ -33,6 +33,6 @@ private final Arm m_Arm;
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

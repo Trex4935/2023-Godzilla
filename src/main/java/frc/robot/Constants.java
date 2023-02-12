@@ -34,8 +34,7 @@ public final class Constants {
 
   // DRIVETRAIN Constants
 
-
-  /** Wheel ID Constants */
+  // Wheel ID Constants
   public final static int FRMotorID = 1; // RIGHT
   public final static int FLMotorID = 2; // LEFT
   public final static int MRMotorID = 3; // RIGHT
@@ -50,28 +49,26 @@ public final class Constants {
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
-  public static final double dtmaxspeed = 0.25; // Speed Limit
+  public static final double dtmaxspeed = 0.5; // Speed Limit
 
   // ARM ROTATION Constants
 
   /** Motor ID */
   public static final int armRotationCAN = 13;
-
   public static final double armRotateSpeed = 0.4; // Arm Rotation Speed
-
   public static boolean inRedZone = false;
 
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {
     public static final double dtmaxaccel = 1;
     public static final double dtmaxspeed = 0.6;
-    public static final double dtmaxomega = 2;
+    public static final double dtmaxomega = 1.6;
   }
 
   /** Motor Rotation Limits */
   public static final int ArmRotationLowerLimit = 0;
 
-  /** Arm Angles */
+  // Arm Angles
   public static final double ArmHighAngleCompressor = 85;
   public static final double ArmMiddleAngleCompressor = 70;
   public static final double ArmLowAngleCompressor = 16;
@@ -84,41 +81,50 @@ public final class Constants {
 
   // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID
+  public static final double armExtensionSpeed = 0.5;
 
-  // arm extension speed? not sure if needed
-  public static final double armExtensionSpeed = 0.25;
-  /** Arm Distances */
-  // Units = Inches (Subject to change)
-  public static final double ArmHighDistance = 33;
-  public static final double ArmMiddleDistance = 10;
-  public static final double ArmLowDistance = 20;
-  public static final double ArmCarryDistance = 1;
+  // Arm Distances
+  // Units = Inches (Converting to ticks)
+  // Math: 1 in. = -5000 ticks
+  public static int inchPerExtentionTicks = -5000;
+  /** 33 in -> -165000 ticks */ 
+  public static final double ArmHighDistance = -165000; 
+  /** 10 in -> -50000 */
+  public static final double ArmMiddleDistance = -50000; 
+  /** 20 in -> -100000 */
+  public static final double ArmLowDistance = -100000; 
+  /** 1 in -> -5000 */
+  public static final double ArmCarryDistance = -5000; 
 
   public static double tempArmDistance = 10;
 
   // DRIVER/CONTROLLER Constants
 
-  /** Driver Constants */
+  // Driver Constants
   // (Differentiates the joysticks inputs by assigning different ID ports)
   public static final int leftJoystick = 0; // Left Joystick ID
   public static final int rightJoystick = 1; // Right Joystick ID
 
-  public static final int joystickAxis = 1; // Actual Joystick Axis ID
+  /** Actual Joystick Axis ID */
+  public static final int joystickAxis = 1;
 
-  /** Controller Constants */
+  // Controller Constants
   public static final int controllerID = 2; // Controller ID
 
   // XBOX Controller Constants (SUBJECT TO CHANGE)
-  public static final int LeftJoystickX = 0; // Side to side
-  public static final int LeftJoystickY = 1; // Front and back
-
-  public static final int RightJoystickX = 4; // Side to side
-  public static final int RightJoystickY = 5; // Front and back
-
+  /** Side to side */
+  public static final int LeftJoystickX = 0;
+  /** Front and back */
+  public static final int LeftJoystickY = 1;
+  /** Side to side */
+  public static final int RightJoystickX = 4;
+  /** Front and back */
+  public static final int RightJoystickY = 5;
+  
   public static final int LeftTrigger = 2;
   public static final int RightTrigger = 3;
 
-  /** Arduino Controller Constants */
+  // Arduino Controller Constants
   // Push Buttons
   public static final int groundButtonID = 1;
   public static final int middleButtonID = 2;
@@ -128,7 +134,7 @@ public final class Constants {
   public static final int ardJoystickDown = 5;
   public static final int ardJoystickLeft = 6;
   public static final int ardJoystickRight = 7;
-
+  // Toggle Switches
   public static final int gamePieceID = 8;
   public static final int robotSideID = 9;
   public static final int gripperID = 10;
@@ -159,7 +165,7 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
-  public static int inchPerExtentionTicks = -5000;
+  
   public static double degreesPerRotationTicks = 1;
   public static double addExtend = 0;
 

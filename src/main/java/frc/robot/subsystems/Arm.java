@@ -4,10 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -30,26 +33,32 @@ public class Arm extends SubsystemBase {
   CANSparkMax armRotationMotor;
   RelativeEncoder armRotationEncoder;
 
+  SparkMaxPIDController armRotationPID;
+
   DigitalInput compressorSideLimitSwitch;
   DigitalInput batterySideLimitSwitch;
 
-  private WPI_TalonFX _talon;
+  public static boolean redZoneLatch = false;
 
   /** Creates a new Arm. */
   public Arm() {
     // init motors
     armExtensionMotor = Falcon.createDefaultFalcon(Constants.armExtensionCAN);
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
+    armRotationPID = armRotationMotor.getPIDController();
+
+    armExtensionMotor.setNeutralMode(NeutralMode.Brake);
 
     // Arm Extension Limit Switches
     armRetractedLimitSwitch = new FlippedDIO(0);
     // Arm Rotation Limit Switches
-    compressorSideLimitSwitch = new DigitalInput(5);
-    batterySideLimitSwitch = new DigitalInput(6);
+    compressorSideLimitSwitch = new DigitalInput(6);
+    batterySideLimitSwitch = new DigitalInput(5);
 
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();
-    Falcon.configMotionMagic(armExtensionMotor, 0.001,0,0,0.1,500,500);
+    Falcon.configMotionMagic(armExtensionMotor, 0.01, 0, 0, 0, 32000, 32000);
+    SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.0001, 0, 0, 0, 0, 32000, 16000, 0);
 
   }
 
@@ -72,9 +81,37 @@ public class Arm extends SubsystemBase {
     armExtensionMotor.set(-Constants.armExtensionSpeed);
   }
 
-  // Using motion magic set the arm to a given position
-  public void setArmPostionMM(double armPosistionTicks){
-    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPosistionTicks);
+  /** Using MotionMagic set the arm to a given position */
+  public void setArmExtensionMM(double armPositionTicks) {
+    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks);
+  }
+
+  /** Using SmartMotion to set the arm to a given angle */
+
+  public void setArmRotationSM(double armRotationTicks) {
+    // IF in REDZONE or not retracted, ENGAGE LATCH.
+    if (armRedZone() && getArmRetractedLimitSwitch() == false) {
+      redZoneLatch = true;
+    }
+
+    // if latched, STOP MOTOR. 
+    if (redZoneLatch) {
+      armRotationMotor.stopMotor();
+
+      // if latched but fully retracted, DISENGAGE LATCH.
+      if (getArmRetractedLimitSwitch()) {
+        redZoneLatch = false;
+      }
+        
+    } 
+    // if not latched, then if limit switch is hit, STOP MOTOR.
+    else if (getBatteryLimitSwitch() || getCompressorLimitSwitch()) {
+        armRotationPID.setReference(armRotationTicks, ControlType.kSmartMotion);
+    }
+      // if not latched or hit limit switch, MOVE MOTOR.
+    else {
+      armRotationPID.setReference(armRotationTicks, ControlType.kSmartMotion);
+    }
   }
 
   /** Sets the speed that the arm moves backward */
@@ -91,12 +128,12 @@ public class Arm extends SubsystemBase {
 
   // __________________________
   // rename later as extend and retract
-  public void moveArmLeft() {
+  public void manualExtendArm() {
     armExtensionMotor.set(Constants.armExtensionSpeed);
     DataLogManager.log("MOVING LEFT");
   }
 
-  public void moveArmRight() {
+  public void manualRetractArm() {
     armExtensionMotor.set((-1) * Constants.armExtensionSpeed);
     DataLogManager.log("MOVING RIGHT");
   }
@@ -106,12 +143,11 @@ public class Arm extends SubsystemBase {
   // method that determines if the arm is retracted or not
 
   /** Extends or retracts the the arm */
-  public void AutoArmExtension(double TargetDistance) { // Distance Unit is: ?????
+  public void AutoArmExtension(double TargetTicks) { // -5000 ticks per inch
     double encoderValueTicks = armExtensionMotor.getSelectedSensorPosition(); // Gets ticks
-    double targetDistanceTicks = TargetDistance * Constants.inchPerExtentionTicks; // Converts target distance to ticks.
-    double checkSign = Math.signum(targetDistanceTicks - encoderValueTicks); // Determines the sign of the direction
+    double checkSign = Math.signum(TargetTicks - encoderValueTicks); // Determines the sign of the direction
     // determine direction of arm movement based on sign of encoder differences
-    if (!Helper.RangeCompare(targetDistanceTicks + 200, targetDistanceTicks - 200, encoderValueTicks)) {
+    if (!Helper.RangeCompare(TargetTicks + 200, TargetTicks - 200, encoderValueTicks)) {
       if (checkSign > 0) { // If sign is positive move forward.
         retractArm();
       } else { // If sign not positive move backward.
@@ -120,10 +156,6 @@ public class Arm extends SubsystemBase {
     } else { // If in range then stop motor.
       stopExtensionMotor();
     }
-  }
-
-  public void AutoArmExtensionMM(double targetTicks){
-    // armExtensionMotor.setSelectedSensorPosition(targetTicks, 0, 20);
   }
 
   // Sendable Methods
@@ -145,7 +177,7 @@ public class Arm extends SubsystemBase {
   public void zeroEncoder() {
     armExtensionMotor.setSelectedSensorPosition(0, 0, 20);
   }
-  
+
   // Arm Rotation Methods
   /**
    * determines if the arm is in the red zone or not, and if it is extended or not
@@ -163,11 +195,11 @@ public class Arm extends SubsystemBase {
 
   /** Sets the speed that the arm moves forward */
   public void moveArmCompressor() {
-  
+
     // Check if we are in the red
-    if (armRedZone()){
+    if (armRedZone()) {
       // If arm is retracted then we can move
-      if (getArmRetractedLimitSwitch()){
+      if (getArmRetractedLimitSwitch()) {
         armRotationMotor.set(-Constants.armRotateSpeed);
       }
       // if not retracted then stop moving
@@ -178,7 +210,7 @@ public class Arm extends SubsystemBase {
     // For when we are not in red zone
     else {
       // If we are not in the red zone then we just need to stop if the limit is hit
-      if (!getCompressorLimitSwitch()){
+      if (!getCompressorLimitSwitch()) {
         armRotationMotor.stopMotor();
       }
       // else we can move
@@ -191,9 +223,9 @@ public class Arm extends SubsystemBase {
   /** sets the speed that the arm moves battery-side */
   public void moveArmBattery() {
     // Check if we are in the red
-    if (armRedZone()){
+    if (armRedZone()) {
       // If arm is retracted then we can move
-      if (getArmRetractedLimitSwitch()){
+      if (getArmRetractedLimitSwitch()) {
         armRotationMotor.set(Constants.armRotateSpeed);
       }
       // if not retracted then stop moving
@@ -204,7 +236,7 @@ public class Arm extends SubsystemBase {
     // For when we are not in red zone
     else {
       // If we are not in the red zone then we just need to stop if the limit is hit
-      if (getBatteryLimitSwitch()){
+      if (getBatteryLimitSwitch()) {
         armRotationMotor.stopMotor();
       }
       // else we can move
@@ -247,7 +279,7 @@ public class Arm extends SubsystemBase {
 
   /** Returns the angle */
   public double getArmAngle() {
-    return getEncoderValue() / 500;
+    return getEncoderValue();
   }
 
   /** stops the ArmRotation motor */
@@ -272,7 +304,7 @@ public class Arm extends SubsystemBase {
   public boolean getCompressorLimitSwitch() {
     return compressorSideLimitSwitch.get();
   }
-  
+
   public boolean getBatteryLimitSwitch() {
     return batterySideLimitSwitch.get();
   }
@@ -281,7 +313,7 @@ public class Arm extends SubsystemBase {
     Constants.tempArmDistance = m_tempArmDistance;
   }
 
-  public double getArmLength(){
+  public double getArmLength() {
     return Constants.tempArmDistance;
   }
   /*

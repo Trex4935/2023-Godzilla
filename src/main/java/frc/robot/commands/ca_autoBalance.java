@@ -5,14 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Drivetrain;
 
-public class cm_moveArmLeft extends CommandBase {
-  Arm m_Arm;
-  /** Creates a new cm_moveArmLeft. */
-  public cm_moveArmLeft(Arm arm) {
-   m_Arm = arm;
+public class ca_autoBalance extends CommandBase {
+  public final Drivetrain m_drivetrain;
+  /** Creates a new ca_autoBalance. */
+  public ca_autoBalance(Drivetrain drivetrain) {
+    m_drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
@@ -22,14 +23,12 @@ public class cm_moveArmLeft extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.moveArmLeft();
+    m_drivetrain.autoBalance();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_Arm.stopExtensionMotor();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

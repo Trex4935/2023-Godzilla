@@ -170,8 +170,8 @@ public void driveWithStraightWithGyro(double avgSpeed) {
 }
 
     public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
-        diffdrive.tankDrive(-joystick1.getRawAxis(Constants.joystickAxis),
-                -joystick2.getRawAxis(Constants.joystickAxis));
+        diffdrive.tankDrive(-joystick2.getRawAxis(Constants.joystickAxis),
+                -joystick1.getRawAxis(Constants.joystickAxis));
     }
 
     /** Stops all Drivetrain motor groups. */

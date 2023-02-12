@@ -105,11 +105,11 @@ public class Arm extends SubsystemBase {
     } 
     // if not latched, then if limit switch is hit, STOP MOTOR.
     else if (getBatteryLimitSwitch() || getCompressorLimitSwitch()) {
-        armRotationPID.setReference(armRotationTicks, ControlType.kSmartMotion);
+        armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
     }
       // if not latched or hit limit switch, MOVE MOTOR.
     else {
-      armRotationPID.setReference(armRotationTicks, ControlType.kSmartMotion);
+      armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
     }
   }
 
@@ -126,7 +126,6 @@ public class Arm extends SubsystemBase {
   }
 
   // __________________________
-  // rename later as extend and retract
   public void manualExtendArm() {
     armExtensionMotor.set(Constants.armExtensionSpeed);
     DataLogManager.log("MOVING LEFT");
@@ -246,16 +245,28 @@ public class Arm extends SubsystemBase {
   }
   /** Increases addExtend */
   public void increaseTicks() {
-    Constants.addExtend -= 1000;
+    Constants.addExtend -= 300;
   }
 
 /** Decreases addExtend */
   public void decreaseTicks() {
-    Constants.addExtend += 1000;
+    Constants.addExtend += 300;
   }
 /** resets the addExtend value */
   public void resetExtensionAdditionTicks() {
     Constants.addExtend = 0;
+  }
+  /** Rotates the arm towards the battery by 0.5 degrees */
+  public void manualRotateBattery() {
+    Constants.addRotate += 0.5;
+  }
+  /** Rotates the arm towards the compressor by 0.5 degrees */
+  public void manualRotateCompressor() {
+    Constants.addRotate -= 0.5;
+  }
+
+  public void resetAddRotationAngle() {
+    Constants.addRotate = 0;
   }
   // __________________________
 

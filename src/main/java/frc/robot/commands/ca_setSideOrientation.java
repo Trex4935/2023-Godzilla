@@ -13,24 +13,25 @@ import frc.robot.extensions.ArmSideOrientation;
 
 public class ca_setSideOrientation extends CommandBase {
   ArmSideOrientation m_armSide;
-  Timer timer;
+  boolean m_isBattery;
+
   /** Creates a new ca_setSideOrientation. */
-  public ca_setSideOrientation(ArmSideOrientation armSide) {
+  public ca_setSideOrientation(ArmSideOrientation armSide, boolean isBattery) {
     m_armSide = armSide;
-    timer = new Timer();
+    m_isBattery = isBattery;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     Constants.selectedArmSideOrientation = m_armSide;
+    Constants.isBatterySide = m_isBattery;
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +41,6 @@ public class ca_setSideOrientation extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get()> 1;
+    return false;
   }
 }

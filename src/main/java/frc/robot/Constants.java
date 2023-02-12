@@ -29,7 +29,8 @@ public final class Constants {
   public static ArmSideOrientation selectedArmSideOrientation = ArmSideOrientation.CompressorSide;
 
   // ROBOT Constants
-  public static Boolean isCube = false;
+  public static boolean isCube = false;
+  public static boolean isBatterySide = true;
 
 
   // DRIVETRAIN Constants
@@ -78,6 +79,8 @@ public final class Constants {
   public static final double ArmHighAngleBattery = 230; 
   public static final double ArmMiddleAngleBattery = 243;
   public static final double ArmLowAngleBattery = 296;
+
+  public static final int sideVal = 0;
 
   // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID
@@ -168,5 +171,6 @@ public final class Constants {
   
   public static double degreesPerRotationTicks = 1;
   public static double addExtend = 0;
+  public static boolean isAutonomous;
 
 }

@@ -38,6 +38,8 @@ import frc.robot.commands.cm_manualExtendArm;
 import frc.robot.commands.cm_manualRetractArm;
 
 import java.sql.Driver;
+
+import edu.wpi.first.util.sendable.SendableBuilder;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -134,8 +136,8 @@ public class RobotContainer {
     resetExtensionTicks = new cm_resetExtensionTicks(arm);
 
     // Robot
-    setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide);
-    setSideOrientationBattery = new ca_setSideOrientation(ArmSideOrientation.BatterySide);
+    setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide, false);
+    setSideOrientationBattery = new ca_setSideOrientation(ArmSideOrientation.BatterySide, true);
 
     setGamePieceTypeCubeTrue = new cm_setGamePieceType(gripper, true);
     setGamePieceTypeCubeFalse = new cm_setGamePieceType(gripper, false);
@@ -275,4 +277,12 @@ public class RobotContainer {
     // return forwardHalfSpeed;
   }
 
+  // Sendable override
+  // Anything put here will be added to the network tables and thus can be added
+  // to the dashboard / consumed by the LED controller
+  public void initSendable(SendableBuilder builder) {
+
+
+
+  }
 }

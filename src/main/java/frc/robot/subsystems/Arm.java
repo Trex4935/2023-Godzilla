@@ -315,6 +315,18 @@ public class Arm extends SubsystemBase {
   public double getArmLength() {
     return Constants.tempArmDistance;
   }
+
+  public boolean getArmSideOrientation() {
+    return Constants.isBatterySide;
+  }
+
+  public boolean getIsCube (){
+    return Constants.isCube;
+  }
+
+  public boolean getIsAutonomous(){
+    return Constants.isAutonomous;
+  }
   /*
    * ====MATH====
    * Ticks per rotation, 42
@@ -387,6 +399,9 @@ public class Arm extends SubsystemBase {
 
     builder.addBooleanProperty("Comp LS", this::getCompressorLimitSwitch, null);
     builder.addBooleanProperty("Batt LS", this::getBatteryLimitSwitch, null);
+    builder.addBooleanProperty("is Battery Side", this::getArmSideOrientation, null);
+    builder.addBooleanProperty("is Cube", this::getIsCube, null);
+    builder.addBooleanProperty("is Autonomous", this::getIsAutonomous, null);
   }
 
   @Override

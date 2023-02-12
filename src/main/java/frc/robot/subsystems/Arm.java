@@ -87,7 +87,6 @@ public class Arm extends SubsystemBase {
   }
 
   /** Using SmartMotion to set the arm to a given angle */
-
   public void setArmRotationSM(double armRotationTicks) {
     // IF in REDZONE or not retracted, ENGAGE LATCH.
     if (armRedZone() && getArmRetractedLimitSwitch() == false) {

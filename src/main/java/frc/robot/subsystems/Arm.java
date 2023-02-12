@@ -399,9 +399,9 @@ public class Arm extends SubsystemBase {
 
     builder.addBooleanProperty("Comp LS", this::getCompressorLimitSwitch, null);
     builder.addBooleanProperty("Batt LS", this::getBatteryLimitSwitch, null);
-    builder.addBooleanProperty("is Battery Side", this::getArmSideOrientation, null);
-    builder.addBooleanProperty("is Cube", this::getIsCube, null);
-    builder.addBooleanProperty("is Autonomous", this::getIsAutonomous, null);
+    builder.addBooleanProperty("isBatterySide", this::getArmSideOrientation, null);
+    builder.addBooleanProperty("isCube", this::getIsCube, null);
+    builder.addBooleanProperty("isAutonomous", this::getIsAutonomous, null);
   }
 
   @Override

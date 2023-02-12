@@ -245,7 +245,19 @@ public class Arm extends SubsystemBase {
       }
     }
   }
+  /** Increases addExtend */
+  public void increaseTicks() {
+    Constants.addExtend -= 1000;
+  }
 
+/** Decreases addExtend */
+  public void decreaseTicks() {
+    Constants.addExtend += 1000;
+  }
+/** resets the addExtend value */
+  public void resetExtensionAdditionTicks() {
+    Constants.addExtend = 0;
+  }
   // __________________________
 
   public void manualMoveArmCompressor() {

@@ -83,7 +83,7 @@ public class Arm extends SubsystemBase {
 
   /** Using MotionMagic set the arm to a given position */
   public void setArmExtensionMM(double armPositionTicks) {
-    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks);
+    armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks + Constants.addExtend);
   }
 
   /** Using SmartMotion to set the arm to a given angle */

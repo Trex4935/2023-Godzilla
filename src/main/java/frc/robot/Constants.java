@@ -88,11 +88,11 @@ public final class Constants {
   // Math: 1 in. = -5000 ticks
   public static int inchPerExtentionTicks = -5000;
   /** 33 in -> -165000 ticks */ 
-  public static final double ArmHighDistance = -165000 + Constants.addExtend; 
+  public static final double ArmHighDistance = -165000; 
   /** 10 in -> -50000 */
-  public static final double ArmMiddleDistance = -50000 + Constants.addExtend; 
+  public static final double ArmMiddleDistance = -50000; 
   /** 20 in -> -100000 */
-  public static final double ArmLowDistance = -100000 + Constants.addExtend; 
+  public static final double ArmLowDistance = -100000; 
   /** 1 in -> -5000 */
   public static final double ArmCarryDistance = -5000; 
 

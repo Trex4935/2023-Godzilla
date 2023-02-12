@@ -31,8 +31,6 @@ import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.cm_setGamePieceType;
-import frc.robot.commands.cm_moveArmLeft;
-import frc.robot.commands.cm_moveArmRight;
 import frc.robot.commands.cm_decreaseExtensionTicks;
 import frc.robot.commands.cm_increaseExtensionTicks;
 import frc.robot.commands.cm_resetExtensionTicks;
@@ -231,10 +229,10 @@ public class RobotContainer {
     new JoystickButton(m_ArduinoController, Constants.groundButtonID).whileTrue(setArmPositionLow);
     new JoystickButton(m_ArduinoController, Constants.middleButtonID).whileTrue(setArmPositionMiddle);
     new JoystickButton(m_ArduinoController, Constants.highButtonID).whileTrue(setArmPositionHigh);
-// manual extension
+    // manual extension
     new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).onTrue(increaseExtensionTicks);
     new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).onTrue(decreaseExtensionTicks);
-//reset manual extension
+    //reset manual extension
     new JoystickButton(m_ArduinoController, Constants.highButtonID).onFalse(resetExtensionTicks);
     new JoystickButton(m_ArduinoController, Constants.middleButtonID).onFalse(resetExtensionTicks);
     new JoystickButton(m_ArduinoController, Constants.groundButtonID).onFalse(resetExtensionTicks);

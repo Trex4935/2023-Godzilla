@@ -4,16 +4,20 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 //Gyro Imports
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -21,7 +25,11 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AutoMovementConstraints;
 import frc.robot.Constants.TrajectoryConstants;
+import frc.robot.extensions.Helper;
+import frc.robot.extensions.PID;
+
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -44,6 +52,10 @@ public class Drivetrain extends SubsystemBase {
     // Declaring encoders
     Encoder leftEncoder;
     Encoder rightEncoder;
+
+
+    // PID
+    PIDController drivePID;
 
     // Declaring Gyro Objects
     public static AHRS ahrs;
@@ -72,6 +84,12 @@ public class Drivetrain extends SubsystemBase {
         // Inverts direction of motors/wheels.
         leftMotors.setInverted(true);
         rightMotors.setInverted(false);
+        FLMotor.setNeutralMode(NeutralMode.Brake);
+        FRMotor.setNeutralMode(NeutralMode.Brake);
+        MLMotor.setNeutralMode(NeutralMode.Brake);
+        MRMotor.setNeutralMode(NeutralMode.Brake);
+        BLMotor.setNeutralMode(NeutralMode.Brake);
+        BRMotor.setNeutralMode(NeutralMode.Brake);
 
         diffdrive = new DifferentialDrive(leftMotors, rightMotors);
 
@@ -86,12 +104,15 @@ public class Drivetrain extends SubsystemBase {
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
+        ahrs.calibrate();
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
         kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);
 
         // initiate simulate gyro Position
         zSimAngle = 0;
+
+        drivePID = new PIDController(0.01, 0.0, 0);
 
     }
 
@@ -110,9 +131,19 @@ public class Drivetrain extends SubsystemBase {
         return ahrs.getPitch();
     }
 
+
     /** Gets Yaw(Z) angle from Gyro */
     public Float getZAngle() {
-        return ahrs.getYaw();
+        return -ahrs.getYaw();
+
+    }
+
+
+    /** Gets Yaw(Z) angle from Gyro */
+    public double getZAngleConverted() {
+        Float yawBounded = -ahrs.getYaw();
+        double yawBoundedDouble = yawBounded.doubleValue();
+        return Helper.ConvertTo360(yawBoundedDouble);
     }
 
     /** Creates an array of the roll, pitch, and yaw values */
@@ -129,11 +160,21 @@ public class Drivetrain extends SubsystemBase {
         diffdrive.tankDrive(leftSpeed, rightSpeed);
     }
 
+
+
+public void driveWithStraightWithGyro(double avgSpeed) {
+    double err = 0 - getZAngleConverted();
+    double P = 0.001;
+    double driftCorrection = err*P;
+    diffdrive.arcadeDrive(avgSpeed, driftCorrection);
+}
+
     public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
         diffdrive.tankDrive(joystick1.getRawAxis(Constants.joystickAxis),
                 joystick2.getRawAxis(Constants.joystickAxis));
     }
 
+    /** Stops all Drivetrain motor groups. */
     public void stopMotors() {
         leftMotors.set(0);
         rightMotors.set(0);
@@ -153,6 +194,13 @@ public class Drivetrain extends SubsystemBase {
     public void resetEncoders() {
         leftEncoder.reset();
         rightEncoder.reset();
+    }
+
+    /** Move the robot based on its pitch/y axis */
+    public void autoBalance() {
+        // Set motors speed using PID controller to get Y-axis to 0 degrees
+        leftMotors.set(drivePID.calculate(getYAngle(), 0));
+        rightMotors.set(drivePID.calculate(getYAngle(), 0));
     }
 
     /** Gets the amount of ticks since reset/init */
@@ -223,6 +271,46 @@ public class Drivetrain extends SubsystemBase {
 
         ChassisSpeeds chassisSpeed = kin.toChassisSpeeds(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
         zSimAngle = chassisSpeed.omegaRadiansPerSecond * 0.02 + zSimAngle;
+    }
+
+    public double getOmega( double startAngle , double endAngle ){
+        double omega = 0;
+        if ( startAngle > endAngle) { // if Start > End  ,  go left, w +
+            omega = AutoMovementConstraints.dtmaxomega ;
+          } else { // if Start < End, go right, w -
+            omega = - AutoMovementConstraints.dtmaxomega;
+          }
+
+          return omega;
+    }
+
+    public void driveTankWithStateTraj(State currState, Double end, Double time){
+        Double velocityTarget = currState.velocityMetersPerSecond;
+        driveWithController(velocityTarget * Math.signum(end), velocityTarget * Math.signum(end));
+        System.out.println("Time:"+ time + "Velocity:" + velocityTarget +
+        "Position:" + currState.poseMeters.getY());
+    }
+
+    
+    public void driveTankWithStateKinematicTraj(State currState,Double end, Double time){
+        Double velocityTarget  = currState.velocityMetersPerSecond;
+        // Rate is 0, because we are following a straight line, the speed varies depending of path, it follows a trapezoide curve.
+        Double leftSpeedWheel  =  getLeftSpeedKin(velocityTarget, 0);
+        Double rightSpeedWheel =  getRightpeedKin(velocityTarget, 0);
+        driveWithController(leftSpeedWheel * Math.signum(end), rightSpeedWheel * Math.signum(end));
+        System.out.println("Time: "+ time + " Velocity: " + velocityTarget +
+        " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel);
+    }
+
+    public void driveArcadeWithStateKinematicGyroTraj(State currState, Double end, Double time){    
+        Double velocityTarget  = currState.velocityMetersPerSecond;
+        // Rate is 0, because we are following a straight line, the speed varies depending of path, it follows a trapezoide curve.
+        Double leftSpeedWheel  =  getLeftSpeedKin(velocityTarget, 0);
+        Double rightSpeedWheel =  getRightpeedKin(velocityTarget, 0);
+        driveWithStraightWithGyro(velocityTarget * Math.signum(end));
+        System.out.println("Time: "+ time + " Velocity: " + velocityTarget +
+        " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel);
+
     }
 
     // Sendable override

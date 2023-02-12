@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoMovementConstraints;
@@ -33,7 +32,7 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
     timer.start();
 
     System.out.println("Time: " + timer.get() + " Velocity: " + 0 + " Omega: " + 0 +
-        " Angle: " + dt.getZAngle() + " AngleTarget: " + eAngle + " LeftSpeed: " + 0 + " RightSpeed: " + 0);
+        " Angle: " + dt.getZAngleConverted() + " AngleTarget: " + eAngle + " LeftSpeed: " + 0 + " RightSpeed: " + 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,21 +40,17 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
   public void execute() {
     Double chassisSpeed = 0.0;
     Double comega = 0.0;
-    // if Start > End , go left, w +
-    if (dt.getZAngle() > eAngle) {
-      comega = -AutoMovementConstraints.dtmaxomega;
-    } else { // if Start < End, go right, w -
-      comega = AutoMovementConstraints.dtmaxomega;
-    }
+    // Gets which direction we are turning
+    comega = dt.getOmega( dt.getZAngleConverted(),eAngle);
     // Constant for now
     Double leftSpeed = dt.getLeftSpeedKin(chassisSpeed, comega);
     Double rightSpeed = dt.getRightpeedKin(chassisSpeed, comega);
 
     dt.driveWithController(leftSpeed, rightSpeed);
-    dt.simulateGyro(leftSpeed, rightSpeed, timer);
-    Double error = eAngle.doubleValue() - dt.getZAngle();
+    // dt.simulateGyro(leftSpeed, rightSpeed, timer);
+    Double error = eAngle.doubleValue() - dt.getZAngleConverted();
     System.out.println("Time: " + timer.get() + " Velocity: " + chassisSpeed + " Omega: " + comega +
-        " Angle: " + dt.getZAngle() + " AngleTarget: " + eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: "
+        " Angle: " + dt.getZAngleConverted() + " AngleTarget: " + eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: "
         + rightSpeed + " Error: " + error);
   }
 
@@ -68,7 +63,7 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return eAngle.doubleValue() - dt.getZAngle() <= 2.0 && eAngle.doubleValue() - dt.getZAngle() >= -2.0
+    return eAngle.doubleValue() - dt.getZAngleConverted() <= 2.0 && eAngle.doubleValue() - dt.getZAngleConverted() >= -2.0
         || timer.get() > 10;
   }
 }

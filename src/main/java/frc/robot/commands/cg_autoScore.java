@@ -26,7 +26,7 @@ public class cg_autoScore extends SequentialCommandGroup {
         new cm_GripperClose(gripper), // Closes on game piece
         new ca_setArmPosition(ArmPosition.MIDDLE),
         new cm_GripperOpen(gripper), // Drops the game piece
-        new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryf) // Moves for mobility points
+        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront, TrajectoryContainer.trajFrontEnd) // Moves for mobility points
 
     );
   }

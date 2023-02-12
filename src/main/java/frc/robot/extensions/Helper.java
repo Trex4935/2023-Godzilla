@@ -22,7 +22,7 @@ public class Helper {
     }
 
     // https://stackoverflow.com/questions/45316947/converting-between-180-180-to-0-360
-    public double ConvertTo360(double angle) {
+    public static double ConvertTo360(double angle) {
         return (angle + 360) % 360;
     }
 

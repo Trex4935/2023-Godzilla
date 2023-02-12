@@ -39,12 +39,8 @@ public class ca_autoTurnKinematic extends CommandBase {
   public void execute() {
     Double chassisSpeed = 0.0;
     Double comega = 0.0;
-    // if Start > End  ,  go left, w +
-    if ( Math.toDegrees(dt.zSimAngle) > eAngle) {
-      comega = - AutoMovementConstraints.dtmaxomega ;
-    } else { // if Start < End, go right, w -
-      comega = AutoMovementConstraints.dtmaxomega;
-    }
+    // Gets which direction we are turning
+    comega = dt.getOmega( Math.toDegrees(dt.zSimAngle),eAngle);
      // Constant for now
     Double leftSpeed = dt.getLeftSpeedKin(chassisSpeed, comega);
     Double rightSpeed  = dt.getRightpeedKin(chassisSpeed, comega);

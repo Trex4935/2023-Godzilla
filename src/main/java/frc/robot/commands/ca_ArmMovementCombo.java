@@ -63,6 +63,7 @@ public class ca_ArmMovementCombo extends CommandBase {
           // System.out.println("DEFAULT-C");
           m_arm.setArmRotationSM(Constants.ArmCarryAngleCompressor);
           m_arm.retractArm();
+
       }
     } else {
       switch (Constants.selectedArmState) {

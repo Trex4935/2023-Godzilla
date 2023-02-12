@@ -170,8 +170,8 @@ public void driveWithStraightWithGyro(double avgSpeed) {
 }
 
     public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
-        diffdrive.tankDrive(joystick1.getRawAxis(Constants.joystickAxis),
-                joystick2.getRawAxis(Constants.joystickAxis));
+        diffdrive.tankDrive(-joystick1.getRawAxis(Constants.joystickAxis),
+                -joystick2.getRawAxis(Constants.joystickAxis));
     }
 
     /** Stops all Drivetrain motor groups. */
@@ -183,6 +183,7 @@ public void driveWithStraightWithGyro(double avgSpeed) {
     /** Sets the max speed value (sendable) */
     public void setMaxSpeed(double MaxSpeed) {
         m_MaxSpeed = MaxSpeed;
+        diffdrive.setMaxOutput(m_MaxSpeed);
     }
 
     /** Get the Max speed value (sendable) */
@@ -287,8 +288,7 @@ public void driveWithStraightWithGyro(double avgSpeed) {
     public void driveTankWithStateTraj(State currState, Double end, Double time){
         Double velocityTarget = currState.velocityMetersPerSecond;
         driveWithController(velocityTarget * Math.signum(end), velocityTarget * Math.signum(end));
-        System.out.println("Time:"+ time + "Velocity:" + velocityTarget +
-        "Position:" + currState.poseMeters.getY());
+        // System.out.println("Time:"+ time + "Velocity:" + velocityTarget +        "Position:" + currState.poseMeters.getY());
     }
 
     
@@ -298,8 +298,7 @@ public void driveWithStraightWithGyro(double avgSpeed) {
         Double leftSpeedWheel  =  getLeftSpeedKin(velocityTarget, 0);
         Double rightSpeedWheel =  getRightpeedKin(velocityTarget, 0);
         driveWithController(leftSpeedWheel * Math.signum(end), rightSpeedWheel * Math.signum(end));
-        System.out.println("Time: "+ time + " Velocity: " + velocityTarget +
-        " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel);
+        // System.out.println("Time: "+ time + " Velocity: " + velocityTarget +        " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel);
     }
 
     public void driveArcadeWithStateKinematicGyroTraj(State currState, Double end, Double time){    
@@ -308,8 +307,7 @@ public void driveWithStraightWithGyro(double avgSpeed) {
         Double leftSpeedWheel  =  getLeftSpeedKin(velocityTarget, 0);
         Double rightSpeedWheel =  getRightpeedKin(velocityTarget, 0);
         driveWithStraightWithGyro(velocityTarget * Math.signum(end));
-        System.out.println("Time: "+ time + " Velocity: " + velocityTarget +
-        " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel);
+        // System.out.println("Time: "+ time + " Velocity: " + velocityTarget +        " Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel + " RightSpeed: " + rightSpeedWheel);
 
     }
 

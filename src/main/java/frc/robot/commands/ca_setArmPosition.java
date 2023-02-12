@@ -16,14 +16,13 @@ public class ca_setArmPosition extends CommandBase {
 
   /** Creates a new ca_setArmPosition. */
   public ca_setArmPosition(ArmPosition armState) {
-    m_armState = armState;
-    timer = new Timer();
+    m_armState = armState;    
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.start();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +39,6 @@ public class ca_setArmPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get()> 1;
+    return false;
   }
 }

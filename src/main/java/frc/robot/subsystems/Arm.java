@@ -247,12 +247,12 @@ public class Arm extends SubsystemBase {
 
   /** Increases addExtend */
   public void increaseTicks() {
-    Constants.addExtend -= 1000;
+    Constants.addExtend -= 3000;
   }
 
   /** Decreases addExtend */
   public void decreaseTicks() {
-    Constants.addExtend += 1000;
+    Constants.addExtend += 3000;
   }
 
   /** resets the addExtend value */

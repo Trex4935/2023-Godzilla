@@ -30,8 +30,7 @@ public class ca_autoTurnKinematic extends CommandBase {
   public void initialize() {
     timer.start();
     
-    System.out.println("Time: "+ timer.get() + " Velocity: " + 0 + " Omega: " + 0 +
-    " Angle: " +  Math.toDegrees(dt.zSimAngle) + " AngleTarget: " +  eAngle + " LeftSpeed: " + 0 + " RightSpeed: " + 0);
+    // System.out.println("Time: "+ timer.get() + " Velocity: " + 0 + " Omega: " + 0 +     " Angle: " +  Math.toDegrees(dt.zSimAngle) + " AngleTarget: " +  eAngle + " LeftSpeed: " + 0 + " RightSpeed: " + 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,8 +47,7 @@ public class ca_autoTurnKinematic extends CommandBase {
     dt.driveWithController(leftSpeed, rightSpeed);
     dt.simulateGyro(leftSpeed, rightSpeed, timer);
     Double error = eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) ;
-    System.out.println("Time: "+ timer.get() + " Velocity: " + chassisSpeed + " Omega: " + comega +
-    " Angle: " +  Math.toDegrees(dt.zSimAngle) + " AngleTarget: " +  eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: " + rightSpeed + " Error: " + error );
+    // System.out.println("Time: "+ timer.get() + " Velocity: " + chassisSpeed + " Omega: " + comega +     " Angle: " +  Math.toDegrees(dt.zSimAngle) + " AngleTarget: " +  eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: " + rightSpeed + " Error: " + error );
   }
 
   // Called once the command ends or is interrupted.

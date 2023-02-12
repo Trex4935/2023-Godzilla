@@ -31,8 +31,7 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
   public void initialize() {
     timer.start();
 
-    System.out.println("Time: " + timer.get() + " Velocity: " + 0 + " Omega: " + 0 +
-        " Angle: " + dt.getZAngleConverted() + " AngleTarget: " + eAngle + " LeftSpeed: " + 0 + " RightSpeed: " + 0);
+    // System.out.println("Time: " + timer.get() + " Velocity: " + 0 + " Omega: " + 0 +        " Angle: " + dt.getZAngleConverted() + " AngleTarget: " + eAngle + " LeftSpeed: " + 0 + " RightSpeed: " + 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -49,9 +48,7 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
     dt.driveWithController(leftSpeed, rightSpeed);
     // dt.simulateGyro(leftSpeed, rightSpeed, timer);
     Double error = eAngle.doubleValue() - dt.getZAngleConverted();
-    System.out.println("Time: " + timer.get() + " Velocity: " + chassisSpeed + " Omega: " + comega +
-        " Angle: " + dt.getZAngleConverted() + " AngleTarget: " + eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: "
-        + rightSpeed + " Error: " + error);
+    // System.out.println("Time: " + timer.get() + " Velocity: " + chassisSpeed + " Omega: " + comega +        " Angle: " + dt.getZAngleConverted() + " AngleTarget: " + eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: "+ rightSpeed + " Error: " + error);
   }
 
   // Called once the command ends or is interrupted.

@@ -167,6 +167,6 @@ public final class Constants {
 
   
   public static double degreesPerRotationTicks = 1;
-  
+  public static double addExtend = 0;
 
 }

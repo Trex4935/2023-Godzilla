@@ -23,8 +23,6 @@ import frc.robot.commands.ca_setSideOrientation;
 import frc.robot.commands.cg_autoDoubleScore;
 import frc.robot.commands.cg_autoScore;
 import frc.robot.commands.cm_driveWithJoysticks;
-import frc.robot.commands.cm_moveArmBattery;
-import frc.robot.commands.cm_moveArmCompressor;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.commands.cm_GripperClose;
@@ -33,11 +31,10 @@ import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.cm_setGamePieceType;
 import frc.robot.commands.cm_decreaseExtensionTicks;
 import frc.robot.commands.cm_increaseExtensionTicks;
-import frc.robot.commands.cm_resetExtensionTicks;
-import frc.robot.commands.cm_manualExtendArm;
-import frc.robot.commands.cm_manualRetractArm;
+import frc.robot.commands.cm_manualResetAddArm;
+import frc.robot.commands.cm_manualRotateBattery;
+import frc.robot.commands.cm_manualRotateCompressor;
 
-import java.sql.Driver;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -63,16 +60,9 @@ public class RobotContainer {
   private final ca_setArmPosition setArmPositionLow;
   private final cm_decreaseExtensionTicks decreaseExtensionTicks;
   private final cm_increaseExtensionTicks increaseExtensionTicks;
-  private final cm_resetExtensionTicks resetExtensionTicks;
-  
-  // __________________________
-
-  private final cm_moveArmCompressor moveArmCompressor;
-  private final cm_moveArmBattery moveArmBattery;
-  private final cm_manualExtendArm manualExtendArm;
-  private final cm_manualRetractArm manualRetractArm;
-
-  // __________________________
+  private final cm_manualRotateBattery manualRotateBattery;
+  private final cm_manualRotateCompressor manualRotateCompressor;
+  private final cm_manualResetAddArm manualResetAddArm;
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
@@ -115,15 +105,6 @@ public class RobotContainer {
 
     // Create Command objects
 
-    // __________________________
-
-    moveArmCompressor = new cm_moveArmCompressor(arm);
-    moveArmBattery = new cm_moveArmBattery(arm);
-    manualExtendArm = new cm_manualExtendArm(arm);
-    manualRetractArm = new cm_manualRetractArm(arm);
-
-    // __________________________
-
     // Combo
     armMovementCombo = new ca_ArmMovementCombo(arm);
     setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
@@ -131,7 +112,9 @@ public class RobotContainer {
     setArmPositionLow = new ca_setArmPosition(ArmPosition.LOW);
     decreaseExtensionTicks = new cm_decreaseExtensionTicks(arm);
     increaseExtensionTicks = new cm_increaseExtensionTicks(arm);
-    resetExtensionTicks = new cm_resetExtensionTicks(arm);
+    manualRotateBattery = new cm_manualRotateBattery(arm);
+    manualRotateCompressor = new cm_manualRotateCompressor(arm);
+    manualResetAddArm = new cm_manualResetAddArm(arm);
 
     // Robot
     setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide);
@@ -229,13 +212,17 @@ public class RobotContainer {
     new JoystickButton(m_ArduinoController, Constants.groundButtonID).whileTrue(setArmPositionLow);
     new JoystickButton(m_ArduinoController, Constants.middleButtonID).whileTrue(setArmPositionMiddle);
     new JoystickButton(m_ArduinoController, Constants.highButtonID).whileTrue(setArmPositionHigh);
-    // manual extension
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).onTrue(increaseExtensionTicks);
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).onTrue(decreaseExtensionTicks);
-    //reset manual extension
-    new JoystickButton(m_ArduinoController, Constants.highButtonID).onFalse(resetExtensionTicks);
-    new JoystickButton(m_ArduinoController, Constants.middleButtonID).onFalse(resetExtensionTicks);
-    new JoystickButton(m_ArduinoController, Constants.groundButtonID).onFalse(resetExtensionTicks);
+    // manual EXTENSION
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(increaseExtensionTicks);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(decreaseExtensionTicks);
+    // manual ROTATION
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(manualRotateCompressor);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(manualRotateBattery);  
+    // reset manual extension & rotation
+    new JoystickButton(m_ArduinoController, Constants.highButtonID).onFalse(manualResetAddArm);
+    new JoystickButton(m_ArduinoController, Constants.middleButtonID).onFalse(manualResetAddArm);
+    new JoystickButton(m_ArduinoController, Constants.groundButtonID).onFalse(manualResetAddArm);
+    
     // Toggle Switches
     new JoystickButton(m_ArduinoController, Constants.gamePieceID).onTrue(setGamePieceTypeCubeTrue)
         .onFalse(setGamePieceTypeCubeFalse);
@@ -244,15 +231,6 @@ public class RobotContainer {
         .whileFalse(setSideOrientationCompressor);
 
     new JoystickButton(m_ArduinoController, Constants.gripperID).whileTrue(gripperOpen).whileFalse(gripperClose);
-
-    // __________________________
-
-    //new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(moveArmCompressor);
-    //new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(moveArmBattery);
-    //new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(moveArmLeft);
-    //new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(moveArmRight);
-
-    // __________________________
  
     // operator.b().toggleOnTrue(Commands.startEnd(gripper::gripOpen,
     // gripper::gripClose, gripper));

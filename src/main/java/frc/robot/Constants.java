@@ -49,7 +49,7 @@ public final class Constants {
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
-  public static final double dtmaxspeed = 1; // Speed Limit
+  public static final double dtmaxspeed = 0.75; // Speed Limit
 
   // ARM ROTATION Constants
 
@@ -75,9 +75,9 @@ public final class Constants {
   public static double ArmCarryAngleCompressor = 10;
 
   public static final double ArmCarryAngleBattery = 308;
-  public static final double ArmHighAngleBattery = 230; 
-  public static final double ArmMiddleAngleBattery = 243;
-  public static final double ArmLowAngleBattery = 296;
+  public static final double ArmHighAngleBattery = 240; 
+  public static final double ArmMiddleAngleBattery = 250;
+  public static final double ArmLowAngleBattery = 310;
 
   // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID

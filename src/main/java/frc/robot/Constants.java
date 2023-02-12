@@ -92,7 +92,7 @@ public final class Constants {
   /** 10 in -> -50000 */
   public static final double ArmMiddleDistance = -50000; 
   /** 20 in -> -100000 */
-  public static final double ArmLowDistance = -100000; 
+  public static final double ArmLowDistance = -140000; 
   /** 1 in -> -5000 */
   public static final double ArmCarryDistance = -5000; 
 

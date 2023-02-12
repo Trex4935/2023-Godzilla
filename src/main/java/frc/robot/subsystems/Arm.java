@@ -52,8 +52,8 @@ public class Arm extends SubsystemBase {
     // Arm Extension Limit Switches
     armRetractedLimitSwitch = new FlippedDIO(0);
     // Arm Rotation Limit Switches
-    compressorSideLimitSwitch = new DigitalInput(5);
-    batterySideLimitSwitch = new DigitalInput(6);
+    compressorSideLimitSwitch = new DigitalInput(6);
+    batterySideLimitSwitch = new DigitalInput(5);
 
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();

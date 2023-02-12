@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.Falcon;
@@ -325,7 +326,7 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean getIsAutonomous(){
-    return Constants.isAutonomous;
+    return DriverStation.isAutonomous();
   }
   /*
    * ====MATH====

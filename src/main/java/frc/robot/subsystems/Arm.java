@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.Falcon;
@@ -328,6 +329,18 @@ public class Arm extends SubsystemBase {
   public double getArmLength() {
     return Constants.tempArmDistance;
   }
+
+  public boolean getArmSideOrientation() {
+    return Constants.isBatterySide;
+  }
+
+  public boolean getIsCube (){
+    return Constants.isCube;
+  }
+
+  public boolean getIsAutonomous(){
+    return DriverStation.isAutonomous();
+  }
   /*
    * ====MATH====
    * Ticks per rotation, 42
@@ -404,6 +417,9 @@ public class Arm extends SubsystemBase {
 
     builder.addBooleanProperty("Comp LS", this::getCompressorLimitSwitch, null);
     builder.addBooleanProperty("Batt LS", this::getBatteryLimitSwitch, null);
+    builder.addBooleanProperty("isBatterySide", this::getArmSideOrientation, null);
+    builder.addBooleanProperty("isCube", this::getIsCube, null);
+    builder.addBooleanProperty("isAutonomous", this::getIsAutonomous, null);
   }
 
   @Override

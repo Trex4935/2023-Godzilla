@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    Constants.isAutonomous = true;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     m_robotContainer.drivetrain.resetGyro();
 
@@ -111,6 +112,7 @@ public class Robot extends TimedRobot {
 
     // Creates entry to show teleop.
     DataLogManager.log("Starting teleop");
+    Constants.isAutonomous = false;
 
   }
 

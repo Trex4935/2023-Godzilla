@@ -16,9 +16,9 @@ public class ca_setSideOrientation extends CommandBase {
   boolean m_isBattery;
 
   /** Creates a new ca_setSideOrientation. */
-  public ca_setSideOrientation(ArmSideOrientation armSide, boolean isBattery) {
+  public ca_setSideOrientation(ArmSideOrientation armSide) {
     m_armSide = armSide;
-    m_isBattery = isBattery;
+    
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -31,7 +31,6 @@ public class ca_setSideOrientation extends CommandBase {
   @Override
   public void execute() {
     Constants.selectedArmSideOrientation = m_armSide;
-    Constants.isBatterySide = m_isBattery;
   }
 
   // Called once the command ends or is interrupted.

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.extensions.Falcon;
 import frc.robot.extensions.FlippedDIO;
 import frc.robot.extensions.Helper;
@@ -331,7 +332,8 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean getArmSideOrientation() {
-    return Constants.isBatterySide;
+    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide){ return true;}
+    else{return false;}
   }
 
   public boolean getIsCube (){

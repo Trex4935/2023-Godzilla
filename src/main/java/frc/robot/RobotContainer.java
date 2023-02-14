@@ -118,8 +118,8 @@ public class RobotContainer {
     manualResetAddArm = new cm_manualResetAddArm(arm);
 
     // Robot
-    setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide, false);
-    setSideOrientationBattery = new ca_setSideOrientation(ArmSideOrientation.BatterySide, true);
+    setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide);
+    setSideOrientationBattery = new ca_setSideOrientation(ArmSideOrientation.BatterySide);
 
     setGamePieceTypeCubeTrue = new cm_setGamePieceType(gripper, true);
     setGamePieceTypeCubeFalse = new cm_setGamePieceType(gripper, false);

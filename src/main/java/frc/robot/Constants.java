@@ -26,7 +26,7 @@ import frc.robot.extensions.ArmSideOrientation;
 public final class Constants {
 
   public static ArmPosition selectedArmState = ArmPosition.CARRY;
-  public static ArmSideOrientation selectedArmSideOrientation = ArmSideOrientation.CompressorSide;
+  public static ArmSideOrientation selectedArmSideOrientation = ArmSideOrientation.BatterySide;
 
   // ROBOT Constants
   public static boolean isCube = false;

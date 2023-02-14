@@ -227,8 +227,8 @@ public class RobotContainer {
     new JoystickButton(m_ArduinoController, Constants.gamePieceID).onTrue(setGamePieceTypeCubeTrue)
         .onFalse(setGamePieceTypeCubeFalse);
 
-    new JoystickButton(m_ArduinoController, Constants.robotSideID).whileTrue(setSideOrientationBattery)
-        .whileFalse(setSideOrientationCompressor);
+    new JoystickButton(m_ArduinoController, Constants.robotSideID).whileTrue(setSideOrientationCompressor)
+        .whileFalse(setSideOrientationBattery);
 
     new JoystickButton(m_ArduinoController, Constants.gripperID).whileTrue(gripperOpen).whileFalse(gripperClose);
  

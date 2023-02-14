@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -50,6 +51,7 @@ public class Arm extends SubsystemBase {
     armRotationPID = armRotationMotor.getPIDController();
 
     armExtensionMotor.setNeutralMode(NeutralMode.Brake);
+    armRotationMotor.setIdleMode(IdleMode.kBrake);
 
     // Arm Extension Limit Switches
     armRetractedLimitSwitch = new FlippedDIO(0);

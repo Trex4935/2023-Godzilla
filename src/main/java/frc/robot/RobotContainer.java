@@ -29,8 +29,8 @@ import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
 import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.cm_setGamePieceType;
-import frc.robot.commands.cm_decreaseExtensionTicks;
-import frc.robot.commands.cm_increaseExtensionTicks;
+import frc.robot.commands.cm_manualDecreaseExtendTicks;
+import frc.robot.commands.cm_manualAddExtendTicks;
 import frc.robot.commands.cm_manualResetAddArm;
 import frc.robot.commands.cm_manualRotateBattery;
 import frc.robot.commands.cm_manualRotateCompressor;
@@ -42,7 +42,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 // Robot Base Class
@@ -59,8 +58,8 @@ public class RobotContainer {
   private final ca_setArmPosition setArmPositionHigh;
   private final ca_setArmPosition setArmPositionMiddle;
   private final ca_setArmPosition setArmPositionLow;
-  private final cm_decreaseExtensionTicks decreaseExtensionTicks;
-  private final cm_increaseExtensionTicks increaseExtensionTicks;
+  private final cm_manualDecreaseExtendTicks manualDecreaseExtendTicks;
+  private final cm_manualAddExtendTicks manualAddExtendTicks;
   private final cm_manualRotateBattery manualRotateBattery;
   private final cm_manualRotateCompressor manualRotateCompressor;
   private final cm_manualResetAddArm manualResetAddArm;
@@ -111,8 +110,8 @@ public class RobotContainer {
     setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
     setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
     setArmPositionLow = new ca_setArmPosition(ArmPosition.LOW);
-    decreaseExtensionTicks = new cm_decreaseExtensionTicks(arm);
-    increaseExtensionTicks = new cm_increaseExtensionTicks(arm);
+    manualDecreaseExtendTicks = new cm_manualDecreaseExtendTicks(arm);
+    manualAddExtendTicks = new cm_manualAddExtendTicks(arm);
     manualRotateBattery = new cm_manualRotateBattery(arm);
     manualRotateCompressor = new cm_manualRotateCompressor(arm);
     manualResetAddArm = new cm_manualResetAddArm(arm);
@@ -214,8 +213,8 @@ public class RobotContainer {
     new JoystickButton(m_ArduinoController, Constants.middleButtonID).whileTrue(setArmPositionMiddle);
     new JoystickButton(m_ArduinoController, Constants.highButtonID).whileTrue(setArmPositionHigh);
     // manual EXTENSION
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(increaseExtensionTicks);
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(decreaseExtensionTicks);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(manualAddExtendTicks);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(manualDecreaseExtendTicks);
     // manual ROTATION
     new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(manualRotateCompressor);
     new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(manualRotateBattery);  

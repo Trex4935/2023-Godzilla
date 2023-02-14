@@ -17,6 +17,7 @@ import frc.robot.commands.ca_autoTrajectoryKinematicWithGyro;
 import frc.robot.commands.ca_autoTurnKinematic;
 import frc.robot.commands.ca_autoTurnKinematicGyro;
 import frc.robot.commands.ca_doSimpleL;
+import frc.robot.commands.ca_doesAbsolutelyNothing;
 import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.ca_setSideOrientation;
@@ -73,6 +74,7 @@ public class RobotContainer {
   private final cm_setGamePieceType setGamePieceTypeCubeTrue;
   /** Sets the game piece type to CubeFalse */
   private final cm_setGamePieceType setGamePieceTypeCubeFalse;
+  private final ca_doesAbsolutelyNothing nothingAtAll;
   private final ca_autoTrajectoryKinematic autoTrajectoryKinematic;
   private final ca_autoTrajectory autoTrajectory;
   private final ca_autoTurnKinematic autoTurnTrajectory;
@@ -107,6 +109,7 @@ public class RobotContainer {
     // Create Command objects
 
     // Combo
+    nothingAtAll = new ca_doesAbsolutelyNothing();
     armMovementCombo = new ca_ArmMovementCombo(arm);
     setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
     setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
@@ -121,8 +124,8 @@ public class RobotContainer {
     setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide);
     setSideOrientationBattery = new ca_setSideOrientation(ArmSideOrientation.BatterySide);
 
-    setGamePieceTypeCubeTrue = new cm_setGamePieceType(gripper, true);
-    setGamePieceTypeCubeFalse = new cm_setGamePieceType(gripper, false);
+    setGamePieceTypeCubeTrue = new cm_setGamePieceType("cube");
+    setGamePieceTypeCubeFalse = new cm_setGamePieceType("cone");
 
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
@@ -248,7 +251,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
    // return autoBalance.withTimeout(15);
-   return driveStraight;
+   return nothingAtAll;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

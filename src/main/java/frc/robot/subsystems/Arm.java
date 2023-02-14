@@ -331,17 +331,22 @@ public class Arm extends SubsystemBase {
     return Constants.tempArmDistance;
   }
 
-  public boolean getArmSideOrientation() {
-    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide){ return true;}
-    else{return false;}
+  public String getArmSideOrientation() {
+    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide){ return "compressor";}
+    else{return "battery";}
   }
 
-  public boolean getIsCube (){
+  public String getIsCube (){
     return Constants.isCube;
   }
 
-  public boolean getIsAutonomous(){
-    return DriverStation.isAutonomous();
+  
+  public String getIsAutonomous(){
+    if (DriverStation.isAutonomous()) {
+      return "GODZILLA";
+    } else {
+     return "Teleop";
+    }
   }
   /*
    * ====MATH====
@@ -419,9 +424,9 @@ public class Arm extends SubsystemBase {
 
     builder.addBooleanProperty("Comp LS", this::getCompressorLimitSwitch, null);
     builder.addBooleanProperty("Batt LS", this::getBatteryLimitSwitch, null);
-    builder.addBooleanProperty("isBatterySide", this::getArmSideOrientation, null);
-    builder.addBooleanProperty("isCube", this::getIsCube, null);
-    builder.addBooleanProperty("isAutonomous", this::getIsAutonomous, null);
+    builder.addStringProperty("isBatterySide", this::getArmSideOrientation, null);
+    builder.addStringProperty("isCube", this::getIsCube, null);
+    builder.addStringProperty("isAutonomous", this::getIsAutonomous, null);
   }
 
   @Override

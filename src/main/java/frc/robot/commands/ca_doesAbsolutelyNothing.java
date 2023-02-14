@@ -5,16 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Gripper;
-import frc.robot.Constants;
 
-public class cm_setGamePieceType extends CommandBase {
-  String m_gamePieceType;
-  /** Creates a new cm_setGamePieceType. */
-  public cm_setGamePieceType (String gamePieceType) {
-    
-    m_gamePieceType = gamePieceType;
-
+public class ca_doesAbsolutelyNothing extends CommandBase {
+  /** Creates a new ca_doesAbsolutelyNothing. */
+  public ca_doesAbsolutelyNothing() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,9 +18,7 @@ public class cm_setGamePieceType extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    Constants.isCube = m_gamePieceType;
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -35,6 +27,6 @@ public class cm_setGamePieceType extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

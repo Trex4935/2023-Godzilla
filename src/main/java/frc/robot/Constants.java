@@ -29,8 +29,8 @@ public final class Constants {
   public static ArmSideOrientation selectedArmSideOrientation = ArmSideOrientation.CompressorSide;
 
   // ROBOT Constants
-  public static boolean isCube = false;
-  public static boolean isBatterySide = true;
+  public static String isCube = "cone";
+  public static String isBatterySide = "battery";
 
 
   // DRIVETRAIN Constants

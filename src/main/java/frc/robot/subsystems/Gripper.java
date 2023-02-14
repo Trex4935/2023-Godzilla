@@ -54,10 +54,6 @@ public class Gripper extends SubsystemBase {
         gripper2.toggle();
     }
 
-    public boolean getIsCube() {
-        return Constants.isCube;
-    }
-
     // Sendable override
     // Anything put here will be added to the network tables and thus can be added
     // to the dashboard / consumed by the LED controller

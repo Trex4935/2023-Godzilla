@@ -31,6 +31,7 @@ public final class Constants {
   // ROBOT Constants
   public static String isCube = "cone";
   public static String isBatterySide = "battery";
+  public static boolean switchSides = false;
 
 
   // DRIVETRAIN Constants

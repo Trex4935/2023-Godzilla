@@ -188,6 +188,7 @@ public class Arm extends SubsystemBase {
     // if arm is in red zone and it is extended
     if (Helper.RangeCompare(225, 91, armRotationEncoder.getPosition())) {
       Constants.inRedZone = true; // Updates global variable
+      Constants.switchSides = false;
       return true;
     } else {
       Constants.inRedZone = false; // Updates global variable

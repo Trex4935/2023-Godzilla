@@ -29,9 +29,9 @@ public final class Constants {
   public static ArmSideOrientation selectedArmSideOrientation = ArmSideOrientation.BatterySide;
 
   // ROBOT Constants
-  public static boolean isCube = false;
+  public static String isCube = "cone";
   // Battery-Side is default
-  public static boolean isBatterySide = true;
+  public static String isBatterySide = "battery";
 
 
   // DRIVETRAIN Constants
@@ -85,7 +85,7 @@ public final class Constants {
 
   // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID
-  public static final double armExtensionSpeed = 0.5;
+  public static final double armExtensionSpeed = 0.7;
 
   // Arm Distances
   // Units = Inches (Converting to ticks)

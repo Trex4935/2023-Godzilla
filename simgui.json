@@ -30,5 +30,15 @@
       "/LiveWindow/Ungrouped/Talon FX [33]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro"
     }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "Arm": {
+          "open": true
+        },
+        "open": true
+      }
+    }
   }
 }

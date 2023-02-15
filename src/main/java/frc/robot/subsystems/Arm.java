@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -49,6 +50,7 @@ public class Arm extends SubsystemBase {
     armRotationPID = armRotationMotor.getPIDController();
 
     armExtensionMotor.setNeutralMode(NeutralMode.Brake);
+    armRotationMotor.setIdleMode(IdleMode.kBrake);
 
     // Arm Extension Limit Switches
     armRetractedLimitSwitch = new FlippedDIO(0);
@@ -217,17 +219,22 @@ public class Arm extends SubsystemBase {
     return Constants.tempArmDistance;
   }
 
-  public boolean getArmSideOrientation() {
-    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide){ return true;}
-    else{return false;}
+  public String getArmSideOrientation() {
+    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide){ return "compressor";}
+    else{return "battery";}
   }
 
-  public boolean getIsCube (){
+  public String getIsCube (){
     return Constants.isCube;
   }
 
-  public boolean getIsAutonomous(){
-    return DriverStation.isAutonomous();
+  
+  public String getIsAutonomous(){
+    if (DriverStation.isAutonomous()) {
+      return "GODZILLA";
+    } else {
+     return "Teleop";
+    }
   }
   /*
    * ====MATH====
@@ -287,9 +294,9 @@ public class Arm extends SubsystemBase {
 
     builder.addBooleanProperty("Comp LS", this::getCompressorLimitSwitch, null);
     builder.addBooleanProperty("Batt LS", this::getBatteryLimitSwitch, null);
-    builder.addBooleanProperty("isBatterySide", this::getArmSideOrientation, null);
-    builder.addBooleanProperty("isCube", this::getIsCube, null);
-    builder.addBooleanProperty("isAutonomous", this::getIsAutonomous, null);
+    builder.addStringProperty("isBatterySide", this::getArmSideOrientation, null);
+    builder.addStringProperty("isCube", this::getIsCube, null);
+    builder.addStringProperty("isAutonomous", this::getIsAutonomous, null);
   }
 
   @Override

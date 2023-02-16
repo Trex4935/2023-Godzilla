@@ -12,6 +12,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.ca_autoBalance;
+import frc.robot.commands.ca_autoDoubleScoreBalance;
 import frc.robot.commands.ca_autoDriveStraightTrajKinGyroEncPID;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
@@ -82,6 +83,7 @@ public class RobotContainer {
   private final ca_driveAutoSquare autoSquare;
   private final ca_autoBalance autoBalance;
   private final cg_autoDoubleScore autoDoubleScore;
+  private final ca_autoDoubleScoreBalance autoDoubleScoreBalance;
   private final ca_doSimpleL autoSimpleL;
   private final cg_autoScore autoScore;
   private final ca_autoTrajectoryKinematicWithGyro driveStraight;
@@ -122,6 +124,7 @@ public class RobotContainer {
     manualRotateBattery = new cm_manualRotateBattery(arm);
     manualRotateCompressor = new cm_manualRotateCompressor(arm);
     manualResetAddArm = new cm_manualResetAddArm(arm);
+    autoDoubleScoreBalance = new ca_autoDoubleScoreBalance(drivetrain, arm, gripper);
 
     // Robot
     setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide, false);

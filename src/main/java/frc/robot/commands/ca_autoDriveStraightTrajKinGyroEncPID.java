@@ -19,15 +19,16 @@ public class ca_autoDriveStraightTrajKinGyroEncPID extends CommandBase {
   Trajectory traj;
   State currState;
   Drivetrain dt;
-  Double end;
+  Double end, trgtAng;
 
   /** Creates a new cm_autoTrajectory. */
-  public ca_autoDriveStraightTrajKinGyroEncPID(Drivetrain drivetrain, Trajectory trajectory, Double endPoint) {
+  public ca_autoDriveStraightTrajKinGyroEncPID(Drivetrain drivetrain, Trajectory trajectory, Double endPoint, Double targetAngle) {
     timer = new Timer();
     traj = trajectory;
     currState = new State(0, 0, 0, new Pose2d(new Translation2d(0, 0), new Rotation2d(0)), 0);
     dt = drivetrain;
     end = endPoint;
+    trgtAng = targetAngle;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);
   }
@@ -45,7 +46,7 @@ public class ca_autoDriveStraightTrajKinGyroEncPID extends CommandBase {
     Double time  = timer.get();
     dt.setTrajPos(currState);
     dt.setTrajSpeed(currState);
-    dt.driveWithPIDArcade(currState, end, time);
+    dt.driveWithPIDArcade(currState, end, time, trgtAng);
 
   }
 

@@ -136,30 +136,33 @@ public class Drivetrain extends SubsystemBase {
         ahrs.reset();
     }
 
-    /** Gets Roll(X) angle from Gyro */
+    /** Gets Yaw(X because the gyro is vertical) angle from Gyro */
     public Float getXAngle() {
-        return ahrs.getRoll();
+        //return ahrs.getRoll();
+        return ahrs.getYaw();
     }
 
     /** Gets Pitch(Y) angle from Gyro */
     public Float getYAngle() {
-        return ahrs.getPitch();
+        //return ahrs.getPitch();
+        return ahrs.getRoll();
     }
 
-    /** Gets Yaw(Z) angle from Gyro */
+    /** Gets Roll(Z because the gyro is vertical) angle from Gyro */
     public Float getZAngle() {
-        return -ahrs.getYaw();
+       // return -ahrs.getYaw();
+       return ahrs.getPitch();
 
     }
 
     /** Gets Yaw(Z) angle from Gyro */
     public double getZAngleConverted() {
-        Float yawBounded = -ahrs.getYaw();
-        double yawBoundedDouble = yawBounded.doubleValue();
-        return Helper.ConvertTo360(yawBoundedDouble);
+        Float rollBounded = -ahrs.getRoll();
+        double rollBoundedDouble = rollBounded.doubleValue();
+        return Helper.ConvertTo360(rollBoundedDouble);
     }
 
-    /** Creates an array of the roll, pitch, and yaw values */
+    /** Creates an array of the yaw, pitch, and roll values */
     public float[] PrincipalAxisValues() {
         return new float[] { getXAngle(), getYAngle(), getZAngle() };
     }
@@ -173,8 +176,8 @@ public class Drivetrain extends SubsystemBase {
         diffdrive.tankDrive(leftSpeed, rightSpeed);
     }
 
-    public void driveWithStraightWithGyro(double avgSpeed) {
-        double err = 0 - getZAngleConverted();
+    public void driveWithStraightWithGyro(double avgSpeed, double targetAngle) {
+        double err = targetAngle - getZAngleConverted();
         double P = 0.001;
         double driftCorrection = err * P;
         diffdrive.arcadeDrive(avgSpeed, driftCorrection);
@@ -322,7 +325,7 @@ public class Drivetrain extends SubsystemBase {
     public void driveTankWithStateKinematicTraj(State currState, Double end, Double time) {
         Double velocityTarget = currState.velocityMetersPerSecond;
         // Rate is 0, because we are following a straight line, the speed varies
-        // depending of path, it follows a trapezoide curve.
+        // depending of path, it follows a trapezoid curve.
         Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
         Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
         driveWithController(leftSpeedWheel * Math.signum(end), rightSpeedWheel * Math.signum(end));
@@ -331,13 +334,13 @@ public class Drivetrain extends SubsystemBase {
         // " RightSpeed: " + rightSpeedWheel);
     }
 
-    public void driveArcadeWithStateKinematicGyroTraj(State currState, Double end, Double time) {
+    public void driveArcadeWithStateKinematicGyroTraj(State currState, Double end, Double time, Double targetAngle) {
         Double velocityTarget = currState.velocityMetersPerSecond;
         // Rate is 0, because we are following a straight line, the speed varies
-        // depending of path, it follows a trapezoide curve.
+        // depending of path, it follows a trapezoid curve.
         Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
         Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
-        driveWithStraightWithGyro(velocityTarget * Math.signum(end));
+        driveWithStraightWithGyro(velocityTarget * Math.signum(end), targetAngle);
         // System.out.println("Time: "+ time + " Velocity: " + velocityTarget + "
         // Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel +
         // " RightSpeed: " + rightSpeedWheel);
@@ -357,14 +360,14 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
-    public void driveWithPIDArcade(State currState, Double end, Double time) {
+    public void driveWithPIDArcade(State currState, Double end, Double time, Double angle) {
         Double velocityTarget = currState.velocityMetersPerSecond;
         // Rate is 0, because we are following a straight line, the speed varies
         // depending of path, it follows a trapezoide curve.
         Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
         Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
         // TO DO
-        double err = 0 - getZAngleConverted();
+        double err = angle - getZAngleConverted();
         double P = 0.1;
         double driftCorrectionTwist = err * P;
         Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel - driftCorrectionTwist;
@@ -413,7 +416,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
-        builder.addFloatArrayProperty("Roll, Pitch, and Yaw Values", this::PrincipalAxisValues, null);
+        builder.addFloatArrayProperty("Yaw, Pitch, and Roll Values", this::PrincipalAxisValues, null);
         builder.addDoubleProperty("RightEncoder", this::getRightEncoderTicks, null);
         builder.addDoubleProperty("LeftEncoder", this::getLeftEncoderTicks, null);
         builder.addDoubleProperty("Trajectory Position", this::getTrajPos, null);

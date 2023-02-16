@@ -158,10 +158,10 @@ public class RobotContainer {
         TrajectoryContainer.trajMobilityEnd);
 
     driveStraight = new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
-        TrajectoryContainer.trajMobilityEnd);
+        TrajectoryContainer.trajMobilityEnd, 0.0);
 
     autoStraightPID = new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.pigeontraj,
-        TrajectoryContainer.pigeontrajEnd);
+        TrajectoryContainer.pigeontrajEnd, 0.0);
 
     // Be able to turn
 

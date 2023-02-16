@@ -44,7 +44,9 @@ public class ca_autoTrajectoryKinematicWithGyro extends CommandBase {
 
     currState = traj.sample(timer.get());
     Double time  = timer.get();
-    dt.driveArcadeWithStateKinematicGyroTraj(currState, end, time);
+    dt.setTrajPos(currState);
+    dt.setTrajSpeed(currState);
+    dt.driveWithPIDArcade(currState, end, time);
 
 
   }

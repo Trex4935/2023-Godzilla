@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory.State;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -50,9 +51,9 @@ public class Drivetrain extends SubsystemBase {
 
     DifferentialDrive diffdrive;
 
-    // Declaring encoders
-    Encoder leftEncoder;
-    Encoder rightEncoder;
+    double trajPos;
+
+    double trajSpeed;
 
     // PID
     PIDController drivePID;
@@ -67,13 +68,13 @@ public class Drivetrain extends SubsystemBase {
     DifferentialDriveKinematics kin;
 
     //
-    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(1, 3);
+    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 0.72);
 
-    private final Encoder m_leftEncoder = new Encoder(0, 1);
-    private final Encoder m_rightEncoder = new Encoder(2, 3);
+    private final Encoder m_leftEncoder = new Encoder(1, 2);
+    private final Encoder m_rightEncoder = new Encoder(3, 4);
 
-    private final PIDController m_leftPIDController = new PIDController(1, 0, 0);
-    private final PIDController m_rightPIDController = new PIDController(1, 0, 0);
+    private final PIDController m_leftPIDController = new PIDController(0, 0, 0);
+    private final PIDController m_rightPIDController = new PIDController(0, 0, 0);
 
     private final MotorControllerGroup m_leftGroup = new MotorControllerGroup(leftMotors);
     private final MotorControllerGroup m_rightGroup = new MotorControllerGroup(rightMotors);
@@ -85,6 +86,8 @@ public class Drivetrain extends SubsystemBase {
 
     public Drivetrain() {
 
+        trajPos = 0;
+        trajSpeed = 0;
         // Creates new motor objects and configures the talons in a separate method
         FLMotor = Talon.createDefaultTalon(Constants.FLMotorID);
         FRMotor = Talon.createDefaultTalon(Constants.FRMotorID);
@@ -109,12 +112,10 @@ public class Drivetrain extends SubsystemBase {
 
         diffdrive.setMaxOutput(m_MaxSpeed);
 
-        leftEncoder = new Encoder(1, 2);
-        rightEncoder = new Encoder(3, 4);
-
         // in Inches
-        leftEncoder.setDistancePerPulse((Constants.wheelDiameter * Math.PI) / Constants.encoderTicks);
-        rightEncoder.setDistancePerPulse((Constants.wheelDiameter * Math.PI) / Constants.encoderTicks);
+        m_leftEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171));
+        m_rightEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171)); // 0.00230097
+        // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
@@ -127,8 +128,6 @@ public class Drivetrain extends SubsystemBase {
         zSimAngle = 0;
 
         drivePID = new PIDController(0.01, 0.0, 0);
-
-       
 
     }
 
@@ -166,8 +165,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void HalfSpeed() {
-        leftMotors.set(0.5);
-        rightMotors.set(0.5);
+        leftMotors.set(0.105);
+        rightMotors.set(0.105);
     }
 
     public void driveWithController(double leftSpeed, double rightSpeed) {
@@ -182,8 +181,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
-        diffdrive.tankDrive(-joystick2.getRawAxis(Constants.joystickAxis),
-                -joystick1.getRawAxis(Constants.joystickAxis));
+        diffdrive.tankDrive(-joystick1.getRawAxis(Constants.joystickAxis),
+                -joystick2.getRawAxis(Constants.joystickAxis));
     }
 
     /** Stops all Drivetrain motor groups. */
@@ -205,8 +204,8 @@ public class Drivetrain extends SubsystemBase {
 
     /** Resets both encoders to 0 */
     public void resetEncoders() {
-        leftEncoder.reset();
-        rightEncoder.reset();
+        m_leftEncoder.reset();
+        m_rightEncoder.reset();
     }
 
     /** Move the robot based on its pitch/y axis */
@@ -218,32 +217,32 @@ public class Drivetrain extends SubsystemBase {
 
     /** Gets the amount of ticks since reset/init */
     public double getLeftEncoderTicks() {
-        return leftEncoder.get();
+        return m_leftEncoder.get();
     }
 
     /** Gets the amount of ticks since reset/init */
     public double getRightEncoderTicks() {
-        return rightEncoder.get();
+        return -m_rightEncoder.get();
     }
 
     /** Gets the distance since reset/init based on setDistancePerPulse */
     public double getLeftEncoderDistance() {
-        return leftEncoder.getDistance();
+        return m_leftEncoder.getDistance();
     }
 
     /** Gets the distance since reset/init based on setDistancePerPulse */
     public double getRightEncoderDistance() {
-        return rightEncoder.getDistance();
+        return m_rightEncoder.getDistance();
     }
 
     /** Gets the speed based on setDistancePerPulse */
     public double getLeftEncoderSpeed() {
-        return leftEncoder.getRate();
+        return m_leftEncoder.getRate();
     }
 
     /** Gets the speed based on setDistancePerPulse */
     public double getRightEncoderSpeed() {
-        return rightEncoder.getRate();
+        return m_rightEncoder.getRate();
     }
 
     /** Converts inches to ticks for motors */
@@ -297,6 +296,22 @@ public class Drivetrain extends SubsystemBase {
         return omega;
     }
 
+    public void setTrajPos(State currState) {
+        trajPos = currState.poseMeters.getY();
+    }
+
+    public void setTrajSpeed(State currState) {
+        trajSpeed = currState.velocityMetersPerSecond;
+    }
+
+    public Double getTrajPos() {
+        return trajPos;
+    }
+
+    public Double getTrajSpeed() {
+        return trajSpeed;
+    }
+
     public void driveTankWithStateTraj(State currState, Double end, Double time) {
         Double velocityTarget = currState.velocityMetersPerSecond;
         driveWithController(velocityTarget * Math.signum(end), velocityTarget * Math.signum(end));
@@ -348,12 +363,12 @@ public class Drivetrain extends SubsystemBase {
         // depending of path, it follows a trapezoide curve.
         Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
         Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
-        //TO DO
+        // TO DO
         double err = 0 - getZAngleConverted();
-        double P = 0.001;
+        double P = 0.1;
         double driftCorrectionTwist = err * P;
-        Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel + driftCorrectionTwist;
-        Double rightSpeedWheelWithGyroCorrection = rightSpeedWheel - driftCorrectionTwist;
+        Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel - driftCorrectionTwist;
+        Double rightSpeedWheelWithGyroCorrection = rightSpeedWheel + driftCorrectionTwist;
         //
         setSpeeds(leftSpeedWheelWithGyroCorrection, rightSpeedWheelWithGyroCorrection);
         // System.out.println("Time: "+ time + " Velocity: " + velocityTarget + "
@@ -364,27 +379,33 @@ public class Drivetrain extends SubsystemBase {
 
     public void setSpeeds(Double leftSpeedWheel, Double rightSpeedWheel) {
         final double leftFeedforward = m_feedforward.calculate(leftSpeedWheel);
-        final double rightFeedforward = m_feedforward.calculate(rightSpeedWheel);
+        final double rightFeedforward = m_feedforward.calculate(-rightSpeedWheel);
 
-        final double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getRate(), leftSpeedWheel); // is encoder in ticks per/sec or m/sec
+        final double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getRate(), leftSpeedWheel); // is encoder
+                                                                                                          // in ticks
+                                                                                                          // per/sec or
+                                                                                                          // m/sec
         final double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getRate(), rightSpeedWheel);
-        m_leftGroup.setVoltage(leftOutput + leftFeedforward);
-        m_rightGroup.setVoltage(rightOutput + rightFeedforward);
+        FLMotor.setVoltage(0.0 + leftFeedforward);
+        FRMotor.setVoltage(0.0 + rightFeedforward);
+        MLMotor.setVoltage(0.0 + leftFeedforward);
+        MRMotor.setVoltage(0.0 + rightFeedforward);
+        BLMotor.setVoltage(0.0 + leftFeedforward);
+        BRMotor.setVoltage(0.0 + rightFeedforward);
     }
 
+    public Boolean reachDriveTarget(Double targetPosition) {
+        double averageTickValue = (m_leftEncoder.get() + m_rightEncoder.get()) / 2;
 
-    public Boolean reachDriveTarget( Double targetPosition ){
-       double averageTickValue = (m_leftEncoder.get() + m_rightEncoder.get()) / 2;
-       
-        if (averageTickValue >= 10000 ) { // if tick value is greater than or equal to 10000, stop both motors
+        if (averageTickValue >= 10000) { // if tick value is greater than or equal to 10000, stop both motors
             leftMotors.stopMotor();
             rightMotors.stopMotor();
             return true;
-        } else { 
-           
+        } else {
+
         }
-        return false; 
-    } 
+        return false;
+    }
 
     // Sendable override
     // Anything put here will be added to the network tables and thus can be added
@@ -395,5 +416,12 @@ public class Drivetrain extends SubsystemBase {
         builder.addFloatArrayProperty("Roll, Pitch, and Yaw Values", this::PrincipalAxisValues, null);
         builder.addDoubleProperty("RightEncoder", this::getRightEncoderTicks, null);
         builder.addDoubleProperty("LeftEncoder", this::getLeftEncoderTicks, null);
+        builder.addDoubleProperty("Trajectory Position", this::getTrajPos, null);
+        builder.addDoubleProperty("Trajectory Speed", this::getTrajSpeed, null);
+        builder.addDoubleProperty("Left Encoder Speed", this::getLeftEncoderSpeed, null);
+        builder.addDoubleProperty("Right Encoder Speed", this::getRightEncoderSpeed, null);
+        builder.addDoubleProperty("Left Encoder Distance", this::getLeftEncoderDistance, null);
+        builder.addDoubleProperty("Right Encoder Distance", this::getRightEncoderDistance, null);
+
     }
 }

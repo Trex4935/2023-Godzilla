@@ -106,7 +106,7 @@ public class Arm extends SubsystemBase {
     }
     // if not latched, then if limit switch is hit, STOP MOTOR.
     else if (getBatteryLimitSwitch() || getCompressorLimitSwitch()) {
-        armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
+      armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
     }
     // if not latched or hit limit switch, MOVE MOTOR.
     else {
@@ -259,10 +259,12 @@ public class Arm extends SubsystemBase {
   public void resetExtensionAdditionTicks() {
     Constants.addExtend = 0;
   }
+
   /** Rotates the arm towards the battery by 0.5 degrees */
   public void manualRotateBattery() {
     Constants.addRotate += 0.5;
   }
+
   /** Rotates the arm towards the compressor by 0.5 degrees */
   public void manualRotateCompressor() {
     Constants.addRotate -= 0.5;
@@ -334,11 +336,11 @@ public class Arm extends SubsystemBase {
     return Constants.isBatterySide;
   }
 
-  public boolean getIsCube (){
+  public boolean getIsCube() {
     return Constants.isCube;
   }
 
-  public boolean getIsAutonomous(){
+  public boolean getIsAutonomous() {
     return DriverStation.isAutonomous();
   }
   /*

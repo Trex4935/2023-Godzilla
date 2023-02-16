@@ -19,21 +19,24 @@ public class cg_autoDoubleScore extends SequentialCommandGroup {
 
     // Use addRequirements() here to declare subsystem dependencies
     addCommands(
-        new cm_GripperClose(gripper), // Closes on game piece
-        new ca_setArmPosition(ArmPosition.MIDDLE),
-        new cm_GripperOpen(gripper), // Drops the game piece
-        new ca_setArmPosition(ArmPosition.CARRY), // Resets arm to default position
-        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront, TrajectoryContainer.trajFrontEnd), // Moves to game piece
-        new ca_setSideOrientation(ArmSideOrientation.BatterySide, true), // Changes the arm side
-        new ca_setArmPosition(ArmPosition.LOW), // Moves arm position to prepare for getting the piece
-        new cm_GripperClose(gripper), // Gets piece
-        new ca_setArmPosition(ArmPosition.CARRY), // Resets arm to default position
-        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryBack, TrajectoryContainer.trajBackEnd), // Moves to scoring area
+        new cm_GripperClose(gripper).withTimeout(1), // Closes on game piece
+        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1),
+        new cm_GripperOpen(gripper).withTimeout(1), // Drops the game piece
+        new ca_setArmPosition(ArmPosition.CARRY).withTimeout(1), // Resets arm to default position
+        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront,
+            TrajectoryContainer.trajFrontEnd), // Moves to game piece
+        new ca_setSideOrientation(ArmSideOrientation.BatterySide, true).withTimeout(1), // Changes the arm side
+        new ca_setArmPosition(ArmPosition.LOW).withTimeout(1), // Moves arm position to prepare for getting the piece
+        new cm_GripperClose(gripper).withTimeout(1), // Gets piece
+        new ca_setArmPosition(ArmPosition.CARRY).withTimeout(1), // Resets arm to default position
+        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryBack,
+            TrajectoryContainer.trajBackEnd), // Moves to scoring area
         new ca_setSideOrientation(ArmSideOrientation.CompressorSide, false), // Changes the arm side
         new ca_setArmPosition(ArmPosition.MIDDLE), // Sets arm position to middle
         new cm_GripperOpen(gripper), // Drops the game piece
         new ca_setArmPosition(ArmPosition.CARRY), // Resets arm to default position
-        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd) // Moving to get mobility points
+        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
+            TrajectoryContainer.trajMobilityEnd) // Moving to get mobility points
 
     );
   }

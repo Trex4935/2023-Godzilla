@@ -43,6 +43,8 @@ public class ca_autoDriveStraightTrajKinGyroEncPID extends CommandBase {
   public void execute() {
     currState = traj.sample(timer.get());
     Double time  = timer.get();
+    dt.setTrajPos(currState);
+    dt.setTrajSpeed(currState);
     dt.driveWithPIDArcade(currState, end, time);
 
   }

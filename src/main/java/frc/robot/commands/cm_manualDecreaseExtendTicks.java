@@ -7,11 +7,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class cm_moveArmBattery extends CommandBase {
-  Arm m_arm;
-  /** Creates a new cm_moveArmBattery. */
-  public cm_moveArmBattery(Arm arm) {
-    m_arm = arm;
+public class cm_manualDecreaseExtendTicks extends CommandBase {
+
+  private final Arm m_Arm;
+  /** Creates a new cm_manualDecreaseExtendTicks. */
+  public cm_manualDecreaseExtendTicks(Arm arm) {
+    m_Arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -22,14 +23,12 @@ public class cm_moveArmBattery extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.manualMoveArmBattery();
+    m_Arm.decreaseTicks();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_arm.stopArmRotation();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

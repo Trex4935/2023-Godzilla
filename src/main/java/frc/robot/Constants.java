@@ -26,10 +26,11 @@ import frc.robot.extensions.ArmSideOrientation;
 public final class Constants {
 
   public static ArmPosition selectedArmState = ArmPosition.CARRY;
-  public static ArmSideOrientation selectedArmSideOrientation = ArmSideOrientation.CompressorSide;
+  public static ArmSideOrientation selectedArmSideOrientation = ArmSideOrientation.BatterySide;
 
   // ROBOT Constants
   public static String isCube = "cone";
+  // Battery-Side is default
   public static String isBatterySide = "battery";
   public static boolean switchSides = false;
 
@@ -51,7 +52,7 @@ public final class Constants {
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
-  public static final double dtmaxspeed = 0.75; // Speed Limit
+  public static final double dtmaxspeed = 0.25; // Speed Limit
 
   // ARM ROTATION Constants
 
@@ -71,15 +72,15 @@ public final class Constants {
   public static final int ArmRotationLowerLimit = 0;
 
   // Arm Angles
-  public static final double ArmHighAngleCompressor = 85;
-  public static final double ArmMiddleAngleCompressor = 70;
-  public static final double ArmLowAngleCompressor = 16;
-  public static double ArmCarryAngleCompressor = 10;
+  public static final double ArmHighAngleBattery = 85;
+  public static final double ArmMiddleAngleBattery = 70;
+  public static final double ArmLowAngleBattery = 16;
+  public static double ArmCarryAngleBattery = 10;
 
-  public static final double ArmCarryAngleBattery = 308;
-  public static final double ArmHighAngleBattery = 240; 
-  public static final double ArmMiddleAngleBattery = 250;
-  public static final double ArmLowAngleBattery = 310;
+  public static final double ArmCarryAngleCompressor = 308;
+  public static final double ArmHighAngleCompressor = 240; 
+  public static final double ArmMiddleAngleCompressor = 250;
+  public static final double ArmLowAngleCompressor = 310;
 
   public static final int sideVal = 0;
 

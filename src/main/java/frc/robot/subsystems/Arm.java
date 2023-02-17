@@ -14,7 +14,6 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -67,22 +66,13 @@ public class Arm extends SubsystemBase {
   }
 
   // Arm Extension Methods
-
-  /** Stops the extension motor */
+  /** Stops the Extension Motor */
   public void stopExtensionMotor() {
     armExtensionMotor.stopMotor();
   }
-
-  /**
-   * Takes a speed values from -1 to 1 and set the extension motor to that value
-   */
-  public void extendArmSetSpeed(Double speed) {
-    armExtensionMotor.set(speed);
-  }
-
-  /** Sets the speed that the arm moves outward */
-  public void extendArm() {
-    armExtensionMotor.set(-Constants.armExtensionSpeed);
+  /** Stops the Rotation Motor */
+  public void stopRotationMotor() {
+    armRotationMotor.stopMotor();
   }
 
   /** Using MotionMagic set the arm to a given position */
@@ -109,7 +99,7 @@ public class Arm extends SubsystemBase {
     }
     // if not latched, then if limit switch is hit, STOP MOTOR.
     else if (getBatteryLimitSwitch() || getCompressorLimitSwitch()) {
-        armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
+      armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
     }
     // if not latched or hit limit switch, MOVE MOTOR.
     else {
@@ -129,35 +119,46 @@ public class Arm extends SubsystemBase {
     }
   }
 
-  // __________________________
-  public void manualExtendArm() {
-    armExtensionMotor.set(Constants.armExtensionSpeed);
-    DataLogManager.log("MOVING LEFT");
-  }
-
-  public void manualRetractArm() {
-    armExtensionMotor.set((-1) * Constants.armExtensionSpeed);
-    DataLogManager.log("MOVING RIGHT");
-  }
-
-  // __________________________
-
-  // method that determines if the arm is retracted or not
-
-  /** Extends or retracts the the arm */
-  public void AutoArmExtension(double TargetTicks) { // -5000 ticks per inch
-    double encoderValueTicks = armExtensionMotor.getSelectedSensorPosition(); // Gets ticks
-    double checkSign = Math.signum(TargetTicks - encoderValueTicks); // Determines the sign of the direction
-    // determine direction of arm movement based on sign of encoder differences
-    if (!Helper.RangeCompare(TargetTicks + 200, TargetTicks - 200, encoderValueTicks)) {
-      if (checkSign > 0) { // If sign is positive move forward.
-        retractArm();
-      } else { // If sign not positive move backward.
-        extendArm();
-      }
-    } else { // If in range then stop motor.
-      stopExtensionMotor();
+  // Arm Rotation Methods
+  /**
+   * determines if the arm is in the red zone or not, and if it is extended or not
+   */
+  public boolean armRedZone() {
+    // if arm is in red zone and it is extended
+    if (Helper.RangeCompare(225, 91, armRotationEncoder.getPosition())) {
+      Constants.inRedZone = true; // Updates global variable
+      Constants.switchSides = false;
+      return true;
+    } else {
+      Constants.inRedZone = false; // Updates global variable
+      return false;
     }
+  }
+
+  /** Increases addExtend */
+  public void increaseTicks() {
+    Constants.addExtend -= 500;
+  }
+  /** Decreases addExtend */
+  public void decreaseTicks() {
+    Constants.addExtend += 500;
+  }
+  /** resets the addExtend value */
+  public void resetExtensionAdditionTicks() {
+    Constants.addExtend = 0;
+  }
+
+  /** Rotates the arm towards the compressor by 0.5 degrees */
+  public void manualRotateCompressor() {
+    Constants.addRotate += 0.5;
+  }
+  /** Rotates the arm towards the battery by 0.5 degrees */
+  public void manualRotateBattery() {
+    Constants.addRotate -= 0.5;
+  }
+  /** Resets additional rotation angles */
+  public void resetAddRotationAngle() {
+    Constants.addRotate = 0;
   }
 
   // Sendable Methods
@@ -180,115 +181,6 @@ public class Arm extends SubsystemBase {
     armExtensionMotor.setSelectedSensorPosition(0, 0, 20);
   }
 
-  // Arm Rotation Methods
-  /**
-   * determines if the arm is in the red zone or not, and if it is extended or not
-   */
-  public boolean armRedZone() {
-    // if arm is in red zone and it is extended
-    if (Helper.RangeCompare(225, 91, armRotationEncoder.getPosition())) {
-      Constants.inRedZone = true; // Updates global variable
-      Constants.switchSides = false;
-      return true;
-    } else {
-      Constants.inRedZone = false; // Updates global variable
-      return false;
-    }
-  }
-
-  /** Sets the speed that the arm moves forward */
-  public void moveArmCompressor() {
-
-    // Check if we are in the red
-    if (armRedZone()) {
-      // If arm is retracted then we can move
-      if (getArmRetractedLimitSwitch()) {
-        armRotationMotor.set(-Constants.armRotateSpeed);
-      }
-      // if not retracted then stop moving
-      else {
-        armRotationMotor.stopMotor();
-      }
-    }
-    // For when we are not in red zone
-    else {
-      // If we are not in the red zone then we just need to stop if the limit is hit
-      if (!getCompressorLimitSwitch()) {
-        armRotationMotor.stopMotor();
-      }
-      // else we can move
-      else {
-        armRotationMotor.set(-Constants.armRotateSpeed);
-      }
-    }
-  }
-
-  /** sets the speed that the arm moves battery-side */
-  public void moveArmBattery() {
-    // Check if we are in the red
-    if (armRedZone()) {
-      // If arm is retracted then we can move
-      if (getArmRetractedLimitSwitch()) {
-        armRotationMotor.set(Constants.armRotateSpeed);
-      }
-      // if not retracted then stop moving
-      else {
-        armRotationMotor.stopMotor();
-      }
-    }
-    // For when we are not in red zone
-    else {
-      // If we are not in the red zone then we just need to stop if the limit is hit
-      if (getBatteryLimitSwitch()) {
-        armRotationMotor.stopMotor();
-      }
-      // else we can move
-      else {
-        armRotationMotor.set(Constants.armRotateSpeed);
-      }
-    }
-  }
-
-  /** Increases addExtend */
-  public void increaseTicks() {
-    Constants.addExtend -= 500;
-  }
-
-  /** Decreases addExtend */
-  public void decreaseTicks() {
-    Constants.addExtend += 500;
-  }
-
-  /** resets the addExtend value */
-  public void resetExtensionAdditionTicks() {
-    Constants.addExtend = 0;
-  }
-  /** Rotates the arm towards the battery by 0.5 degrees */
-  public void manualRotateBattery() {
-    Constants.addRotate += 0.5;
-  }
-  /** Rotates the arm towards the compressor by 0.5 degrees */
-  public void manualRotateCompressor() {
-    Constants.addRotate -= 0.5;
-  }
-
-  public void resetAddRotationAngle() {
-    Constants.addRotate = 0;
-  }
-  // __________________________
-
-  public void manualMoveArmCompressor() {
-    armRotationMotor.set(Constants.armRotateSpeed);
-    DataLogManager.log("MOVING COMP");
-  }
-
-  public void manualMoveArmBattery() {
-    armRotationMotor.set((-1) * Constants.armRotateSpeed);
-    DataLogManager.log("MOVING BATT");
-  }
-
-  // __________________________
-
   /** Returns the encoder value */
   public double getEncoderValue() {
     return armRotationEncoder.getPosition();
@@ -299,21 +191,16 @@ public class Arm extends SubsystemBase {
     return getEncoderValue();
   }
 
-  /** stops the ArmRotation motor */
-  public void stopArmRotation() {
-    armRotationMotor.stopMotor();
-  }
-
   /** Sets the default angle value (sendable) */
   public void setDefaultAngle(double m_defaultAngle) {
-    Constants.ArmCarryAngleCompressor = m_defaultAngle;
+    Constants.ArmCarryAngleBattery = m_defaultAngle;
   }
 
   /** Get the default angle value (sendable) */
   public double getDefaultAngle() {
     return Constants.ArmCarryAngleCompressor;
   }
-
+  /** Method that determines if the arm is retracted or not */
   public boolean getArmRetractedLimitSwitch() {
     return armRetractedLimitSwitch.get();
   }
@@ -350,6 +237,7 @@ public class Arm extends SubsystemBase {
     } else {
      return "Teleop";
     }
+
   }
   /*
    * ====MATH====
@@ -382,24 +270,6 @@ public class Arm extends SubsystemBase {
    * ->>> Then the rotation motor is moved until it reaches 4500 ticks.
    */
 
-  /** Rotates the arm */
-  public void AutoArmRotation(double TargetAngle) {
-    double encoderValueTicks = armRotationEncoder.getPosition(); // Gets ticks
-    double targetAngleTicks = TargetAngle * Constants.degreesPerRotationTicks; // Converts target angle to ticks.
-    double checkSign = Math.signum(targetAngleTicks - encoderValueTicks); // Determines the sign of the direction
-    // determine direction of arm movement based on sign of encoder differences
-    if (!Helper.RangeCompare(targetAngleTicks + 2, targetAngleTicks - 2, encoderValueTicks)) { // If not in range then
-                                                                                               // move...
-      if (checkSign < 0) { // If sign is positive rotate compressor-side.
-        moveArmCompressor();
-      } else { // If sign not positive rotate battery-side.
-        moveArmBattery();
-      }
-    } else { // If in range then stop motor.
-      stopArmRotation();
-    }
-  }
-
   private double getAddExtend() {
     return Constants.addExtend;
   }
@@ -420,7 +290,7 @@ public class Arm extends SubsystemBase {
     builder.addDoubleProperty("AddExtension", this::getAddExtend, null);
 
     // Arm Rotation Sendables
-    builder.addDoubleProperty("Angle", this::getArmAngle, this::AutoArmRotation);
+    builder.addDoubleProperty("Angle", this::getArmAngle, null);
     builder.addDoubleProperty("Rotation Encoder", this::getEncoderValue, null);
     builder.addBooleanProperty("RedZone", this::armRedZone, null);
     builder.addDoubleProperty("Default Angle", this::getDefaultAngle, this::setDefaultAngle);

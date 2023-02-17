@@ -13,19 +13,19 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-// Going straight autonomous using only trajectory, kinematics, gyro and timer.
-public class ca_autoTrajectoryKinematicWithGyro extends CommandBase {
+// Going straight autonomous using only trajectory, kinematics, gyro, encoders and timer + 2 PIDs.
+public class ca_autoDriveStraightTrajKinGyroEncPID extends CommandBase {
   Timer timer;
   Trajectory traj;
   State currState;
   Drivetrain dt;
   Double end, trgtAng;
-  
+
   /** Creates a new cm_autoTrajectory. */
-  public ca_autoTrajectoryKinematicWithGyro(Drivetrain drivetrain, Trajectory trajectory, Double endPoint, Double targetAngle) {
+  public ca_autoDriveStraightTrajKinGyroEncPID(Drivetrain drivetrain, Trajectory trajectory, Double endPoint, Double targetAngle) {
     timer = new Timer();
     traj = trajectory;
-    currState =  new State(0,0,0, new Pose2d(new Translation2d(0,0),new Rotation2d(0)),0);
+    currState = new State(0, 0, 0, new Pose2d(new Translation2d(0, 0), new Rotation2d(0)), 0);
     dt = drivetrain;
     end = endPoint;
     trgtAng = targetAngle;
@@ -42,13 +42,11 @@ public class ca_autoTrajectoryKinematicWithGyro extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     currState = traj.sample(timer.get());
     Double time  = timer.get();
     dt.setTrajPos(currState);
     dt.setTrajSpeed(currState);
-    dt.driveWithStraightWithGyro(currState.velocityMetersPerSecond, trgtAng);
-
+    dt.driveWithPIDArcade(currState, end, time, trgtAng);
 
   }
 
@@ -61,7 +59,7 @@ public class ca_autoTrajectoryKinematicWithGyro extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ( (currState.poseMeters.getY() > end*Math.signum(end) - 0.001  || currState.poseMeters.getY() > end*Math.signum(end) + 0.001) && (currState.velocityMetersPerSecond < 0.001 ||  currState.velocityMetersPerSecond > -0.001));
-  }
-  
+  return dt.reachDriveTarget(end);
+
+}
 }

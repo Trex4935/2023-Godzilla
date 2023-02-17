@@ -7,31 +7,28 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class cm_manualRetractArm extends CommandBase {
-  Arm m_Arm;
+public class cm_manualDecreaseExtendTicks extends CommandBase {
 
-  /** Creates a new cm_moveArmRight. */
-  public cm_manualRetractArm(Arm arm) {
+  private final Arm m_Arm;
+  /** Creates a new cm_manualDecreaseExtendTicks. */
+  public cm_manualDecreaseExtendTicks(Arm arm) {
     m_Arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.manualRetractArm();
+    m_Arm.decreaseTicks();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_Arm.stopExtensionMotor();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

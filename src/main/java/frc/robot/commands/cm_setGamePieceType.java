@@ -9,11 +9,10 @@ import frc.robot.subsystems.Gripper;
 import frc.robot.Constants;
 
 public class cm_setGamePieceType extends CommandBase {
-  Gripper m_gripper;
-  Boolean m_gamePieceType;
+  String m_gamePieceType;
   /** Creates a new cm_setGamePieceType. */
-  public cm_setGamePieceType(Gripper gripper, Boolean gamePieceType) {
-    m_gripper = gripper;
+  public cm_setGamePieceType (String gamePieceType) {
+    
     m_gamePieceType = gamePieceType;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -36,6 +35,6 @@ public class cm_setGamePieceType extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

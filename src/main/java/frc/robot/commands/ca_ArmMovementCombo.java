@@ -31,7 +31,7 @@ public class ca_ArmMovementCombo extends CommandBase {
   public void execute() {
     /** If Robot arm is on BatterySide (The Front), then run switch case. */
     // Suppresses the ArmMovementCombo if the arm is in the RedZone.
-    if (Constants.inRedZone || Arm.redZoneLatch) {
+    if (Constants.inRedZone || Arm.redZoneLatch || Constants.switchSides) {
       Constants.selectedArmState = ArmPosition.CARRY;
     }
 

@@ -32,6 +32,7 @@ public final class Constants {
   public static String isCube = "cone";
   // Battery-Side is default
   public static String isBatterySide = "battery";
+  public static boolean switchSides = false;
 
 
   // DRIVETRAIN Constants

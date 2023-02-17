@@ -20,6 +20,7 @@ public class ca_autoDoubleScoreBalance extends SequentialCommandGroup {
      addCommands(
         new cm_GripperClose(gripper).withTimeout(1), // Closes on game piece
         new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1),
+        new ca_setSideOrientation(ArmSideOrientation.CompressorSide, false),
         new cm_GripperOpen(gripper).withTimeout(1), // Drops the game piece
         new ca_setArmPosition(ArmPosition.CARRY).withTimeout(1), // Resets arm to default position
         new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront,

@@ -10,7 +10,10 @@ import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Arm;
 // Commands
 import frc.robot.commands.ca_ArmMovementCombo;
+import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.ca_autoBalance;
+import frc.robot.commands.ca_autoDoubleScoreBalance;
+import frc.robot.commands.ca_autoDriveStraightTrajKinGyroEncPID;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
 import frc.robot.commands.ca_autoTrajectoryKinematicWithGyro;
@@ -81,10 +84,15 @@ public class RobotContainer {
   private final ca_driveAutoSquare autoSquare;
   private final ca_autoBalance autoBalance;
   private final cg_autoDoubleScore autoDoubleScore;
+  private final ca_autoDoubleScoreBalance autoDoubleScoreBalance;
   private final ca_doSimpleL autoSimpleL;
   private final cg_autoScore autoScore;
   private final ca_autoTrajectoryKinematicWithGyro driveStraight;
-  //private final SequentialCommandGroup autoDoubleScoreAndBalancing;
+
+  private final ca_autoDriveStraightTrajKinGyroEncPID autoStraightPID;
+
+  private final ca_ForwardHalfSpeed forwardHalfSpeed;
+  // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
   // private final SequentialCommandGroup backwordAndAutoBalancing;
   // private final SequentialCommandGroup doLAndAutoBalancing;
   // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
@@ -118,6 +126,7 @@ public class RobotContainer {
     manualRotateBattery = new cm_manualRotateBattery(arm);
     manualRotateCompressor = new cm_manualRotateCompressor(arm);
     manualResetAddArm = new cm_manualResetAddArm(arm);
+    autoDoubleScoreBalance = new ca_autoDoubleScoreBalance(drivetrain, arm, gripper);
 
     // Robot
     setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide);
@@ -140,15 +149,24 @@ public class RobotContainer {
 
     // Auto Bench-Test
 
-    autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryFront,TrajectoryContainer.trajFrontEnd);
+    autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryFront,
+        TrajectoryContainer.trajFrontEnd);
 
     // Going Backword-mobility.
 
-    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj, TrajectoryContainer.pigeontrajEnd);
+    forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
 
-    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd);
+    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj,
+        TrajectoryContainer.pigeontrajEnd);
 
-    driveStraight = new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd);
+    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryMobility,
+        TrajectoryContainer.trajMobilityEnd);
+
+    driveStraight = new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
+        TrajectoryContainer.trajMobilityEnd, 0.0);
+
+    autoStraightPID = new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.pigeontraj,
+        TrajectoryContainer.pigeontrajEnd, 0.0);
 
     // Be able to turn
 
@@ -170,7 +188,8 @@ public class RobotContainer {
 
     // Go backword and do autobalancing.
 
-    //backwordAndAutoBalancing = new SequentialCommandGroup(autoTrajectory, autoBalance);
+    // backwordAndAutoBalancing = new SequentialCommandGroup(autoTrajectory,
+    // autoBalance);
 
     // Go in a simple L
 
@@ -178,11 +197,12 @@ public class RobotContainer {
 
     // Go in a simple L shape and do auto balancing.
 
-    //doLAndAutoBalancing = new SequentialCommandGroup(autoSimpleL, autoBalance);
+    // doLAndAutoBalancing = new SequentialCommandGroup(autoSimpleL, autoBalance);
 
     // Make 2 points and go in a simple L shape and do auto balancing.
 
-    //autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore, autoSimpleL);
+    // autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore,
+    // autoSimpleL);
 
     // Follow L Path using point-map.
 
@@ -191,7 +211,6 @@ public class RobotContainer {
 
     // Add encoder for real length measures to auto.
 
-    
     // Add PID to auo.
 
     // Configure the trigger bindings
@@ -220,12 +239,12 @@ public class RobotContainer {
     new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(manualDecreaseExtendTicks);
     // manual ROTATION
     new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(manualRotateCompressor);
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(manualRotateBattery);  
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(manualRotateBattery);
     // reset manual extension & rotation
     new JoystickButton(m_ArduinoController, Constants.highButtonID).onFalse(manualResetAddArm);
     new JoystickButton(m_ArduinoController, Constants.middleButtonID).onFalse(manualResetAddArm);
     new JoystickButton(m_ArduinoController, Constants.groundButtonID).onFalse(manualResetAddArm);
-    
+
     // Toggle Switches
     new JoystickButton(m_ArduinoController, Constants.gamePieceID).onTrue(setGamePieceTypeCubeTrue)
         .onFalse(setGamePieceTypeCubeFalse);
@@ -234,7 +253,7 @@ public class RobotContainer {
         .whileFalse(setSideOrientationBattery);
 
     new JoystickButton(m_ArduinoController, Constants.gripperID).whileTrue(gripperOpen).whileFalse(gripperClose);
- 
+
     // operator.b().toggleOnTrue(Commands.startEnd(gripper::gripOpen,
     // gripper::gripClose, gripper));
 
@@ -249,8 +268,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-   // return autoBalance.withTimeout(15);
-   return null;
+
+    // return autoBalance.withTimeout(15);
+    return autoDoubleScore;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;
@@ -260,8 +280,6 @@ public class RobotContainer {
   // Anything put here will be added to the network tables and thus can be added
   // to the dashboard / consumed by the LED controller
   public void initSendable(SendableBuilder builder) {
-
-
 
   }
 }

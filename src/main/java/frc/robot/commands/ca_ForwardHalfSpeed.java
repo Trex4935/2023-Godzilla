@@ -43,8 +43,8 @@ public class ca_ForwardHalfSpeed extends CommandBase {
   @Override
   public boolean isFinished() {
     if (timer.get() > 15) {
-      return true;}
-    else {
+      return true;
+    } else {
       return false;
     }
   }

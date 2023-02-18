@@ -26,6 +26,7 @@ import frc.robot.commands.ca_setArmPosition;
 import frc.robot.commands.ca_setSideOrientation;
 import frc.robot.commands.cg_autoDoubleScore;
 import frc.robot.commands.cg_autoScore;
+import frc.robot.commands.cg_autoScoreBalance;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
@@ -87,6 +88,7 @@ public class RobotContainer {
   private final ca_autoDoubleScoreBalance autoDoubleScoreBalance;
   private final ca_doSimpleL autoSimpleL;
   private final cg_autoScore autoScore;
+  private final cg_autoScoreBalance autoScoreAndBalance;
   private final ca_autoTrajectoryKinematicWithGyro driveStraight;
 
   private final ca_autoDriveStraightTrajKinGyroEncPID autoStraightPID;
@@ -186,6 +188,10 @@ public class RobotContainer {
 
     autoBalance = new ca_autoBalance(drivetrain);
 
+    // Scores middle and balances.
+
+    autoScoreAndBalance = new cg_autoScoreBalance(drivetrain, arm, gripper);
+
     // Go backword and do autobalancing.
 
     // backwordAndAutoBalancing = new SequentialCommandGroup(autoTrajectory,
@@ -270,7 +276,7 @@ public class RobotContainer {
 
 
     // return autoBalance.withTimeout(15);
-    return autoDoubleScore;
+    return autoScoreAndBalance;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

@@ -120,6 +120,7 @@ public class Drivetrain extends SubsystemBase {
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
         ahrs.calibrate();
+        ahrs.reset();
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
         kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);
@@ -127,7 +128,7 @@ public class Drivetrain extends SubsystemBase {
         // initiate simulate gyro Position
         zSimAngle = 0;
 
-        drivePID = new PIDController(0.01, 0.0, 0);
+        drivePID = new PIDController(0.025, 0.0, 0);
 
     }
 
@@ -136,29 +137,27 @@ public class Drivetrain extends SubsystemBase {
         ahrs.reset();
     }
 
-    /** Gets Yaw(X because the gyro is vertical) angle from Gyro */
+    /** Gets Roll(X) angle from Gyro */
     public Float getXAngle() {
-        //return ahrs.getRoll();
-        return ahrs.getYaw();
+        return ahrs.getRoll();
     }
 
     /** Gets Pitch(Y) angle from Gyro */
     public Float getYAngle() {
-        //return ahrs.getPitch();
-        return ahrs.getRoll();
+    //    return ahrs.getYaw();
+        return ahrs.getPitch();
     }
 
-    /** Gets Roll(Z because the gyro is vertical) angle from Gyro */
+    /** Gets Yaw(Z) from Gyro */
     public Float getZAngle() {
-       // return -ahrs.getYaw();
-       return ahrs.getPitch();
+    //   return ahrs.getRoll();
+       return -ahrs.getYaw();
 
     }
 
-    /** Gets Yaw(Z) angle from Gyro */
+    /** Gets Yaw(Z) angle from Gyro and converts it to 360 */
     public double getZAngleConverted() {
-        Float rollBounded = -ahrs.getRoll();
-        double rollBoundedDouble = rollBounded.doubleValue();
+        double rollBoundedDouble = getZAngle().doubleValue();
         return Helper.ConvertTo360(rollBoundedDouble);
     }
 
@@ -417,6 +416,10 @@ public class Drivetrain extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
         builder.addFloatArrayProperty("Yaw, Pitch, and Roll Values", this::PrincipalAxisValues, null);
+        // Gyro values
+        builder.addFloatProperty("X/Roll", this::getXAngle, null);
+        builder.addFloatProperty("Y/Pitch", this::getYAngle, null);
+        builder.addFloatProperty("Z/Yaw", this::getZAngle, null);
         builder.addDoubleProperty("RightEncoder", this::getRightEncoderTicks, null);
         builder.addDoubleProperty("LeftEncoder", this::getLeftEncoderTicks, null);
         builder.addDoubleProperty("Trajectory Position", this::getTrajPos, null);

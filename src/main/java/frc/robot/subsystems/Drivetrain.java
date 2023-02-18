@@ -128,7 +128,7 @@ public class Drivetrain extends SubsystemBase {
         // initiate simulate gyro Position
         zSimAngle = 0;
 
-        drivePID = new PIDController(0.025, 0.0, 0);
+        drivePID = new PIDController(0.0, 0.0, 0);
 
     }
 
@@ -147,6 +147,14 @@ public class Drivetrain extends SubsystemBase {
     //    return ahrs.getYaw();
         return ahrs.getPitch();
     }
+
+    
+    /** Gets the offset of the pitch*/
+    public Float getYAngleOffset() {
+        //    return ahrs.getYaw();
+            return getYAngle() - 2.1f;
+        }
+    
 
     /** Gets Yaw(Z) from Gyro */
     public Float getZAngle() {

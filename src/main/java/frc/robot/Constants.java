@@ -52,7 +52,7 @@ public final class Constants {
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
-  public static final double dtmaxspeed = 1; // Speed Limit also affects auto, needed to be 1 used trahjspeed as limit
+  public static final double dtmaxspeed = .75; // Speed Limit also affects auto, needed to be 1 used trahjspeed as limit
 
   // ARM ROTATION Constants
 
@@ -64,7 +64,7 @@ public final class Constants {
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {
     public static final double dtmaxaccel = 1;
-    public static final double dtmaxspeed = 0.65;
+    public static final double autodtMaxSpeed = 0.65;
     public static final double dtmaxomega = 1.6;
   }
 
@@ -109,6 +109,8 @@ public final class Constants {
   // (Differentiates the joysticks inputs by assigning different ID ports)
   public static final int leftJoystick = 0; // Left Joystick ID
   public static final int rightJoystick = 1; // Right Joystick ID
+
+  public static final int joystickTrigger = 1;
 
   /** Actual Joystick Axis ID */
   public static final int joystickAxis = 1;

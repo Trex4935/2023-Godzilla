@@ -40,6 +40,7 @@ import frc.robot.commands.cm_manualResetAddArm;
 import frc.robot.commands.cm_manualRotateBattery;
 import frc.robot.commands.cm_manualRotateCompressor;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import frc.robot.commands.cm_setSpeedLimit;
 
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
@@ -59,6 +60,8 @@ public class RobotContainer {
 
   // Declare Commands
   private final cm_driveWithJoysticks driveWithJoysticks;
+  private final cm_setSpeedLimit setSpeedLimitMax;
+  private final cm_setSpeedLimit setSpeedLimitDefault;
   private final ca_ArmMovementCombo armMovementCombo;
   private final ca_setArmPosition setArmPositionHigh;
   private final ca_setArmPosition setArmPositionMiddle;
@@ -139,6 +142,8 @@ public class RobotContainer {
 
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
+    setSpeedLimitMax = new cm_setSpeedLimit(drivetrain, 1.0);
+    setSpeedLimitDefault = new cm_setSpeedLimit(drivetrain, 0.75);
 
     // Gripper
     gripperOpen = new cm_GripperOpen(gripper);
@@ -229,6 +234,9 @@ public class RobotContainer {
 
     // Makes controller driving the default command
     drivetrain.setDefaultCommand(driveWithJoysticks);
+
+    new JoystickButton(m_JoystickLeft, Constants.joystickTrigger).whileTrue(setSpeedLimitMax).whileFalse(setSpeedLimitDefault);
+    new JoystickButton(m_JoystickRight, Constants.joystickTrigger).whileTrue(setSpeedLimitMax).whileFalse(setSpeedLimitDefault);
 
     // Run arm movement combo and restart if it end
     arm.setDefaultCommand(armMovementCombo);

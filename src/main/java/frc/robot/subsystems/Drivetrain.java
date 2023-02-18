@@ -128,7 +128,7 @@ public class Drivetrain extends SubsystemBase {
         // initiate simulate gyro Position
         zSimAngle = 0;
 
-        drivePID = new PIDController(0.0, 0.0, 0);
+        drivePID = new PIDController(0.15, 0.0, 0);
 
     }
 
@@ -152,7 +152,8 @@ public class Drivetrain extends SubsystemBase {
     /** Gets the offset of the pitch*/
     public Float getYAngleOffset() {
         //    return ahrs.getYaw();
-            return getYAngle()+1.9f;
+            return getYAngle()  
+            - 1.75f;
         }
     
 
@@ -221,8 +222,14 @@ public class Drivetrain extends SubsystemBase {
     /** Move the robot based on its pitch/y axis */
     public void autoBalance() {
         // Set motors speed using PID controller to get Y-axis to 0 degrees
-        leftMotors.set(drivePID.calculate(getYAngle(), 0));
-        rightMotors.set(drivePID.calculate(getYAngle(), 0));
+        double leftPitch = drivePID.calculate(getYAngleOffset(), 0);
+        double rightPitch = drivePID.calculate(getYAngleOffset(), 0);        
+        double err = 0 - getZAngleConverted();
+        double P = 0.01;
+        double driftCorrectionTwist = err * P;
+
+        leftMotors.set(leftPitch +  driftCorrectionTwist);
+        rightMotors.set(rightPitch - driftCorrectionTwist);
     }
 
     /** Gets the amount of ticks since reset/init */

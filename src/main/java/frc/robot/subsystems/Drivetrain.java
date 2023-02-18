@@ -152,7 +152,7 @@ public class Drivetrain extends SubsystemBase {
     /** Gets the offset of the pitch*/
     public Float getYAngleOffset() {
         //    return ahrs.getYaw();
-            return getYAngle() - 2.1f;
+            return getYAngle()+1.9f;
         }
     
 

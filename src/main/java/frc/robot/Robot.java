@@ -87,6 +87,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     Constants.isAutonomous = true;
     Constants.dtmaxspeed = 1;
+    m_robotContainer.drivetrain.setMaxSpeed(Constants.dtmaxspeed);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     m_robotContainer.drivetrain.resetGyro();
 
@@ -108,6 +109,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     Constants.dtmaxspeed = 0.75;
+    m_robotContainer.drivetrain.setMaxSpeed(Constants.dtmaxspeed);
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

@@ -4,9 +4,9 @@ If you need help with gyro:
 ----------------------------------------------------------
 Robot Specific Notes: 
 Gyro is vertical, therefore:
-x = Yaw
-y = Roll
-z = Pitch
+x = Pitch
+y = Yaw
+z = Roll
 ----------------------------------------------------------
 Imports:
 

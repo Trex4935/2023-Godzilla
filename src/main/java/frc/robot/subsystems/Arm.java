@@ -222,8 +222,8 @@ public class Arm extends SubsystemBase {
   }
 
   public String getArmSideOrientation() {
-    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide){ return "compressor";}
-    else{return "battery";}
+    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide){ return "battery";}
+    else{return "compressor";}
   }
 
   public String getIsCube (){

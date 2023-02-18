@@ -103,8 +103,8 @@ public class RobotContainer {
   // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
 
   // Declare Other
-  private final Joystick m_JoystickLeft = new Joystick(Constants.LeftJoystickX);
-  private final Joystick m_JoystickRight = new Joystick(Constants.LeftJoystickY);
+  private final Joystick m_JoystickLeft = new Joystick(Constants.leftJoystick);
+  private final Joystick m_JoystickRight = new Joystick(Constants.rightJoystick);
   private final Joystick m_ArduinoController = new Joystick(Constants.controllerID);
 
   /**
@@ -142,8 +142,8 @@ public class RobotContainer {
 
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
-    setSpeedLimitMax = new cm_setSpeedLimit(drivetrain, 1.0);
-    setSpeedLimitDefault = new cm_setSpeedLimit(drivetrain, 0.75);
+    setSpeedLimitMax = new cm_setSpeedLimit(1.0);
+    setSpeedLimitDefault = new cm_setSpeedLimit(0.75);
 
     // Gripper
     gripperOpen = new cm_GripperOpen(gripper);
@@ -235,13 +235,14 @@ public class RobotContainer {
     // Makes controller driving the default command
     drivetrain.setDefaultCommand(driveWithJoysticks);
 
-    new JoystickButton(m_JoystickLeft, Constants.joystickTrigger).whileTrue(setSpeedLimitMax).whileFalse(setSpeedLimitDefault);
-    new JoystickButton(m_JoystickRight, Constants.joystickTrigger).whileTrue(setSpeedLimitMax).whileFalse(setSpeedLimitDefault);
-
     // Run arm movement combo and restart if it end
     arm.setDefaultCommand(armMovementCombo);
 
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    
+    // Increase Speed when pressing triggers.
+    new JoystickButton(m_JoystickLeft, Constants.joystickTrigger).onTrue(setSpeedLimitMax).onFalse(setSpeedLimitDefault);
+    new JoystickButton(m_JoystickRight, Constants.joystickTrigger).onTrue(setSpeedLimitMax).onFalse(setSpeedLimitDefault);
 
     // Arduino Controller Button Mapping
     // Arm Movement

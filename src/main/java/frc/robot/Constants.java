@@ -181,5 +181,6 @@ public final class Constants {
   /** Adds rotation degrees */
   public static double addRotate = 0;
 
+  public static double speedLimit = 0.75;
 
 }

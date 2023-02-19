@@ -24,6 +24,7 @@ public class cm_manualRotateBattery extends CommandBase {
   @Override
   public void execute() {
     m_arm.manualRotateBattery();
+    
   }
 
   // Called once the command ends or is interrupted.

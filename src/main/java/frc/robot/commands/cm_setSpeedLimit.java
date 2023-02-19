@@ -9,9 +9,10 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class cm_setSpeedLimit extends CommandBase {
-  double m_speedLimit;
+  double SpeedLimit;
   /** Creates a new cm_releaseSpeedLimiter. */
   public cm_setSpeedLimit(double m_speedLimit) {
+    SpeedLimit = m_speedLimit;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -22,7 +23,7 @@ public class cm_setSpeedLimit extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Constants.speedLimit = m_speedLimit;
+    Constants.speedLimit = SpeedLimit;
   }
 
   // Called once the command ends or is interrupted.

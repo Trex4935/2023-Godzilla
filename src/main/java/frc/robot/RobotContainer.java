@@ -142,7 +142,7 @@ public class RobotContainer {
 
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
-    setSpeedLimitMax = new cm_setSpeedLimit(1.0);
+    setSpeedLimitMax = new cm_setSpeedLimit(0.99);
     setSpeedLimitDefault = new cm_setSpeedLimit(0.75);
 
     // Gripper

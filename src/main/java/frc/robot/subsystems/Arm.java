@@ -38,7 +38,7 @@ public class Arm extends SubsystemBase {
   DigitalInput armRetractedLimitSwitch;
 
   // Arm Rotation
-  CANSparkMax armRotationMotor;
+  public CANSparkMax armRotationMotor;
   RelativeEncoder armRotationEncoder;
 
   SparkMaxPIDController armRotationPID;
@@ -82,17 +82,23 @@ public class Arm extends SubsystemBase {
   }
 
   // Rotates the arm towards the chassis until limit switch is tripped
-  public void armRotationToLimit(){
-    // If true, stop motor
-    if (LimitSwitchTripped) {
-      armRotationMotor.stopMotor();
+  public void armRotationToLimit(ArmSideOrientation m_armSide){
+    // If batterySide, move to limit switch
+    if (m_armSide == ArmSideOrientation.BatterySide) {
+      if (batterySideLimitSwitch.get()) {
+        armRotationMotor.stopMotor();
+      } else {
+        armRotationMotor.set(0.4);
+      }
     }
-    // If false, keep rotating
-    else (LimitSwitchNotTripped) {
-      armRotationMotor
+    // If compressorSide, move to limit switch
+    else {
+      if (compressorSideLimitSwitch.get()) {
+        stopRotationMotor();
+      } else {
+        armRotationMotor.set(-0.4);
+      }
     }
-
-
   }
 
   /** Using MotionMagic set the arm to a given position */

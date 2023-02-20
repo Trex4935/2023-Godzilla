@@ -7,41 +7,44 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /** Add your docs here. */
 public class Gripper extends SubsystemBase {
 
     /** Declares new pneumatic objects. */
-    DoubleSolenoid gripper;
+    Solenoid gripper;
     Compressor compressor;
 
     public Gripper() {
         /** Creates new pneumatic objects. */
-        gripper = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 0, 1);
-        compressor = new Compressor(1, PneumaticsModuleType.REVPH);
+        gripper = new Solenoid(15, PneumaticsModuleType.CTREPCM, 0);
+        compressor = new Compressor(15, PneumaticsModuleType.CTREPCM);
         compressor.enableDigital();
     }
 
     /** Closes the gripper */
     public void gripClose() {
-        DataLogManager.log("/_\\ GRIPPER CLOSE /_\\");
-        gripper.set(Value.kForward);
+        // DataLogManager.log("/_\\ GRIPPER CLOSE /_\\");
+        gripper.set(true);
     }
 
     /** Opens the gripper */
     public void gripOpen() {
-        DataLogManager.log("\\_/ GRIPPER OPEN \\_/");
-        gripper.set(Value.kReverse);
+        // DataLogManager.log("\\_/ GRIPPER OPEN \\_/");
+        gripper.set(false);
     }
 
     /** Turns off the gripper */
     public void disableGrip() {
         DataLogManager.log("|_| GRIPPER OFF |_|");
-        gripper.set(Value.kOff);
+    }
+
+    public void toggleGrip() {
+        gripper.toggle();
     }
 
     // Sendable override
@@ -50,6 +53,7 @@ public class Gripper extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("GripperState", null, null);
+//        builder.addBooleanProperty("isCube", this::getIsCube, null);
     }
 
     @Override

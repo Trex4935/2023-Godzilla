@@ -5,36 +5,49 @@
 package frc.robot;
 
 // Subsystems
-import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Gripper;
-
+import frc.robot.subsystems.Arm;
 // Commands
-import frc.robot.commands.cm_armRotationForward;
+import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.Constants.direction;
-import frc.robot.commands.ca_AutoArmRotationAngle;
 import frc.robot.commands.ca_ForwardHalfSpeed;
+import frc.robot.commands.ca_autoBalance;
+import frc.robot.commands.ca_autoDoubleScoreBalance;
+import frc.robot.commands.ca_autoDriveStraightTrajKinGyroEncPID;
 import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.ca_autoTrajectoryKinematic;
+import frc.robot.commands.ca_autoTrajectoryKinematicWithGyro;
 import frc.robot.commands.ca_autoTurnKinematic;
+import frc.robot.commands.ca_autoTurnKinematicGyro;
+import frc.robot.commands.ca_doSimpleL;
+import frc.robot.commands.ca_doesAbsolutelyNothing;
 import frc.robot.commands.ca_driveAutoSquare;
-import frc.robot.commands.cm_armRotationBackward;
+import frc.robot.commands.ca_setArmPosition;
+import frc.robot.commands.ca_setSideOrientation;
+import frc.robot.commands.cg_autoDoubleScore;
+import frc.robot.commands.cg_autoScore;
+import frc.robot.commands.cg_autoScoreBalance;
 import frc.robot.commands.cm_driveWithJoysticks;
+import frc.robot.extensions.ArmPosition;
+import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.commands.cm_GripperClose;
 import frc.robot.commands.cm_GripperOpen;
+import frc.robot.commands.ca_ArmMovementCombo;
+import frc.robot.commands.cm_setGamePieceType;
+import frc.robot.commands.cm_manualDecreaseExtendTicks;
+import frc.robot.commands.cm_manualAddExtendTicks;
+import frc.robot.commands.cm_manualResetAddArm;
+import frc.robot.commands.cm_manualRotateBattery;
+import frc.robot.commands.cm_manualRotateCompressor;
+import edu.wpi.first.util.sendable.SendableBuilder;
 
-import java.util.List;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+// Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -44,33 +57,56 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class RobotContainer {
 
   // Declare Subsystems
-  private final Drivetrain drivetrain;
-  private final ArmExtension armextension;
-  private final ArmRotation armrotation;
+  public final Drivetrain drivetrain;
+  private final Arm arm;
   private final Gripper gripper;
 
   // Declare Commands
   private final cm_driveWithJoysticks driveWithJoysticks;
-  // private final cm_ExtendArm extendArm;
-  private final cm_armRotationForward armRotationForward;
-  private final cm_armRotationBackward armRotationBackward;
-  private final ca_ForwardHalfSpeed forwardHalfSpeed;
-  private final ca_AutoArmRotationAngle armRotationPreset0;
-  private final ca_AutoArmRotationAngle armRotationPreset90;
-  private final ca_AutoArmRotationAngle armRotationPreset135;
-  private final ca_AutoArmRotationAngle armRotationPreset180;
-  private final ca_AutoArmRotationAngle armRotationPreset270;
+  private final ca_ArmMovementCombo armMovementCombo;
+  private final ca_setArmPosition setArmPositionHigh;
+  private final ca_setArmPosition setArmPositionMiddle;
+  private final ca_setArmPosition setArmPositionLow;
+  private final cm_manualDecreaseExtendTicks manualDecreaseExtendTicks;
+  private final cm_manualAddExtendTicks manualAddExtendTicks;
+  private final cm_manualRotateBattery manualRotateBattery;
+  private final cm_manualRotateCompressor manualRotateCompressor;
+  private final cm_manualResetAddArm manualResetAddArm;
 
   private final cm_GripperClose gripperClose;
   private final cm_GripperOpen gripperOpen;
-  private final ca_autoTrajectoryKinematic autoTrajectory;
+  private final ca_setSideOrientation setSideOrientationCompressor;
+  private final ca_setSideOrientation setSideOrientationBattery;
+  /** Sets the game piece type to CubeTrue */
+  private final cm_setGamePieceType setGamePieceTypeCubeTrue;
+  /** Sets the game piece type to CubeFalse */
+  private final cm_setGamePieceType setGamePieceTypeCubeFalse;
+  private final ca_doesAbsolutelyNothing nothingAtAll;
+  private final ca_autoTrajectoryKinematic autoTrajectoryKinematic;
+  private final ca_autoTrajectory autoTrajectory;
   private final ca_autoTurnKinematic autoTurnTrajectory;
+  private final ca_autoTurnKinematicGyro autoTurnTrajectoryWithGyro;
   private final ca_driveAutoSquare autoSquare;
+  private final ca_autoBalance autoBalance;
+  private final cg_autoDoubleScore autoDoubleScore;
+  private final ca_autoDoubleScoreBalance autoDoubleScoreBalance;
+  private final ca_doSimpleL autoSimpleL;
+  private final cg_autoScore autoScore;
+  private final cg_autoScoreBalance autoScoreAndBalance;
+  private final ca_autoTrajectoryKinematicWithGyro driveStraight;
+
+  private final ca_autoDriveStraightTrajKinGyroEncPID autoStraightPID;
+
+  private final ca_ForwardHalfSpeed forwardHalfSpeed;
+  // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
+  // private final SequentialCommandGroup backwordAndAutoBalancing;
+  // private final SequentialCommandGroup doLAndAutoBalancing;
+  // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
 
   // Declare Other
-  private final Joystick m_JoystickLeft = new Joystick(Constants.joystickLeft);
-  private final Joystick m_JoystickRight = new Joystick(Constants.joystickRight);
-  private CommandXboxController operator = new CommandXboxController(Constants.controllerID);
+  private final Joystick m_JoystickLeft = new Joystick(Constants.LeftJoystickX);
+  private final Joystick m_JoystickRight = new Joystick(Constants.LeftJoystickY);
+  private final Joystick m_ArduinoController = new Joystick(Constants.controllerID);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -79,54 +115,113 @@ public class RobotContainer {
 
     // Create Subsystem objects
     drivetrain = new Drivetrain();
-    armextension = new ArmExtension();
-    armrotation = new ArmRotation();
+    arm = new Arm();
     gripper = new Gripper();
+    drivetrain.resetGyro();
 
     // Create Command objects
-    // extendArm = new cm_ExtendArm(armextension, 0.0);
-    armRotationForward = new cm_armRotationForward(armrotation);
-    armRotationBackward = new cm_armRotationBackward(armrotation);
-    armRotationPreset0 = new ca_AutoArmRotationAngle(armrotation, 0);
-    armRotationPreset90 = new ca_AutoArmRotationAngle(armrotation, 90);
-    armRotationPreset135 = new ca_AutoArmRotationAngle(armrotation, 135);
-    armRotationPreset180 = new ca_AutoArmRotationAngle(armrotation, 180);
-    armRotationPreset270 = new ca_AutoArmRotationAngle(armrotation, 270);
+
+    // Combo
+    nothingAtAll = new ca_doesAbsolutelyNothing();
+    armMovementCombo = new ca_ArmMovementCombo(arm);
+    setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
+    setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
+    setArmPositionLow = new ca_setArmPosition(ArmPosition.LOW);
+    manualDecreaseExtendTicks = new cm_manualDecreaseExtendTicks(arm);
+    manualAddExtendTicks = new cm_manualAddExtendTicks(arm);
+    manualRotateBattery = new cm_manualRotateBattery(arm);
+    manualRotateCompressor = new cm_manualRotateCompressor(arm);
+    manualResetAddArm = new cm_manualResetAddArm(arm);
+    autoDoubleScoreBalance = new ca_autoDoubleScoreBalance(drivetrain, arm, gripper);
+
+    // Robot
+    setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide);
+    setSideOrientationBattery = new ca_setSideOrientation(ArmSideOrientation.BatterySide);
+
+    setGamePieceTypeCubeTrue = new cm_setGamePieceType("cube");
+    setGamePieceTypeCubeFalse = new cm_setGamePieceType("cone");
+
+    // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
-    forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
+
+    // Gripper
     gripperOpen = new cm_GripperOpen(gripper);
     gripperClose = new cm_GripperClose(gripper);
 
     // Put the drive train sendable values onto the networktables / dashboard
     SmartDashboard.putData(drivetrain);
-    SmartDashboard.putData(armextension);
-    SmartDashboard.putData(armrotation);
+    SmartDashboard.putData(arm);
     SmartDashboard.putData(gripper);
 
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-        Constants.dtmaxspeed, Constants.dtmaxaccel);
+    // Auto Bench-Test
 
-    Trajectory trajectoryFront = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(0, 0.25),
-            new Translation2d(0, 0.5)),
-        // new Translation2d(xn, yn),
-        new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
+    autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryFront,
+        TrajectoryContainer.trajFrontEnd);
 
-    Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(0, -0.25),
-            new Translation2d(0, -0.5)),
-        // new Translation2d(xn, yn),
-        new Pose2d(0, -1, Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
+    // Going Backword-mobility.
 
-    autoTrajectory = new ca_autoTrajectoryKinematic(drivetrain, trajectoryFront);
-    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, -135.0); // testing 90 degree Turn;
-    autoSquare = new ca_driveAutoSquare(drivetrain, trajectoryFront);
+    forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
+
+    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj,
+        TrajectoryContainer.pigeontrajEnd);
+
+    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryMobility,
+        TrajectoryContainer.trajMobilityEnd);
+
+    driveStraight = new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
+        TrajectoryContainer.trajMobilityEnd, 0.0);
+
+    autoStraightPID = new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.pigeontraj,
+        TrajectoryContainer.pigeontrajEnd, 0.0);
+
+    // Be able to turn
+
+    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, -110.0); // testing 90 degree Turn;
+
+    autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 270.0); // testing 90 degree Turn;
+
+    // Make a point & go Backword-mobility.
+
+    autoScore = new cg_autoScore(drivetrain, arm, gripper);
+
+    // Make 2 point and go Backword-mobility.
+
+    autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
+
+    // Do autobalancing.
+
+    autoBalance = new ca_autoBalance(drivetrain);
+
+    // Scores middle and balances.
+
+    autoScoreAndBalance = new cg_autoScoreBalance(drivetrain, arm, gripper);
+
+    // Go backword and do autobalancing.
+
+    // backwordAndAutoBalancing = new SequentialCommandGroup(autoTrajectory,
+    // autoBalance);
+
+    // Go in a simple L
+
+    autoSimpleL = new ca_doSimpleL(drivetrain);
+
+    // Go in a simple L shape and do auto balancing.
+
+    // doLAndAutoBalancing = new SequentialCommandGroup(autoSimpleL, autoBalance);
+
+    // Make 2 points and go in a simple L shape and do auto balancing.
+
+    // autoDoubleScoreAndBalancing = new SequentialCommandGroup(autoDoubleScore,
+    // autoSimpleL);
+
+    // Follow L Path using point-map.
+
+    // Make 2 points and go in a simple L shape using point map and do auto
+    // balancing.
+
+    // Add encoder for real length measures to auto.
+
+    // Add PID to auto.
 
     // Configure the trigger bindings
     configureBindings();
@@ -139,16 +234,44 @@ public class RobotContainer {
     // Makes controller driving the default command
     drivetrain.setDefaultCommand(driveWithJoysticks);
 
-    // Creates command to move the arm in and out
-    new RunCommand(() -> armextension.extendArm(operator.getRightX()));
+    // Run arm movement combo and restart if it end
+    arm.setDefaultCommand(armMovementCombo);
 
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    operator.b().whileTrue(armRotationForward);
-    operator.x().whileTrue(armRotationBackward);
 
-    operator.start().whileTrue(armRotationPreset0);
+    // Arduino Controller Button Mapping
+    // Arm Movement
+    new JoystickButton(m_ArduinoController, Constants.groundButtonID).whileTrue(setArmPositionLow);
+    new JoystickButton(m_ArduinoController, Constants.middleButtonID).whileTrue(setArmPositionMiddle);
+    new JoystickButton(m_ArduinoController, Constants.highButtonID).whileTrue(setArmPositionHigh);
+    // manual EXTENSION
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(manualAddExtendTicks);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(manualDecreaseExtendTicks);
+    // manual ROTATION
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(manualRotateCompressor);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(manualRotateBattery);
+    // reset manual extension & rotation
+    new JoystickButton(m_ArduinoController, Constants.highButtonID).onFalse(manualResetAddArm);
+    new JoystickButton(m_ArduinoController, Constants.middleButtonID).onFalse(manualResetAddArm);
+    new JoystickButton(m_ArduinoController, Constants.groundButtonID).onFalse(manualResetAddArm);
 
-    operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
+    // Toggle Switches
+    new JoystickButton(m_ArduinoController, Constants.gamePieceID).onTrue(setGamePieceTypeCubeTrue)
+        .onFalse(setGamePieceTypeCubeFalse);
+
+    new JoystickButton(m_ArduinoController, Constants.robotSideID).onTrue(setSideOrientationCompressor)
+        .onFalse(setSideOrientationBattery);
+
+    new JoystickButton(m_ArduinoController, Constants.gripperID).whileTrue(gripperOpen).whileFalse(gripperClose);
+
+    // operator.b().toggleOnTrue(Commands.startEnd(gripper::gripOpen,
+    // gripper::gripClose, gripper));
+
+    // new JoystickButton(m_JoystickLeft, 1).toggleOnTrue(autoBalance);
+
+
+    // May help with pickup button?
+    // operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
 
   }
 
@@ -159,28 +282,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    // Trajectory
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-        Constants.dtmaxspeed, Constants.dtmaxaccel);
 
-    Trajectory trajectoryFront = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(0, 0.25),
-            new Translation2d(0, 0.5)),
-        // new Translation2d(xn, yn),
-        new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
+    // return autoBalance.withTimeout(15);
+    return autoScoreAndBalance;
 
-    Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(0, -0.25),
-            new Translation2d(0, -0.5)),
-        // new Translation2d(xn, yn),
-        new Pose2d(0, -1, Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
 
+  /* Need to rework
+  
     // Generic Auto
     SequentialCommandGroup auto = new SequentialCommandGroup(new WaitCommand(0));
 
@@ -224,35 +332,18 @@ public class RobotContainer {
       }
 
     }
-
-    // Fill in once we have more info/constants
-    /*
-     * RamseteCommand ramseteCommand =
-     * new RamseteCommand(
-     * trajectory,
-     * drivetrain::getPose,
-     * new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-     * new SimpleMotorFeedforward(
-     * Constants.ksVolts,
-     * Constants.kvVoltSecondsPerMeter,
-     * Constants.kaVoltSecondsSquaredPerMeter),
-     * Constants.kDriveKinematics,
-     * drivetrain::getWheelSpeeds,
-     * new PIDController(Constants.kPDriveVel, 0, 0),
-     * new PIDController(Constants.kPDriveVel, 0, 0),
-     * // RamseteCommand passes volts to the callback
-     * drivetrain::tankDriveVolts,
-     * drivetrain);
-     * 
-     * drivetrain.resetOdometry(trajectory.getInitialPose());
-     * 
-     * return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
-     */
-
-    return auto;
+    
+  */
+  // return auto;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;
   }
 
+  // Sendable override
+  // Anything put here will be added to the network tables and thus can be added
+  // to the dashboard / consumed by the LED controller
+  public void initSendable(SendableBuilder builder) {
+
+  }
 }

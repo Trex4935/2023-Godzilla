@@ -13,21 +13,22 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-// Going straight autonomous using only trajectory, kinematics and timer.
-public class ca_autoTrajectoryKinematic extends CommandBase {
+// Going straight autonomous using only trajectory, kinematics, gyro and timer.
+public class ca_autoTrajectoryKinematicWithGyro extends CommandBase {
   Timer timer;
   Trajectory traj;
   State currState;
   Drivetrain dt;
-  Double end;
+  Double end, trgtAng;
   
   /** Creates a new cm_autoTrajectory. */
-  public ca_autoTrajectoryKinematic(Drivetrain drivetrain, Trajectory trajectory, Double endPoint) {
+  public ca_autoTrajectoryKinematicWithGyro(Drivetrain drivetrain, Trajectory trajectory, Double endPoint, Double targetAngle) {
     timer = new Timer();
     traj = trajectory;
     currState =  new State(0,0,0, new Pose2d(new Translation2d(0,0),new Rotation2d(0)),0);
     dt = drivetrain;
     end = endPoint;
+    trgtAng = targetAngle;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);
   }
@@ -43,8 +44,10 @@ public class ca_autoTrajectoryKinematic extends CommandBase {
   public void execute() {
 
     currState = traj.sample(timer.get());
-    Double time = timer.get();
-    dt.driveTankWithStateKinematicTraj( currState, end,  time);
+    Double time  = timer.get();
+    dt.setTrajPos(currState);
+    dt.setTrajSpeed(currState);
+    dt.driveWithStraightWithGyro(currState.velocityMetersPerSecond, trgtAng);
 
 
   }

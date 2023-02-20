@@ -22,7 +22,7 @@ public class Falcon {
         public double neutralDeadband = 0.04;
 
         // Motor ramp when using open loop
-        public double openLoopRamp = 0.75;
+        public double openLoopRamp = 0.1;
 
         // Set motor limits
         //// normal output forward and reverse = 0% ... i.e. stopped
@@ -97,6 +97,7 @@ public class Falcon {
         falcon.configForwardSoftLimitThreshold(config.forwardSoftLimit);
         falcon.configReverseSoftLimitThreshold(config.reverseSoftLimit);
 
+        falcon.setSelectedSensorPosition(0);
         // Return the configured motor object
         return falcon;
     }
@@ -169,7 +170,7 @@ public class Falcon {
         motorObject.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0,
                 kTimeout);
         motorObject.configNeutralDeadband(0.001, kTimeout);
-        motorObject.configOpenloopRamp(1);
+        motorObject.configOpenloopRamp(0);
 
         /* Set Motion Magic gains in slot0 - see documentation */
         motorObject.selectProfileSlot(0, 0);

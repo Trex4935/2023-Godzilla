@@ -4,33 +4,31 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Gripper;
+import frc.robot.Constants;
+import frc.robot.extensions.ArmSideOrientation;
 
-public class cm_GripperOpen extends CommandBase {
+public class ca_setSideOrientation extends CommandBase {
+  ArmSideOrientation m_armSide;
+  boolean m_isBattery;
 
-  private final Gripper gripper;
-  private final Timer timer;
-
-  /** Creates a new cm_GripperClose. */
-  public cm_GripperOpen(Gripper grip) {
-    gripper = grip;
-    timer = new Timer();
+  /** Creates a new ca_setSideOrientation. */
+  public ca_setSideOrientation(ArmSideOrientation armSide) {
+    m_armSide = armSide;
+    
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(grip);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    gripper.gripOpen();
+    Constants.switchingSides = true;
+    Constants.selectedArmSideOrientation = m_armSide;
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +38,6 @@ public class cm_GripperOpen extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 1.0;
+    return true;
   }
 }

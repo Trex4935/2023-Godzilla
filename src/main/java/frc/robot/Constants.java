@@ -104,6 +104,9 @@ public final class Constants {
 
   public static double tempArmDistance = 10;
 
+  // Gripper Constants
+  public static boolean gripperClosed = true;
+
   // DRIVER/CONTROLLER Constants
 
   // Driver Constants

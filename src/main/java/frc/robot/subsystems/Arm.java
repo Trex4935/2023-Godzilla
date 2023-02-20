@@ -88,7 +88,7 @@ public class Arm extends SubsystemBase {
       if (batterySideLimitSwitch.get()) {
         armRotationMotor.stopMotor();
       } else {
-        armRotationMotor.set(0.4);
+        armRotationMotor.set(-0.4);
       }
     }
     // If compressorSide, move to limit switch
@@ -96,7 +96,7 @@ public class Arm extends SubsystemBase {
       if (compressorSideLimitSwitch.get()) {
         stopRotationMotor();
       } else {
-        armRotationMotor.set(-0.4);
+        armRotationMotor.set(0.4);
       }
     }
   }

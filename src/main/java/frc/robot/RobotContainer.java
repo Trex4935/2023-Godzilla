@@ -41,8 +41,7 @@ import frc.robot.commands.cm_manualRotateBattery;
 import frc.robot.commands.cm_manualRotateCompressor;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.commands.cm_setSpeedLimit;
-import frc.robot.commands.negativeSpeed;
-import frc.robot.commands.positiveSpeed;
+
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -103,9 +102,6 @@ public class RobotContainer {
   // private final SequentialCommandGroup doLAndAutoBalancing;
   // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
 
-  private final positiveSpeed pSpeed;
-  private final negativeSpeed nSpeed;
-
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.leftJoystick);
   private final Joystick m_JoystickRight = new Joystick(Constants.rightJoystick);
@@ -136,9 +132,6 @@ public class RobotContainer {
     manualRotateCompressor = new cm_manualRotateCompressor(arm);
     manualResetAddArm = new cm_manualResetAddArm(arm);
     autoDoubleScoreBalance = new ca_autoDoubleScoreBalance(drivetrain, arm, gripper);
-
-    pSpeed = new positiveSpeed(arm);
-    nSpeed = new negativeSpeed(arm);
 
     // Robot
     setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide);
@@ -260,11 +253,8 @@ public class RobotContainer {
     new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(manualAddExtendTicks);
     new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(manualDecreaseExtendTicks);
     // manual ROTATION
-  //  new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(manualRotateCompressor);
-  //  new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(manualRotateBattery);
-// ____________________________________________
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(nSpeed);
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(pSpeed);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(manualRotateCompressor);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(manualRotateBattery);
 
 
     // reset manual extension & rotation

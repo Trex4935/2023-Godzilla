@@ -13,7 +13,6 @@ import frc.robot.Constants;
 public class ca_ArmMovementCombo extends CommandBase {
 
   private final Arm m_arm;
-
   /** Creates a new ca_ArmMovementCombo. */
   public ca_ArmMovementCombo(Arm arm) {
     m_arm = arm;
@@ -33,6 +32,11 @@ public class ca_ArmMovementCombo extends CommandBase {
     // Suppresses the ArmMovementCombo if the arm is in the RedZone.
     if (Constants.inRedZone || Arm.redZoneLatch || Constants.switchingSides) {
       Constants.selectedArmState = ArmPosition.CARRY;
+    }
+
+    // If gripperClosed is FALSE, then set state to attached
+    if (!Constants.gripperClosed) {
+      Constants.selectedArmState = ArmPosition.ATTACHED;
     }
 
     if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide) {
@@ -61,7 +65,7 @@ public class ca_ArmMovementCombo extends CommandBase {
 
         case ATTACHED:
           // System.out.println("ATTACHED-C");
-          m_arm.setArmRotationSM(Constants.ArmAttachedAngleBattery);
+          m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
           m_arm.retractArm();
           break;
 
@@ -97,7 +101,7 @@ public class ca_ArmMovementCombo extends CommandBase {
 
         case ATTACHED:
           // System.out.println("DEFAULT-B");
-          m_arm.setArmRotationSM(Constants.ArmAttachedAngleCompressor);
+          m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
           m_arm.retractArm();
           break;
 

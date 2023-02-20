@@ -99,7 +99,7 @@ public class Arm extends SubsystemBase {
     }
     // if not latched, then if limit switch is hit, STOP MOTOR.
     else if (getBatteryLimitSwitch() || getCompressorLimitSwitch()) {
-      armRotationMotor.stopMotor();
+      // armRotationMotor.stopMotor();
     }
     // if not latched or hit limit switch, MOVE MOTOR.
     else {

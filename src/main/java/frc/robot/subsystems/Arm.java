@@ -123,7 +123,6 @@ public class Arm extends SubsystemBase {
       }
 
     }
-  
     // if not latched or hit limit switch, MOVE MOTOR.
     else {
       armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);

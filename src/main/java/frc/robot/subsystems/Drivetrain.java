@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import frc.robot.Constants;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 //Gyro Imports
@@ -31,7 +34,7 @@ import frc.robot.Constants.AutoMovementConstraints;
 import frc.robot.Constants.TrajectoryConstants;
 import frc.robot.extensions.Helper;
 import frc.robot.extensions.PID;
-
+import frc.robot.Constants.direction;
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -58,6 +61,7 @@ public class Drivetrain extends SubsystemBase {
     // PID
     PIDController drivePID;
 
+
     // Declaring Gyro Objects
     public static AHRS ahrs;
 
@@ -81,6 +85,7 @@ public class Drivetrain extends SubsystemBase {
 
     //
 
+
     // Simulate
     public double zSimAngle;
 
@@ -88,6 +93,8 @@ public class Drivetrain extends SubsystemBase {
 
         trajPos = 0;
         trajSpeed = 0;
+
+
         // Creates new motor objects and configures the talons in a separate method
         FLMotor = Talon.createDefaultTalon(Constants.FLMotorID);
         FRMotor = Talon.createDefaultTalon(Constants.FRMotorID);
@@ -422,6 +429,40 @@ public class Drivetrain extends SubsystemBase {
 
         }
         return false;
+
+    public direction[] calculateTrajEnum(Translation2d goal) {
+        direction[] pointMap = {};
+        int start = 1;
+
+        // Turn
+        if (goal.getX() < 0) {
+            pointMap[0] = direction.LEFT;
+        } else if (goal.getX() > 0) {
+            pointMap[0] = direction.RIGHT;
+        } else {
+            start = 0;
+        }
+
+        // Front
+        int j = 0;
+        for (int i = start; i < goal.getX(); i++) {
+            pointMap[i] = direction.FRONT;
+            j = i;
+        }
+        // Turn
+        if (goal.getY() < 0) {
+            pointMap[j] = direction.LEFT;
+        } else if (goal.getY() > 0) {
+            pointMap[j] = direction.RIGHT;
+        } else {
+            start = j;
+        }
+
+        for (int i = start; i < goal.getY(); i++) {
+            pointMap[i] = direction.FRONT;
+        }
+
+        return pointMap;
     }
 
     // Sendable override

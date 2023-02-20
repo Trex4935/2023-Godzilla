@@ -10,6 +10,7 @@ import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Arm;
 // Commands
 import frc.robot.commands.ca_ArmMovementCombo;
+import frc.robot.Constants.direction;
 import frc.robot.commands.ca_ForwardHalfSpeed;
 import frc.robot.commands.ca_autoBalance;
 import frc.robot.commands.ca_autoDoubleScoreBalance;
@@ -46,8 +47,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 // Robot Base Class
 public class RobotContainer {
@@ -217,7 +221,7 @@ public class RobotContainer {
 
     // Add encoder for real length measures to auto.
 
-    // Add PID to auo.
+    // Add PID to auto.
 
     // Configure the trigger bindings
     configureBindings();
@@ -265,6 +269,10 @@ public class RobotContainer {
 
     // new JoystickButton(m_JoystickLeft, 1).toggleOnTrue(autoBalance);
 
+
+    // May help with pickup button?
+    // operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
+
   }
 
   /**
@@ -277,6 +285,56 @@ public class RobotContainer {
 
     // return autoBalance.withTimeout(15);
     return autoScoreAndBalance;
+
+
+  /* Need to rework
+  
+    // Generic Auto
+    SequentialCommandGroup auto = new SequentialCommandGroup(new WaitCommand(0));
+
+    direction[] autoPath = null;
+    // calculated path
+    autoPath = drivetrain.calculateTrajEnum(new Translation2d(6, -4));
+
+    // Construct auto
+    for (int index = 0; index < autoPath.length; index++) {
+      switch (autoPath[index]) {
+        case FRONT:
+
+          // Going Forward
+          auto.addCommands(new ca_autoTrajectoryKinematic(drivetrain, trajectoryFront));
+
+          break;
+
+        case BACK:
+
+          // Going Back
+          auto.addCommands(new ca_autoTrajectoryKinematic(drivetrain, trajectoryBack));
+
+          break;
+
+        case RIGHT:
+
+          // Going Right
+          auto.addCommands(new ca_autoTurnKinematic(drivetrain, -90.0));
+
+          break;
+
+        case LEFT:
+
+          // Going Left
+          auto.addCommands(new ca_autoTurnKinematic(drivetrain, 90.0));
+
+          break;
+
+        default:
+          break;
+      }
+
+    }
+    
+  */
+  // return auto;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

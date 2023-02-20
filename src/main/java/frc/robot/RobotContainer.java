@@ -263,8 +263,8 @@ public class RobotContainer {
   //  new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(manualRotateCompressor);
   //  new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(manualRotateBattery);
 // ____________________________________________
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(pSpeed);
-    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(nSpeed);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(nSpeed);
+    new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(pSpeed);
 
 
     // reset manual extension & rotation

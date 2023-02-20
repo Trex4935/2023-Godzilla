@@ -34,7 +34,6 @@ public final class Constants {
   public static String isBatterySide = "battery";
   public static boolean switchingSides = false;
 
-
   // DRIVETRAIN Constants
 
   // Wheel ID Constants
@@ -52,7 +51,7 @@ public final class Constants {
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
-  public static  double dtmaxspeed = 0.75; // Speed Limit
+  public static double dtmaxspeed = 0.75; // Speed Limit
 
   // ARM ROTATION Constants
 
@@ -78,7 +77,7 @@ public final class Constants {
   public static double ArmCarryAngleBattery = 10;
 
   public static final double ArmCarryAngleCompressor = 308;
-  public static final double ArmHighAngleCompressor = 240; 
+  public static final double ArmHighAngleCompressor = 240;
   public static final double ArmMiddleAngleCompressor = 250;
   public static final double ArmLowAngleCompressor = 310;
 
@@ -92,16 +91,21 @@ public final class Constants {
   // Units = Inches (Converting to ticks)
   // Math: 1 in. = -5000 ticks
   public static int inchPerExtentionTicks = -5000;
-  /** 33 in -> -165000 ticks */ 
-  public static final double ArmHighDistance = -165000; 
+  /** 33 in -> -165000 ticks */
+  public static final double ArmHighDistance = -165000;
   /** 10 in -> -50000 */
-  public static final double ArmMiddleDistance = -90000; 
+  public static final double ArmMiddleDistance = -90000;
   /** 20 in -> -100000 */
-  public static final double ArmLowDistance = -140000; 
+  public static final double ArmLowDistance = -140000;
   /** 1 in -> -5000 */
-  public static final double ArmCarryDistance = -5000; 
+  public static final double ArmAttachedAngleDistance = 0;
+  
+  public static final double ArmCarryDistance = -5000;
 
   public static double tempArmDistance = 10;
+
+  // Gripper Constants
+  public static boolean gripperClosed = true;
 
   // DRIVER/CONTROLLER Constants
 
@@ -127,7 +131,7 @@ public final class Constants {
   public static final int RightJoystickX = 4;
   /** Front and back */
   public static final int RightJoystickY = 5;
-  
+
   public static final int LeftTrigger = 2;
   public static final int RightTrigger = 3;
 
@@ -156,6 +160,9 @@ public final class Constants {
 
   public static final TrapezoidProfile.Constraints thetaConstraints = new Constraints(Constants.dtmaxspeed,
       Constants.dtmaxaccel);
+  public static final double ArmAttachedAngleCompressor = 0;
+  public static final double ArmAttachedAngleBattery = 0;
+  public static final double ArmAttachedDistance = 0;
 
   // Subject to change
   public static class TrajectoryConstants {
@@ -172,7 +179,6 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
-  
   public static double degreesPerRotationTicks = 1;
   /** Adds extension ticks */
   public static double addExtend = 0;
@@ -182,5 +188,4 @@ public final class Constants {
   public static double addRotate = 0;
 
   public static double speedLimit = 0.75;
-
 }

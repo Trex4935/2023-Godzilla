@@ -13,7 +13,6 @@ import frc.robot.Constants;
 public class ca_ArmMovementCombo extends CommandBase {
 
   private final Arm m_arm;
-
   /** Creates a new ca_ArmMovementCombo. */
   public ca_ArmMovementCombo(Arm arm) {
     m_arm = arm;
@@ -35,6 +34,11 @@ public class ca_ArmMovementCombo extends CommandBase {
       Constants.selectedArmState = ArmPosition.CARRY;
     }
 
+    // If gripperClosed is FALSE, then set state to attached
+    if (!Constants.gripperClosed && m_arm.getArmRetractedLimitSwitch() && Constants.selectedArmState == ArmPosition.CARRY) {
+      Constants.selectedArmState = ArmPosition.ATTACHED;
+    }
+
     if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide) {
       /**
        * Switch case runs different height presets when selectedArmPosition changes.
@@ -44,7 +48,7 @@ public class ca_ArmMovementCombo extends CommandBase {
           // System.out.println("HIGH-C");
           m_arm.setArmRotationSM(Constants.ArmHighAngleBattery);
           m_arm.setArmExtensionMM(Constants.ArmHighDistance);
-      
+
           break;
 
         case MIDDLE:
@@ -59,10 +63,17 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
+        case ATTACHED:
+          // System.out.println("ATTACHED-C");
+          m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
+          m_arm.retractArm();
+          break;
+
         default: // Carry Position is default
           // System.out.println("DEFAULT-C");
           m_arm.setArmRotationSM(Constants.ArmCarryAngleBattery);
           m_arm.retractArm();
+
       }
     } else {
       switch (Constants.selectedArmState) {
@@ -88,11 +99,17 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
+        case ATTACHED:
+          // System.out.println("DEFAULT-B");
+          m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
+          m_arm.retractArm();
+          break;
+
         default: // Carry Position is default when side switch is flipped.
           // System.out.println("DEFAULT-B");
           m_arm.setArmRotationSM(Constants.ArmCarryAngleCompressor);
           m_arm.retractArm();
-          
+
       }
     }
 

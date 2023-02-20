@@ -1,0 +1,16 @@
+----------------------------------------------------------
+If you need help with 2023-Godzilla:
+----------------------------------------------------------
+
+Motor Orientations:
+Arm Rotation Motor:
+    Battery = NEGATIVE Speed
+    Compressor = POSITIVE Speed
+
+----------------------------------------------------------
+
+Robot Orientations:
+Battery = "Front"
+Compressor = "Back"
+
+----------------------------------------------------------

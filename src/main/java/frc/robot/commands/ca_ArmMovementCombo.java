@@ -35,7 +35,7 @@ public class ca_ArmMovementCombo extends CommandBase {
     }
 
     // If gripperClosed is FALSE, then set state to attached
-    if (!Constants.gripperClosed) {
+    if (!Constants.gripperClosed && m_arm.getArmRetractedLimitSwitch() && Constants.selectedArmState == ArmPosition.CARRY) {
       Constants.selectedArmState = ArmPosition.ATTACHED;
     }
 

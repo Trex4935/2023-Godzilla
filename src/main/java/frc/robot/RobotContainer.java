@@ -176,7 +176,7 @@ public class RobotContainer {
 
     // Be able to turn
 
-    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, -110.0); // testing 90 degree Turn;
+    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, -110.0); // testing 90 degree Turn;
 
     autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 270.0); // testing 90 degree Turn;
 

@@ -26,7 +26,13 @@ import frc.robot.extensions.SparkMax;
 
 public class Arm extends SubsystemBase {
 
-  // Arm Extension
+  public static final String setArmExtensionMM = null;
+
+  private static final boolean LimitSwitchTripped = false;
+
+  private static final String LimitSwitchNotTripped = null;
+
+// Arm Extension
   private WPI_TalonFX armExtensionMotor;
 
   DigitalInput armRetractedLimitSwitch;
@@ -73,6 +79,20 @@ public class Arm extends SubsystemBase {
   /** Stops the Rotation Motor */
   public void stopRotationMotor() {
     armRotationMotor.stopMotor();
+  }
+
+  // Rotates the arm towards the chassis until limit switch is tripped
+  public void armRotationToLimit(){
+    // If true, stop motor
+    if (LimitSwitchTripped) {
+      armRotationMotor.stopMotor();
+    }
+    // If false, keep rotating
+    else (LimitSwitchNotTripped) {
+      armRotationMotor
+    }
+
+
   }
 
   /** Using MotionMagic set the arm to a given position */

@@ -44,7 +44,7 @@ public class ca_ArmMovementCombo extends CommandBase {
           // System.out.println("HIGH-C");
           m_arm.setArmRotationSM(Constants.ArmHighAngleBattery);
           m_arm.setArmExtensionMM(Constants.ArmHighDistance);
-      
+
           break;
 
         case MIDDLE:
@@ -59,10 +59,17 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
+        case ATTACHED:
+          // System.out.println("ATTACHED-C");
+          m_arm.setArmRotationSM(Constants.ArmAttachedAngleBattery);
+          m_arm.retractArm();
+          break;
+
         default: // Carry Position is default
           // System.out.println("DEFAULT-C");
           m_arm.setArmRotationSM(Constants.ArmCarryAngleBattery);
           m_arm.retractArm();
+
       }
     } else {
       switch (Constants.selectedArmState) {
@@ -88,11 +95,17 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
+        case ATTACHED:
+          // System.out.println("DEFAULT-B");
+          m_arm.setArmRotationSM(Constants.ArmAttachedAngleCompressor);
+          m_arm.retractArm();
+          break;
+
         default: // Carry Position is default when side switch is flipped.
           // System.out.println("DEFAULT-B");
           m_arm.setArmRotationSM(Constants.ArmCarryAngleCompressor);
           m_arm.retractArm();
-          
+
       }
     }
 

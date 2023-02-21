@@ -11,7 +11,7 @@ public enum ArmPosition {
     HIGH,
     MIDDLE,
     LOW,
-    ATTACHED,
+    RAMMING,
     SHELF
 
 }

@@ -26,12 +26,6 @@ import frc.robot.extensions.SparkMax;
 
 public class Arm extends SubsystemBase {
 
-  public static final String setArmExtensionMM = null;
-
-  private static final boolean LimitSwitchTripped = false;
-
-  private static final String LimitSwitchNotTripped = null;
-
 // Arm Extension
   private WPI_TalonFX armExtensionMotor;
 
@@ -109,7 +103,7 @@ public class Arm extends SubsystemBase {
   /** Using SmartMotion to set the arm to a given angle */
   public void setArmRotationSM(double armRotationTicks) {
     // IF in REDZONE or not retracted, ENGAGE LATCH.
-    if (armRedZone() && getArmRetractedLimitSwitch() == false) {
+    if (armRedZone() && !getArmRetractedLimitSwitch()) {
       redZoneLatch = true;
     }
 
@@ -261,6 +255,10 @@ public class Arm extends SubsystemBase {
     }
 
   }
+
+  public boolean getLatchEngaged(){
+    return redZoneLatch;
+  }
   /*
    * ====MATH====
    * Ticks per rotation, 42
@@ -322,6 +320,8 @@ public class Arm extends SubsystemBase {
     builder.addStringProperty("isBatterySide", this::getArmSideOrientation, null);
     builder.addStringProperty("isCube", this::getIsCube, null);
     builder.addStringProperty("isAutonomous", this::getIsAutonomous, null);
+
+    builder.addBooleanProperty("RedZone Latch Engaged", this::getLatchEngaged, null);
   }
 
   @Override

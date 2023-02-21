@@ -27,7 +27,7 @@ public class ca_setSideOrientation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Constants.switchingSides = true;
+    Constants.switchingSides = !Constants.switchingSides;
     Constants.selectedArmSideOrientation = m_armSide;
   }
 

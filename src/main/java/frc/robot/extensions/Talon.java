@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 /** Add your docs here. */
 public class Talon {
 
-    private static final int Timeout = 20;
+    // private static final int Timeout = 20;
 
     public static class DefaultConfiguration {
 

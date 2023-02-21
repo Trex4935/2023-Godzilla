@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 //Gyro Imports
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
@@ -30,8 +29,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.AutoMovementConstraints;
 import frc.robot.Constants.TrajectoryConstants;
 import frc.robot.extensions.Helper;
-import frc.robot.extensions.PID;
-
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */

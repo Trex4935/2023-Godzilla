@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.AutoMovementConstraints;
 import frc.robot.subsystems.Drivetrain;
 
 public class ca_autoTurnKinematicGyro extends CommandBase {
@@ -47,7 +46,7 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
 
     dt.driveWithController(leftSpeed, rightSpeed);
     // dt.simulateGyro(leftSpeed, rightSpeed, timer);
-    Double error = eAngle.doubleValue() - dt.getZAngleConverted();
+    // Double error = eAngle.doubleValue() - dt.getZAngleConverted();
     // System.out.println("Time: " + timer.get() + " Velocity: " + chassisSpeed + " Omega: " + comega +        " Angle: " + dt.getZAngleConverted() + " AngleTarget: " + eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: "+ rightSpeed + " Error: " + error);
   }
 

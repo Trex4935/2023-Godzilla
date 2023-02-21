@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 //Gyro Imports
@@ -46,11 +45,12 @@ public class Drivetrain extends SubsystemBase {
     MotorControllerGroup leftMotors;
     MotorControllerGroup rightMotors;
 
+    // Declare diff drive
     DifferentialDrive diffdrive;
 
-    double trajPos;
-
-    double trajSpeed;
+    // Declaring encoders
+    private static Encoder leftEncoder;
+    private static Encoder rightEncoder;
 
     // PID
     PIDController drivePID;
@@ -63,20 +63,14 @@ public class Drivetrain extends SubsystemBase {
 
     // Kinemtatics
     DifferentialDriveKinematics kin;
+    double trajPos;
+    double trajSpeed;
 
     //
     private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 0.72);
 
-    private final Encoder m_leftEncoder = new Encoder(1, 2);
-    private final Encoder m_rightEncoder = new Encoder(3, 4);
-
     private final PIDController m_leftPIDController = new PIDController(0, 0, 0);
     private final PIDController m_rightPIDController = new PIDController(0, 0, 0);
-
-    private final MotorControllerGroup m_leftGroup = new MotorControllerGroup(leftMotors);
-    private final MotorControllerGroup m_rightGroup = new MotorControllerGroup(rightMotors);
-
-    //
 
     // Simulate
     public double zSimAngle;
@@ -85,6 +79,7 @@ public class Drivetrain extends SubsystemBase {
 
         trajPos = 0;
         trajSpeed = 0;
+
         // Creates new motor objects and configures the talons in a separate method
         FLMotor = Talon.createDefaultTalon(Constants.FLMotorID);
         FRMotor = Talon.createDefaultTalon(Constants.FRMotorID);
@@ -101,13 +96,15 @@ public class Drivetrain extends SubsystemBase {
         leftMotors.setInverted(true);
         rightMotors.setInverted(false);
         
+        // Create differential drive object
         diffdrive = new DifferentialDrive(leftMotors, rightMotors);
-
         diffdrive.setMaxOutput(m_MaxSpeed);
 
-        // in Inches
-        m_leftEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171));
-        m_rightEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171)); // 0.00230097
+        // Create encoders and set distance values
+        leftEncoder = new Encoder(1, 2);
+        rightEncoder = new Encoder(3, 4);
+        leftEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171));
+        rightEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171)); // 0.00230097
         // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
 
         // Creating gyro object
@@ -208,8 +205,8 @@ public class Drivetrain extends SubsystemBase {
 
     /** Resets both encoders to 0 */
     public void resetEncoders() {
-        m_leftEncoder.reset();
-        m_rightEncoder.reset();
+        leftEncoder.reset();
+        rightEncoder.reset();
     }
 
     /** Move the robot based on its pitch/y axis */
@@ -227,32 +224,32 @@ public class Drivetrain extends SubsystemBase {
 
     /** Gets the amount of ticks since reset/init */
     public double getLeftEncoderTicks() {
-        return m_leftEncoder.get();
+        return leftEncoder.get();
     }
 
     /** Gets the amount of ticks since reset/init */
     public double getRightEncoderTicks() {
-        return -m_rightEncoder.get();
+        return -rightEncoder.get();
     }
 
     /** Gets the distance since reset/init based on setDistancePerPulse */
     public double getLeftEncoderDistance() {
-        return m_leftEncoder.getDistance();
+        return leftEncoder.getDistance();
     }
 
     /** Gets the distance since reset/init based on setDistancePerPulse */
     public double getRightEncoderDistance() {
-        return m_rightEncoder.getDistance();
+        return rightEncoder.getDistance();
     }
 
     /** Gets the speed based on setDistancePerPulse */
     public double getLeftEncoderSpeed() {
-        return m_leftEncoder.getRate();
+        return leftEncoder.getRate();
     }
 
     /** Gets the speed based on setDistancePerPulse */
     public double getRightEncoderSpeed() {
-        return m_rightEncoder.getRate();
+        return rightEncoder.getRate();
     }
 
     /** Converts inches to ticks for motors */
@@ -391,11 +388,11 @@ public class Drivetrain extends SubsystemBase {
         final double leftFeedforward = m_feedforward.calculate(leftSpeedWheel);
         final double rightFeedforward = m_feedforward.calculate(-rightSpeedWheel);
 
-        final double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getRate(), leftSpeedWheel); // is encoder
+        final double leftOutput = m_leftPIDController.calculate(leftEncoder.getRate(), leftSpeedWheel); // is encoder
                                                                                                           // in ticks
                                                                                                           // per/sec or
                                                                                                           // m/sec
-        final double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getRate(), rightSpeedWheel);
+        final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), rightSpeedWheel);
         FLMotor.setVoltage(0.0 + leftFeedforward);
         FRMotor.setVoltage(0.0 + rightFeedforward);
         MLMotor.setVoltage(0.0 + leftFeedforward);
@@ -405,7 +402,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public Boolean reachDriveTarget(Double targetPosition) {
-        double averageTickValue = (m_leftEncoder.get() + m_rightEncoder.get()) / 2;
+        double averageTickValue = (leftEncoder.get() + rightEncoder.get()) / 2;
 
         if (averageTickValue >= 10000) { // if tick value is greater than or equal to 10000, stop both motors
             leftMotors.stopMotor();

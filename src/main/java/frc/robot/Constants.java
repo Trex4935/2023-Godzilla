@@ -98,7 +98,7 @@ public final class Constants {
   /** 20 in -> -100000 */
   public static final double ArmLowDistance = -140000;
   /** 1 in -> -5000 */
-  public static final double ArmAttachedAngleDistance = 0;
+  public static final double ArmRammingDistance = 0;
   
   public static final double ArmCarryDistance = -5000;
 
@@ -160,9 +160,6 @@ public final class Constants {
 
   public static final TrapezoidProfile.Constraints thetaConstraints = new Constraints(Constants.dtmaxspeed,
       Constants.dtmaxaccel);
-  public static final double ArmAttachedAngleCompressor = 0;
-  public static final double ArmAttachedAngleBattery = 0;
-  public static final double ArmAttachedDistance = 0;
 
   // Subject to change
   public static class TrajectoryConstants {

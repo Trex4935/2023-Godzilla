@@ -421,7 +421,6 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
-        builder.addFloatArrayProperty("Yaw, Pitch, and Roll Values", this::PrincipalAxisValues, null);
         // Gyro values
         builder.addFloatProperty("X/Roll", this::getXAngle, null);
         builder.addFloatProperty("Y/Pitch", this::getYAngle, null);

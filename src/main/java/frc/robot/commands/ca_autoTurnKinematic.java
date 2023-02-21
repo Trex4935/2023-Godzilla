@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.AutoMovementConstraints;
 import frc.robot.subsystems.Drivetrain;
 
 public class ca_autoTurnKinematic extends CommandBase {
@@ -15,7 +14,7 @@ public class ca_autoTurnKinematic extends CommandBase {
   Drivetrain dt;
   Double eAngle;
 
-  public ca_autoTurnKinematic(Drivetrain drivetrain, Double endAngle) {
+  public ca_autoTurnKinematic(Drivetrain drivetrain, Double startAngle, Double endAngle) {
     timer = new Timer();
     dt = drivetrain;
     eAngle = endAngle;
@@ -29,7 +28,9 @@ public class ca_autoTurnKinematic extends CommandBase {
   public void initialize() {
     timer.start();
 
-    // System.out.println("Time: "+ timer.get() + " Velocity: " + 0 + " Omega: " + 0 +     " Angle: " +  Math.toDegrees(dt.zSimAngle) + " AngleTarget: " +  eAngle + " LeftSpeed: " + 0 + " RightSpeed: " + 0);
+    // System.out.println("Time: "+ timer.get() + " Velocity: " + 0 + " Omega: " + 0
+    // + " Angle: " + Math.toDegrees(dt.zSimAngle) + " AngleTarget: " + eAngle + "
+    // LeftSpeed: " + 0 + " RightSpeed: " + 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,16 +40,19 @@ public class ca_autoTurnKinematic extends CommandBase {
     Double comega = 0.0;
     
     // Gets which direction we are turning
-    comega = dt.getOmega( Math.toDegrees(dt.zSimAngle),eAngle);
-     // Constant for now
-
+    comega = dt.getOmega(Math.toDegrees(dt.zSimAngle), eAngle);
+    // Constant for now
     Double leftSpeed = dt.getLeftSpeedKin(chassisSpeed, comega);
     Double rightSpeed = dt.getRightpeedKin(chassisSpeed, comega);
+    Double rightSpeed = dt.getRightpeedKin(chassisSpeed, comega);
 
-    dt.driveWithController(leftSpeed, rightSpeed);
+    dt.driveWithAuto(leftSpeed, rightSpeed);
     dt.simulateGyro(leftSpeed, rightSpeed, timer);
-    Double error = eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) ;
-    // System.out.println("Time: "+ timer.get() + " Velocity: " + chassisSpeed + " Omega: " + comega +     " Angle: " +  Math.toDegrees(dt.zSimAngle) + " AngleTarget: " +  eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: " + rightSpeed + " Error: " + error );
+    // Double error = eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) ;
+    // System.out.println("Time: "+ timer.get() + " Velocity: " + chassisSpeed + "
+    // Omega: " + comega + " Angle: " + Math.toDegrees(dt.zSimAngle) + "
+    // AngleTarget: " + eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: " +
+    // rightSpeed + " Error: " + error );
   }
 
   // Called once the command ends or is interrupted.

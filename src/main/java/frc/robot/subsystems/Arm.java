@@ -26,13 +26,13 @@ import frc.robot.extensions.SparkMax;
 
 public class Arm extends SubsystemBase {
 
-  // Arm Extension
+// Arm Extension
   private WPI_TalonFX armExtensionMotor;
 
   DigitalInput armRetractedLimitSwitch;
 
   // Arm Rotation
-  CANSparkMax armRotationMotor;
+  public CANSparkMax armRotationMotor;
   RelativeEncoder armRotationEncoder;
 
   SparkMaxPIDController armRotationPID;
@@ -75,6 +75,26 @@ public class Arm extends SubsystemBase {
     armRotationMotor.stopMotor();
   }
 
+  // Rotates the arm towards the chassis until limit switch is tripped
+  public void armRotationToLimit(ArmSideOrientation m_armSide){
+    // If batterySide, move to limit switch
+    if (m_armSide == ArmSideOrientation.BatterySide) {
+      if (batterySideLimitSwitch.get()) {
+        armRotationMotor.stopMotor();
+      } else {
+        armRotationMotor.set(-0.4);
+      }
+    }
+    // If compressorSide, move to limit switch
+    else {
+      if (compressorSideLimitSwitch.get()) {
+        stopRotationMotor();
+      } else {
+        armRotationMotor.set(0.4);
+      }
+    }
+  }
+
   /** Using MotionMagic set the arm to a given position */
   public void setArmExtensionMM(double armPositionTicks) {
     armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks + Constants.addExtend);
@@ -83,7 +103,7 @@ public class Arm extends SubsystemBase {
   /** Using SmartMotion to set the arm to a given angle */
   public void setArmRotationSM(double armRotationTicks) {
     // IF in REDZONE or not retracted, ENGAGE LATCH.
-    if (armRedZone() && getArmRetractedLimitSwitch() == false) {
+    if (armRedZone() && !getArmRetractedLimitSwitch()) {
       redZoneLatch = true;
     }
 
@@ -96,10 +116,6 @@ public class Arm extends SubsystemBase {
         redZoneLatch = false;
       }
 
-    }
-    // if not latched, then if limit switch is hit, STOP MOTOR.
-    else if (getBatteryLimitSwitch() || getCompressorLimitSwitch()) {
-      armRotationMotor.stopMotor();
     }
     // if not latched or hit limit switch, MOVE MOTOR.
     else {
@@ -239,6 +255,10 @@ public class Arm extends SubsystemBase {
     }
 
   }
+
+  public boolean getLatchEngaged(){
+    return redZoneLatch;
+  }
   /*
    * ====MATH====
    * Ticks per rotation, 42
@@ -300,6 +320,8 @@ public class Arm extends SubsystemBase {
     builder.addStringProperty("isBatterySide", this::getArmSideOrientation, null);
     builder.addStringProperty("isCube", this::getIsCube, null);
     builder.addStringProperty("isAutonomous", this::getIsAutonomous, null);
+
+    builder.addBooleanProperty("RedZone Latch Engaged", this::getLatchEngaged, null);
   }
 
   @Override

@@ -43,8 +43,9 @@ public class Gripper extends SubsystemBase {
         DataLogManager.log("|_| GRIPPER OFF |_|");
     }
 
-    public void toggleGrip() {
-        gripper.toggle();
+    public boolean getGripperClose() {
+        Constants.gripperClosed = gripper.get();
+        return Constants.gripperClosed;
     }
 
     // Sendable override
@@ -52,7 +53,7 @@ public class Gripper extends SubsystemBase {
     // to the dashboard / consumed by the LED controller
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("GripperState", null, null);
+        builder.addBooleanProperty("GripperClosed", this::getGripperClose, null);
 //        builder.addBooleanProperty("isCube", this::getIsCube, null);
     }
 

@@ -34,7 +34,6 @@ public final class Constants {
   public static String isBatterySide = "battery";
   public static boolean switchingSides = false;
 
-
   // DRIVETRAIN Constants
 
   // Wheel ID Constants
@@ -53,8 +52,7 @@ public final class Constants {
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
-  public static  double dtmaxspeed = 0.75; // Speed Limit
-
+  public static double dtmaxspeed = 0.75; // Speed Limit
 
   // ARM ROTATION Constants
 
@@ -67,7 +65,7 @@ public final class Constants {
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {
     public static final double dtmaxaccel = 1;
-    public static final double dtmaxspeed = 0.65;
+    public static final double autodtMaxSpeed = 0.65;
     public static final double dtmaxomega = 1.6;
   }
 
@@ -81,7 +79,7 @@ public final class Constants {
   public static double ArmCarryAngleBattery = 10;
 
   public static final double ArmCarryAngleCompressor = 308;
-  public static final double ArmHighAngleCompressor = 240; 
+  public static final double ArmHighAngleCompressor = 240;
   public static final double ArmMiddleAngleCompressor = 250;
   public static final double ArmLowAngleCompressor = 310;
 
@@ -95,16 +93,23 @@ public final class Constants {
   // Units = Inches (Converting to ticks)
   // Math: 1 in. = -5000 ticks
   public static int inchPerExtentionTicks = -5000;
-  /** 33 in -> -165000 ticks */ 
-  public static final double ArmHighDistance = -165000; 
+  /** 33 in -> -165000 ticks */
+  public static final double ArmHighDistance = -165000;
   /** 10 in -> -50000 */
-  public static final double ArmMiddleDistance = -90000; 
+  public static final double ArmMiddleDistance = -90000;
   /** 20 in -> -100000 */
-  public static final double ArmLowDistance = -140000; 
+  public static final double ArmLowDistance = -140000;
   /** 1 in -> -5000 */
-  public static final double ArmCarryDistance = -5000; 
+  public static final double ArmRammingDistance = 0;
+  
+  public static final double ArmCarryDistance = -5000;
+
+  public static final double ArmShelfDistance = -45000;
 
   public static double tempArmDistance = 10;
+
+  // Gripper Constants
+  public static boolean gripperClosed = true;
 
   // DRIVER/CONTROLLER Constants
 
@@ -112,6 +117,8 @@ public final class Constants {
   // (Differentiates the joysticks inputs by assigning different ID ports)
   public static final int leftJoystick = 0; // Left Joystick ID
   public static final int rightJoystick = 1; // Right Joystick ID
+
+  public static final int joystickTrigger = 1;
 
   /** Actual Joystick Axis ID */
   public static final int joystickAxis = 1;
@@ -129,7 +136,7 @@ public final class Constants {
   public static final int RightJoystickX = 4;
   /** Front and back */
   public static final int RightJoystickY = 5;
-  
+
   public static final int LeftTrigger = 2;
   public static final int RightTrigger = 3;
 
@@ -138,6 +145,7 @@ public final class Constants {
   public static final int groundButtonID = 1;
   public static final int middleButtonID = 2;
   public static final int highButtonID = 3;
+  public static final int shelfButtonID = 11;
   // Joystick
   public static final int ardJoystickUp = 4;
   public static final int ardJoystickDown = 5;
@@ -174,7 +182,6 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
-  
   public static double degreesPerRotationTicks = 1;
   /** Adds extension ticks */
   public static double addExtend = 0;
@@ -183,7 +190,7 @@ public final class Constants {
   /** Adds rotation degrees */
   public static double addRotate = 0;
 
-
+  public static double speedLimit = 0.75;
   // Direction
   public enum direction {
     FRONT,

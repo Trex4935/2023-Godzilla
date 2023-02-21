@@ -10,7 +10,6 @@ import frc.robot.extensions.ArmPosition;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Gripper;
 import frc.robot.TrajectoryContainer;
-import frc.robot.commands.ca_autoTurnKinematic;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

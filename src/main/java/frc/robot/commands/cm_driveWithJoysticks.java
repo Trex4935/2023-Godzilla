@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class cm_driveWithJoysticks extends CommandBase {
@@ -34,6 +35,7 @@ public class cm_driveWithJoysticks extends CommandBase {
   @Override
   public void execute() {
     //This command moves robot by calling the joysticks method and taking in the inputs of both joysticks 
+  m_Drivetrain.setMaxSpeed(Constants.speedLimit);
   m_Drivetrain.driveWithJoysticks(m_joystickLeft, m_joystickRight);
   }
 

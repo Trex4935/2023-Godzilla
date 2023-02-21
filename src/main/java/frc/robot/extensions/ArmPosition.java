@@ -10,6 +10,8 @@ public enum ArmPosition {
     CARRY,
     HIGH,
     MIDDLE,
-    LOW
+    LOW,
+    RAMMING,
+    SHELF
 
 }

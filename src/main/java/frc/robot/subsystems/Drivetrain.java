@@ -127,41 +127,22 @@ public class Drivetrain extends SubsystemBase {
         ahrs.reset();
     }
 
-    /** Gets Roll(X) angle from Gyro */
-    public Float getXAngle() {
-        return ahrs.getRoll();
-    }
-
-    /** Gets Pitch(Y) angle from Gyro */
-    public Float getYAngle() {
-        // return ahrs.getYaw();
-        return ahrs.getPitch();
-    }
-
-    /** Gets the offset of the pitch */
-
     /** Gets the offset of the pitch */
     public Float getYAngleOffset() {
         // return ahrs.getYaw();
-        return getYAngle()
+        return s_getAngleY()
                 - 1.75f;
-    }
-
-    /** Gets Yaw(Z) from Gyro */
-    public Float getZAngle() {
-        // return ahrs.getRoll();
-        return -ahrs.getYaw();
     }
 
     /** Gets Yaw(Z) angle from Gyro and converts it to 360 */
     public double getZAngleConverted() {
-        double rollBoundedDouble = getZAngle().doubleValue();
+        double rollBoundedDouble = s_getAngleZ().doubleValue();
         return Helper.ConvertTo360(rollBoundedDouble);
     }
 
     /** Creates an array of the yaw, pitch, and roll values */
     public float[] PrincipalAxisValues() {
-        return new float[] { getXAngle(), getYAngle(), getZAngle() };
+        return new float[] { s_getAngleX(), s_getAngleY(), s_getAngleZ() };
     }
 
     // ********** ????? *****************
@@ -199,11 +180,6 @@ public class Drivetrain extends SubsystemBase {
         Constants.dtmaxspeed = MaxSpeed;
     }
 
-    /** Get the Max speed value (sendable) */
-    public double getMaxSpeed() {
-        return m_MaxSpeed;
-    }
-
     /** Resets both encoders to 0 */
     public void resetEncoders() {
         leftEncoder.reset();
@@ -221,36 +197,6 @@ public class Drivetrain extends SubsystemBase {
 
         leftMotors.set(leftPitch + driftCorrectionTwist);
         rightMotors.set(rightPitch - driftCorrectionTwist);
-    }
-
-    /** Gets the amount of ticks since reset/init */
-    public double getLeftEncoderTicks() {
-        return leftEncoder.get();
-    }
-
-    /** Gets the amount of ticks since reset/init */
-    public double getRightEncoderTicks() {
-        return -rightEncoder.get();
-    }
-
-    /** Gets the distance since reset/init based on setDistancePerPulse */
-    public double getLeftEncoderDistance() {
-        return leftEncoder.getDistance();
-    }
-
-    /** Gets the distance since reset/init based on setDistancePerPulse */
-    public double getRightEncoderDistance() {
-        return rightEncoder.getDistance();
-    }
-
-    /** Gets the speed based on setDistancePerPulse */
-    public double getLeftEncoderSpeed() {
-        return leftEncoder.getRate();
-    }
-
-    /** Gets the speed based on setDistancePerPulse */
-    public double getRightEncoderSpeed() {
-        return rightEncoder.getRate();
     }
 
     /** Converts inches to ticks for motors */
@@ -310,14 +256,6 @@ public class Drivetrain extends SubsystemBase {
 
     public void setTrajSpeed(State currState) {
         trajSpeed = currState.velocityMetersPerSecond;
-    }
-
-    public Double getTrajPos() {
-        return trajPos;
-    }
-
-    public Double getTrajSpeed() {
-        return trajSpeed;
     }
 
     public void driveTankWithStateTraj(State currState, Double end, Double time) {
@@ -415,24 +353,86 @@ public class Drivetrain extends SubsystemBase {
         return false;
     }
 
+    // ******************** Sendables ********************
+    
+    /** Gets Roll(X) angle from Gyro */
+    public Float s_getAngleX() {
+        return ahrs.getRoll();
+    }
+
+    /** Gets Pitch(Y) angle from Gyro */
+    public Float s_getAngleY() {
+        // return ahrs.getYaw();
+        return ahrs.getPitch();
+    }
+
+    /** Gets Yaw(Z) from Gyro */
+    public Float s_getAngleZ() {
+        // return ahrs.getRoll();
+        return -ahrs.getYaw();
+    }
+
+    /** Get the Max speed value (sendable) */
+    public double s_getMaxSpeed() {
+        return m_MaxSpeed;
+    }
+
+    public Double s_getTrajPos() {
+        return trajPos;
+    }
+
+    public Double s_getTrajSpeed() {
+        return trajSpeed;
+    }
+
+    /** Gets the distance since reset/init based on setDistancePerPulse */
+    public double s_getEncoderLeftDistance() {
+        return leftEncoder.getDistance();
+    }
+
+    /** Gets the speed based on setDistancePerPulse */
+    public double s_getEncoderLeftSpeed() {
+        return leftEncoder.getRate();
+    }
+
+    /** Gets the amount of ticks since reset/init */
+    public double s_getEncoderLeftTicks() {
+        return leftEncoder.get();
+    }
+
+    /** Gets the distance since reset/init based on setDistancePerPulse */
+    public double s_getEncoderRightDistance() {
+        return rightEncoder.getDistance();
+    }
+
+    /** Gets the speed based on setDistancePerPulse */
+    public double s_getEncoderRightSpeed() {
+        return rightEncoder.getRate();
+    }
+
+    /** Gets the amount of ticks since reset/init */
+    public double s_getEncoderRightTicks() {
+        return -rightEncoder.get();
+    }
+
     // Sendable override
     // Anything put here will be added to the network tables and thus can be added
     // to the dashboard / consumed by the LED controller
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
+        builder.addDoubleProperty("MaxSpeed", this::s_getMaxSpeed, this::setMaxSpeed);
         // Gyro values
-        builder.addFloatProperty("X/Roll", this::getXAngle, null);
-        builder.addFloatProperty("Y/Pitch", this::getYAngle, null);
-        builder.addFloatProperty("Z/Yaw", this::getZAngle, null);
-        builder.addDoubleProperty("RightEncoder", this::getRightEncoderTicks, null);
-        builder.addDoubleProperty("LeftEncoder", this::getLeftEncoderTicks, null);
-        builder.addDoubleProperty("Trajectory Position", this::getTrajPos, null);
-        builder.addDoubleProperty("Trajectory Speed", this::getTrajSpeed, null);
-        builder.addDoubleProperty("Left Encoder Speed", this::getLeftEncoderSpeed, null);
-        builder.addDoubleProperty("Right Encoder Speed", this::getRightEncoderSpeed, null);
-        builder.addDoubleProperty("Left Encoder Distance", this::getLeftEncoderDistance, null);
-        builder.addDoubleProperty("Right Encoder Distance", this::getRightEncoderDistance, null);
+        builder.addFloatProperty("X/Roll", this::s_getAngleX, null);
+        builder.addFloatProperty("Y/Pitch", this::s_getAngleY, null);
+        builder.addFloatProperty("Z/Yaw", this::s_getAngleZ, null);
+        builder.addDoubleProperty("RightEncoder", this::s_getEncoderRightTicks, null);
+        builder.addDoubleProperty("LeftEncoder", this::s_getEncoderLeftTicks, null);
+        builder.addDoubleProperty("Trajectory Position", this::s_getTrajPos, null);
+        builder.addDoubleProperty("Trajectory Speed", this::s_getTrajSpeed, null);
+        builder.addDoubleProperty("Left Encoder Speed", this::s_getEncoderLeftSpeed, null);
+        builder.addDoubleProperty("Right Encoder Speed", this::s_getEncoderRightSpeed, null);
+        builder.addDoubleProperty("Left Encoder Distance", this::s_getEncoderLeftDistance, null);
+        builder.addDoubleProperty("Right Encoder Distance", this::s_getEncoderRightDistance, null);
 
     }
 }

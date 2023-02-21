@@ -147,18 +147,10 @@ public class Drivetrain extends SubsystemBase {
                 - 1.75f;
     }
 
-        // return ahrs.getYaw();
-        return getYAngle()
-                - 1.75f;
-    }
-
     /** Gets Yaw(Z) from Gyro */
     public Float getZAngle() {
         // return ahrs.getRoll();
         return -ahrs.getYaw();
-        // return ahrs.getRoll();
-        return -ahrs.getYaw();
-
     }
 
     /** Gets Yaw(Z) angle from Gyro and converts it to 360 */

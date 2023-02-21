@@ -92,19 +92,15 @@ public class Drivetrain extends SubsystemBase {
         MRMotor = Talon.createDefaultTalon(Constants.MRMotorID);
         BLMotor = Talon.createDefaultTalon(Constants.BLMotorID);
         BRMotor = Talon.createDefaultTalon(Constants.BRMotorID);
+        
         // Sets up motor controller groups
         leftMotors = new MotorControllerGroup(FLMotor, MLMotor, BLMotor);
         rightMotors = new MotorControllerGroup(FRMotor, MRMotor, BRMotor);
+        
         // Inverts direction of motors/wheels.
         leftMotors.setInverted(true);
         rightMotors.setInverted(false);
-        FLMotor.setNeutralMode(NeutralMode.Brake);
-        FRMotor.setNeutralMode(NeutralMode.Brake);
-        MLMotor.setNeutralMode(NeutralMode.Brake);
-        MRMotor.setNeutralMode(NeutralMode.Brake);
-        BLMotor.setNeutralMode(NeutralMode.Brake);
-        BRMotor.setNeutralMode(NeutralMode.Brake);
-
+        
         diffdrive = new DifferentialDrive(leftMotors, rightMotors);
 
         diffdrive.setMaxOutput(m_MaxSpeed);

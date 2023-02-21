@@ -134,8 +134,11 @@ public class Drivetrain extends SubsystemBase {
 
     /** Gets Pitch(Y) angle from Gyro */
     public Float getYAngle() {
+        // return ahrs.getYaw();
         return ahrs.getPitch();
     }
+
+    /** Gets the offset of the pitch */
 
     /** Gets the offset of the pitch */
     public Float getYAngleOffset() {
@@ -148,7 +151,6 @@ public class Drivetrain extends SubsystemBase {
     public Float getZAngle() {
         // return ahrs.getRoll();
         return -ahrs.getYaw();
-
     }
 
     /** Gets Yaw(Z) angle from Gyro and converts it to 360 */

@@ -102,6 +102,8 @@ public final class Constants {
   
   public static final double ArmCarryDistance = -5000;
 
+  public static final double ArmShelfDistance = -45000;
+
   public static double tempArmDistance = 10;
 
   // Gripper Constants
@@ -140,6 +142,7 @@ public final class Constants {
   public static final int groundButtonID = 1;
   public static final int middleButtonID = 2;
   public static final int highButtonID = 3;
+  public static final int shelfButtonID = 29;
   // Joystick
   public static final int ardJoystickUp = 4;
   public static final int ardJoystickDown = 5;

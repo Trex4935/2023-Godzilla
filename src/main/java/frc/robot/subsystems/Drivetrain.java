@@ -141,23 +141,21 @@ public class Drivetrain extends SubsystemBase {
 
     /** Gets Pitch(Y) angle from Gyro */
     public Float getYAngle() {
-    //    return ahrs.getYaw();
+        // return ahrs.getYaw();
         return ahrs.getPitch();
     }
 
-    
-    /** Gets the offset of the pitch*/
+    /** Gets the offset of the pitch */
     public Float getYAngleOffset() {
-        //    return ahrs.getYaw();
-            return getYAngle()  
-            - 1.75f;
-        }
-    
+        // return ahrs.getYaw();
+        return getYAngle()
+                - 1.75f;
+    }
 
     /** Gets Yaw(Z) from Gyro */
     public Float getZAngle() {
-    //   return ahrs.getRoll();
-       return -ahrs.getYaw();
+        // return ahrs.getRoll();
+        return -ahrs.getYaw();
 
     }
 
@@ -220,12 +218,12 @@ public class Drivetrain extends SubsystemBase {
     public void autoBalance() {
         // Set motors speed using PID controller to get Y-axis to 0 degrees
         double leftPitch = drivePID.calculate(getYAngleOffset(), 0);
-        double rightPitch = drivePID.calculate(getYAngleOffset(), 0);        
+        double rightPitch = drivePID.calculate(getYAngleOffset(), 0);
         double err = 0 - getZAngleConverted();
         double P = 0.01;
         double driftCorrectionTwist = err * P;
 
-        leftMotors.set(leftPitch +  driftCorrectionTwist);
+        leftMotors.set(leftPitch + driftCorrectionTwist);
         rightMotors.set(rightPitch - driftCorrectionTwist);
     }
 

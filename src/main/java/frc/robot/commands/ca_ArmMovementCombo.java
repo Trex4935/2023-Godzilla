@@ -13,6 +13,7 @@ import frc.robot.Constants;
 public class ca_ArmMovementCombo extends CommandBase {
 
   private final Arm m_arm;
+
   /** Creates a new ca_ArmMovementCombo. */
   public ca_ArmMovementCombo(Arm arm) {
     m_arm = arm;
@@ -35,7 +36,8 @@ public class ca_ArmMovementCombo extends CommandBase {
     }
 
     // If gripperClosed is FALSE, then set state to attached
-    if (!Constants.gripperClosed && m_arm.getArmRetractedLimitSwitch() && Constants.selectedArmState == ArmPosition.CARRY) {
+    if (!Constants.gripperClosed && m_arm.getArmRetractedLimitSwitch()
+        && Constants.selectedArmState == ArmPosition.CARRY) {
       Constants.selectedArmState = ArmPosition.ATTACHED;
     }
 
@@ -67,6 +69,12 @@ public class ca_ArmMovementCombo extends CommandBase {
           // System.out.println("ATTACHED-C");
           m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
           m_arm.retractArm();
+          break;
+
+        case SHELF:
+          // System.out.println("SHELF-C");
+          m_arm.setArmRotationSM(Constants.ArmLowAngleBattery);
+          m_arm.setArmExtensionMM(Constants.ArmShelfDistance);
           break;
 
         default: // Carry Position is default
@@ -103,6 +111,12 @@ public class ca_ArmMovementCombo extends CommandBase {
           // System.out.println("DEFAULT-B");
           m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
           m_arm.retractArm();
+          break;
+
+        case SHELF:
+          // System.out.println("DEFAULT-B");
+          m_arm.setArmRotationSM(Constants.ArmLowAngleCompressor);
+          m_arm.setArmExtensionMM(Constants.ArmShelfDistance);
           break;
 
         default: // Carry Position is default when side switch is flipped.

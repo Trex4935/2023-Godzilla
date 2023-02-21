@@ -63,6 +63,7 @@ public class RobotContainer {
   private final ca_setArmPosition setArmPositionHigh;
   private final ca_setArmPosition setArmPositionMiddle;
   private final ca_setArmPosition setArmPositionLow;
+  private final ca_setArmPosition setArmPositionShelf;
   private final cm_manualDecreaseExtendTicks manualDecreaseExtendTicks;
   private final cm_manualAddExtendTicks manualAddExtendTicks;
   private final cm_manualRotateBattery manualRotateBattery;
@@ -123,6 +124,7 @@ public class RobotContainer {
     setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
     setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
     setArmPositionLow = new ca_setArmPosition(ArmPosition.LOW);
+    setArmPositionShelf = new ca_setArmPosition(ArmPosition.SHELF);
     manualDecreaseExtendTicks = new cm_manualDecreaseExtendTicks(arm);
     manualAddExtendTicks = new cm_manualAddExtendTicks(arm);
     manualRotateBattery = new cm_manualRotateBattery(arm);
@@ -236,16 +238,19 @@ public class RobotContainer {
     arm.setDefaultCommand(armMovementCombo);
 
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    
+
     // Increase Speed when pressing triggers.
-    new JoystickButton(m_JoystickLeft, Constants.joystickTrigger).onTrue(setSpeedLimitMax).onFalse(setSpeedLimitDefault);
-    // new JoystickButton(m_JoystickRight, Constants.joystickTrigger).onTrue(setSpeedLimitMax).onFalse(setSpeedLimitDefault);
+    new JoystickButton(m_JoystickLeft, Constants.joystickTrigger).onTrue(setSpeedLimitMax)
+        .onFalse(setSpeedLimitDefault);
+    // new JoystickButton(m_JoystickRight,
+    // Constants.joystickTrigger).onTrue(setSpeedLimitMax).onFalse(setSpeedLimitDefault);
 
     // Arduino Controller Button Mapping
     // Arm Movement
     new JoystickButton(m_ArduinoController, Constants.groundButtonID).whileTrue(setArmPositionLow);
     new JoystickButton(m_ArduinoController, Constants.middleButtonID).whileTrue(setArmPositionMiddle);
     new JoystickButton(m_ArduinoController, Constants.highButtonID).whileTrue(setArmPositionHigh);
+    new JoystickButton(m_ArduinoController, Constants.shelfButtonID).whileTrue(setArmPositionShelf);
     // manual EXTENSION
     new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(manualAddExtendTicks);
     new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(manualDecreaseExtendTicks);
@@ -253,11 +258,11 @@ public class RobotContainer {
     new JoystickButton(m_ArduinoController, Constants.ardJoystickLeft).whileTrue(manualRotateCompressor);
     new JoystickButton(m_ArduinoController, Constants.ardJoystickRight).whileTrue(manualRotateBattery);
 
-
     // reset manual extension & rotation
     new JoystickButton(m_ArduinoController, Constants.highButtonID).onFalse(manualResetAddArm);
     new JoystickButton(m_ArduinoController, Constants.middleButtonID).onFalse(manualResetAddArm);
     new JoystickButton(m_ArduinoController, Constants.groundButtonID).onFalse(manualResetAddArm);
+    new JoystickButton(m_ArduinoController, Constants.shelfButtonID).onFalse(manualResetAddArm);
 
     // Toggle Switches
     new JoystickButton(m_ArduinoController, Constants.gamePieceID).onTrue(setGamePieceTypeCubeTrue)
@@ -281,7 +286,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-
 
     // return autoBalance.withTimeout(15);
     return autoScoreAndBalance;

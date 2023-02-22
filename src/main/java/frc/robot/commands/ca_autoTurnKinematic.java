@@ -44,7 +44,6 @@ public class ca_autoTurnKinematic extends CommandBase {
     // Constant for now
     Double leftSpeed = dt.getLeftSpeedKin(chassisSpeed, comega);
     Double rightSpeed = dt.getRightpeedKin(chassisSpeed, comega);
-    Double rightSpeed = dt.getRightpeedKin(chassisSpeed, comega);
 
     dt.driveWithAuto(leftSpeed, rightSpeed);
     dt.simulateGyro(leftSpeed, rightSpeed, timer);

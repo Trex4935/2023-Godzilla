@@ -39,6 +39,7 @@ import frc.robot.commands.cm_manualAddExtendTicks;
 import frc.robot.commands.cm_manualResetAddArm;
 import frc.robot.commands.cm_manualRotateBattery;
 import frc.robot.commands.cm_manualRotateCompressor;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.commands.cm_setSpeedLimit;
 
@@ -182,13 +183,16 @@ public class RobotContainer {
 
     // Be able to turn
 
-    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, -110.0); // testing 90 degree Turn;
+    autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, -110.0); // testing 90 degree Turn;
 
     autoTurnTrajectoryWithGyro = new ca_autoTurnKinematicGyro(drivetrain, 0.0, 270.0); // testing 90 degree Turn;
 
     // Make a point & go Backword-mobility.
 
     autoScore = new cg_autoScore(drivetrain, arm, gripper);
+
+
+    
 
     // Make 2 point and go Backword-mobility.
 
@@ -197,6 +201,11 @@ public class RobotContainer {
     // Do autobalancing.
 
     autoBalance = new ca_autoBalance(drivetrain);
+   // once a point is scored, the robot then moves 8 forward, then moves 4 backwards
+    autoScore.andThen(goToAuto(new Translation2d(0,8))).andThen(goToAuto(new Translation2d(0, -4))).andThen( autoBalance);
+    // once a point is scored, the robot then moves 2 to the right(?) and 8 forward, then moves another 2 forward(?) and 8 backwards
+    autoScore.andThen(goToAuto(new Translation2d(2,8))).andThen(goToAuto(new Translation2d(2, -8))).andThen(autoScore);
+
 
     // Scores middle and balances.
 
@@ -284,9 +293,9 @@ public class RobotContainer {
 
     // new JoystickButton(m_JoystickLeft, 1).toggleOnTrue(autoBalance);
 
-
     // May help with pickup button?
-    // operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen, gripper::gripClose, gripper));
+    // operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen,
+    // gripper::gripClose, gripper));
 
   }
 
@@ -300,55 +309,7 @@ public class RobotContainer {
     // return autoBalance.withTimeout(15);
     return autoScoreAndBalance;
 
-
-  /* Need to rework
-  
-    // Generic Auto
-    SequentialCommandGroup auto = new SequentialCommandGroup(new WaitCommand(0));
-
-    direction[] autoPath = null;
-    // calculated path
-    autoPath = drivetrain.calculateTrajEnum(new Translation2d(6, -4));
-
-    // Construct auto
-    for (int index = 0; index < autoPath.length; index++) {
-      switch (autoPath[index]) {
-        case FRONT:
-
-          // Going Forward
-          auto.addCommands(new ca_autoTrajectoryKinematic(drivetrain, trajectoryFront));
-
-          break;
-
-        case BACK:
-
-          // Going Back
-          auto.addCommands(new ca_autoTrajectoryKinematic(drivetrain, trajectoryBack));
-
-          break;
-
-        case RIGHT:
-
-          // Going Right
-          auto.addCommands(new ca_autoTurnKinematic(drivetrain, -90.0));
-
-          break;
-
-        case LEFT:
-
-          // Going Left
-          auto.addCommands(new ca_autoTurnKinematic(drivetrain, 90.0));
-
-          break;
-
-        default:
-          break;
-      }
-
-    }
-    
-  */
-  // return auto;
+    // return auto;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;
@@ -360,4 +321,56 @@ public class RobotContainer {
   public void initSendable(SendableBuilder builder) {
 
   }
+
+  SequentialCommandGroup goToAuto(Translation2d endPoint) {
+
+    // Generic Auto
+    SequentialCommandGroup auto = new SequentialCommandGroup(new ca_doesAbsolutelyNothing());
+// this command takes in the coordinates of a game point that then calculates a path for it to move. the path is calculated and then the robot is moved accordingly.
+    direction[] autoPath = null;
+    // calculated path
+    autoPath = drivetrain.calculateTrajEnum(endPoint);
+
+    // Construct auto
+    for (int index = 0; index < autoPath.length; index++) {
+      switch (autoPath[index]) {
+        case FRONT:
+
+          // Going Forward
+          auto.addCommands(new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryFront,
+              TrajectoryContainer.trajFrontEnd));
+
+          break;
+
+        case BACK:
+
+          // Going Back
+          auto.addCommands(new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryBack,
+              TrajectoryContainer.trajBackEnd));
+
+          break;
+
+        case RIGHT:
+
+          // Going Right
+          auto.addCommands(new ca_autoTurnKinematic(drivetrain, 0.0, -90.0));
+
+          break;
+
+        case LEFT:
+
+          // Going Left
+          auto.addCommands(new ca_autoTurnKinematic(drivetrain, 0.0, 90.0));
+
+          break;
+
+        default:
+          break;
+      }
+
+    }
+
+    return auto;
+  }
+
 }

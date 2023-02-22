@@ -67,10 +67,10 @@ public class Drivetrain extends SubsystemBase {
     double trajSpeed;
 
     //
-    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 0.72);
+    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 1.15);
 
-    private final PIDController m_leftPIDController = new PIDController(0, 0, 0);
-    private final PIDController m_rightPIDController = new PIDController(0, 0, 0);
+    private final PIDController m_leftPIDController = new PIDController(1.2, 0, 0);
+    private final PIDController m_rightPIDController = new PIDController(1.2, 0, 0);
 
     // Simulate
     public double zSimAngle;
@@ -304,17 +304,23 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void driveWithPIDArcade(State currState, Double end, Double time, Double angle) {
-        Double velocityTarget = currState.velocityMetersPerSecond;
+        Double velocityTarget = -currState.velocityMetersPerSecond; /// Set voltage in setspeed act inverse as set, so
+                                                                    /// we need to minus it here.
         // Rate is 0, because we are following a straight line, the speed varies
         // depending of path, it follows a trapezoide curve.
         Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
         Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
         // TO DO
-        double err = angle - getZAngleConverted();
-        double P = 0.1;
+        double err = angle - s_getAngleZ(); // getZAngleConverted
+        double P = 0.05;
         double driftCorrectionTwist = err * P;
         Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel - driftCorrectionTwist;
         Double rightSpeedWheelWithGyroCorrection = rightSpeedWheel + driftCorrectionTwist;
+        System.out.println("Time: " + time + " VelocityTarget: " + velocityTarget + " leftSpeedWheel:  =  y "
+                + leftSpeedWheel + " rightSpeedWheel: " + rightSpeedWheel + "  error: " + err + "  Angle: " + angle
+                + "  GyroAngle: " + getZAngleConverted() + "  P: " + P + "  driftCorrectionTwist: "
+                + driftCorrectionTwist + "  leftSpeedWheelWithGyroCorrection: " + leftSpeedWheelWithGyroCorrection
+                + "  rightSpeedWheelWithGyroCorrection: " + rightSpeedWheelWithGyroCorrection);
         //
         setSpeeds(leftSpeedWheelWithGyroCorrection, rightSpeedWheelWithGyroCorrection);
         // System.out.println("Time: "+ time + " Velocity: " + velocityTarget + "
@@ -331,19 +337,27 @@ public class Drivetrain extends SubsystemBase {
                                                                                                         // in ticks
                                                                                                         // per/sec or
                                                                                                         // m/sec
-        final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), rightSpeedWheel);
-        FLMotor.setVoltage(0.0 + leftFeedforward);
-        FRMotor.setVoltage(0.0 + rightFeedforward);
-        MLMotor.setVoltage(0.0 + leftFeedforward);
-        MRMotor.setVoltage(0.0 + rightFeedforward);
-        BLMotor.setVoltage(0.0 + leftFeedforward);
-        BRMotor.setVoltage(0.0 + rightFeedforward);
+        final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), -rightSpeedWheel);
+        System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
+                + leftFeedforward + " rightFeedforward: " + rightFeedforward + " leftEncoder :" + leftEncoder.getRate()
+                + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput + " rightOutput: "
+                + rightOutput);
+        FLMotor.setVoltage(leftOutput + leftFeedforward);
+        FRMotor.setVoltage(rightOutput + rightFeedforward);
+        MLMotor.setVoltage(leftOutput + leftFeedforward);
+        MRMotor.setVoltage(rightOutput + rightFeedforward);
+        BLMotor.setVoltage(leftOutput + leftFeedforward);
+        BRMotor.setVoltage(rightOutput + rightFeedforward);
     }
 
     public Boolean reachDriveTarget(Double targetPosition) {
-        double averageTickValue = (leftEncoder.get() + rightEncoder.get()) / 2;
+        double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance())) / 2;
 
-        if (averageTickValue >= 10000) { // if tick value is greater than or equal to 10000, stop both motors
+        if (averageTickValue >= targetPosition - 0.01 || averageTickValue <= targetPosition + 0.01) { // if tick value
+                                                                                                      // is greater than
+                                                                                                      // or equal to
+                                                                                                      // 10000, stop
+                                                                                                      // both motors
             leftMotors.stopMotor();
             rightMotors.stopMotor();
             return true;
@@ -354,7 +368,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // ******************** Sendables ********************
-    
+
     /** Gets Roll(X) angle from Gyro */
     public Float s_getAngleX() {
         return ahrs.getRoll();

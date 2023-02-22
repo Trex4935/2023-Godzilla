@@ -23,10 +23,16 @@ public class cg_autoScoreBalance extends SequentialCommandGroup {
         new cm_GripperClose(gripper).withTimeout(0.75), // Closes on game piece
         new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(6),
         new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(5),
-        new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)).withTimeout(1),// , // Resets arm to default position
+        new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)).withTimeout(1), // , // Resets
+                                                                                                         // arm to
+                                                                                                         // default
+                                                                                                         // position
         new ca_doesAbsolutelyNothing().withTimeout(1),
-        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront,TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece
-        //new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryBack,TrajectoryContainer.trajBackEnd, 0.0), // Moves to game piece
+        new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryMobility,
+            TrajectoryContainer.trajMobilityEnd, 0.0), // Moves to game piece
+        // new ca_autoTrajectoryKinematicWithGyro(drivetrain,
+        // TrajectoryContainer.trajectoryBack,TrajectoryContainer.trajBackEnd, 0.0), //
+        // Moves to game piece
         new ca_autoBalance(drivetrain) // Balances the drivetrain
     );
   }

@@ -1,0 +1,35 @@
+new tasks 2/21:
+make an auto that drops cone, runs past charging station for movement points, run back to balance
+make auto that drops cone, make a l to grab second cone, either pre-position to pick up cone orgrab cone and go to next cone station for link
+
+name all autos and describe what they do
+create back up autos in case something breaks (? dont know if already made)
+
+AutoBalance
+-----
+mobility-point -
+mobility-chargeStation
+
+2Point
+------
+toItem==TurnFrontTurnFront(DoL)
+backToScore(DoL)
+Mobility-point
+
+
+
+-----------------------
+
+Default
+-------
+MobilityPoint
+
+
+1Score
+------
+MobilityPoints
+
+
+1ScoreBalance
+----------
+ChargeStation

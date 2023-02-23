@@ -10,7 +10,7 @@ import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Arm;
 // Commands
 import frc.robot.commands.ca_ArmMovementCombo;
-import frc.robot.commands.ca_ForwardHalfSpeed;
+import frc.robot.commands.ca_ForwardSlowSpeed;
 import frc.robot.commands.ca_autoBalance;
 import frc.robot.commands.ca_autoDoubleScoreBalance;
 import frc.robot.commands.ca_autoDriveStraightTrajKinGyroEncPID;
@@ -94,7 +94,7 @@ public class RobotContainer {
 
   private final ca_autoDriveStraightTrajKinGyroEncPID autoStraightPID;
 
-  private final ca_ForwardHalfSpeed forwardHalfSpeed;
+  private final ca_ForwardSlowSpeed forwardHalfSpeed;
   // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
   // private final SequentialCommandGroup backwordAndAutoBalancing;
   // private final SequentialCommandGroup doLAndAutoBalancing;
@@ -160,7 +160,7 @@ public class RobotContainer {
 
     // Going Backword-mobility.
 
-    forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
+    forwardHalfSpeed = new ca_ForwardSlowSpeed(drivetrain);
 
     autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj,
         TrajectoryContainer.pigeontrajEnd);

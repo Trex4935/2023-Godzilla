@@ -67,10 +67,11 @@ public class Drivetrain extends SubsystemBase {
     double trajSpeed;
 
     //
-    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 0.72);
+    private final SimpleMotorFeedforward m_feedforward;
 
-    private final PIDController m_leftPIDController = new PIDController(0, 0, 0);
-    private final PIDController m_rightPIDController = new PIDController(0, 0, 0);
+    // PID Controller
+    private final PIDController m_leftPIDController;
+    private final PIDController m_rightPIDController;
 
     // Simulate
     public double zSimAngle;
@@ -106,6 +107,13 @@ public class Drivetrain extends SubsystemBase {
         leftEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171));
         rightEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171)); // 0.00230097
         // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
+
+        // Create PID Controllers
+        m_leftPIDController = new PIDController(0, 0, 0);
+        m_rightPIDController = new PIDController(0, 0, 0);
+
+        // Feed Forward
+        m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 0.72);
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
@@ -145,8 +153,8 @@ public class Drivetrain extends SubsystemBase {
         return new float[] { s_getAngleX(), s_getAngleY(), s_getAngleZ() };
     }
 
-    // ********** ????? *****************
-    public void HalfSpeed() {
+    // Sets motor speed slow for auto.
+    public void SlowSpeed() {
         leftMotors.set(0.105);
         rightMotors.set(0.105);
     }

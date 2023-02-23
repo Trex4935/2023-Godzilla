@@ -130,8 +130,7 @@ public class Drivetrain extends SubsystemBase {
     /** Gets the offset of the pitch */
     public Float getYAngleOffset() {
         // return ahrs.getYaw();
-        return s_getAngleY()
-                - 1.75f;
+        return s_getAngleY() - 1.35f;
     }
 
     /** Gets Yaw(Z) angle from Gyro and converts it to 360 */
@@ -167,6 +166,7 @@ public class Drivetrain extends SubsystemBase {
     public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
         diffdrive.tankDrive(-joystick1.getRawAxis(Constants.joystickAxis),
                 -joystick2.getRawAxis(Constants.joystickAxis));
+        System.out.println("Pitch Angle: " + s_getAngleY());
     }
 
     /** Stops all Drivetrain motor groups. */
@@ -191,12 +191,16 @@ public class Drivetrain extends SubsystemBase {
         // Set motors speed using PID controller to get Y-axis to 0 degrees
         double leftPitch = drivePID.calculate(getYAngleOffset(), 0);
         double rightPitch = drivePID.calculate(getYAngleOffset(), 0);
-        double err = 0 - getZAngleConverted();
+        double err = 0 - s_getAngleZ();
         double P = 0.01;
         double driftCorrectionTwist = err * P;
 
         leftMotors.set(leftPitch + driftCorrectionTwist);
         rightMotors.set(rightPitch - driftCorrectionTwist);
+
+        System.out.println("leftPitch: " + leftPitch + 
+        " rightPitch: " + rightPitch + " err: " + err +
+        " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist + " Pitch Angle: " + s_getAngleY());
     }
 
     /** Converts inches to ticks for motors */

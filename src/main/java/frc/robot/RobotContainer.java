@@ -288,7 +288,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return autoBalance.withTimeout(15);
-    return autoScoreAndBalance;
+    return autoBalance;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

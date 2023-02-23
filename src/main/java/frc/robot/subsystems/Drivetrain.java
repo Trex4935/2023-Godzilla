@@ -303,8 +303,20 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
+    public Double calculateSpeeds(State currState){
+        //enc pos
+       double encoderPosition = (leftEncoder.get() + rightEncoder.get()) / 2;
+        // traj pos
+        double currentTrajectoryPos = currState.poseMeters.getY();
+        double P = 1;
+        //
+        double targetSpeed = (currentTrajectoryPos - encoderPosition) / .002 * P;
+        return targetSpeed;
+    }
+
     public void driveWithPIDArcade(State currState, Double end, Double time, Double angle) {
-        Double velocityTarget = currState.velocityMetersPerSecond;
+        //Double velocityTarget = currState.velocityMetersPerSecond;
+        Double velocityTarget = calculateSpeeds(currState);
         // Rate is 0, because we are following a straight line, the speed varies
         // depending of path, it follows a trapezoide curve.
         Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);

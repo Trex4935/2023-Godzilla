@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
 public class TrajectoryContainer {
@@ -45,7 +46,7 @@ public class TrajectoryContainer {
     new Pose2d(0, 4.0, Rotation2d.fromDegrees(0)),
     trajectoryConfig);
 
-    public static final Double trajMobilityEnd = 4.0;
+    public static final Double trajMobilityEnd = Units.inchesToMeters(139.5);
     public static final Trajectory trajectoryMobility = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0, 0, new Rotation2d(0)),
     List.of(),

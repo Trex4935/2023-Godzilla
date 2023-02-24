@@ -171,8 +171,8 @@ public class RobotContainer {
     driveStraight = new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
         TrajectoryContainer.trajMobilityEnd, 0.0);
 
-    autoStraightPID = new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.pigeontraj,
-        TrajectoryContainer.pigeontrajEnd, 0.0);
+    autoStraightPID = new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryMobility,
+        TrajectoryContainer.trajMobilityEnd, 0.0);
 
     // Be able to turn
 
@@ -288,7 +288,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return autoBalance.withTimeout(15);
-    return autoScoreAndBalance;
+    return autoBalance;
 
     // A command will be run in autonomous
     // return forwardHalfSpeed;

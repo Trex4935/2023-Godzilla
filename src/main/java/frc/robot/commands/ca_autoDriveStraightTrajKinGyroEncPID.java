@@ -22,7 +22,8 @@ public class ca_autoDriveStraightTrajKinGyroEncPID extends CommandBase {
   Double end, trgtAng;
 
   /** Creates a new cm_autoTrajectory. */
-  public ca_autoDriveStraightTrajKinGyroEncPID(Drivetrain drivetrain, Trajectory trajectory, Double endPoint, Double targetAngle) {
+  public ca_autoDriveStraightTrajKinGyroEncPID(Drivetrain drivetrain, Trajectory trajectory, Double endPoint,
+      Double targetAngle) {
     timer = new Timer();
     traj = trajectory;
     currState = new State(0, 0, 0, new Pose2d(new Translation2d(0, 0), new Rotation2d(0)), 0);
@@ -43,7 +44,7 @@ public class ca_autoDriveStraightTrajKinGyroEncPID extends CommandBase {
   @Override
   public void execute() {
     currState = traj.sample(timer.get());
-    Double time  = timer.get();
+    Double time = timer.get();
     dt.setTrajPos(currState);
     dt.setTrajSpeed(currState);
     dt.driveWithPIDArcade(currState, end, time, trgtAng);
@@ -59,7 +60,8 @@ public class ca_autoDriveStraightTrajKinGyroEncPID extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-  return dt.reachDriveTarget(end);
+    return false;
+    // dt.reachDriveTarget(end);
 
-}
+  }
 }

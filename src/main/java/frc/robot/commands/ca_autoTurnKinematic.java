@@ -12,13 +12,11 @@ public class ca_autoTurnKinematic extends CommandBase {
   /** Creates a new ca_autoTurnKinematic. */
   Timer timer;
   Drivetrain dt;
-  Double sAngle;
   Double eAngle;
 
   public ca_autoTurnKinematic(Drivetrain drivetrain, Double startAngle, Double endAngle) {
     timer = new Timer();
     dt = drivetrain;
-    sAngle = startAngle;
     eAngle = endAngle;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);
@@ -40,6 +38,7 @@ public class ca_autoTurnKinematic extends CommandBase {
   public void execute() {
     Double chassisSpeed = 0.0;
     Double comega = 0.0;
+    
     // Gets which direction we are turning
     comega = dt.getOmega(Math.toDegrees(dt.zSimAngle), eAngle);
     // Constant for now

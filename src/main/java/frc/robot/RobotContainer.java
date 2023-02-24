@@ -10,6 +10,7 @@ import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Arm;
 // Commands
 import frc.robot.commands.ca_ArmMovementCombo;
+import frc.robot.Constants.direction;
 import frc.robot.commands.ca_ForwardSlowSpeed;
 import frc.robot.commands.ca_autoBalance;
 import frc.robot.commands.ca_autoDoubleScoreBalance;
@@ -38,6 +39,7 @@ import frc.robot.commands.cm_manualAddExtendTicks;
 import frc.robot.commands.cm_manualResetAddArm;
 import frc.robot.commands.cm_manualRotateBattery;
 import frc.robot.commands.cm_manualRotateCompressor;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.commands.cm_setSpeedLimit;
 
@@ -45,7 +47,12 @@ import frc.robot.commands.cm_setSpeedLimit;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 // Robot Base Class
 public class RobotContainer {
@@ -184,6 +191,9 @@ public class RobotContainer {
 
     autoScore = new cg_autoScore(drivetrain, arm, gripper);
 
+
+    
+
     // Make 2 point and go Backword-mobility.
 
     autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
@@ -191,6 +201,11 @@ public class RobotContainer {
     // Do autobalancing.
 
     autoBalance = new ca_autoBalance(drivetrain);
+   // once a point is scored, the robot then moves 8 forward, then moves 4 backwards
+    autoScore.andThen(goToAuto(new Translation2d(0,8))).andThen(goToAuto(new Translation2d(0, -4))).andThen( autoBalance);
+    // once a point is scored, the robot then moves 2 to the right(?) and 8 forward, then moves another 2 forward(?) and 8 backwards
+    autoScore.andThen(goToAuto(new Translation2d(2,8))).andThen(goToAuto(new Translation2d(2, -8))).andThen(autoScore);
+
 
     // Scores middle and balances.
 
@@ -221,7 +236,7 @@ public class RobotContainer {
 
     // Add encoder for real length measures to auto.
 
-    // Add PID to auo.
+    // Add PID to auto.
 
     // Configure the trigger bindings
     configureBindings();
@@ -278,6 +293,10 @@ public class RobotContainer {
 
     // new JoystickButton(m_JoystickLeft, 1).toggleOnTrue(autoBalance);
 
+    // May help with pickup button?
+    // operator.a().toggleOnTrue(Commands.startEnd(gripper::gripOpen,
+    // gripper::gripClose, gripper));
+
   }
 
   /**
@@ -290,6 +309,8 @@ public class RobotContainer {
     // return autoBalance.withTimeout(15);
     return autoBalance;
 
+    // return auto;
+
     // A command will be run in autonomous
     // return forwardHalfSpeed;
   }
@@ -300,4 +321,56 @@ public class RobotContainer {
   public void initSendable(SendableBuilder builder) {
 
   }
+
+  SequentialCommandGroup goToAuto(Translation2d endPoint) {
+
+    // Generic Auto
+    SequentialCommandGroup auto = new SequentialCommandGroup(new ca_doesAbsolutelyNothing());
+// this command takes in the coordinates of a game point that then calculates a path for it to move. the path is calculated and then the robot is moved accordingly.
+    direction[] autoPath = null;
+    // calculated path
+    autoPath = drivetrain.calculateTrajEnum(endPoint);
+
+    // Construct auto
+    for (int index = 0; index < autoPath.length; index++) {
+      switch (autoPath[index]) {
+        case FRONT:
+
+          // Going Forward
+          auto.addCommands(new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryFront,
+              TrajectoryContainer.trajFrontEnd));
+
+          break;
+
+        case BACK:
+
+          // Going Back
+          auto.addCommands(new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryBack,
+              TrajectoryContainer.trajBackEnd));
+
+          break;
+
+        case RIGHT:
+
+          // Going Right
+          auto.addCommands(new ca_autoTurnKinematic(drivetrain, 0.0, -90.0));
+
+          break;
+
+        case LEFT:
+
+          // Going Left
+          auto.addCommands(new ca_autoTurnKinematic(drivetrain, 0.0, 90.0));
+
+          break;
+
+        default:
+          break;
+      }
+
+    }
+
+    return auto;
+  }
+
 }

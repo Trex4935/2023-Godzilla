@@ -44,6 +44,7 @@ public final class Constants {
   public final static int BRMotorID = 5; // RIGHT
   public final static int BLMotorID = 6; // LEFT
 
+
   /** Measurement Constants */
   public final static int wheelDiameter = 6;
   public final static int encoderTicks = 8192;
@@ -59,6 +60,7 @@ public final class Constants {
   public static final int armRotationCAN = 13;
   public static final double armRotateSpeed = 0.85; // Arm Rotation Speed
   public static boolean inRedZone = false;
+
 
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {
@@ -122,6 +124,7 @@ public final class Constants {
   public static final int joystickAxis = 1;
 
   // Controller Constants
+
   public static final int controllerID = 2; // Controller ID
 
   // XBOX Controller Constants (SUBJECT TO CHANGE)
@@ -188,4 +191,12 @@ public final class Constants {
   public static double addRotate = 0;
 
   public static double speedLimit = 0.75;
+  // Direction
+  public enum direction {
+    FRONT,
+    BACK,
+    RIGHT,
+    LEFT
+  }
+
 }

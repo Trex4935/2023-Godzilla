@@ -17,6 +17,7 @@ public class ca_driveAutoSquare extends SequentialCommandGroup {
     double squareAngle = 45.0;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    
     addCommands(new ca_autoTrajectory(drivetrain,trajectory, end),
     new ca_autoTurnKinematicGyro(drivetrain, 0.0, squareAngle),
     new ca_autoTrajectory(drivetrain,trajectory, end),

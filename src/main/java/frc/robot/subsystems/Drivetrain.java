@@ -67,10 +67,11 @@ public class Drivetrain extends SubsystemBase {
     double trajSpeed;
 
     //
-    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 1.15);
+    private final SimpleMotorFeedforward m_feedforward;
 
-    private final PIDController m_leftPIDController = new PIDController(1.2, 0, 0);
-    private final PIDController m_rightPIDController = new PIDController(1.2, 0, 0);
+    // PID Controller
+    private final PIDController m_leftPIDController;
+    private final PIDController m_rightPIDController;
 
     // Simulate
     public double zSimAngle;
@@ -106,6 +107,13 @@ public class Drivetrain extends SubsystemBase {
         leftEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171));
         rightEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171)); // 0.00230097
         // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
+
+        // Create PID Controllers
+        m_leftPIDController = new PIDController(1.2, 0, 0);
+        m_rightPIDController = new PIDController(1.2, 0, 0);
+
+        // Feed Forward
+        m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 1.15);
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
@@ -144,8 +152,8 @@ public class Drivetrain extends SubsystemBase {
         return new float[] { s_getAngleX(), s_getAngleY(), s_getAngleZ() };
     }
 
-    // ********** ????? *****************
-    public void HalfSpeed() {
+    // Sets motor speed slow for auto.
+    public void SlowSpeed() {
         leftMotors.set(0.105);
         rightMotors.set(0.105);
     }
@@ -307,15 +315,34 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
+    public Double calculateSpeeds(State currState){
+        //enc pos
+       double encoderPosition = (leftEncoder.get() + rightEncoder.get()) / 2;
+        // traj pos
+        double currentTrajectoryPos = currState.poseMeters.getY();
+        double P = 1;
+        //
+        double targetSpeed = (currentTrajectoryPos - encoderPosition) / .002 * P;
+        return targetSpeed;
+    }
+
     public void driveWithPIDArcade(State currState, Double end, Double time, Double angle) {
-        Double velocityTarget = -currState.velocityMetersPerSecond; /// Set voltage in setspeed act inverse as set, so
-                                                                    /// we need to minus it here.
+        //Double velocityTarget = currState.velocityMetersPerSecond;
+        Double velocityTarget = calculateSpeeds(currState);
         // Rate is 0, because we are following a straight line, the speed varies
         // depending of path, it follows a trapezoide curve.
         Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
         Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
         // TO DO
-        double err = angle - s_getAngleZ(); // getZAngleConverted
+        Double targetAngle = angle;
+        double err = targetAngle - getZAngleConverted();
+         if ( angle == 0 || angle == 360){
+            if (getZAngleConverted() <= 180 && ()) {
+                err = 0.0 - getZAngleConverted();
+            } else {
+                err = 360 - getZAngleConverted();
+            }
+         }
         double P = 0.05;
         double driftCorrectionTwist = err * P;
         Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel - driftCorrectionTwist;
@@ -327,9 +354,7 @@ public class Drivetrain extends SubsystemBase {
                 + "  rightSpeedWheelWithGyroCorrection: " + rightSpeedWheelWithGyroCorrection);
         //
         setSpeeds(leftSpeedWheelWithGyroCorrection, rightSpeedWheelWithGyroCorrection);
-        // System.out.println("Time: "+ time + " Velocity: " + velocityTarget + "
-        // Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel +
-        // " RightSpeed: " + rightSpeedWheel);
+
 
     }
 

@@ -11,7 +11,7 @@ import frc.robot.subsystems.Arm;
 // Commands
 import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.Constants.direction;
-import frc.robot.commands.ca_ForwardHalfSpeed;
+import frc.robot.commands.ca_ForwardSlowSpeed;
 import frc.robot.commands.ca_autoBalance;
 import frc.robot.commands.ca_autoDoubleScoreBalance;
 import frc.robot.commands.ca_autoDriveStraightTrajKinGyroEncPID;
@@ -101,7 +101,7 @@ public class RobotContainer {
 
   private final ca_autoDriveStraightTrajKinGyroEncPID autoStraightPID;
 
-  private final ca_ForwardHalfSpeed forwardHalfSpeed;
+  private final ca_ForwardSlowSpeed forwardHalfSpeed;
   // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
   // private final SequentialCommandGroup backwordAndAutoBalancing;
   // private final SequentialCommandGroup doLAndAutoBalancing;
@@ -167,7 +167,7 @@ public class RobotContainer {
 
     // Going Backword-mobility.
 
-    forwardHalfSpeed = new ca_ForwardHalfSpeed(drivetrain);
+    forwardHalfSpeed = new ca_ForwardSlowSpeed(drivetrain);
 
     autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj,
         TrajectoryContainer.pigeontrajEnd);
@@ -178,8 +178,8 @@ public class RobotContainer {
     driveStraight = new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
         TrajectoryContainer.trajMobilityEnd, 0.0);
 
-    autoStraightPID = new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.pigeontraj,
-        TrajectoryContainer.pigeontrajEnd, 0.0);
+    autoStraightPID = new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryMobility,
+        TrajectoryContainer.trajMobilityEnd, 0.0);
 
     // Be able to turn
 
@@ -307,7 +307,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return autoBalance.withTimeout(15);
-    return autoScoreAndBalance;
+    return autoBalance;
 
     // return auto;
 

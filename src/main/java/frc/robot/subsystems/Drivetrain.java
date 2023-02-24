@@ -75,10 +75,11 @@ public class Drivetrain extends SubsystemBase {
     double trajSpeed;
 
     //
-    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 0.72);
+    private final SimpleMotorFeedforward m_feedforward;
 
-    private final PIDController m_leftPIDController = new PIDController(0, 0, 0);
-    private final PIDController m_rightPIDController = new PIDController(0, 0, 0);
+    // PID Controller
+    private final PIDController m_leftPIDController;
+    private final PIDController m_rightPIDController;
 
     private final MotorControllerGroup m_leftGroup = new MotorControllerGroup(leftMotors);
     private final MotorControllerGroup m_rightGroup = new MotorControllerGroup(rightMotors);
@@ -121,6 +122,13 @@ public class Drivetrain extends SubsystemBase {
         rightEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171)); // 0.00230097
         // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
 
+        // Create PID Controllers
+        m_leftPIDController = new PIDController(1.2, 0, 0);
+        m_rightPIDController = new PIDController(1.2, 0, 0);
+
+        // Feed Forward
+        m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 1.15);
+
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
         ahrs.calibrate();
@@ -141,45 +149,25 @@ public class Drivetrain extends SubsystemBase {
         ahrs.reset();
     }
 
-    /** Gets Roll(X) angle from Gyro */
-    public Float getXAngle() {
-        return ahrs.getRoll();
-    }
-
-    /** Gets Pitch(Y) angle from Gyro */
-    public Float getYAngle() {
-        // return ahrs.getYaw();
-        return ahrs.getPitch();
-    }
-
-    /** Gets the offset of the pitch */
-
     /** Gets the offset of the pitch */
     public Float getYAngleOffset() {
         // return ahrs.getYaw();
-        return getYAngle()
-                - 1.75f;
-    }
-
-    /** Gets Yaw(Z) from Gyro */
-    public Float getZAngle() {
-        // return ahrs.getRoll();
-        return -ahrs.getYaw();
+        return s_getAngleY() - 1.35f;
     }
 
     /** Gets Yaw(Z) angle from Gyro and converts it to 360 */
     public double getZAngleConverted() {
-        double rollBoundedDouble = getZAngle().doubleValue();
+        double rollBoundedDouble = s_getAngleZ().doubleValue();
         return Helper.ConvertTo360(rollBoundedDouble);
     }
 
     /** Creates an array of the yaw, pitch, and roll values */
     public float[] PrincipalAxisValues() {
-        return new float[] { getXAngle(), getYAngle(), getZAngle() };
+        return new float[] { s_getAngleX(), s_getAngleY(), s_getAngleZ() };
     }
 
-    // ********** ????? *****************
-    public void HalfSpeed() {
+    // Sets motor speed slow for auto.
+    public void SlowSpeed() {
         leftMotors.set(0.105);
         rightMotors.set(0.105);
     }
@@ -200,6 +188,7 @@ public class Drivetrain extends SubsystemBase {
     public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
         diffdrive.tankDrive(-joystick1.getRawAxis(Constants.joystickAxis),
                 -joystick2.getRawAxis(Constants.joystickAxis));
+        System.out.println("Pitch Angle: " + s_getAngleY());
     }
 
     /** Stops all Drivetrain motor groups. */
@@ -213,11 +202,6 @@ public class Drivetrain extends SubsystemBase {
         Constants.dtmaxspeed = MaxSpeed;
     }
 
-    /** Get the Max speed value (sendable) */
-    public double getMaxSpeed() {
-        return m_MaxSpeed;
-    }
-
     /** Resets both encoders to 0 */
     public void resetEncoders() {
         leftEncoder.reset();
@@ -229,42 +213,16 @@ public class Drivetrain extends SubsystemBase {
         // Set motors speed using PID controller to get Y-axis to 0 degrees
         double leftPitch = drivePID.calculate(getYAngleOffset(), 0);
         double rightPitch = drivePID.calculate(getYAngleOffset(), 0);
-        double err = 0 - getZAngleConverted();
+        double err = 0 - s_getAngleZ();
         double P = 0.01;
         double driftCorrectionTwist = err * P;
 
         leftMotors.set(leftPitch + driftCorrectionTwist);
         rightMotors.set(rightPitch - driftCorrectionTwist);
-    }
 
-    /** Gets the amount of ticks since reset/init */
-    public double getLeftEncoderTicks() {
-        return leftEncoder.get();
-    }
-
-    /** Gets the amount of ticks since reset/init */
-    public double getRightEncoderTicks() {
-        return -rightEncoder.get();
-    }
-
-    /** Gets the distance since reset/init based on setDistancePerPulse */
-    public double getLeftEncoderDistance() {
-        return leftEncoder.getDistance();
-    }
-
-    /** Gets the distance since reset/init based on setDistancePerPulse */
-    public double getRightEncoderDistance() {
-        return rightEncoder.getDistance();
-    }
-
-    /** Gets the speed based on setDistancePerPulse */
-    public double getLeftEncoderSpeed() {
-        return leftEncoder.getRate();
-    }
-
-    /** Gets the speed based on setDistancePerPulse */
-    public double getRightEncoderSpeed() {
-        return rightEncoder.getRate();
+        System.out.println("leftPitch: " + leftPitch + 
+        " rightPitch: " + rightPitch + " err: " + err +
+        " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist + " Pitch Angle: " + s_getAngleY());
     }
 
     /** Converts inches to ticks for motors */
@@ -326,14 +284,6 @@ public class Drivetrain extends SubsystemBase {
         trajSpeed = currState.velocityMetersPerSecond;
     }
 
-    public Double getTrajPos() {
-        return trajPos;
-    }
-
-    public Double getTrajSpeed() {
-        return trajSpeed;
-    }
-
     public void driveTankWithStateTraj(State currState, Double end, Double time) {
         Double velocityTarget = currState.velocityMetersPerSecond;
         driveWithAuto(velocityTarget * Math.signum(end), velocityTarget * Math.signum(end));
@@ -379,23 +329,46 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
+    public Double calculateSpeeds(State currState){
+        //enc pos
+       double encoderPosition = (leftEncoder.get() + rightEncoder.get()) / 2;
+        // traj pos
+        double currentTrajectoryPos = currState.poseMeters.getY();
+        double P = 1;
+        //
+        double targetSpeed = (currentTrajectoryPos - encoderPosition) / .002 * P;
+        return targetSpeed;
+    }
+
     public void driveWithPIDArcade(State currState, Double end, Double time, Double angle) {
-        Double velocityTarget = currState.velocityMetersPerSecond;
+        //Double velocityTarget = currState.velocityMetersPerSecond;
+        Double velocityTarget = calculateSpeeds(currState);
         // Rate is 0, because we are following a straight line, the speed varies
         // depending of path, it follows a trapezoide curve.
         Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
         Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
         // TO DO
-        double err = angle - getZAngleConverted();
-        double P = 0.1;
+        Double targetAngle = angle;
+        double err = targetAngle - getZAngleConverted();
+         if ( angle == 0 || angle == 360){
+            if (getZAngleConverted() <= 180 && ()) {
+                err = 0.0 - getZAngleConverted();
+            } else {
+                err = 360 - getZAngleConverted();
+            }
+         }
+        double P = 0.05;
         double driftCorrectionTwist = err * P;
         Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel - driftCorrectionTwist;
         Double rightSpeedWheelWithGyroCorrection = rightSpeedWheel + driftCorrectionTwist;
+        System.out.println("Time: " + time + " VelocityTarget: " + velocityTarget + " leftSpeedWheel:  =  y "
+                + leftSpeedWheel + " rightSpeedWheel: " + rightSpeedWheel + "  error: " + err + "  Angle: " + angle
+                + "  GyroAngle: " + getZAngleConverted() + "  P: " + P + "  driftCorrectionTwist: "
+                + driftCorrectionTwist + "  leftSpeedWheelWithGyroCorrection: " + leftSpeedWheelWithGyroCorrection
+                + "  rightSpeedWheelWithGyroCorrection: " + rightSpeedWheelWithGyroCorrection);
         //
         setSpeeds(leftSpeedWheelWithGyroCorrection, rightSpeedWheelWithGyroCorrection);
-        // System.out.println("Time: "+ time + " Velocity: " + velocityTarget + "
-        // Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel +
-        // " RightSpeed: " + rightSpeedWheel);
+
 
     }
 
@@ -407,19 +380,27 @@ public class Drivetrain extends SubsystemBase {
                                                                                                         // in ticks
                                                                                                         // per/sec or
                                                                                                         // m/sec
-        final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), rightSpeedWheel);
-        FLMotor.setVoltage(0.0 + leftFeedforward);
-        FRMotor.setVoltage(0.0 + rightFeedforward);
-        MLMotor.setVoltage(0.0 + leftFeedforward);
-        MRMotor.setVoltage(0.0 + rightFeedforward);
-        BLMotor.setVoltage(0.0 + leftFeedforward);
-        BRMotor.setVoltage(0.0 + rightFeedforward);
+        final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), -rightSpeedWheel);
+        System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
+                + leftFeedforward + " rightFeedforward: " + rightFeedforward + " leftEncoder :" + leftEncoder.getRate()
+                + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput + " rightOutput: "
+                + rightOutput);
+        FLMotor.setVoltage(leftOutput + leftFeedforward);
+        FRMotor.setVoltage(rightOutput + rightFeedforward);
+        MLMotor.setVoltage(leftOutput + leftFeedforward);
+        MRMotor.setVoltage(rightOutput + rightFeedforward);
+        BLMotor.setVoltage(leftOutput + leftFeedforward);
+        BRMotor.setVoltage(rightOutput + rightFeedforward);
     }
 
     public Boolean reachDriveTarget(Double targetPosition) {
-        double averageTickValue = (leftEncoder.get() + rightEncoder.get()) / 2;
+        double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance())) / 2;
 
-        if (averageTickValue >= 10000) { // if tick value is greater than or equal to 10000, stop both motors
+        if (averageTickValue >= targetPosition - 0.01 || averageTickValue <= targetPosition + 0.01) { // if tick value
+                                                                                                      // is greater than
+                                                                                                      // or equal to
+                                                                                                      // 10000, stop
+                                                                                                      // both motors
             leftMotors.stopMotor();
             rightMotors.stopMotor();
             return true;
@@ -465,25 +446,86 @@ public class Drivetrain extends SubsystemBase {
         return pointMap;
     }
 
+    // ******************** Sendables ********************
+
+    /** Gets Roll(X) angle from Gyro */
+    public Float s_getAngleX() {
+        return ahrs.getRoll();
+    }
+
+    /** Gets Pitch(Y) angle from Gyro */
+    public Float s_getAngleY() {
+        // return ahrs.getYaw();
+        return ahrs.getPitch();
+    }
+
+    /** Gets Yaw(Z) from Gyro */
+    public Float s_getAngleZ() {
+        // return ahrs.getRoll();
+        return -ahrs.getYaw();
+    }
+
+    /** Get the Max speed value (sendable) */
+    public double s_getMaxSpeed() {
+        return m_MaxSpeed;
+    }
+
+    public Double s_getTrajPos() {
+        return trajPos;
+    }
+
+    public Double s_getTrajSpeed() {
+        return trajSpeed;
+    }
+
+    /** Gets the distance since reset/init based on setDistancePerPulse */
+    public double s_getEncoderLeftDistance() {
+        return leftEncoder.getDistance();
+    }
+
+    /** Gets the speed based on setDistancePerPulse */
+    public double s_getEncoderLeftSpeed() {
+        return leftEncoder.getRate();
+    }
+
+    /** Gets the amount of ticks since reset/init */
+    public double s_getEncoderLeftTicks() {
+        return leftEncoder.get();
+    }
+
+    /** Gets the distance since reset/init based on setDistancePerPulse */
+    public double s_getEncoderRightDistance() {
+        return rightEncoder.getDistance();
+    }
+
+    /** Gets the speed based on setDistancePerPulse */
+    public double s_getEncoderRightSpeed() {
+        return rightEncoder.getRate();
+    }
+
+    /** Gets the amount of ticks since reset/init */
+    public double s_getEncoderRightTicks() {
+        return -rightEncoder.get();
+    }
+
     // Sendable override
     // Anything put here will be added to the network tables and thus can be added
     // to the dashboard / consumed by the LED controller
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
-        builder.addFloatArrayProperty("Yaw, Pitch, and Roll Values", this::PrincipalAxisValues, null);
+        builder.addDoubleProperty("MaxSpeed", this::s_getMaxSpeed, this::setMaxSpeed);
         // Gyro values
-        builder.addFloatProperty("X/Roll", this::getXAngle, null);
-        builder.addFloatProperty("Y/Pitch", this::getYAngle, null);
-        builder.addFloatProperty("Z/Yaw", this::getZAngle, null);
-        builder.addDoubleProperty("RightEncoder", this::getRightEncoderTicks, null);
-        builder.addDoubleProperty("LeftEncoder", this::getLeftEncoderTicks, null);
-        builder.addDoubleProperty("Trajectory Position", this::getTrajPos, null);
-        builder.addDoubleProperty("Trajectory Speed", this::getTrajSpeed, null);
-        builder.addDoubleProperty("Left Encoder Speed", this::getLeftEncoderSpeed, null);
-        builder.addDoubleProperty("Right Encoder Speed", this::getRightEncoderSpeed, null);
-        builder.addDoubleProperty("Left Encoder Distance", this::getLeftEncoderDistance, null);
-        builder.addDoubleProperty("Right Encoder Distance", this::getRightEncoderDistance, null);
+        builder.addFloatProperty("X/Roll", this::s_getAngleX, null);
+        builder.addFloatProperty("Y/Pitch", this::s_getAngleY, null);
+        builder.addFloatProperty("Z/Yaw", this::s_getAngleZ, null);
+        builder.addDoubleProperty("RightEncoder", this::s_getEncoderRightTicks, null);
+        builder.addDoubleProperty("LeftEncoder", this::s_getEncoderLeftTicks, null);
+        builder.addDoubleProperty("Trajectory Position", this::s_getTrajPos, null);
+        builder.addDoubleProperty("Trajectory Speed", this::s_getTrajSpeed, null);
+        builder.addDoubleProperty("Left Encoder Speed", this::s_getEncoderLeftSpeed, null);
+        builder.addDoubleProperty("Right Encoder Speed", this::s_getEncoderRightSpeed, null);
+        builder.addDoubleProperty("Left Encoder Distance", this::s_getEncoderLeftDistance, null);
+        builder.addDoubleProperty("Right Encoder Distance", this::s_getEncoderRightDistance, null);
 
     }
 }

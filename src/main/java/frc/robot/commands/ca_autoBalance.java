@@ -37,6 +37,6 @@ public class ca_autoBalance extends CommandBase {
   public boolean isFinished() {
   
     // Replace getYAngle with correct direction (Pitch relative to the robot) once confirmed
-    return  (m_drivetrain.getYAngleOffset() <= 1) && (m_drivetrain.getYAngleOffset() >= -1);
+    return  (m_drivetrain.getYAngleOffset() <= .5f) && (m_drivetrain.getYAngleOffset() >= -.5f);
   }
 }

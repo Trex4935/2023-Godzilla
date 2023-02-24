@@ -40,6 +40,6 @@ public class ca_setArmPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Arm.checkRotation(m_armState) && Arm.checkExtension(m_armState);
+    return Arm.checkRotation(m_armState) || Arm.checkExtension(m_armState);
   }
 }

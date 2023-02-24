@@ -351,7 +351,7 @@ public class Drivetrain extends SubsystemBase {
         Double targetAngle = angle;
         double err = targetAngle - getZAngleConverted();
          if ( angle == 0 || angle == 360){
-            if (getZAngleConverted() <= 180 && ()) {
+            if (getZAngleConverted() <= 180 ) {
                 err = 0.0 - getZAngleConverted();
             } else {
                 err = 360 - getZAngleConverted();

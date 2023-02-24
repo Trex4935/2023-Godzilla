@@ -191,6 +191,7 @@ public class Drivetrain extends SubsystemBase {
         // Set motors speed using PID controller to get Y-axis to 0 degrees
         double leftPitch = drivePID.calculate(getYAngleOffset(), 0);
         double rightPitch = drivePID.calculate(getYAngleOffset(), 0);
+
         double err = 0 - getZAngleConverted();
         double P = 0.01;
         double driftCorrectionTwist = err * P;
@@ -322,11 +323,19 @@ public class Drivetrain extends SubsystemBase {
         Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
         Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
         // TO DO
-        double err = angle - getZAngleConverted();
+        Double targetAngle = angle;
+        double err = targetAngle - getZAngleConverted();
+         if ( angle == 0 || angle == 360){
+            if (getZAngleConverted() <= 180 && ()) {
+                err = 0.0 - getZAngleConverted();
+            } else {
+                err = 360 - getZAngleConverted();
+            }
+         }
         double P = 0.1;
-        double driftCorrectionTwist = err * P;
-        Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel - driftCorrectionTwist;
-        Double rightSpeedWheelWithGyroCorrection = rightSpeedWheel + driftCorrectionTwist;
+        double driftCorrectionTwist = err * P; 
+        Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel + driftCorrectionTwist; 
+        Double rightSpeedWheelWithGyroCorrection = rightSpeedWheel - driftCorrectionTwist;
         //
         setSpeeds(leftSpeedWheelWithGyroCorrection, rightSpeedWheelWithGyroCorrection);
         // System.out.println("Time: "+ time + " Velocity: " + velocityTarget + "

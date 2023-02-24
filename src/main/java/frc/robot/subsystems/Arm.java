@@ -8,16 +8,17 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.extensions.Falcon;
 import frc.robot.extensions.FlippedDIO;
@@ -27,13 +28,13 @@ import frc.robot.extensions.SparkMax;
 public class Arm extends SubsystemBase {
 
 // Arm Extension
-  private WPI_TalonFX armExtensionMotor;
+  private static WPI_TalonFX armExtensionMotor;
 
   DigitalInput armRetractedLimitSwitch;
 
   // Arm Rotation
   public CANSparkMax armRotationMotor;
-  RelativeEncoder armRotationEncoder;
+  static RelativeEncoder armRotationEncoder;
 
   SparkMaxPIDController armRotationPID;
 
@@ -244,6 +245,116 @@ public class Arm extends SubsystemBase {
 
   public String getIsCube (){
     return Constants.isCube;
+  }
+
+  
+  public static boolean checkRotation(ArmPosition armPos){
+
+    boolean isReached = false;
+    //battery side 
+    double ticksOffHighB = armRotationEncoder.getPosition() - Constants.ArmHighAngleBattery;
+    double ticksOffMiddleB = armRotationEncoder.getPosition() - Constants.ArmMiddleAngleBattery;
+    double ticksOffLowB = armRotationEncoder.getPosition() - Constants.ArmLowAngleBattery;
+    double ticksOffCarryB = armRotationEncoder.getPosition() - Constants.ArmCarryAngleBattery;
+    //compressor side
+    double ticksOffHighC = armRotationEncoder.getPosition() - Constants.ArmHighAngleCompressor;
+    double ticksOffMiddleC = armRotationEncoder.getPosition() - Constants.ArmMiddleAngleCompressor;
+    double ticksOffLowC = armRotationEncoder.getPosition() - Constants.ArmLowAngleCompressor;
+    double ticksOffCarryC = armRotationEncoder.getPosition() - Constants.ArmCarryAngleCompressor;
+    //if battery side, check position and if its reached the target
+    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide) {
+    
+    switch (armPos) {
+      case HIGH:
+      isReached = ticksOffHighB <= 1 && ticksOffHighB >= -1 ;
+      System.out.println("highb reached");
+        break;
+
+      case MIDDLE:
+       isReached = ticksOffMiddleB <= 1 && ticksOffMiddleB >= -1;
+       System.out.println("middleb reached");
+        break;
+
+      case LOW:
+       isReached = ticksOffLowB <= 1 && ticksOffLowB >= -1;
+       System.out.println("lowb reached");
+       break;
+
+      case CARRY:
+       isReached = ticksOffCarryB <= 1 && ticksOffCarryB >= -1;
+       System.out.println("carryb reached");
+       break;
+    
+      default:
+      isReached = false;
+        break;
+    }
+
+    return isReached;
+  
+  //if compressor side, check position and if its reached the target
+  } else {
+    
+    switch (armPos) {
+      case HIGH:
+      isReached = ticksOffHighC <= 1 && ticksOffHighC >= -1 ;
+      System.out.println("highc reached");
+        break;
+
+      case MIDDLE:
+       isReached = ticksOffMiddleC <= 1 && ticksOffMiddleC >= -1;
+       System.out.println("middlec reached");
+        break;
+
+      case LOW:
+       isReached = ticksOffLowC <= 1 && ticksOffLowC >= -1;
+       System.out.println("lowc reached");
+       break;
+
+      case CARRY:
+       isReached = ticksOffCarryC <= 1 && ticksOffCarryC >= -1;
+       System.out.println("carryc reached");
+       break;
+    
+      default:
+      isReached = false;
+        break;
+    }
+    return isReached;
+  }
+  }
+
+   public static boolean checkExtension(ArmPosition armPos){
+
+    boolean isExtended = false;
+    double ticksOffHigh = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmHighDistance;
+    double ticksOffMiddle = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmMiddleDistance;
+    double ticksOffLow = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmLowDistance;
+    double ticksOffCarry = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmCarryDistance;
+
+    
+    switch (armPos) {
+      case HIGH:
+      isExtended = ticksOffHigh <= 500 && ticksOffHigh >= -500 ;
+        break;
+
+      case MIDDLE:
+       isExtended = ticksOffMiddle <= 500 && ticksOffMiddle >= -500;
+        break;
+
+      case LOW:
+       isExtended = ticksOffLow <= 500 && ticksOffLow >= -500;
+
+      case CARRY:
+       isExtended = ticksOffCarry <= 500 && ticksOffCarry >= -500;
+    
+      default:
+      isExtended = false;
+        break;
+    }
+
+    return isExtended;
+
   }
 
   

@@ -22,9 +22,9 @@ public class cg_autoDoubleScore extends SequentialCommandGroup {
         new cm_GripperClose(gripper).withTimeout(2), // Closes on game piece
         // new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1), // Drops the
         new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(5),
-        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1),
-        new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)).withTimeout(0.5),// , // Resets arm to default position
-        new ca_setArmPosition(ArmPosition.CARRY).withTimeout(1)
+        new ca_setArmPosition(ArmPosition.MIDDLE),
+        new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)),// , // Resets arm to default position
+        new ca_setArmPosition(ArmPosition.CARRY)
     // new ca_autoTrajectoryKinematicWithGyro(drivetrain,
     // TrajectoryContainer.trajectoryFront,
     // TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece

@@ -19,16 +19,16 @@ public class ca_autoDoubleScoreBalance extends SequentialCommandGroup {
     // Use addRequirements() here to declare subsystem dependencies.
      addCommands(
         new cm_GripperClose(gripper).withTimeout(1), // Closes on game piece
-        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1),
+        new ca_setArmPosition(ArmPosition.MIDDLE),
         new ca_setSideOrientation(ArmSideOrientation.CompressorSide),
         new cm_GripperOpen(gripper).withTimeout(1), // Drops the game piece
-        new ca_setArmPosition(ArmPosition.CARRY).withTimeout(1), // Resets arm to default position
+        new ca_setArmPosition(ArmPosition.CARRY), // Resets arm to default position
         new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront,
             TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece
         new ca_setSideOrientation(ArmSideOrientation.BatterySide).withTimeout(1), // Changes the arm side
-        new ca_setArmPosition(ArmPosition.LOW).withTimeout(1), // Moves arm position to prepare for getting the piece
+        new ca_setArmPosition(ArmPosition.LOW), // Moves arm position to prepare for getting the piece
         new cm_GripperClose(gripper).withTimeout(1), // Gets piece
-        new ca_setArmPosition(ArmPosition.CARRY).withTimeout(1), // Resets arm to default position
+        new ca_setArmPosition(ArmPosition.CARRY), // Resets arm to default position
         new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryBack,
             TrajectoryContainer.trajBackEnd, 0.0), // Moves to scoring area
         new ca_setSideOrientation(ArmSideOrientation.CompressorSide), // Changes the arm side

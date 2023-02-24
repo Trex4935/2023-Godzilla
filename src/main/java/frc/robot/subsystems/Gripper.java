@@ -24,6 +24,9 @@ public class Gripper extends SubsystemBase {
         gripper = new Solenoid(15, PneumaticsModuleType.CTREPCM, 0);
         compressor = new Compressor(15, PneumaticsModuleType.CTREPCM);
         compressor.enableDigital();
+
+        
+
     }
 
     /** Closes the gripper */

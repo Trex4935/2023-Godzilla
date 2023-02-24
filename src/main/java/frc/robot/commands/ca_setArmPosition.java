@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
+import frc.robot.subsystems.Arm;
 
 public class ca_setArmPosition extends CommandBase {
   ArmPosition m_armState;
@@ -15,7 +16,7 @@ public class ca_setArmPosition extends CommandBase {
 
   /** Creates a new ca_setArmPosition. */
   public ca_setArmPosition(ArmPosition armState) {
-    m_armState = armState;    
+    m_armState = armState; 
   }
 
   // Called when the command is initially scheduled.
@@ -28,6 +29,7 @@ public class ca_setArmPosition extends CommandBase {
   @Override
   public void execute() {
       Constants.selectedArmState = m_armState;
+      //encoder values of rotation compared to target ticks for encoder position to turn true
     // System.out.println(m_armState);
   }
 
@@ -38,6 +40,6 @@ public class ca_setArmPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Arm.checkRotation(m_armState) && Arm.checkExtension(m_armState);
   }
 }

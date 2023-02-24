@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
 public class TrajectoryContainer {
@@ -31,26 +32,39 @@ public class TrajectoryContainer {
     new Pose2d(0, pigeontrajEnd, Rotation2d.fromDegrees(0)),
     trajectoryConfig);
 
-    public static final Double trajFrontEnd = 1.75; //goes on platform without encoders
+    public static final Double trajFrontEnd = 8.0; //goes on platform without encoders
     public static final Trajectory trajectoryFront = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0, 0, new Rotation2d(0)),
     List.of(),
     new Pose2d(0, trajFrontEnd, Rotation2d.fromDegrees(0)),
     trajectoryConfig);
 
-    public static final Double trajBackEnd = - 1.0;
+    public static final Double trajBackEnd = - 4.0;
     public static final Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0, 0.0, new Rotation2d(0)),
     List.of(),
-    new Pose2d(0, 1.0, Rotation2d.fromDegrees(0)),
+    new Pose2d(0, 4.0, Rotation2d.fromDegrees(0)),
     trajectoryConfig);
 
-    public static final Double trajMobilityEnd = 4.0;
+    public static final Double trajMobilityEnd = Units.inchesToMeters(139.5);
     public static final Trajectory trajectoryMobility = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0, 0, new Rotation2d(0)),
     List.of(),
     new Pose2d(0, trajMobilityEnd, Rotation2d.fromDegrees(0)),
     trajectoryConfig);
-    
+
+    public static final Double trajMobiPointsEnd = 8.0;
+    public static final Trajectory trajMobiPoints = TrajectoryGenerator.generateTrajectory(
+    new Pose2d(0,0,new Rotation2d()),
+    List.of(),
+    new Pose2d(0,0, Rotation2d.fromDegrees(0)),
+    trajectoryConfig);    
+
+    public static final Double trajGoToChargeStationEnd = -4.0;
+    public static final Trajectory trajGoToChargeStation = TrajectoryGenerator.generateTrajectory(
+    new Pose2d(0,0,new Rotation2d()),
+    List.of(),
+    new Pose2d(0,0, Rotation2d.fromDegrees(0)),
+    trajectoryConfig);     
 
 }

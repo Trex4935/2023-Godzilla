@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-public class ca_ForwardHalfSpeed extends CommandBase {
+public class ca_ForwardSlowSpeed extends CommandBase {
 
   private final Drivetrain drivetrain;
   private Timer timer = new Timer();
 
   /** Creates a new ca_ForwardHalfSpeed. */
-  public ca_ForwardHalfSpeed(Drivetrain dt) {
+  public ca_ForwardSlowSpeed(Drivetrain dt) {
     drivetrain = dt;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -30,7 +30,7 @@ public class ca_ForwardHalfSpeed extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.HalfSpeed();
+    drivetrain.SlowSpeed();
   }
 
   // Called once the command ends or is interrupted.

@@ -47,38 +47,38 @@ public class ca_ArmMovementCombo extends CommandBase {
        */
       switch (Constants.selectedArmState) {
         case HIGH:
-          // System.out.println("HIGH-B");
+          System.out.println("HIGH-B");
           m_arm.setArmRotationSM(Constants.ArmHighAngleBattery);
           m_arm.setArmExtensionMM(Constants.ArmHighDistance);
 
           break;
 
         case MIDDLE:
-          // System.out.println("MIDDLE-B");
+          System.out.println("MIDDLE-B");
           m_arm.setArmRotationSM(Constants.ArmMiddleAngleBattery);
           m_arm.setArmExtensionMM(Constants.ArmMiddleDistance);
           break;
 
         case LOW:
-          // System.out.println("LOW-B");
+          System.out.println("LOW-B");
           m_arm.setArmRotationSM(Constants.ArmLowAngleBattery);
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
-        case RAMMING:
-          // System.out.println("Ramming-B");
-          m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
-          m_arm.retractArm();
-          break;
+        // case RAMMING:
+        // System.out.println("Ramming-B");
+        // m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
+        // m_arm.retractArm();
+        // break;
 
         case SHELF:
-          // System.out.println("SHELF-B");
+          System.out.println("SHELF-B");
           m_arm.setArmRotationSM(Constants.ArmMiddleAngleBattery);
           m_arm.setArmExtensionMM(Constants.ArmShelfDistance);
           break;
 
         default: // Carry Position is default
-          // System.out.println("DEFAULT-B");
+          System.out.println("DEFAULT-B");
           m_arm.setArmRotationSM(Constants.ArmCarryAngleBattery);
           m_arm.retractArm();
 
@@ -90,37 +90,37 @@ public class ca_ArmMovementCombo extends CommandBase {
          * i.e. Low: 0 + 20 |Mirrored| 270 - 20
          */
         case HIGH:
-          // System.out.println("HIGH-C");
+          System.out.println("HIGH-C");
           m_arm.setArmRotationSM(Constants.ArmHighAngleCompressor);
           m_arm.setArmExtensionMM(Constants.ArmHighDistance);
           break;
 
         case MIDDLE:
-          // System.out.println("MIDDLE-C");
+          System.out.println("MIDDLE-C");
           m_arm.setArmRotationSM(Constants.ArmMiddleAngleCompressor);
           m_arm.setArmExtensionMM(Constants.ArmMiddleDistance);
           break;
 
         case LOW:
-          // System.out.println("LOW-C");
+          System.out.println("LOW-C");
           m_arm.setArmRotationSM(Constants.ArmLowAngleCompressor);
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
-        case RAMMING:
-          // System.out.println("RAMMING-C");
-          m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
-          m_arm.retractArm();
-          break;
+        // case RAMMING:
+        // System.out.println("RAMMING-C");
+        // m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
+        // m_arm.retractArm();
+        // break;
 
         case SHELF:
-          // System.out.println("DEFAULT-C");
+          System.out.println("DEFAULT-C");
           m_arm.setArmRotationSM(Constants.ArmMiddleAngleCompressor);
           m_arm.setArmExtensionMM(Constants.ArmShelfDistance);
           break;
 
         default: // Carry Position is default when side switch is flipped.
-          // System.out.println("DEFAULT-C");
+          System.out.println("DEFAULT-C");
           m_arm.setArmRotationSM(Constants.ArmCarryAngleCompressor);
           m_arm.retractArm();
 

@@ -18,6 +18,7 @@ import frc.robot.commands.autoArmAction.ca_setArmPosition;
 import frc.robot.commands.autoArmAction.ca_setSideOrientation;
 import frc.robot.commands.autoArmAction.cm_GripperClose;
 import frc.robot.commands.autoArmAction.cm_GripperOpen;
+import frc.robot.commands.autoArmAction.cm_retractArm;
 import frc.robot.commands.autoArmAction.cm_manualAddExtendTicks;
 import frc.robot.commands.autoArmAction.cm_manualDecreaseExtendTicks;
 import frc.robot.commands.autoArmAction.cm_manualResetAddArm;
@@ -41,6 +42,7 @@ import frc.robot.commands.autoPoints.ca_autoDoubleScoreBalance;
 import frc.robot.commands.autoPoints.cg_autoDoubleScore;
 import frc.robot.commands.autoPoints.cg_autoScore;
 import frc.robot.commands.autoPoints.cg_autoScoreBalance;
+import frc.robot.commands.autoPoints.cg_autoScoreMobilityBalance;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -96,6 +98,7 @@ public class RobotContainer {
   private final cg_autoScore autoScore;
   private final cg_autoScoreBalance autoScoreAndBalance;
   private final ca_autoTrajectoryKinematicWithGyro driveStraight;
+  private final cg_autoScoreMobilityBalance autoScoreMobilityBalance;
 
   private final ca_autoDriveStraightTrajKinGyroEncPID autoStraightPID;
 
@@ -189,21 +192,22 @@ public class RobotContainer {
 
     autoScore = new cg_autoScore(drivetrain, arm, gripper);
 
-
-    
-
     // Make 2 point and go Backword-mobility.
 
     autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
+    autoScoreMobilityBalance = new cg_autoScoreMobilityBalance(drivetrain, arm, gripper);
 
     // Do autobalancing.
 
     autoBalance = new ca_autoBalance(drivetrain);
-   // once a point is scored, the robot then moves 8 forward, then moves 4 backwards
-    //autoScore.andThen(goToAuto(new Translation2d(0,8))).andThen(goToAuto(new Translation2d(0, -4))).andThen( autoBalance);
-    // once a point is scored, the robot then moves 2 to the right(?) and 8 forward, then moves another 2 forward(?) and 8 backwards
-    //autoScore.andThen(goToAuto(new Translation2d(2,8))).andThen(goToAuto(new Translation2d(2, -8))).andThen(autoScore);
-
+    // once a point is scored, the robot then moves 8 forward, then moves 4
+    // backwards
+    // autoScore.andThen(goToAuto(new Translation2d(0,8))).andThen(goToAuto(new
+    // Translation2d(0, -4))).andThen( autoBalance);
+    // once a point is scored, the robot then moves 2 to the right(?) and 8 forward,
+    // then moves another 2 forward(?) and 8 backwards
+    // autoScore.andThen(goToAuto(new Translation2d(2,8))).andThen(goToAuto(new
+    // Translation2d(2, -8))).andThen(autoScore);
 
     // Scores middle and balances.
 
@@ -258,6 +262,10 @@ public class RobotContainer {
     // new JoystickButton(m_JoystickRight,
     // Constants.joystickTrigger).onTrue(setSpeedLimitMax).onFalse(setSpeedLimitDefault);
 
+    // Manual Testing Maintenance Mode
+    // new JoystickButton(m_ArduinoController,
+    // Constants.groundButtonID).whileTrue(new cm_retractArm(arm));
+
     // Arduino Controller Button Mapping
     // Arm Movement
     new JoystickButton(m_ArduinoController, Constants.groundButtonID).whileTrue(setArmPositionLow);
@@ -305,7 +313,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return autoBalance.withTimeout(15);
-    return autoDoubleScore;
+    return autoScoreMobilityBalance;
 
     // return auto;
 
@@ -324,7 +332,9 @@ public class RobotContainer {
 
     // Generic Auto
     SequentialCommandGroup auto = new SequentialCommandGroup(new ca_doesAbsolutelyNothing());
-// this command takes in the coordinates of a game point that then calculates a path for it to move. the path is calculated and then the robot is moved accordingly.
+    // this command takes in the coordinates of a game point that then calculates a
+    // path for it to move. the path is calculated and then the robot is moved
+    // accordingly.
     direction[] autoPath = null;
     // calculated path
     autoPath = drivetrain.calculateTrajEnum(endPoint);

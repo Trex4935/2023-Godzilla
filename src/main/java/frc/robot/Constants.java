@@ -44,7 +44,6 @@ public final class Constants {
   public final static int BRMotorID = 5; // RIGHT
   public final static int BLMotorID = 6; // LEFT
 
-
   /** Measurement Constants */
   public final static int wheelDiameter = 6;
   public final static int encoderTicks = 8192;
@@ -52,7 +51,7 @@ public final class Constants {
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
-  public static double dtmaxspeed = 0.75; // Speed Limit
+  public static double dtmaxspeed = 1; // Speed Limit
 
   // ARM ROTATION Constants
 
@@ -61,11 +60,10 @@ public final class Constants {
   public static final double armRotateSpeed = 0.85; // Arm Rotation Speed
   public static boolean inRedZone = false;
 
-
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {
-    public static final double dtmaxaccel = 1;
-    public static final double autodtMaxSpeed = 0.65;
+    public static final double dtmaxaccel = 0.75; // 0.5 on flat
+    public static final double autodtMaxSpeed = 1.25; // 1 on flat
     public static final double dtmaxomega = 1.6;
   }
 
@@ -101,7 +99,7 @@ public final class Constants {
   public static final double ArmLowDistance = -140000;
   /** 1 in -> -5000 */
   public static final double ArmRammingDistance = 0;
-  
+
   public static final double ArmCarryDistance = -5000;
 
   public static final double ArmShelfDistance = -45000;
@@ -145,7 +143,7 @@ public final class Constants {
   public static final int groundButtonID = 1;
   public static final int middleButtonID = 2;
   public static final int highButtonID = 3;
-  public static final int shelfButtonID = 12;
+  public static final int shelfButtonID = 11;
   // Joystick
   public static final int ardJoystickUp = 4;
   public static final int ardJoystickDown = 5;
@@ -191,6 +189,7 @@ public final class Constants {
   public static double addRotate = 0;
 
   public static double speedLimit = 0.75;
+
   // Direction
   public enum direction {
     FRONT,

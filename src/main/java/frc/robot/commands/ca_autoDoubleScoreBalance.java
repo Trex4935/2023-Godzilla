@@ -34,6 +34,7 @@ public class ca_autoDoubleScoreBalance extends SequentialCommandGroup {
         new ca_setSideOrientation(ArmSideOrientation.CompressorSide), // Changes the arm side
         new ca_setArmPosition(ArmPosition.MIDDLE), // Sets arm position to middle
         new cm_GripperOpen(gripper), // Drops the game piece
+        new ca_setSideOrientation(ArmSideOrientation.BatterySide), // Changes the arm side
         new ca_setArmPosition(ArmPosition.CARRY), // Resets arm to default position
         new ca_doSimpleL(drivetrain), // Autonomous
         new ca_autoBalance(drivetrain) // Balances the drivetrain

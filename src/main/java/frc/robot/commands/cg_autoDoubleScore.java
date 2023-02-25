@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.TrajectoryContainer;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.subsystems.Arm;
@@ -22,13 +23,12 @@ public class cg_autoDoubleScore extends SequentialCommandGroup {
         new cm_GripperClose(gripper).withTimeout(2), // Closes on game piece
         // new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1), // Drops the
         new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(5),
-        new ca_setArmPosition(ArmPosition.MIDDLE),
-        new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)),// , // Resets arm to default position
-        new ca_setArmPosition(ArmPosition.CARRY)
-    // new ca_autoTrajectoryKinematicWithGyro(drivetrain,
-    // TrajectoryContainer.trajectoryFront,
-    // TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece
-    // new ca_setSideOrientation(ArmSideOrientation.BatterySide,
+        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(2),
+        new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)).withTimeout(2),// , // Resets arm to default position
+        new ca_setArmPosition(ArmPosition.CARRY).withTimeout(2),
+        new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,TrajectoryContainer.trajectoryMobility,TrajectoryContainer.trajMobilityEnd, 0.0), // Moves to game piece
+        new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,TrajectoryContainer.trajectoryBack,TrajectoryContainer.trajBackEnd, 0.0) // Moves to game piece
+        // new ca_setSideOrientation(ArmSideOrientation.BatterySide,
     // true).withTimeout(3), // Changes the arm side
     // new ca_setArmPosition(ArmPosition.LOW).withTimeout(1), // Moves arm position
     // to prepare for getting the piece

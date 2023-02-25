@@ -123,8 +123,8 @@ public class Drivetrain extends SubsystemBase {
         // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
 
         // Create PID Controllers
-        m_leftPIDController = new PIDController(1.2, 0, 0);
-        m_rightPIDController = new PIDController(1.2, 0, 0);
+        m_leftPIDController = new PIDController(0.9, 0, 0);
+        m_rightPIDController = new PIDController(0.9, 0, 0);
 
         // Feed Forward
         m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 1.15);
@@ -331,22 +331,22 @@ public class Drivetrain extends SubsystemBase {
 
     public Double calculateSpeeds(State currState){
         //enc pos
-       double encoderPosition = (leftEncoder.get() + rightEncoder.get()) / 2;
+       double encoderPosition = (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2;
         // traj pos
         double currentTrajectoryPos = currState.poseMeters.getY();
-        double P = 1;
+        double P = 1.0/34;
         //
-        double targetSpeed = (currentTrajectoryPos - encoderPosition) / .002 * P;
+        double targetSpeed = Math.min((currentTrajectoryPos - encoderPosition) / .02 * P,0.5);
         return targetSpeed;
     }
 
     public void driveWithPIDArcade(State currState, Double end, Double time, Double angle) {
         //Double velocityTarget = currState.velocityMetersPerSecond;
-        Double velocityTarget = calculateSpeeds(currState);
+        Double velocityTarget = calculateSpeeds(currState)* Math.signum(end);
         // Rate is 0, because we are following a straight line, the speed varies
         // depending of path, it follows a trapezoide curve.
-        Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
-        Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
+        Double leftSpeedWheel = - getLeftSpeedKin(velocityTarget, 0);
+        Double rightSpeedWheel = - getRightpeedKin(velocityTarget, 0);
         // TO DO
         Double targetAngle = angle;
         double err = targetAngle - getZAngleConverted();
@@ -384,7 +384,7 @@ public class Drivetrain extends SubsystemBase {
         System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
                 + leftFeedforward + " rightFeedforward: " + rightFeedforward + " leftEncoder :" + leftEncoder.getRate()
                 + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput + " rightOutput: "
-                + rightOutput);
+                + rightOutput + " leftEncoderDistance: " + leftEncoder.getDistance() + " rightEncoderDistance: " + rightEncoder.getDistance() );
         FLMotor.setVoltage(leftOutput + leftFeedforward);
         FRMotor.setVoltage(rightOutput + rightFeedforward);
         MLMotor.setVoltage(leftOutput + leftFeedforward);
@@ -394,9 +394,9 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public Boolean reachDriveTarget(Double targetPosition) {
-        double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance())) / 2;
-
-        if (averageTickValue >= targetPosition - 0.01 || averageTickValue <= targetPosition + 0.01) { // if tick value
+        double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))*(Math.signum(targetPosition)) / 2;
+        System.out.println( " targetPosition: " + targetPosition + " averageDistance: " + averageTickValue);
+        if (averageTickValue >= targetPosition - 0.1 && averageTickValue <= targetPosition + 0.1) { // if tick value
                                                                                                       // is greater than
                                                                                                       // or equal to
                                                                                                       // 10000, stop

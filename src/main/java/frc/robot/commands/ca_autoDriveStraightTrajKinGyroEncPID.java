@@ -38,6 +38,7 @@ public class ca_autoDriveStraightTrajKinGyroEncPID extends CommandBase {
   @Override
   public void initialize() {
     timer.start();
+    dt.resetEncoders();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -60,8 +61,7 @@ public class ca_autoDriveStraightTrajKinGyroEncPID extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-    // dt.reachDriveTarget(end);
+    return dt.reachDriveTarget(end);
 
   }
 }

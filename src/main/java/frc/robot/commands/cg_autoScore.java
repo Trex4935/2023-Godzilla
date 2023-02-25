@@ -22,10 +22,10 @@ public class cg_autoScore extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new cm_GripperClose(gripper), // Closes on game piece
-        new ca_setArmPosition(ArmPosition.MIDDLE),
-        new cm_GripperOpen(gripper), // Drops the game piece
-        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront, TrajectoryContainer.trajFrontEnd, 0.0) // Moves for mobility points
+        new cm_GripperClose(gripper).withTimeout(2), // Closes on game piece
+        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(5),
+        new cm_GripperOpen(gripper).withTimeout(2), // Drops the game piece
+        new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd, 0.0) // Moves for mobility points
 
     );
   }

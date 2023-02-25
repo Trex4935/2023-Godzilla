@@ -202,9 +202,9 @@ public class RobotContainer {
 
     autoBalance = new ca_autoBalance(drivetrain);
    // once a point is scored, the robot then moves 8 forward, then moves 4 backwards
-    autoScore.andThen(goToAuto(new Translation2d(0,8))).andThen(goToAuto(new Translation2d(0, -4))).andThen( autoBalance);
+    //autoScore.andThen(goToAuto(new Translation2d(0,8))).andThen(goToAuto(new Translation2d(0, -4))).andThen( autoBalance);
     // once a point is scored, the robot then moves 2 to the right(?) and 8 forward, then moves another 2 forward(?) and 8 backwards
-    autoScore.andThen(goToAuto(new Translation2d(2,8))).andThen(goToAuto(new Translation2d(2, -8))).andThen(autoScore);
+    //autoScore.andThen(goToAuto(new Translation2d(2,8))).andThen(goToAuto(new Translation2d(2, -8))).andThen(autoScore);
 
 
     // Scores middle and balances.
@@ -307,7 +307,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return autoBalance.withTimeout(15);
-    return autoBalance;
+    return autoDoubleScore;
 
     // return auto;
 

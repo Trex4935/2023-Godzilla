@@ -26,8 +26,8 @@ public class cg_autoScoreBalance extends SequentialCommandGroup {
         new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)), // , // Resets arm to default
                                                                                           // position
         new ca_doesAbsolutelyNothing().withTimeout(1),
-        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront,
-            TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece
+        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
+            TrajectoryContainer.trajMobilityEnd, 0.0), // Moves to game piece
         // new ca_autoTrajectoryKinematicWithGyro(drivetrain,
         // TrajectoryContainer.trajectoryBack,TrajectoryContainer.trajBackEnd, 0.0), //
         // Moves to game piece

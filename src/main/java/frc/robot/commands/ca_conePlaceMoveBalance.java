@@ -20,10 +20,10 @@ addCommands(
   new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1),
   new ca_setSideOrientation(ArmSideOrientation.CompressorSide), // Changes the arm side
   new cm_GripperOpen(gripper), // Drops the game piece
-  new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajMobiPoints,
-  TrajectoryContainer.trajMobiPointsEnd, 0.0), // Moves to game piece
-  new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajGoToChargeStation,
-  TrajectoryContainer.trajGoToChargeStationEnd, 0.0), // Moves to game piece
+  new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront,
+  TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece trajMobiPointsEnd
+  new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront,
+  TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece trajGoToChargeStationEnd
   new ca_autoBalance(drivetrain) // Balances the drivetrain
 );    
   }

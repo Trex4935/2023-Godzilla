@@ -65,11 +65,11 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
-        // case RAMMING:
-        // System.out.println("Ramming-B");
-        // m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
-        // m_arm.retractArm();
-        // break;
+         case RAMMING:
+         System.out.println("RAMMING-B");
+         m_arm.setArmRotationSM(Constants.ArmRotationLowerLimit);
+         m_arm.setArmExtensionMM(Constants.ArmRammingDistance);
+         break;
 
         case SHELF:
           System.out.println("SHELF-B");
@@ -107,11 +107,11 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
-        // case RAMMING:
-        // System.out.println("RAMMING-C");
-        // m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
-        // m_arm.retractArm();
-        // break;
+         case RAMMING:
+         System.out.println("RAMMING-C");
+         m_arm.setArmRotationSM(Constants.ArmRotationUpperLimit);
+         m_arm.setArmExtensionMM(Constants.ArmRammingDistance);
+         break;
 
         case SHELF:
           System.out.println("DEFAULT-C");

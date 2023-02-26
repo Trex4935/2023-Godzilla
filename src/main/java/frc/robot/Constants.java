@@ -69,12 +69,14 @@ public final class Constants {
 
   /** Motor Rotation Limits */
   public static final int ArmRotationLowerLimit = 0;
+  public static final double ArmRotationUpperLimit = 270;
 
   // Arm Angles
   public static final double ArmHighAngleBattery = 85;
   public static final double ArmMiddleAngleBattery = 70;
   public static final double ArmLowAngleBattery = 16;
   public static double ArmCarryAngleBattery = 10;
+
 
   public static final double ArmCarryAngleCompressor = 308;
   public static final double ArmHighAngleCompressor = 240;

@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 
 public class cm_setSpeedLimit extends CommandBase {
-  double SpeedLimit;
+  double m_speedLimit;
   /** Creates a new cm_releaseSpeedLimiter. */
-  public cm_setSpeedLimit(double m_speedLimit) {
-    SpeedLimit = m_speedLimit;
+  public cm_setSpeedLimit(double SpeedLimit) {
+    m_speedLimit = SpeedLimit;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -22,7 +22,7 @@ public class cm_setSpeedLimit extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Constants.dtmaxspeed = SpeedLimit;
+    Constants.dtmaxspeed = m_speedLimit;
   }
 
   // Called once the command ends or is interrupted.

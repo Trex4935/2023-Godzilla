@@ -79,6 +79,8 @@ public class Drivetrain extends SubsystemBase {
     private final PIDController m_leftPIDController;
     private final PIDController m_rightPIDController;
 
+    private final PIDController anglePID;
+
     private final MotorControllerGroup m_leftGroup = new MotorControllerGroup(leftMotors);
     private final MotorControllerGroup m_rightGroup = new MotorControllerGroup(rightMotors);
 
@@ -131,7 +133,7 @@ public class Drivetrain extends SubsystemBase {
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
         ahrs.calibrate();
-        ahrs.reset();
+        // ahrs.reset();
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
         kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);
@@ -141,6 +143,9 @@ public class Drivetrain extends SubsystemBase {
 
         drivePID = new PIDController(0.06, 0.0008, 0); // 0.05, 0.001
         drivePID.setIntegratorRange(-4, 4); // -2,2
+
+        anglePID = new PIDController(0.0225, 0.001, 0); // 0.05, 0.001
+        drivePID.setIntegratorRange(-180, 180); // -2,2
 
     }
 
@@ -188,7 +193,7 @@ public class Drivetrain extends SubsystemBase {
     public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
         diffdrive.tankDrive(-joystick1.getRawAxis(Constants.joystickAxis),
                 -joystick2.getRawAxis(Constants.joystickAxis));
-        System.out.println("Pitch Angle: " + s_getAngleY());
+        // System.out.println("Pitch Angle: " + s_getAngleY());
     }
 
     /** Stops all Drivetrain motor groups. */
@@ -268,9 +273,9 @@ public class Drivetrain extends SubsystemBase {
     public double getOmega(double startAngle, double endAngle) {
         double omega = 0;
         if (startAngle > endAngle) { // if Start > End , go left, w +
-            omega = AutoMovementConstraints.dtmaxomega;
-        } else { // if Start < End, go right, w -
             omega = -AutoMovementConstraints.dtmaxomega;
+        } else { // if Start < End, go right, w -
+            omega = AutoMovementConstraints.dtmaxomega;
         }
 
         return omega;
@@ -359,21 +364,16 @@ public class Drivetrain extends SubsystemBase {
         // err = 360 - getZAngleConverted();
         // }
         // }
-        double P = 0.0175; // 0.02 best value on floor
+        // double P = 0.0225; // 0.02 best value on floor ///0.0175
+        anglePID.calculate(s_getAngleZ(), angle);
         // Deadband
-        if (err <= 0.1 && err >= -0.1) {
+        if (err <= 0.05 && err >= -0.05) {
             err = 0;
         }
 
-        double driftCorrectionTwist = err * P;
+        double driftCorrectionTwist = anglePID.calculate(s_getAngleZ(), angle); // err * P;
         Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel - driftCorrectionTwist;
         Double rightSpeedWheelWithGyroCorrection = rightSpeedWheel + driftCorrectionTwist;
-        System.out.println("Time: " + time + " Position Target: " + currState.poseMeters.getY() + " VelocityTarget: "
-                + velocityTarget + " leftSpeedWheel:  =  y "
-                + leftSpeedWheel + " rightSpeedWheel: " + rightSpeedWheel + "  error: " + err + "  Angle: " + angle
-                + "  GyroAngle: " + getZAngleConverted() + "  P: " + P + "  driftCorrectionTwist: "
-                + driftCorrectionTwist + "  leftSpeedWheelWithGyroCorrection: " + leftSpeedWheelWithGyroCorrection
-                + "  rightSpeedWheelWithGyroCorrection: " + rightSpeedWheelWithGyroCorrection);
         //
         setSpeeds(leftSpeedWheelWithGyroCorrection, rightSpeedWheelWithGyroCorrection);
 

@@ -111,6 +111,7 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     Constants.dtmaxspeed = 0.75;
     m_robotContainer.drivetrain.setMaxSpeed(Constants.dtmaxspeed);
+    m_robotContainer.drivetrain.resetGyro();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

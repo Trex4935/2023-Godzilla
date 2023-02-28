@@ -63,8 +63,8 @@ public final class Constants {
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {
     public static final double dtmaxaccel = 0.75; // 0.5 on flat
-    public static final double autodtMaxSpeed = 1.25; // 1 on flat
-    public static final double dtmaxomega = 1.6;
+    public static final double autodtMaxSpeed = 1.25; // 1 on flat 4.1 m/s is max.
+    public static final double dtmaxomega = 1.4;
   }
 
   /** Motor Rotation Limits */
@@ -76,7 +76,6 @@ public final class Constants {
   public static final double ArmMiddleAngleBattery = 70;
   public static final double ArmLowAngleBattery = 16;
   public static double ArmCarryAngleBattery = 10;
-
 
   public static final double ArmCarryAngleCompressor = 308;
   public static final double ArmHighAngleCompressor = 240;

@@ -51,6 +51,13 @@ public class TrajectoryContainer {
             List.of(),
             new Pose2d(0, trajMobilityEnd, Rotation2d.fromDegrees(0)),
             trajectoryConfig);
+ 
+        public static final Double trajPieceEnd = Units.inchesToMeters(183);
+        public static final Trajectory trajectoryPiece = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(),
+                new Pose2d(0, trajPieceEnd, Rotation2d.fromDegrees(0)),
+                trajectoryConfig);
 
     // public static final Double trajMobiPointsEnd = 8.0;
     // public static final Trajectory trajMobiPoints =

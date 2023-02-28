@@ -41,18 +41,19 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
     Double chassisSpeed = 0.0;
     Double comega = 0.0;
     // Gets which direction we are turning
-    comega = dt.getOmega(dt.getZAngleConverted(), eAngle);
+    comega = dt.getOmega(dt.s_getAngleZ(), eAngle);
+    Double error = eAngle.doubleValue() - dt.s_getAngleZ();
+    // Double P = 0.1;
+
     // Constant for now
     Double leftSpeed = dt.getLeftSpeedKin(chassisSpeed, comega);
     Double rightSpeed = dt.getRightpeedKin(chassisSpeed, comega);
 
     dt.driveWithAuto(leftSpeed, rightSpeed);
-    // dt.simulateGyro(leftSpeed, rightSpeed, timer);
-    // Double error = eAngle.doubleValue() - dt.getZAngleConverted();
-    // System.out.println("Time: " + timer.get() + " Velocity: " + chassisSpeed + "
-    // Omega: " + comega + " Angle: " + dt.getZAngleConverted() + " AngleTarget: " +
-    // eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: "+ rightSpeed + " Error:
-    // " + error);
+    dt.simulateGyro(leftSpeed, rightSpeed, timer);
+    System.out.println("Time: " + timer.get() + " Velocity: " + chassisSpeed + "Omega: " + comega + " Angle: "
+        + dt.s_getAngleZ() + " AngleTarget: " + eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: "
+        + rightSpeed + " Error:" + error);
   }
 
   // Called once the command ends or is interrupted.
@@ -64,8 +65,7 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return eAngle.doubleValue() - dt.getZAngleConverted() <= 2.0
-        && eAngle.doubleValue() - dt.getZAngleConverted() >= -2.0
-        || timer.get() > 10;
+    return eAngle.doubleValue() - dt.s_getAngleZ() <= 4.0
+        && eAngle.doubleValue() - dt.s_getAngleZ() >= -4.0;
   }
 }

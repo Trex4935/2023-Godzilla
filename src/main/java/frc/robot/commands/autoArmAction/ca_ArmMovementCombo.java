@@ -113,7 +113,7 @@ public class ca_ArmMovementCombo extends CommandBase {
           break;
 
         case SHELF:
-          System.out.println("DEFAULT-C");
+          System.out.println("SHELF-C");
           m_arm.setArmRotationSM(Constants.ArmMiddleAngleCompressor);
           m_arm.setArmExtensionMM(Constants.ArmShelfDistance);
           break;

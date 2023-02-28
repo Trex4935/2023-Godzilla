@@ -146,7 +146,7 @@ public final class Constants {
   public static final int groundButtonID = 1;
   public static final int middleButtonID = 2;
   public static final int highButtonID = 3;
-  public static final int shelfButtonID = 11;
+  public static final int shelfButtonID = 13;
   // Joystick
   public static final int ardJoystickUp = 4;
   public static final int ardJoystickDown = 5;

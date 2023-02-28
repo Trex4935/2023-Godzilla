@@ -10,9 +10,9 @@ import frc.robot.extensions.ArmPosition;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Gripper;
 import frc.robot.TrajectoryContainer;
-import frc.robot.commands.autoArmAction.ca_setArmPosition;
-import frc.robot.commands.autoArmAction.cm_GripperClose;
-import frc.robot.commands.autoArmAction.cm_GripperOpen;
+import frc.robot.commands.armAction.ca_setArmPosition;
+import frc.robot.commands.armAction.cm_GripperClose;
+import frc.robot.commands.armAction.cm_GripperOpen;
 import frc.robot.commands.autoDriveActions.ca_autoDriveStraightTrajKinGyroEncPID;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more

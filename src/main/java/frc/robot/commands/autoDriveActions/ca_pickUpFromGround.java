@@ -5,8 +5,8 @@
 package frc.robot.commands.autoDriveActions;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.autoArmAction.ca_setArmPosition;
-import frc.robot.commands.autoArmAction.cm_GripperClose;
+import frc.robot.commands.armAction.ca_setArmPosition;
+import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Gripper;

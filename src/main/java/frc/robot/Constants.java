@@ -107,6 +107,8 @@ public final class Constants {
 
   public static double tempArmDistance = 10;
 
+  public static boolean buttonOccupied = false;
+
   // Gripper Constants
   public static boolean gripperClosed = true;
 

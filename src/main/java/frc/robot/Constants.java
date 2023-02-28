@@ -58,6 +58,7 @@ public final class Constants {
   /** Motor ID */
   public static final int armRotationCAN = 13;
   public static final double armRotateSpeed = 0.85; // Arm Rotation Speed
+  public static double slowArmRotateSpeed = 0.4;
   public static boolean inRedZone = false;
 
   /** Class for the speed and acceleration limits of the robot. */
@@ -77,7 +78,7 @@ public final class Constants {
   public static final double ArmLowAngleBattery = 16;
   public static double ArmCarryAngleBattery = 10;
 
-  public static final double ArmCarryAngleCompressor = 308;
+  public static final double ArmCarryAngleCompressor = 313;
   public static final double ArmHighAngleCompressor = 240;
   public static final double ArmMiddleAngleCompressor = 250;
   public static final double ArmLowAngleCompressor = 310;

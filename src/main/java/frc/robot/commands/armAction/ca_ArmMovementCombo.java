@@ -36,10 +36,12 @@ public class ca_ArmMovementCombo extends CommandBase {
     }
 
     // If gripperClosed is FALSE, then set state to ramming
-    if (!Constants.gripperClosed && m_arm.getArmRetractedLimitSwitch()
-        && (Constants.selectedArmState == ArmPosition.CARRY || Constants.selectedArmState == ArmPosition.RAMMING) && !Constants.buttonOccupied) {
-      Constants.selectedArmState = ArmPosition.RAMMING;
-    }
+    /* if (!Constants.gripperClosed && m_arm.getArmRetractedLimitSwitch()
+        && (Constants.selectedArmState == ArmPosition.CARRY || Constants.selectedArmState == ArmPosition.RAMMING)
+        && !Constants.buttonOccupied) {
+        Constants.slowArmRotateSpeed = 0.25;
+        Constants.selectedArmState = ArmPosition.RAMMING;
+    } */
 
     if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide) {
       /**
@@ -64,11 +66,11 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
-         case RAMMING:
+        /* case RAMMING:
           System.out.println("RAMMING-B");
           m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
           m_arm.retractArm();
-          break;
+          break; */
 
         case SHELF:
           System.out.println("SHELF-B");
@@ -106,11 +108,11 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
-        case RAMMING:
+        /* case RAMMING:
           System.out.println("RAMMING-C");
           m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);
           m_arm.retractArm();
-          break;
+          break; */
 
         case SHELF:
           System.out.println("SHELF-C");
@@ -127,6 +129,7 @@ public class ca_ArmMovementCombo extends CommandBase {
     }
 
     Constants.selectedArmState = ArmPosition.CARRY;
+    /* Constants.slowArmRotateSpeed = 0.4; */
   }
 
   // Called once the command ends or is interrupted.

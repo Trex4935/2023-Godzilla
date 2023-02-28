@@ -87,6 +87,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     Constants.isAutonomous = true;
     Constants.dtmaxspeed = 1;
+    Constants.buttonOccupied = true;
     m_robotContainer.drivetrain.setMaxSpeed(Constants.dtmaxspeed);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     m_robotContainer.drivetrain.resetGyro();
@@ -109,6 +110,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    Constants.buttonOccupied = false;
     Constants.dtmaxspeed = 0.75;
     m_robotContainer.drivetrain.setMaxSpeed(Constants.dtmaxspeed);
     m_robotContainer.drivetrain.resetGyro();

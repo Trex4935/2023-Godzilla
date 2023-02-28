@@ -14,7 +14,7 @@ import frc.robot.extensions.ArmSideOrientation;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.commands.armAction.ca_ArmMovementCombo;
-import frc.robot.commands.armAction.ca_setArmPosition;
+import frc.robot.commands.armAction.cm_setArmPositionManual;
 import frc.robot.commands.armAction.ca_setSideOrientation;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
@@ -67,10 +67,10 @@ public class RobotContainer {
   private final cm_setSpeedLimit setSpeedLimitMax;
   private final cm_setSpeedLimit setSpeedLimitDefault;
   private final ca_ArmMovementCombo armMovementCombo;
-  private final ca_setArmPosition setArmPositionHigh;
-  private final ca_setArmPosition setArmPositionMiddle;
-  private final ca_setArmPosition setArmPositionLow;
-  private final ca_setArmPosition setArmPositionShelf;
+  private final cm_setArmPositionManual setArmPositionHigh;
+  private final cm_setArmPositionManual setArmPositionMiddle;
+  private final cm_setArmPositionManual setArmPositionLow;
+  private final cm_setArmPositionManual setArmPositionShelf;
   private final cm_manualDecreaseExtendTicks manualDecreaseExtendTicks;
   private final cm_manualAddExtendTicks manualAddExtendTicks;
   private final cm_manualRotateBattery manualRotateBattery;
@@ -129,10 +129,10 @@ public class RobotContainer {
     // Combo
     nothingAtAll = new ca_doesAbsolutelyNothing();
     armMovementCombo = new ca_ArmMovementCombo(arm);
-    setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
-    setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
-    setArmPositionLow = new ca_setArmPosition(ArmPosition.LOW);
-    setArmPositionShelf = new ca_setArmPosition(ArmPosition.SHELF);
+    setArmPositionHigh = new cm_setArmPositionManual(ArmPosition.HIGH);
+    setArmPositionMiddle = new cm_setArmPositionManual(ArmPosition.MIDDLE);
+    setArmPositionLow = new cm_setArmPositionManual(ArmPosition.LOW);
+    setArmPositionShelf = new cm_setArmPositionManual(ArmPosition.SHELF);
     manualDecreaseExtendTicks = new cm_manualDecreaseExtendTicks(arm);
     manualAddExtendTicks = new cm_manualAddExtendTicks(arm);
     manualRotateBattery = new cm_manualRotateBattery(arm);

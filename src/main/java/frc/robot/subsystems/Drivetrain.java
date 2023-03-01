@@ -196,10 +196,10 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // DEFAULT Command that moves the robot with joysticks
-    public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
-        diffdrive.tankDrive(-joystick1.getRawAxis(Constants.joystickAxis),
-                -joystick2.getRawAxis(Constants.joystickAxis));
-        // System.out.println("Pitch Angle: " + s_getAngleY());
+    public void driveWithJoysticks(Joystick leftJoystick, Joystick rightJoystick) {
+        diffdrive.tankDrive(-leftJoystick.getRawAxis(Constants.joystickAxis),
+                -rightJoystick.getRawAxis(Constants.joystickAxis));
+        System.out.println("Pitch Angle: " + s_getAngleY());
     }
 
     /** Stops all Drivetrain motor groups. */
@@ -210,7 +210,8 @@ public class Drivetrain extends SubsystemBase {
 
     /** Sets the max speed value (sendable) */
     public void setMaxSpeed(double MaxSpeed) {
-        Constants.dtmaxspeed = MaxSpeed;
+        m_MaxSpeed = MaxSpeed;
+        diffdrive.setMaxOutput(m_MaxSpeed);
     }
 
     /** Resets both encoders to 0 */

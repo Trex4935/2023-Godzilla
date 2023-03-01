@@ -35,7 +35,7 @@ public class cm_driveWithJoysticks extends CommandBase {
   @Override
   public void execute() {
     //This command moves robot by calling the joysticks method and taking in the inputs of both joysticks 
-  m_Drivetrain.setMaxSpeed(Constants.speedLimit);
+  m_Drivetrain.setMaxSpeed(Constants.dtmaxspeed);
   m_Drivetrain.driveWithJoysticks(m_joystickLeft, m_joystickRight);
   }
 

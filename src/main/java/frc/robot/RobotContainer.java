@@ -257,7 +257,7 @@ public class RobotContainer {
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     // Increase Speed when pressing triggers.
-    new JoystickButton(m_JoystickLeft, Constants.joystickTrigger).onTrue(setSpeedLimitMax)
+    new JoystickButton(m_JoystickRight, Constants.joystickTrigger).onTrue(setSpeedLimitMax)
         .onFalse(setSpeedLimitDefault);
     // new JoystickButton(m_JoystickRight,
     // Constants.joystickTrigger).onTrue(setSpeedLimitMax).onFalse(setSpeedLimitDefault);

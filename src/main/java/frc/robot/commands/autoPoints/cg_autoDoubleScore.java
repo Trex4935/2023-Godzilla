@@ -11,7 +11,9 @@ import frc.robot.commands.armAction.ca_setSideOrientation;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
 import frc.robot.commands.autoDriveActions.ca_autoDriveStraightTrajKinGyroEncPID;
+import frc.robot.commands.autoDriveActions.ca_autoTurnKinematic;
 import frc.robot.commands.autoDriveActions.ca_autoTurnKinematicGyro;
+import frc.robot.commands.autoDriveActions.ca_doesAbsolutelyNothing;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.subsystems.Arm;
@@ -26,29 +28,41 @@ public class cg_autoDoubleScore extends SequentialCommandGroup {
     // Use addRequirements() here to declare subsystem dependencies
     addCommands(
 
-      new cm_GripperClose(gripper).withTimeout(0.5), // Closes on game piece
-      new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(5),
-      new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(3.5),
-      new cm_GripperOpen(gripper).alongWith(new
-        ca_setArmPosition(ArmPosition.MIDDLE)).withTimeout(1),// , // Resets arm to
+        new cm_GripperClose(gripper).withTimeout(0.5), // Closes on game piece
+        new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(5),
+        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(3.5),
+        new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)).withTimeout(1), // , // Resets
+                                                                                                         // arm to
         // default position
-      new ca_setArmPosition(ArmPosition.CARRY).alongWith(new ca_setSideOrientation(ArmSideOrientation.BatterySide)).withTimeout(4),
+        new ca_setArmPosition(ArmPosition.CARRY).alongWith(new ca_setSideOrientation(ArmSideOrientation.BatterySide))
+            .withTimeout(4),
         // new ca_setArmPosition(ArmPosition.CARRY).withTimeout(2),
-    //     new ca_autoTurnKinematicGyro(drivetrain, 0.0, -90.0),
-    // new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
-    // TrajectoryContainer.trajectoryFront,
-    // TrajectoryContainer.trajFrontEnd, -90.0),
-    // new ca_autoTurnKinematicGyro(drivetrain, -90.0, 0.0),
-    new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
-    TrajectoryContainer.trajectoryPiece,
-    TrajectoryContainer.trajPieceEnd, 0.0), // Moves to game piece
-    new ca_setArmPosition(ArmPosition.LOW).withTimeout(2.5),
-    new cm_GripperClose(gripper).withTimeout(0.5),
-    new ca_setArmPosition(ArmPosition.CARRY)
-    // new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
-    // TrajectoryContainer.trajectoryBack,
-    // TrajectoryContainer.trajBackEnd, 0.0), // Moves to game piece
-    // new ca_autoTurnKinematicGyro(drivetrain, 0.0, -90.0)
+        // new ca_autoTurnKinematicGyro(drivetrain, 0.0, -90.0),
+        // new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
+        // TrajectoryContainer.trajectoryFront,
+        // TrajectoryContainer.trajFrontEnd, -90.0),
+        new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
+            TrajectoryContainer.trajectoryPiece,
+            TrajectoryContainer.trajPieceEnd, (0.0)),
+        new ca_autoTurnKinematic(drivetrain, 0.0, 90.0),
+        // new ca_doesAbsolutelyNothing().withTimeout(5),
+        // new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
+        // TrajectoryContainer.trajectoryPieceSide,
+        // TrajectoryContainer.trajPieceSideEnd, (150.0)), // Moves to game piece
+        // new ca_doesAbsolutelyNothing().withTimeout(5),
+        // new ca_autoTurnKinematic(drivetrain, 90.0, 0.0),
+        // new ca_doesAbsolutelyNothing().withTimeout(5),
+        // new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
+        // TrajectoryContainer.trajectoryPiece,
+        // TrajectoryContainer.trajPieceEnd, 0.0), // Moves to game piece
+        new ca_setArmPosition(ArmPosition.LOW).withTimeout(2.5),
+        new cm_GripperClose(gripper).withTimeout(2),
+        new ca_setArmPosition(ArmPosition.CARRY),
+        new ca_autoTurnKinematic(drivetrain, 90.0, 0.0),
+        new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
+        TrajectoryContainer.trajectoryBack,
+        TrajectoryContainer.trajBackEnd, 0.0) // Moves to game piece
+    // //new ca_autoTurnKinematicGyro(drivetrain, 0.0, -90.0)
 
     // new ca_setSideOrientation(ArmSideOrientation.BatterySide,
     // true).withTimeout(3), // Changes the arm side

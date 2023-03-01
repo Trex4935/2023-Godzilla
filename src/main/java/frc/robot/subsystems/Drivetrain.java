@@ -133,6 +133,12 @@ public class Drivetrain extends SubsystemBase {
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
         ahrs.calibrate();
+        // new Thread(){
+        //     public void run(){
+        //         Thread.sleep(500);
+
+        //     }.start();
+        // }
         // ahrs.reset();
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
@@ -144,7 +150,7 @@ public class Drivetrain extends SubsystemBase {
         drivePID = new PIDController(0.06, 0.0008, 0); // 0.05, 0.001
         drivePID.setIntegratorRange(-4, 4); // -2,2
 
-        anglePID = new PIDController(0.0225, 0.001, 0); // 0.05, 0.001
+        anglePID = new PIDController(0.0225, 0.00, 0); // 0.05, 0.001
         drivePID.setIntegratorRange(-180, 180); // -2,2
 
     }
@@ -364,14 +370,14 @@ public class Drivetrain extends SubsystemBase {
         // err = 360 - getZAngleConverted();
         // }
         // }
-        // double P = 0.0225; // 0.02 best value on floor ///0.0175
-        anglePID.calculate(s_getAngleZ(), angle);
+        double P = 0.03; // 0.02 best value on floor ///0.0175
+        //anglePID.calculate(s_getAngleZ(), angle);
         // Deadband
         if (err <= 0.05 && err >= -0.05) {
             err = 0;
         }
 
-        double driftCorrectionTwist = anglePID.calculate(s_getAngleZ(), angle); // err * P;
+        double driftCorrectionTwist = err*P;//anglePID.calculate(s_getAngleZ(), angle); // err * P;
         Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel - driftCorrectionTwist;
         Double rightSpeedWheelWithGyroCorrection = rightSpeedWheel + driftCorrectionTwist;
         //

@@ -13,11 +13,13 @@ public class ca_autoTurnKinematic extends CommandBase {
   Timer timer;
   Drivetrain dt;
   Double eAngle;
+  Double sAngle;
 
   public ca_autoTurnKinematic(Drivetrain drivetrain, Double startAngle, Double endAngle) {
     timer = new Timer();
     dt = drivetrain;
     eAngle = endAngle;
+    sAngle = startAngle;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);
 
@@ -38,15 +40,26 @@ public class ca_autoTurnKinematic extends CommandBase {
   public void execute() {
     Double chassisSpeed = 0.0;
     Double comega = 0.0;
-    
+
+    Double leftSpeed = 0.0;
+    Double rightSpeed = 0.0;
+
     // Gets which direction we are turning
-    comega = dt.getOmega(Math.toDegrees(dt.zSimAngle), eAngle);
+    // comega = dt.getOmega(Math.toDegrees(dt.zSimAngle), eAngle);
     // Constant for now
-    Double leftSpeed = dt.getLeftSpeedKin(chassisSpeed, comega);
-    Double rightSpeed = dt.getRightpeedKin(chassisSpeed, comega);
+    // Double leftSpeed = dt.getLeftSpeedKin(chassisSpeed, comega);
+    // Double rightSpeed = dt.getRightpeedKin(chassisSpeed, comega);
+    if (sAngle >= eAngle) {
+      leftSpeed = -0.5;
+      rightSpeed = 0.5;
+    } else {
+      leftSpeed = 0.5;
+      rightSpeed = -0.5;
+
+    }
 
     dt.driveWithAuto(leftSpeed, rightSpeed);
-    dt.simulateGyro(leftSpeed, rightSpeed, timer);
+    // dt.simulateGyro(leftSpeed, rightSpeed, timer);
     // Double error = eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) ;
     // System.out.println("Time: "+ timer.get() + " Velocity: " + chassisSpeed + "
     // Omega: " + comega + " Angle: " + Math.toDegrees(dt.zSimAngle) + "
@@ -63,7 +76,14 @@ public class ca_autoTurnKinematic extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) <= 2.0
-        && eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) >= -2.0 || timer.get() > 10;
+    Double timeStop = 0.0;
+    if (sAngle >= eAngle) {
+     timeStop = 0.9;//turnRight
+    } else {
+      timeStop = 1.05;//turn
+
+    }
+    return timer.get() > timeStop; // eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) <= 2.0
+    // && eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) >= -2.0 ||
   }
 }

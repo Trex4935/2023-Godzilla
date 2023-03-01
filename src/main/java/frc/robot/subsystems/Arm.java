@@ -27,10 +27,10 @@ import frc.robot.extensions.SparkMax;
 
 public class Arm extends SubsystemBase {
 
-// Arm Extension
+  // Arm Extension
   private static WPI_TalonFX armExtensionMotor;
 
-  DigitalInput armRetractedLimitSwitch;
+  public DigitalInput armRetractedLimitSwitch;
 
   // Arm Rotation
   public CANSparkMax armRotationMotor;
@@ -71,19 +71,20 @@ public class Arm extends SubsystemBase {
   public void stopExtensionMotor() {
     armExtensionMotor.stopMotor();
   }
+
   /** Stops the Rotation Motor */
   public void stopRotationMotor() {
     armRotationMotor.stopMotor();
   }
 
   // Rotates the arm towards the chassis until limit switch is tripped
-  public void armRotationToLimit(ArmSideOrientation m_armSide){
+  public void armRotationToLimit(ArmSideOrientation m_armSide) {
     // If batterySide, move to limit switch
     if (m_armSide == ArmSideOrientation.BatterySide) {
       if (batterySideLimitSwitch.get()) {
         armRotationMotor.stopMotor();
       } else {
-        armRotationMotor.set(-0.4);
+        armRotationMotor.set(-Constants.slowArmRotateSpeed);
       }
     }
     // If compressorSide, move to limit switch
@@ -91,7 +92,7 @@ public class Arm extends SubsystemBase {
       if (compressorSideLimitSwitch.get()) {
         stopRotationMotor();
       } else {
-        armRotationMotor.set(0.4);
+        armRotationMotor.set(Constants.slowArmRotateSpeed);
       }
     }
   }
@@ -156,10 +157,12 @@ public class Arm extends SubsystemBase {
   public void increaseTicks() {
     Constants.addExtend -= 500;
   }
+
   /** Decreases addExtend */
   public void decreaseTicks() {
     Constants.addExtend += 500;
   }
+
   /** resets the addExtend value */
   public void resetExtensionAdditionTicks() {
     Constants.addExtend = 0;
@@ -169,10 +172,12 @@ public class Arm extends SubsystemBase {
   public void manualRotateCompressor() {
     Constants.addRotate += 0.5;
   }
+
   /** Rotates the arm towards the battery by 0.5 degrees */
   public void manualRotateBattery() {
     Constants.addRotate -= 0.5;
   }
+
   /** Resets additional rotation angles */
   public void resetAddRotationAngle() {
     Constants.addRotate = 0;
@@ -217,6 +222,7 @@ public class Arm extends SubsystemBase {
   public double getDefaultAngle() {
     return Constants.ArmCarryAngleCompressor;
   }
+
   /** Method that determines if the arm is retracted or not */
   public boolean getArmRetractedLimitSwitch() {
     return armRetractedLimitSwitch.get();
@@ -239,92 +245,94 @@ public class Arm extends SubsystemBase {
   }
 
   public String getArmSideOrientation() {
-    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide){ return "battery";}
-    else{return "compressor";}
+    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide) {
+      return "battery";
+    } else {
+      return "compressor";
+    }
   }
 
-  public String getIsCube (){
+  public String getIsCube() {
     return Constants.isCube;
   }
 
-  
-  public static boolean checkRotation(ArmPosition armPos){
+  public static boolean checkRotation(ArmPosition armPos) {
 
     boolean isReached = false;
-    //battery side 
+    // battery side
     double ticksOffHighB = armRotationEncoder.getPosition() - Constants.ArmHighAngleBattery;
     double ticksOffMiddleB = armRotationEncoder.getPosition() - Constants.ArmMiddleAngleBattery;
     double ticksOffLowB = armRotationEncoder.getPosition() - Constants.ArmLowAngleBattery;
     double ticksOffCarryB = armRotationEncoder.getPosition() - Constants.ArmCarryAngleBattery;
-    //compressor side
+    // compressor side
     double ticksOffHighC = armRotationEncoder.getPosition() - Constants.ArmHighAngleCompressor;
     double ticksOffMiddleC = armRotationEncoder.getPosition() - Constants.ArmMiddleAngleCompressor;
     double ticksOffLowC = armRotationEncoder.getPosition() - Constants.ArmLowAngleCompressor;
     double ticksOffCarryC = armRotationEncoder.getPosition() - Constants.ArmCarryAngleCompressor;
-    //if battery side, check position and if its reached the target
+    // if battery side, check position and if its reached the target
     if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide) {
-    
-    switch (armPos) {
-      case HIGH:
-      isReached = ticksOffHighB <= 1 && ticksOffHighB >= -1 ;
-      System.out.println("highb reached");
-        break;
 
-      case MIDDLE:
-       isReached = ticksOffMiddleB <= 1 && ticksOffMiddleB >= -1;
-       System.out.println("middleb reached");
-        break;
+      switch (armPos) {
+        case HIGH:
+          isReached = ticksOffHighB <= 1 && ticksOffHighB >= -1;
+          System.out.println("highb reached");
+          break;
 
-      case LOW:
-       isReached = ticksOffLowB <= 1 && ticksOffLowB >= -1;
-       System.out.println("lowb reached");
-       break;
+        case MIDDLE:
+          isReached = ticksOffMiddleB <= 1 && ticksOffMiddleB >= -1;
+          System.out.println("middleb reached");
+          break;
 
-      case CARRY:
-       isReached = ticksOffCarryB <= 1 && ticksOffCarryB >= -1;
-       System.out.println("carryb reached");
-       break;
-    
-      default:
-      isReached = false;
-        break;
+        case LOW:
+          isReached = ticksOffLowB <= 1 && ticksOffLowB >= -1;
+          System.out.println("lowb reached");
+          break;
+
+        case CARRY:
+          isReached = ticksOffCarryB <= 1 && ticksOffCarryB >= -1;
+          System.out.println("carryb reached");
+          break;
+
+        default:
+          isReached = false;
+          break;
+      }
+
+      return isReached;
+
+      // if compressor side, check position and if its reached the target
+    } else {
+
+      switch (armPos) {
+        case HIGH:
+          isReached = ticksOffHighC <= 1 && ticksOffHighC >= -1;
+          System.out.println("highc reached");
+          break;
+
+        case MIDDLE:
+          isReached = ticksOffMiddleC <= 1 && ticksOffMiddleC >= -1;
+          System.out.println("middlec reached");
+          break;
+
+        case LOW:
+          isReached = ticksOffLowC <= 1 && ticksOffLowC >= -1;
+          System.out.println("lowc reached");
+          break;
+
+        case CARRY:
+          isReached = ticksOffCarryC <= 1 && ticksOffCarryC >= -1;
+          System.out.println("carryc reached");
+          break;
+
+        default:
+          isReached = false;
+          break;
+      }
+      return isReached;
     }
-
-    return isReached;
-  
-  //if compressor side, check position and if its reached the target
-  } else {
-    
-    switch (armPos) {
-      case HIGH:
-      isReached = ticksOffHighC <= 1 && ticksOffHighC >= -1 ;
-      System.out.println("highc reached");
-        break;
-
-      case MIDDLE:
-       isReached = ticksOffMiddleC <= 1 && ticksOffMiddleC >= -1;
-       System.out.println("middlec reached");
-        break;
-
-      case LOW:
-       isReached = ticksOffLowC <= 1 && ticksOffLowC >= -1;
-       System.out.println("lowc reached");
-       break;
-
-      case CARRY:
-       isReached = ticksOffCarryC <= 1 && ticksOffCarryC >= -1;
-       System.out.println("carryc reached");
-       break;
-    
-      default:
-      isReached = false;
-        break;
-    }
-    return isReached;
-  }
   }
 
-   public static boolean checkExtension(ArmPosition armPos){
+  public static boolean checkExtension(ArmPosition armPos) {
 
     boolean isExtended = false;
     double ticksOffHigh = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmHighDistance;
@@ -332,24 +340,23 @@ public class Arm extends SubsystemBase {
     double ticksOffLow = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmLowDistance;
     double ticksOffCarry = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmCarryDistance;
 
-    
     switch (armPos) {
       case HIGH:
-      isExtended = ticksOffHigh <= 500 && ticksOffHigh >= -500 ;
+        isExtended = ticksOffHigh <= 500 && ticksOffHigh >= -500;
         break;
 
       case MIDDLE:
-       isExtended = ticksOffMiddle <= 500 && ticksOffMiddle >= -500;
+        isExtended = ticksOffMiddle <= 500 && ticksOffMiddle >= -500;
         break;
 
       case LOW:
-       isExtended = ticksOffLow <= 500 && ticksOffLow >= -500;
+        isExtended = ticksOffLow <= 500 && ticksOffLow >= -500;
 
       case CARRY:
-       isExtended = ticksOffCarry <= 500 && ticksOffCarry >= -500;
-    
+        isExtended = ticksOffCarry <= 500 && ticksOffCarry >= -500;
+
       default:
-      isExtended = false;
+        isExtended = false;
         break;
     }
 
@@ -357,17 +364,16 @@ public class Arm extends SubsystemBase {
 
   }
 
-  
-  public String getIsAutonomous(){
+  public String getIsAutonomous() {
     if (DriverStation.isAutonomous()) {
       return "GODZILLA";
     } else {
-     return "Teleop";
+      return "Teleop";
     }
 
   }
 
-  public boolean getLatchEngaged(){
+  public boolean getLatchEngaged() {
     return redZoneLatch;
   }
   /*

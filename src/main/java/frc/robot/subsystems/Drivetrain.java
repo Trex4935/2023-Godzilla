@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants;
 
@@ -62,7 +61,6 @@ public class Drivetrain extends SubsystemBase {
     // PID
     PIDController drivePID;
 
-
     // Declaring Gyro Objects
     public static AHRS ahrs;
 
@@ -81,11 +79,12 @@ public class Drivetrain extends SubsystemBase {
     private final PIDController m_leftPIDController;
     private final PIDController m_rightPIDController;
 
+    private final PIDController anglePID;
+
     private final MotorControllerGroup m_leftGroup = new MotorControllerGroup(leftMotors);
     private final MotorControllerGroup m_rightGroup = new MotorControllerGroup(rightMotors);
 
     //
-
 
     // Simulate
     public double zSimAngle;
@@ -123,16 +122,24 @@ public class Drivetrain extends SubsystemBase {
         // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
 
         // Create PID Controllers
-        m_leftPIDController = new PIDController(0.9, 0, 0);
-        m_rightPIDController = new PIDController(0.9, 0, 0);
-
+        m_leftPIDController = new PIDController(0.0225, 0.001, 0);// Right P ==0.01 for flat
+        m_rightPIDController = new PIDController(0.0225, 0.001, 0);// Right P ==0.01 for flat
+        m_leftPIDController.setIntegratorRange(-12, 12);// V
+        m_rightPIDController.setIntegratorRange(-12, 12);// V
         // Feed Forward
-        m_feedforward = new SimpleMotorFeedforward(0.105 * 12, 1.15);
+        m_feedforward = new SimpleMotorFeedforward(0.18 * 12, 1.15);// new SimpleMotorFeedforward(0.105 * 12, 1.15); //
+                                                                    // on the ground 0.165 for ks
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
         ahrs.calibrate();
-        ahrs.reset();
+        // new Thread(){
+        //     public void run(){
+        //         Thread.sleep(500);
+
+        //     }.start();
+        // }
+        // ahrs.reset();
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
         kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);
@@ -140,7 +147,11 @@ public class Drivetrain extends SubsystemBase {
         // initiate simulate gyro Position
         zSimAngle = 0;
 
-        drivePID = new PIDController(0.15, 0.0, 0);
+        drivePID = new PIDController(0.06, 0.0008, 0); // 0.05, 0.001
+        drivePID.setIntegratorRange(-4, 4); // -2,2
+
+        anglePID = new PIDController(0.0225, 0.00, 0); // 0.05, 0.001
+        drivePID.setIntegratorRange(-180, 180); // -2,2
 
     }
 
@@ -212,18 +223,18 @@ public class Drivetrain extends SubsystemBase {
     /** Move the robot based on its pitch/y axis */
     public void autoBalance() {
         // Set motors speed using PID controller to get Y-axis to 0 degrees
-        double leftPitch = drivePID.calculate(getYAngleOffset(), 0);
-        double rightPitch = drivePID.calculate(getYAngleOffset(), 0);
+        double leftPitch = Math.min(drivePID.calculate(getYAngleOffset(), 0), 0.8);
+        double rightPitch = Math.min(drivePID.calculate(getYAngleOffset(), 0), 0.8);
         double err = 0 - s_getAngleZ();
-        double P = 0.01;
+        double P = 0.0175; // 0.2
         double driftCorrectionTwist = err * P;
 
-        leftMotors.set(leftPitch + driftCorrectionTwist);
-        rightMotors.set(rightPitch - driftCorrectionTwist);
+        leftMotors.set(leftPitch + driftCorrectionTwist); // left: + becase .set, -.setVolt
+        rightMotors.set(rightPitch - driftCorrectionTwist); // right: - becase .set, +.setVolt
 
-        System.out.println("leftPitch: " + leftPitch + 
-        " rightPitch: " + rightPitch + " err: " + err +
-        " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist + " Pitch Angle: " + s_getAngleY());
+        System.out.println("leftPitch: " + leftPitch +
+                " rightPitch: " + rightPitch + " err: " + err +
+                " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist + " Pitch Angle: " + s_getAngleY());
     }
 
     /** Converts inches to ticks for motors */
@@ -269,9 +280,9 @@ public class Drivetrain extends SubsystemBase {
     public double getOmega(double startAngle, double endAngle) {
         double omega = 0;
         if (startAngle > endAngle) { // if Start > End , go left, w +
-            omega = AutoMovementConstraints.dtmaxomega;
-        } else { // if Start < End, go right, w -
             omega = -AutoMovementConstraints.dtmaxomega;
+        } else { // if Start < End, go right, w -
+            omega = AutoMovementConstraints.dtmaxomega;
         }
 
         return omega;
@@ -330,46 +341,48 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
-    public Double calculateSpeeds(State currState){
-        //enc pos
-       double encoderPosition = (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2;
+    public Double calculateSpeeds(State currState) {
+        // enc pos
+        double encoderPosition = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))
+                / 2;
         // traj pos
         double currentTrajectoryPos = currState.poseMeters.getY();
-        double P = 1.0/34;
+        double P = 1.0 / 25;
         //
-        double targetSpeed = Math.min((currentTrajectoryPos - encoderPosition) / .02 * P,0.5);
+        double targetSpeed = Math.min((currentTrajectoryPos - encoderPosition) / .02 * P,
+                AutoMovementConstraints.autodtMaxSpeed);
         return targetSpeed;
     }
 
     public void driveWithPIDArcade(State currState, Double end, Double time, Double angle) {
-        //Double velocityTarget = currState.velocityMetersPerSecond;
-        Double velocityTarget = calculateSpeeds(currState)* Math.signum(end);
+        // Double velocityTarget = currState.velocityMetersPerSecond;
+        Double velocityTarget = calculateSpeeds(currState) * Math.signum(end);// * Math.signum(end)
         // Rate is 0, because we are following a straight line, the speed varies
         // depending of path, it follows a trapezoide curve.
-        Double leftSpeedWheel = - getLeftSpeedKin(velocityTarget, 0);
-        Double rightSpeedWheel = - getRightpeedKin(velocityTarget, 0);
+        Double leftSpeedWheel = -getLeftSpeedKin(velocityTarget, 0);
+        Double rightSpeedWheel = -getRightpeedKin(velocityTarget, 0);
         // TO DO
         Double targetAngle = angle;
-        double err = targetAngle - getZAngleConverted();
-         if ( angle == 0 || angle == 360){
-            if (getZAngleConverted() <= 180 ) {
-                err = 0.0 - getZAngleConverted();
-            } else {
-                err = 360 - getZAngleConverted();
-            }
-         }
-        double P = 0.05;
-        double driftCorrectionTwist = err * P;
+        double err = targetAngle - s_getAngleZ();
+        // if (angle == 0 || angle == 360) {
+        // if (getZAngleConverted() <= 180) {
+        // err = 0.0 - getZAngleConverted();
+        // } else {
+        // err = 360 - getZAngleConverted();
+        // }
+        // }
+        double P = 0.03; // 0.02 best value on floor ///0.0175
+        //anglePID.calculate(s_getAngleZ(), angle);
+        // Deadband
+        if (err <= 0.05 && err >= -0.05) {
+            err = 0;
+        }
+
+        double driftCorrectionTwist = err*P;//anglePID.calculate(s_getAngleZ(), angle); // err * P;
         Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel - driftCorrectionTwist;
         Double rightSpeedWheelWithGyroCorrection = rightSpeedWheel + driftCorrectionTwist;
-        System.out.println("Time: " + time + " VelocityTarget: " + velocityTarget + " leftSpeedWheel:  =  y "
-                + leftSpeedWheel + " rightSpeedWheel: " + rightSpeedWheel + "  error: " + err + "  Angle: " + angle
-                + "  GyroAngle: " + getZAngleConverted() + "  P: " + P + "  driftCorrectionTwist: "
-                + driftCorrectionTwist + "  leftSpeedWheelWithGyroCorrection: " + leftSpeedWheelWithGyroCorrection
-                + "  rightSpeedWheelWithGyroCorrection: " + rightSpeedWheelWithGyroCorrection);
         //
         setSpeeds(leftSpeedWheelWithGyroCorrection, rightSpeedWheelWithGyroCorrection);
-
 
     }
 
@@ -385,7 +398,8 @@ public class Drivetrain extends SubsystemBase {
         System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
                 + leftFeedforward + " rightFeedforward: " + rightFeedforward + " leftEncoder :" + leftEncoder.getRate()
                 + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput + " rightOutput: "
-                + rightOutput + " leftEncoderDistance: " + leftEncoder.getDistance() + " rightEncoderDistance: " + rightEncoder.getDistance() );
+                + rightOutput + " leftEncoderDistance: " + leftEncoder.getDistance() + " rightEncoderDistance: "
+                + rightEncoder.getDistance());
         FLMotor.setVoltage(leftOutput + leftFeedforward);
         FRMotor.setVoltage(rightOutput + rightFeedforward);
         MLMotor.setVoltage(leftOutput + leftFeedforward);
@@ -395,13 +409,14 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public Boolean reachDriveTarget(Double targetPosition) {
-        double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))*(Math.signum(targetPosition)) / 2;
-        System.out.println( " targetPosition: " + targetPosition + " averageDistance: " + averageTickValue);
+        double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))
+                * (Math.signum(targetPosition)) / 2;
+        System.out.println(" targetPosition: " + targetPosition + " averageDistance: " + averageTickValue);
         if (averageTickValue >= targetPosition - 0.1 && averageTickValue <= targetPosition + 0.1) { // if tick value
-                                                                                                      // is greater than
-                                                                                                      // or equal to
-                                                                                                      // 10000, stop
-                                                                                                      // both motors
+                                                                                                    // is greater than
+                                                                                                    // or equal to
+                                                                                                    // 10000, stop
+                                                                                                    // both motors
             leftMotors.stopMotor();
             rightMotors.stopMotor();
             return true;

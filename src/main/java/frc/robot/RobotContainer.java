@@ -8,41 +8,41 @@ package frc.robot;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Arm;
-// Commands
-import frc.robot.commands.ca_ArmMovementCombo;
 import frc.robot.Constants.direction;
-import frc.robot.commands.ca_ForwardSlowSpeed;
-import frc.robot.commands.ca_autoBalance;
-import frc.robot.commands.ca_autoDoubleScoreBalance;
-import frc.robot.commands.ca_autoDriveStraightTrajKinGyroEncPID;
-import frc.robot.commands.ca_autoTrajectory;
-import frc.robot.commands.ca_autoTrajectoryKinematic;
-import frc.robot.commands.ca_autoTrajectoryKinematicWithGyro;
-import frc.robot.commands.ca_autoTurnKinematic;
-import frc.robot.commands.ca_autoTurnKinematicGyro;
-import frc.robot.commands.ca_doSimpleL;
-import frc.robot.commands.ca_doesAbsolutelyNothing;
-import frc.robot.commands.ca_driveAutoSquare;
-import frc.robot.commands.ca_setArmPosition;
-import frc.robot.commands.ca_setSideOrientation;
-import frc.robot.commands.cg_autoDoubleScore;
-import frc.robot.commands.cg_autoScore;
-import frc.robot.commands.cg_autoScoreBalance;
-import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
-import frc.robot.commands.cm_GripperClose;
-import frc.robot.commands.cm_GripperOpen;
-import frc.robot.commands.cm_setGamePieceType;
-import frc.robot.commands.cm_manualDecreaseExtendTicks;
-import frc.robot.commands.cm_manualAddExtendTicks;
-import frc.robot.commands.cm_manualResetAddArm;
-import frc.robot.commands.cm_manualRotateBattery;
-import frc.robot.commands.cm_manualRotateCompressor;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import frc.robot.commands.cm_setSpeedLimit;
-
+import frc.robot.commands.armAction.ca_ArmMovementCombo;
+import frc.robot.commands.armAction.cm_setArmPositionManual;
+import frc.robot.commands.armAction.ca_setSideOrientation;
+import frc.robot.commands.armAction.cm_GripperClose;
+import frc.robot.commands.armAction.cm_GripperOpen;
+import frc.robot.commands.armAction.cm_manualAddExtendTicks;
+import frc.robot.commands.armAction.cm_manualDecreaseExtendTicks;
+import frc.robot.commands.armAction.cm_manualResetAddArm;
+import frc.robot.commands.armAction.cm_manualRotateBattery;
+import frc.robot.commands.armAction.cm_manualRotateCompressor;
+import frc.robot.commands.armAction.cm_retractArm;
+import frc.robot.commands.armAction.cm_setGamePieceType;
+import frc.robot.commands.armAction.cm_setSpeedLimit;
+import frc.robot.commands.autoDriveActions.ca_ForwardSlowSpeed;
+import frc.robot.commands.autoDriveActions.ca_autoDriveStraightTrajKinGyroEncPID;
+import frc.robot.commands.autoDriveActions.ca_autoTrajectory;
+import frc.robot.commands.autoDriveActions.ca_autoTrajectoryKinematic;
+import frc.robot.commands.autoDriveActions.ca_autoTrajectoryKinematicWithGyro;
+import frc.robot.commands.autoDriveActions.ca_autoTurnKinematic;
+import frc.robot.commands.autoDriveActions.ca_autoTurnKinematicGyro;
+import frc.robot.commands.autoDriveActions.ca_doSimpleL;
+import frc.robot.commands.autoDriveActions.ca_doesAbsolutelyNothing;
+import frc.robot.commands.autoDriveActions.ca_driveAutoSquare;
+import frc.robot.commands.autoDriveActions.cm_driveWithJoysticks;
+import frc.robot.commands.autoPoints.ca_autoBalance;
+import frc.robot.commands.autoPoints.ca_autoDoubleScoreBalance;
+import frc.robot.commands.autoPoints.cg_autoDoubleScore;
+import frc.robot.commands.autoPoints.cg_autoScore;
+import frc.robot.commands.autoPoints.cg_autoScoreBalance;
+import frc.robot.commands.autoPoints.cg_autoScoreMobilityBalance;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -67,10 +67,10 @@ public class RobotContainer {
   private final cm_setSpeedLimit setSpeedLimitMax;
   private final cm_setSpeedLimit setSpeedLimitDefault;
   private final ca_ArmMovementCombo armMovementCombo;
-  private final ca_setArmPosition setArmPositionHigh;
-  private final ca_setArmPosition setArmPositionMiddle;
-  private final ca_setArmPosition setArmPositionLow;
-  private final ca_setArmPosition setArmPositionShelf;
+  private final cm_setArmPositionManual setArmPositionHigh;
+  private final cm_setArmPositionManual setArmPositionMiddle;
+  private final cm_setArmPositionManual setArmPositionLow;
+  private final cm_setArmPositionManual setArmPositionShelf;
   private final cm_manualDecreaseExtendTicks manualDecreaseExtendTicks;
   private final cm_manualAddExtendTicks manualAddExtendTicks;
   private final cm_manualRotateBattery manualRotateBattery;
@@ -98,6 +98,7 @@ public class RobotContainer {
   private final cg_autoScore autoScore;
   private final cg_autoScoreBalance autoScoreAndBalance;
   private final ca_autoTrajectoryKinematicWithGyro driveStraight;
+  private final cg_autoScoreMobilityBalance autoScoreMobilityBalance;
 
   private final ca_autoDriveStraightTrajKinGyroEncPID autoStraightPID;
 
@@ -128,10 +129,10 @@ public class RobotContainer {
     // Combo
     nothingAtAll = new ca_doesAbsolutelyNothing();
     armMovementCombo = new ca_ArmMovementCombo(arm);
-    setArmPositionHigh = new ca_setArmPosition(ArmPosition.HIGH);
-    setArmPositionMiddle = new ca_setArmPosition(ArmPosition.MIDDLE);
-    setArmPositionLow = new ca_setArmPosition(ArmPosition.LOW);
-    setArmPositionShelf = new ca_setArmPosition(ArmPosition.SHELF);
+    setArmPositionHigh = new cm_setArmPositionManual(ArmPosition.HIGH);
+    setArmPositionMiddle = new cm_setArmPositionManual(ArmPosition.MIDDLE);
+    setArmPositionLow = new cm_setArmPositionManual(ArmPosition.LOW);
+    setArmPositionShelf = new cm_setArmPositionManual(ArmPosition.SHELF);
     manualDecreaseExtendTicks = new cm_manualDecreaseExtendTicks(arm);
     manualAddExtendTicks = new cm_manualAddExtendTicks(arm);
     manualRotateBattery = new cm_manualRotateBattery(arm);
@@ -191,21 +192,22 @@ public class RobotContainer {
 
     autoScore = new cg_autoScore(drivetrain, arm, gripper);
 
-
-    
-
     // Make 2 point and go Backword-mobility.
 
     autoDoubleScore = new cg_autoDoubleScore(drivetrain, arm, gripper);
+    autoScoreMobilityBalance = new cg_autoScoreMobilityBalance(drivetrain, arm, gripper);
 
     // Do autobalancing.
 
     autoBalance = new ca_autoBalance(drivetrain);
-   // once a point is scored, the robot then moves 8 forward, then moves 4 backwards
-    //autoScore.andThen(goToAuto(new Translation2d(0,8))).andThen(goToAuto(new Translation2d(0, -4))).andThen( autoBalance);
-    // once a point is scored, the robot then moves 2 to the right(?) and 8 forward, then moves another 2 forward(?) and 8 backwards
-    //autoScore.andThen(goToAuto(new Translation2d(2,8))).andThen(goToAuto(new Translation2d(2, -8))).andThen(autoScore);
-
+    // once a point is scored, the robot then moves 8 forward, then moves 4
+    // backwards
+    // autoScore.andThen(goToAuto(new Translation2d(0,8))).andThen(goToAuto(new
+    // Translation2d(0, -4))).andThen( autoBalance);
+    // once a point is scored, the robot then moves 2 to the right(?) and 8 forward,
+    // then moves another 2 forward(?) and 8 backwards
+    // autoScore.andThen(goToAuto(new Translation2d(2,8))).andThen(goToAuto(new
+    // Translation2d(2, -8))).andThen(autoScore);
 
     // Scores middle and balances.
 
@@ -259,6 +261,10 @@ public class RobotContainer {
         .onFalse(setSpeedLimitDefault);
     // new JoystickButton(m_JoystickRight,
     // Constants.joystickTrigger).onTrue(setSpeedLimitMax).onFalse(setSpeedLimitDefault);
+
+    // Manual Testing Maintenance Mode
+    // new JoystickButton(m_ArduinoController,
+    // Constants.groundButtonID).whileTrue(new cm_retractArm(arm));
 
     // Arduino Controller Button Mapping
     // Arm Movement
@@ -326,7 +332,9 @@ public class RobotContainer {
 
     // Generic Auto
     SequentialCommandGroup auto = new SequentialCommandGroup(new ca_doesAbsolutelyNothing());
-// this command takes in the coordinates of a game point that then calculates a path for it to move. the path is calculated and then the robot is moved accordingly.
+    // this command takes in the coordinates of a game point that then calculates a
+    // path for it to move. the path is calculated and then the robot is moved
+    // accordingly.
     direction[] autoPath = null;
     // calculated path
     autoPath = drivetrain.calculateTrajEnum(endPoint);

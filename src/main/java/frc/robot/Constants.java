@@ -44,7 +44,6 @@ public final class Constants {
   public final static int BRMotorID = 5; // RIGHT
   public final static int BLMotorID = 6; // LEFT
 
-
   /** Measurement Constants */
   public final static int wheelDiameter = 6;
   public final static int encoderTicks = 8192;
@@ -52,25 +51,26 @@ public final class Constants {
 
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
-  public static double dtmaxspeed = 0.75; // Speed Limit
+  public static double dtmaxspeed = 1; // Speed Limit
 
   // ARM ROTATION Constants
 
   /** Motor ID */
   public static final int armRotationCAN = 13;
   public static final double armRotateSpeed = 0.85; // Arm Rotation Speed
+  public static double slowArmRotateSpeed = 0.4;
   public static boolean inRedZone = false;
-
 
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {
-    public static final double dtmaxaccel = 1;
-    public static final double autodtMaxSpeed = 0.65;
-    public static final double dtmaxomega = 1.6;
+    public static final double dtmaxaccel = 0.75; // 0.5 on flat
+    public static final double autodtMaxSpeed = 1.25; // 1 on flat 4.1 m/s is max.
+    public static final double dtmaxomega = 1.4;
   }
 
   /** Motor Rotation Limits */
   public static final int ArmRotationLowerLimit = 0;
+  public static final double ArmRotationUpperLimit = 270;
 
   // Arm Angles
   public static final double ArmHighAngleBattery = 85;
@@ -78,7 +78,7 @@ public final class Constants {
   public static final double ArmLowAngleBattery = 16;
   public static double ArmCarryAngleBattery = 10;
 
-  public static final double ArmCarryAngleCompressor = 308;
+  public static final double ArmCarryAngleCompressor = 313;
   public static final double ArmHighAngleCompressor = 240;
   public static final double ArmMiddleAngleCompressor = 250;
   public static final double ArmLowAngleCompressor = 310;
@@ -101,12 +101,14 @@ public final class Constants {
   public static final double ArmLowDistance = -140000;
   /** 1 in -> -5000 */
   public static final double ArmRammingDistance = 0;
-  
+
   public static final double ArmCarryDistance = -5000;
 
   public static final double ArmShelfDistance = -45000;
 
   public static double tempArmDistance = 10;
+
+  public static boolean buttonOccupied = false;
 
   // Gripper Constants
   public static boolean gripperClosed = true;
@@ -145,7 +147,7 @@ public final class Constants {
   public static final int groundButtonID = 1;
   public static final int middleButtonID = 2;
   public static final int highButtonID = 3;
-  public static final int shelfButtonID = 11;
+  public static final int shelfButtonID = 13;
   // Joystick
   public static final int ardJoystickUp = 4;
   public static final int ardJoystickDown = 5;
@@ -189,6 +191,8 @@ public final class Constants {
 
   /** Adds rotation degrees */
   public static double addRotate = 0;
+
+  public static double speedLimit = 0.75;
 
   // Direction
   public enum direction {

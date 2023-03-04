@@ -26,9 +26,9 @@ public class cg_autoScoreMobilityBalance extends SequentialCommandGroup {
     addCommands(
 
         new cm_GripperClose(gripper).withTimeout(1.5), // Closes on game piece
-        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1), // Drops the
-        new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(5),
-        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(2),
+        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(0.5), // Drops the
+        new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(5.5),
+        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1.5),
         new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)).withTimeout(0.5), // , // Resets
 
         new ca_setArmPosition(ArmPosition.CARRY).withTimeout(0.5),

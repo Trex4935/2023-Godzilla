@@ -64,7 +64,7 @@ public final class Constants {
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {
     public static final double dtmaxaccel = 0.75; // 0.5 on flat
-    public static final double autodtMaxSpeed = 1.25; // 1 on flat 4.1 m/s is max.
+    public static final double autodtMaxSpeed = 3.25; // 1 on flat 4.1 m/s is max.
     public static final double dtmaxomega = 1.4;
   }
 

@@ -10,6 +10,7 @@ import frc.robot.commands.armAction.ca_setArmPosition;
 import frc.robot.commands.armAction.ca_setSideOrientation;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
+import frc.robot.commands.armAction.cm_setArmPositionManual;
 import frc.robot.commands.autoDriveActions.ca_autoDriveStraightTrajKinGyroEncPID;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
@@ -26,10 +27,10 @@ public class cg_autoScoreMobilityBalance extends SequentialCommandGroup {
     addCommands(
 
         new cm_GripperClose(gripper).withTimeout(1.5), // Closes on game piece
-        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(0.5), // Drops the
-        new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(5.5),
-        new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1.5),
-        new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)).withTimeout(0.5), // , // Resets
+        //new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(0.5), // Drops the
+        new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(4),
+        new cm_setArmPositionManual(ArmPosition.MIDDLE).withTimeout(2.5),
+        new cm_GripperOpen(gripper).alongWith(new cm_setArmPositionManual(ArmPosition.MIDDLE)).withTimeout(0.5), // , // Resets
 
         new ca_setArmPosition(ArmPosition.CARRY).withTimeout(0.5),
         new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryMobility,

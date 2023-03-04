@@ -31,7 +31,7 @@ public class cg_autoScoreMobilityBalance extends SequentialCommandGroup {
         new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(2),
         new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)).withTimeout(0.5), // , // Resets
 
-        new ca_setArmPosition(ArmPosition.CARRY).withTimeout(2),
+        new ca_setArmPosition(ArmPosition.CARRY).withTimeout(0.5),
         new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryMobility,
             TrajectoryContainer.trajMobilityEnd, 0.0), // Moves to game piece
         new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryBack,

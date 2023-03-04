@@ -38,11 +38,11 @@ public class TrajectoryContainer {
                         new Pose2d(0, trajFrontEnd, Rotation2d.fromDegrees(0)),
                         trajectoryConfig);
 
-        public static final Double trajBackEnd = Units.inchesToMeters(-36);
+        public static final Double trajBackEnd = - Units.inchesToMeters(36);
         public static final Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
                         new Pose2d(0, 0.0, new Rotation2d(0)),
                         List.of(),
-                        new Pose2d(0, 1.0, Rotation2d.fromDegrees(0)),
+                        new Pose2d(0, Math.abs(trajBackEnd), Rotation2d.fromDegrees(0)),
                         trajectoryConfig);
 
         public static final Double trajMobilityEnd = Units.inchesToMeters(139.5);

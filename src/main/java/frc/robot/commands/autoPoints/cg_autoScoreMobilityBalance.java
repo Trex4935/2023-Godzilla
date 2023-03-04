@@ -26,11 +26,11 @@ public class cg_autoScoreMobilityBalance extends SequentialCommandGroup {
     // Use addRequirements() here to declare subsystem dependencies
     addCommands(
 
-        new cm_GripperClose(gripper).withTimeout(1.5), // Closes on game piece
+        new cm_GripperClose(gripper).withTimeout(1.25), // Closes on game piece
         //new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(0.5), // Drops the
-        new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(4),
-        new cm_setArmPositionManual(ArmPosition.MIDDLE).withTimeout(2.5),
-        new cm_GripperOpen(gripper).alongWith(new cm_setArmPositionManual(ArmPosition.MIDDLE)).withTimeout(0.5), // , // Resets
+        new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(2),
+        new cm_setArmPositionManual(ArmPosition.MIDDLE).withTimeout(3),
+        new cm_GripperOpen(gripper).alongWith(new cm_setArmPositionManual(ArmPosition.MIDDLE)).withTimeout(2), // , // Resets
 
         new ca_setArmPosition(ArmPosition.CARRY).withTimeout(0.5),
         new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryMobility,

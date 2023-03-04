@@ -347,7 +347,7 @@ public class Drivetrain extends SubsystemBase {
                 / 2;
         // traj pos
         double currentTrajectoryPos = currState.poseMeters.getY();
-        double P = 1.0 / 25;
+        double P = 1.0 / 22;
         //
         double targetSpeed = Math.min((currentTrajectoryPos - encoderPosition) / .02 * P,
                 AutoMovementConstraints.autodtMaxSpeed);

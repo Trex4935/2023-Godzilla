@@ -45,7 +45,7 @@ public class TrajectoryContainer {
                         new Pose2d(0, Math.abs(trajBackEnd), Rotation2d.fromDegrees(0)),
                         trajectoryConfig);
 
-        public static final Double trajMobilityEnd = Units.inchesToMeters(139.5);
+        public static final Double trajMobilityEnd = Units.inchesToMeters(110); //Go to mobility 139.5, 95
         public static final Trajectory trajectoryMobility = TrajectoryGenerator.generateTrajectory(
                         new Pose2d(0, 0, new Rotation2d(0)),
                         List.of(),

@@ -122,8 +122,8 @@ public class Drivetrain extends SubsystemBase {
         // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
 
         // Create PID Controllers
-        m_leftPIDController = new PIDController(0.03, 0.001, 0);// Right P ==0.01 for flat , 0.0225
-        m_rightPIDController = new PIDController(0.03, 0.001, 0);// Right P ==0.01 for flat,0.0225
+        m_leftPIDController = new PIDController(0.2, 0.001, 0);// Right P ==0.01 for flat , 0.0225
+        m_rightPIDController = new PIDController(0.2, 0.001, 0);// Right P ==0.01 for flat,0.0225
         m_leftPIDController.setIntegratorRange(-12, 12);// V
         m_rightPIDController.setIntegratorRange(-12, 12);// V
         // Feed Forward
@@ -347,7 +347,7 @@ public class Drivetrain extends SubsystemBase {
                 / 2;
         // traj pos
         double currentTrajectoryPos = currState.poseMeters.getY();
-        double P = 1.0 / 14;
+        double P = 1.0 / 20;
         //
         double targetSpeed = Math.min((currentTrajectoryPos - encoderPosition) / .02 * P,
                 AutoMovementConstraints.autodtMaxSpeed);

@@ -408,6 +408,21 @@ public class Drivetrain extends SubsystemBase {
         BRMotor.setVoltage(rightOutput + rightFeedforward);
     }
 
+    public void driveStraightTarget(double Speed, double Angle, double Position){
+
+        if (reachDriveTarget(Position)) {
+            stopMotors();
+        } else {
+            driveWithStraightWithGyro(Speed, Angle);
+        }
+    
+    }
+    public boolean checkPitch()
+    {
+
+        return(s_getAngleY() > 10);
+    }
+
     public Boolean reachDriveTarget(Double targetPosition) {
         double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))
                 * (Math.signum(targetPosition)) / 2;

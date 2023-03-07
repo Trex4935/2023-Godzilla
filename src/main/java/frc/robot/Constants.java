@@ -201,5 +201,9 @@ public final class Constants {
     RIGHT,
     LEFT
   }
+  // Auto Balance Values
 
+  public static double autoSpeed = 0.9; // -1 to 1
+  public static double autoPosition = 2.0; // in meters
+  public static double autoAngle = 0.0; // in degrees
 }

@@ -3,8 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.autoDriveActions;
-
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
 
@@ -13,18 +11,19 @@ import frc.robot.subsystems.Drivetrain;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ca_driveAutoSquare extends SequentialCommandGroup {
   /** Creates a new cm_driveAutoSquare. */
-  public ca_driveAutoSquare(Drivetrain drivetrain, Trajectory trajectory, Double end) {
+  public ca_driveAutoSquare(Drivetrain drivetrain) {
     double squareAngle = 45.0;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     
-    addCommands(new ca_autoTrajectory(drivetrain,trajectory, end),
+    addCommands(
+    // Replace new ca_autoTrajectory(drivetrain,trajectory, end),
     new ca_autoTurnKinematicGyro(drivetrain, 0.0, squareAngle),
-    new ca_autoTrajectory(drivetrain,trajectory, end),
+    // Replace new ca_autoTrajectory(drivetrain,trajectory, end),
     new ca_autoTurnKinematicGyro(drivetrain, squareAngle, squareAngle*2),
-    new ca_autoTrajectory(drivetrain,trajectory, end),
+    // Replace new ca_autoTrajectory(drivetrain,trajectory, end),
     new ca_autoTurnKinematicGyro(drivetrain, squareAngle*2, squareAngle*3),
-    new ca_autoTrajectory(drivetrain,trajectory, end),
+    // Replace new ca_autoTrajectory(drivetrain,trajectory, end),
     new ca_autoTurnKinematicGyro(drivetrain, squareAngle*3, squareAngle*4)
     );
   }

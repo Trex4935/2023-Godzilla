@@ -5,12 +5,10 @@
 package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.TrajectoryContainer;
 import frc.robot.commands.armAction.ca_setArmPosition;
 import frc.robot.commands.armAction.ca_setSideOrientation;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
-import frc.robot.commands.autoDriveActions.ca_autoDriveStraightTrajKinGyroEncPID;
 import frc.robot.commands.autoDriveActions.ca_autoTurnKinematic;
 import frc.robot.commands.autoDriveActions.ca_autoTurnKinematicGyro;
 import frc.robot.commands.autoDriveActions.ca_doesAbsolutelyNothing;
@@ -41,10 +39,10 @@ public class cg_autoDoubleScore extends SequentialCommandGroup {
         // new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
         // TrajectoryContainer.trajectoryFront,
         // TrajectoryContainer.trajFrontEnd, -90.0),
-        new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
+        /* Replace new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
             TrajectoryContainer.trajectoryPiece,
             TrajectoryContainer.trajPieceEnd, (0.0)),
-        new ca_autoTurnKinematic(drivetrain, 0.0, 90.0),
+        new ca_autoTurnKinematic(drivetrain, 0.0, 90.0), */
         // new ca_doesAbsolutelyNothing().withTimeout(5),
         // new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
         // TrajectoryContainer.trajectoryPieceSide,
@@ -58,10 +56,10 @@ public class cg_autoDoubleScore extends SequentialCommandGroup {
         new ca_setArmPosition(ArmPosition.LOW).withTimeout(2.5),
         new cm_GripperClose(gripper).withTimeout(2),
         new ca_setArmPosition(ArmPosition.CARRY),
-        new ca_autoTurnKinematic(drivetrain, 90.0, 0.0),
-        new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
+        new ca_autoTurnKinematic(drivetrain, 90.0, 0.0)
+        /* Replace new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain,
         TrajectoryContainer.trajectoryBack,
-        TrajectoryContainer.trajBackEnd, 0.0) // Moves to game piece
+        TrajectoryContainer.trajBackEnd, 0.0) // Moves to game piece */
     // //new ca_autoTurnKinematicGyro(drivetrain, 0.0, -90.0)
 
     // new ca_setSideOrientation(ArmSideOrientation.BatterySide,

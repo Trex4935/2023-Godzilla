@@ -5,12 +5,10 @@
 package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.TrajectoryContainer;
 import frc.robot.commands.armAction.ca_setArmPosition;
 import frc.robot.commands.armAction.ca_setSideOrientation;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
-import frc.robot.commands.autoDriveActions.ca_autoTrajectoryKinematicWithGyro;
 import frc.robot.commands.autoDriveActions.ca_doSimpleL;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
@@ -29,14 +27,12 @@ public class ca_autoDoubleScoreBalance extends SequentialCommandGroup {
         new ca_setSideOrientation(ArmSideOrientation.CompressorSide),
         new cm_GripperOpen(gripper).withTimeout(1), // Drops the game piece
         new ca_setArmPosition(ArmPosition.CARRY), // Resets arm to default position
-        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront,
-            TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece
+        // Replace new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront, TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece
         new ca_setSideOrientation(ArmSideOrientation.BatterySide).withTimeout(1), // Changes the arm side
         new ca_setArmPosition(ArmPosition.LOW), // Moves arm position to prepare for getting the piece
         new cm_GripperClose(gripper).withTimeout(1), // Gets piece
         new ca_setArmPosition(ArmPosition.CARRY), // Resets arm to default position
-        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryBack,
-            TrajectoryContainer.trajBackEnd, 0.0), // Moves to scoring area
+        // Replace new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryBack, TrajectoryContainer.trajBackEnd, 0.0), // Moves to scoring area
         new ca_setSideOrientation(ArmSideOrientation.CompressorSide), // Changes the arm side
         new ca_setArmPosition(ArmPosition.MIDDLE), // Sets arm position to middle
         new cm_GripperOpen(gripper), // Drops the game piece

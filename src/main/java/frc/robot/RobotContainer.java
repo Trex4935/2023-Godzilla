@@ -27,10 +27,6 @@ import frc.robot.commands.armAction.cm_retractArm;
 import frc.robot.commands.armAction.cm_setGamePieceType;
 import frc.robot.commands.armAction.cm_setSpeedLimit;
 import frc.robot.commands.autoDriveActions.ca_ForwardSlowSpeed;
-import frc.robot.commands.autoDriveActions.ca_autoDriveStraightTrajKinGyroEncPID;
-import frc.robot.commands.autoDriveActions.ca_autoTrajectory;
-import frc.robot.commands.autoDriveActions.ca_autoTrajectoryKinematic;
-import frc.robot.commands.autoDriveActions.ca_autoTrajectoryKinematicWithGyro;
 import frc.robot.commands.autoDriveActions.ca_autoTurnKinematic;
 import frc.robot.commands.autoDriveActions.ca_autoTurnKinematicGyro;
 import frc.robot.commands.autoDriveActions.ca_doSimpleL;
@@ -86,8 +82,6 @@ public class RobotContainer {
   /** Sets the game piece type to CubeFalse */
   private final cm_setGamePieceType setGamePieceTypeCubeFalse;
   private final ca_doesAbsolutelyNothing nothingAtAll;
-  private final ca_autoTrajectoryKinematic autoTrajectoryKinematic;
-  private final ca_autoTrajectory autoTrajectory;
   private final ca_autoTurnKinematic autoTurnTrajectory;
   private final ca_autoTurnKinematicGyro autoTurnTrajectoryWithGyro;
   private final ca_driveAutoSquare autoSquare;
@@ -97,10 +91,7 @@ public class RobotContainer {
   private final ca_doSimpleL autoSimpleL;
   private final cg_autoScore autoScore;
   private final cg_autoScoreBalance autoScoreAndBalance;
-  private final ca_autoTrajectoryKinematicWithGyro driveStraight;
   private final cg_autoScoreMobilityBalance autoScoreMobilityBalance;
-
-  private final ca_autoDriveStraightTrajKinGyroEncPID autoStraightPID;
 
   private final ca_ForwardSlowSpeed forwardHalfSpeed;
   // private final SequentialCommandGroup autoDoubleScoreAndBalancing;
@@ -163,24 +154,11 @@ public class RobotContainer {
 
     // Auto Bench-Test
 
-    autoSquare = new ca_driveAutoSquare(drivetrain, TrajectoryContainer.trajectoryFront,
-        TrajectoryContainer.trajFrontEnd);
+    autoSquare = new ca_driveAutoSquare(drivetrain);
 
     // Going Backword-mobility.
 
     forwardHalfSpeed = new ca_ForwardSlowSpeed(drivetrain);
-
-    autoTrajectory = new ca_autoTrajectory(drivetrain, TrajectoryContainer.pigeontraj,
-        TrajectoryContainer.pigeontrajEnd);
-
-    autoTrajectoryKinematic = new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryMobility,
-        TrajectoryContainer.trajMobilityEnd);
-
-    driveStraight = new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
-        TrajectoryContainer.trajMobilityEnd, 0.0);
-
-    autoStraightPID = new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryMobility,
-        TrajectoryContainer.trajMobilityEnd, 0.0);
 
     // Be able to turn
 
@@ -326,59 +304,6 @@ public class RobotContainer {
   // to the dashboard / consumed by the LED controller
   public void initSendable(SendableBuilder builder) {
 
-  }
-
-  SequentialCommandGroup goToAuto(Translation2d endPoint) {
-
-    // Generic Auto
-    SequentialCommandGroup auto = new SequentialCommandGroup(new ca_doesAbsolutelyNothing());
-    // this command takes in the coordinates of a game point that then calculates a
-    // path for it to move. the path is calculated and then the robot is moved
-    // accordingly.
-    direction[] autoPath = null;
-    // calculated path
-    autoPath = drivetrain.calculateTrajEnum(endPoint);
-
-    // Construct auto
-    for (int index = 0; index < autoPath.length; index++) {
-      switch (autoPath[index]) {
-        case FRONT:
-
-          // Going Forward
-          auto.addCommands(new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryFront,
-              TrajectoryContainer.trajFrontEnd));
-
-          break;
-
-        case BACK:
-
-          // Going Back
-          auto.addCommands(new ca_autoTrajectoryKinematic(drivetrain, TrajectoryContainer.trajectoryBack,
-              TrajectoryContainer.trajBackEnd));
-
-          break;
-
-        case RIGHT:
-
-          // Going Right
-          auto.addCommands(new ca_autoTurnKinematic(drivetrain, 0.0, -90.0));
-
-          break;
-
-        case LEFT:
-
-          // Going Left
-          auto.addCommands(new ca_autoTurnKinematic(drivetrain, 0.0, 90.0));
-
-          break;
-
-        default:
-          break;
-      }
-
-    }
-
-    return auto;
   }
 
 }

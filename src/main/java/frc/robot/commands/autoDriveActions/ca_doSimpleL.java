@@ -5,7 +5,6 @@
 package frc.robot.commands.autoDriveActions;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.TrajectoryContainer;
 import frc.robot.subsystems.Drivetrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -19,9 +18,9 @@ public class ca_doSimpleL extends SequentialCommandGroup {
     double squareAngle = 90;
     addCommands(
         new ca_autoTurnKinematicGyro(drivetrain, 0.0, squareAngle),
-        new ca_autoTrajectory(drivetrain, TrajectoryContainer.trajectoryFront,TrajectoryContainer.trajFrontEnd),
-        new ca_autoTurnKinematicGyro(drivetrain, 0.0, 0.0),
-        new ca_autoTrajectory(drivetrain, TrajectoryContainer.trajectoryFront, TrajectoryContainer.trajFrontEnd)
+        // Replace new ca_autoTrajectory(drivetrain, TrajectoryContainer.trajectoryFront,TrajectoryContainer.trajFrontEnd),
+        new ca_autoTurnKinematicGyro(drivetrain, 0.0, 0.0)
+        // Replace new ca_autoTrajectory(drivetrain, TrajectoryContainer.trajectoryFront, TrajectoryContainer.trajFrontEnd)
 
     );
   }

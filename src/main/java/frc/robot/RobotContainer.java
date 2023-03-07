@@ -313,7 +313,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return autoBalance.withTimeout(15);
-    return autoScoreMobilityBalance;
+    return autoScore;
 
     // return auto;
 

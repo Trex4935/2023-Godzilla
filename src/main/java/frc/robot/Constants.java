@@ -106,6 +106,8 @@ public final class Constants {
 
   public static final double ArmShelfDistance = -45000;
 
+  public static final double autoConeBumperDistance = -65000;
+
   public static double tempArmDistance = 10;
 
   public static boolean buttonOccupied = false;

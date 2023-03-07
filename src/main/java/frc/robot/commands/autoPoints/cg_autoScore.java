@@ -11,10 +11,12 @@ import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Gripper;
 import frc.robot.TrajectoryContainer;
+import frc.robot.commands.armAction.ca_goToConeBumper;
 import frc.robot.commands.armAction.ca_setArmPosition;
 import frc.robot.commands.armAction.ca_setSideOrientation;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
+import frc.robot.commands.armAction.cm_setArmPositionManual;
 import frc.robot.commands.autoDriveActions.ca_autoDriveStraightTrajKinGyroEncPID;
 import frc.robot.commands.autoDriveActions.ca_autoTrajectoryKinematicWithGyro;
 import frc.robot.commands.autoDriveActions.ca_doesAbsolutelyNothing;
@@ -30,15 +32,15 @@ public class cg_autoScore extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new cm_GripperClose(gripper).withTimeout(0.75), // Closes on game piece
-        new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(6),
-        new ca_setArmPosition(ArmPosition.MIDDLE),
-        new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)), // , // Resets arm to default
-                                                                                          // position
-        new ca_doesAbsolutelyNothing().withTimeout(1),
-        new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
-            TrajectoryContainer.trajMobilityEnd, 0.0), // Moves to game piece
-        new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd, 0.0) // Moves for mobility points
+      new ca_setArmPosition(ArmPosition.BUMPER),
+      new cm_GripperClose(gripper).withTimeout(0.75), // Closes on game piece
+      new ca_setArmPosition(ArmPosition.MIDDLE),
+      new cm_GripperOpen(gripper).alongWith(new cm_setArmPositionManual(ArmPosition.MIDDLE)).withTimeout(3), // , // Resets arm to default
+                                                                                        // position
+      new ca_doesAbsolutelyNothing().withTimeout(1)//,
+      /* new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
+          TrajectoryContainer.trajMobilityEnd, 0.0), // Moves to game piece
+      new ca_autoDriveStraightTrajKinGyroEncPID(drivetrain, TrajectoryContainer.trajectoryMobility, TrajectoryContainer.trajMobilityEnd, 0.0) // Moves for mobility points */
 
     );
   }

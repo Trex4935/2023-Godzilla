@@ -92,19 +92,12 @@ public final class Constants {
   // Arm Distances
   // Units = Inches (Converting to ticks)
   // Math: 1 in. = -5000 ticks
-  public static int inchPerExtentionTicks = -5000;
-  /** 33 in -> -165000 ticks */
   public static final double ArmHighDistance = -165000;
-  /** 10 in -> -50000 */
   public static final double ArmMiddleDistance = -90000;
-  /** 20 in -> -100000 */
   public static final double ArmLowDistance = -140000;
-  /** 1 in -> -5000 */
-  public static final double ArmRammingDistance = 0;
-
   public static final double ArmCarryDistance = -5000;
-
   public static final double ArmShelfDistance = -45000;
+  public static final double autoConeBumperDistance = -65000;
 
   public static boolean buttonOccupied = false;
 

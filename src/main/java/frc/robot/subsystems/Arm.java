@@ -182,6 +182,14 @@ public class Arm extends SubsystemBase {
     return batterySideLimitSwitch.get();
   }
 
+  public static boolean checkRotation2(double desiredTicks) {
+    return Math.abs(armRotationEncoder.getPosition()) - desiredTicks < 1;
+  }
+
+  public static boolean checkExtension2(double desiredTicks) { /** Gets Speed of Arm Extension Motor (Sendable) */
+    return Math.abs(armExtensionMotor.getSelectedSensorPosition()) - desiredTicks < 100;
+  }
+
   // ******************** Sendables ********************
 
   // State of redzone latch

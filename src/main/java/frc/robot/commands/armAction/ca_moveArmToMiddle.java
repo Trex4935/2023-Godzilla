@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
-public class ca_moveToMiddle extends CommandBase {
+public class ca_moveArmToMiddle extends CommandBase {
   Arm m_arm;
 
   /** Creates a new ca_goToConeBumper. */
-  public ca_moveToMiddle(Arm arm) {
+  public ca_moveArmToMiddle(Arm arm) {
     m_arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
   }

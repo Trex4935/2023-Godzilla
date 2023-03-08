@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.armAction.ca_goToConeBumper;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
-import frc.robot.commands.armAction.ca_moveToMiddle;
+import frc.robot.commands.armAction.ca_moveArmToMiddle;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Gripper;
 
@@ -22,7 +22,7 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ca_goToConeBumper(arm),
-        new cm_GripperClose(gripper).raceWith(new ca_moveToMiddle(arm)),
+        new cm_GripperClose(gripper).raceWith(new ca_moveArmToMiddle(arm)),
         new cm_GripperOpen(gripper)
 
     );

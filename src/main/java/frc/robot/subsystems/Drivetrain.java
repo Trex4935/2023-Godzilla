@@ -4,9 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 //Gyro Imports
@@ -16,7 +14,6 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -27,12 +24,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.AutoMovementConstraints;
 import frc.robot.Constants.TrajectoryConstants;
 import frc.robot.extensions.Helper;
-import frc.robot.extensions.PID;
-import frc.robot.Constants.direction;
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -80,16 +74,11 @@ public class Drivetrain extends SubsystemBase {
 
     private final PIDController anglePID;
 
-    private final MotorControllerGroup m_leftGroup = new MotorControllerGroup(leftMotors);
-    private final MotorControllerGroup m_rightGroup = new MotorControllerGroup(rightMotors);
-
-    //
-
     // Simulate
     public double zSimAngle;
 
+    // Drivetrain contructor
     public Drivetrain() {
-
 
         // Creates new motor objects and configures the talons in a separate method
         FLMotor = Talon.createDefaultTalon(Constants.FLMotorID);
@@ -130,13 +119,6 @@ public class Drivetrain extends SubsystemBase {
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
         ahrs.calibrate();
-        // new Thread(){
-        //     public void run(){
-        //         Thread.sleep(500);
-
-        //     }.start();
-        // }
-        // ahrs.reset();
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
         kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);
@@ -185,6 +167,7 @@ public class Drivetrain extends SubsystemBase {
         diffdrive.tankDrive(leftSpeed, rightSpeed);
     }
 
+    // Moves forward using the gyro to keep the robot strait
     public void driveWithStraightWithGyro(double avgSpeed, double targetAngle) {
         double err = targetAngle - getZAngleConverted();
         double P = 0.001;
@@ -196,7 +179,6 @@ public class Drivetrain extends SubsystemBase {
     public void driveWithJoysticks(Joystick leftJoystick, Joystick rightJoystick) {
         diffdrive.tankDrive(-leftJoystick.getRawAxis(Constants.joystickAxis),
                 -rightJoystick.getRawAxis(Constants.joystickAxis));
-        System.out.println("Pitch Angle: " + s_getAngleY());
     }
 
     /** Stops all Drivetrain motor groups. */
@@ -285,43 +267,18 @@ public class Drivetrain extends SubsystemBase {
         return omega;
     }
 
-
-    public void setSpeeds(Double leftSpeedWheel, Double rightSpeedWheel) {
-        final double leftFeedforward = m_feedforward.calculate(leftSpeedWheel);
-        final double rightFeedforward = m_feedforward.calculate(-rightSpeedWheel);
-
-        final double leftOutput = m_leftPIDController.calculate(leftEncoder.getRate(), leftSpeedWheel); // is encoder
-                                                                                                        // in ticks
-                                                                                                        // per/sec or
-                                                                                                        // m/sec
-        final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), -rightSpeedWheel);
-        System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
-                + leftFeedforward + " rightFeedforward: " + rightFeedforward + " leftEncoder :" + leftEncoder.getRate()
-                + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput + " rightOutput: "
-                + rightOutput + " leftEncoderDistance: " + leftEncoder.getDistance() + " rightEncoderDistance: "
-                + rightEncoder.getDistance());
-        FLMotor.setVoltage(leftOutput + leftFeedforward);
-        FRMotor.setVoltage(rightOutput + rightFeedforward);
-        MLMotor.setVoltage(leftOutput + leftFeedforward);
-        MRMotor.setVoltage(rightOutput + rightFeedforward);
-        BLMotor.setVoltage(leftOutput + leftFeedforward);
-        BRMotor.setVoltage(rightOutput + rightFeedforward);
-    }
-
+    // Determine if we have reached a target position and stop the motors
     public Boolean reachDriveTarget(Double targetPosition) {
         double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))
                 * (Math.signum(targetPosition)) / 2;
         System.out.println(" targetPosition: " + targetPosition + " averageDistance: " + averageTickValue);
-        if (averageTickValue >= targetPosition - 0.1 && averageTickValue <= targetPosition + 0.1) { // if tick value
-                                                                                                    // is greater than
-                                                                                                    // or equal to
-                                                                                                    // 10000, stop
-                                                                                                    // both motors
+
+        // if tick value is greater than or equal to target position, stop both motors
+        if (averageTickValue >= targetPosition - 0.1 && averageTickValue <= targetPosition + 0.1) {
             leftMotors.stopMotor();
             rightMotors.stopMotor();
             return true;
         } else {
-
         }
         return false;
 

@@ -43,6 +43,7 @@ import frc.robot.commands.autoPoints.cg_autoDoubleScore;
 import frc.robot.commands.autoPoints.cg_autoScore;
 import frc.robot.commands.autoPoints.cg_autoScoreBalance;
 import frc.robot.commands.autoPoints.cg_autoScoreMobilityBalance;
+import frc.robot.commands.autoPoints.cg_unifiedAuto;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -99,6 +100,7 @@ public class RobotContainer {
   private final cg_autoScoreBalance autoScoreAndBalance;
   private final ca_autoTrajectoryKinematicWithGyro driveStraight;
   private final cg_autoScoreMobilityBalance autoScoreMobilityBalance;
+  private final cg_unifiedAuto unifiedAuto;
 
   private final ca_autoDriveStraightTrajKinGyroEncPID autoStraightPID;
 
@@ -160,6 +162,8 @@ public class RobotContainer {
     SmartDashboard.putData(drivetrain);
     SmartDashboard.putData(arm);
     SmartDashboard.putData(gripper);
+
+    unifiedAuto = new cg_unifiedAuto(arm, gripper);
 
     // Auto Bench-Test
 
@@ -313,7 +317,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return autoBalance.withTimeout(15);
-    return autoScore;
+    return unifiedAuto;
 
     // return auto;
 

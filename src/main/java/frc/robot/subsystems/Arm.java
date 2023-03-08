@@ -4,12 +4,10 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
@@ -18,7 +16,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.extensions.Falcon;
 import frc.robot.extensions.FlippedDIO;
@@ -50,18 +47,20 @@ public class Arm extends SubsystemBase {
     armRotationMotor = SparkMax.createDefaultCANSparkMax(Constants.armRotationCAN);
     armRotationPID = armRotationMotor.getPIDController();
 
-    armExtensionMotor.setNeutralMode(NeutralMode.Brake);
-    armRotationMotor.setIdleMode(IdleMode.kBrake);
-
     // Arm Extension Limit Switches
     armRetractedLimitSwitch = new FlippedDIO(0);
+
     // Arm Rotation Limit Switches
     compressorSideLimitSwitch = new DigitalInput(6);
     batterySideLimitSwitch = new DigitalInput(5);
 
     // rotation encoder init
     armRotationEncoder = armRotationMotor.getEncoder();
+
+    // PID for arm extension
     Falcon.configMotionMagic(armExtensionMotor, 0.01, 0, 0, 0, 32000, 32000);
+
+    // PID for arm rotation
     SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.0001, 0, 0, 0, 0, 32000, 16000, 0);
 
   }
@@ -75,26 +74,6 @@ public class Arm extends SubsystemBase {
   /** Stops the Rotation Motor */
   public void stopRotationMotor() {
     armRotationMotor.stopMotor();
-  }
-
-  // Rotates the arm towards the chassis until limit switch is tripped
-  public void armRotationToLimit(ArmSideOrientation m_armSide) {
-    // If batterySide, move to limit switch
-    if (m_armSide == ArmSideOrientation.BatterySide) {
-      if (batterySideLimitSwitch.get()) {
-        armRotationMotor.stopMotor();
-      } else {
-        armRotationMotor.set(-Constants.slowArmRotateSpeed);
-      }
-    }
-    // If compressorSide, move to limit switch
-    else {
-      if (compressorSideLimitSwitch.get()) {
-        stopRotationMotor();
-      } else {
-        armRotationMotor.set(Constants.slowArmRotateSpeed);
-      }
-    }
   }
 
   /** Using MotionMagic set the arm to a given position */
@@ -183,68 +162,45 @@ public class Arm extends SubsystemBase {
     Constants.addRotate = 0;
   }
 
-  // Sendable Methods
-  /** Gets Encoder Ticks for Extension Encoder (Sendable) */
-  public double getExtensionEncoderTicks() {
-    return armExtensionMotor.getSelectedSensorPosition();
-  }
-
-  /** Gets Speed of Arm Extension Motor (Sendable) */
-  public double getExtensionMotorSpeed() {
-    return armExtensionMotor.get();
-  }
-
-  public String getExtensionPosition() {
-
-    return "Error";
-  }
-
+  // Zeros out the entension encoder
   public void zeroEncoder() {
     armExtensionMotor.setSelectedSensorPosition(0, 0, 20);
   }
 
-  /** Returns the encoder value */
-  public double getEncoderValue() {
-    return armRotationEncoder.getPosition();
-  }
-
-  /** Returns the angle */
-  public double getArmAngle() {
-    return getEncoderValue();
-  }
-
-  /** Sets the default angle value (sendable) */
-  public void setDefaultAngle(double m_defaultAngle) {
-    Constants.ArmCarryAngleBattery = m_defaultAngle;
-  }
-
-  /** Get the default angle value (sendable) */
-  public double getDefaultAngle() {
-    return Constants.ArmCarryAngleCompressor;
-  }
-
-  /** Method that determines if the arm is retracted or not */
+  // Get the state of the arm extension limit swith
   public boolean getArmRetractedLimitSwitch() {
     return armRetractedLimitSwitch.get();
   }
 
+  // Get the state of the compressor side limit swith
   public boolean getCompressorLimitSwitch() {
     return compressorSideLimitSwitch.get();
   }
 
+  // Get the state of the compressor side limit swith
   public boolean getBatteryLimitSwitch() {
     return batterySideLimitSwitch.get();
   }
 
-  public void setArmLength(Double m_tempArmDistance) {
-    Constants.tempArmDistance = m_tempArmDistance;
+  // ******************** Sendables ********************
+
+  // State of redzone latch
+  public boolean s_getLatchEngaged() {
+    return redZoneLatch;
   }
 
-  public double getArmLength() {
-    return Constants.tempArmDistance;
+  // Amount of extension added to the arm
+  private double s_getAddExtend() {
+    return Constants.addExtend;
   }
 
-  public String getArmSideOrientation() {
+  // Amount of rotation added to the arm
+  private double s_getAddRotation() {
+    return Constants.addRotate;
+  }
+
+  // Report the side that the arm is on
+  public String s_getArmSideOrientation() {
     if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide) {
       return "battery";
     } else {
@@ -252,127 +208,13 @@ public class Arm extends SubsystemBase {
     }
   }
 
-  public String getIsCube() {
+  // determine if we are going for a cube or
+  public String s_getIsCube() {
     return Constants.isCube;
   }
 
-  public static boolean checkRotation(ArmPosition armPos) {
-
-    boolean isReached = false;
-    // battery side
-    double ticksOffHighB = armRotationEncoder.getPosition() - Constants.ArmHighAngleBattery;
-    double ticksOffMiddleB = armRotationEncoder.getPosition() - Constants.ArmMiddleAngleBattery;
-    double ticksOffLowB = armRotationEncoder.getPosition() - Constants.ArmLowAngleBattery;
-    double ticksOffCarryB = armRotationEncoder.getPosition() - Constants.ArmCarryAngleBattery;
-    // compressor side
-    double ticksOffHighC = armRotationEncoder.getPosition() - Constants.ArmHighAngleCompressor;
-    double ticksOffMiddleC = armRotationEncoder.getPosition() - Constants.ArmMiddleAngleCompressor;
-    double ticksOffLowC = armRotationEncoder.getPosition() - Constants.ArmLowAngleCompressor;
-    double ticksOffCarryC = armRotationEncoder.getPosition() - Constants.ArmCarryAngleCompressor;
-    // if battery side, check position and if its reached the target
-    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide) {
-
-      switch (armPos) {
-        case HIGH:
-          isReached = ticksOffHighB <= 1 && ticksOffHighB >= -1;
-          System.out.println("highb reached");
-          break;
-
-        case MIDDLE:
-          isReached = ticksOffMiddleB <= 1 && ticksOffMiddleB >= -1;
-          System.out.println("middleb reached");
-          break;
-
-        case LOW:
-          isReached = ticksOffLowB <= 1 && ticksOffLowB >= -1;
-          System.out.println("lowb reached");
-          break;
-
-        case CARRY:
-          isReached = ticksOffCarryB <= 1 && ticksOffCarryB >= -1;
-          System.out.println("carryb reached");
-          break;
-
-        default:
-          isReached = false;
-          break;
-      }
-
-      return isReached;
-
-      // if compressor side, check position and if its reached the target
-    } else {
-
-      switch (armPos) {
-        case HIGH:
-          isReached = ticksOffHighC <= 1 && ticksOffHighC >= -1;
-          // System.out.println("highc reached");
-          break;
-
-        case MIDDLE:
-          isReached = ticksOffMiddleC <= 1 && ticksOffMiddleC >= -1;
-          // System.out.println("middlec reached");
-          break;
-
-        case LOW:
-          isReached = ticksOffLowC <= 1 && ticksOffLowC >= -1;
-          // System.out.println("lowc reached");
-          break;
-
-        case CARRY:
-          isReached = ticksOffCarryC <= 1 && ticksOffCarryC >= -1;
-          // System.out.println("carryc reached");
-          break;
-
-        default:
-          isReached = false;
-          break;
-      }
-      return isReached;
-    }
-  }
-
-  public static boolean checkRotation2(double desiredTicks) {
-    return Math.abs(armRotationEncoder.getPosition()) - desiredTicks < 1;
-  }
-
-  public static boolean checkExtension(ArmPosition armPos) {
-
-    boolean isExtended = false;
-    double ticksOffHigh = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmHighDistance;
-    double ticksOffMiddle = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmMiddleDistance;
-    double ticksOffLow = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmLowDistance;
-    double ticksOffCarry = armExtensionMotor.getSelectedSensorPosition() - Constants.ArmCarryDistance;
-
-    switch (armPos) {
-      case HIGH:
-        isExtended = ticksOffHigh <= 500 && ticksOffHigh >= -500;
-        break;
-
-      case MIDDLE:
-        isExtended = ticksOffMiddle <= 500 && ticksOffMiddle >= -500;
-        break;
-
-      case LOW:
-        isExtended = ticksOffLow <= 500 && ticksOffLow >= -500;
-
-      case CARRY:
-        isExtended = ticksOffCarry <= 500 && ticksOffCarry >= -500;
-
-      default:
-        isExtended = false;
-        break;
-    }
-
-    return isExtended;
-
-  }
-
-  public static boolean checkExtension2(double desiredTicks) {
-    return Math.abs(armExtensionMotor.getSelectedSensorPosition()) - desiredTicks < 100;
-  }
-
-  public String getIsAutonomous() {
+  // Used to put auto state onto network tables for LEDs
+  public String s_getIsAutonomous() {
     if (DriverStation.isAutonomous()) {
       return "GODZILLA";
     } else {
@@ -381,42 +223,30 @@ public class Arm extends SubsystemBase {
 
   }
 
-  public boolean getLatchEngaged() {
-    return redZoneLatch;
+  // Sendable Methods
+  /** Gets Encoder Ticks for Extension Encoder (Sendable) */
+  public double s_getExtensionEncoderTicks() {
+    return armExtensionMotor.getSelectedSensorPosition();
   }
-  /*
-   * ====MATH====
-   * Ticks per rotation, 42
-   * Gear Ratio Reduction, 144:1
-   * Gear has 40 teeth, sprocket has 12
-   * 12 degrees per tooth
-   * 144 degrees-?
-   * 0.83 degrees per rotation = 42 ticks?
-   * .002 degrees per tick-?
-   * 
-   * fixed math 2/4/23
-   * small gear has 15 (40/15 ratio = 2.67), big circle (gear?) has 40...
-   * apparently its 9 degrees per tooth now?
-   * every 6048 encoder ticks, small gear turns 2.67 times, big gear moves once
-   * every 44.86 ticks, we move one degree
-   * 144 x 42 = 6048
-   * 6048 x 2.67 = 16148.16
-   * 16148.16 / 360 = 44.856 rounded 44.86
-   * 
-   */
 
-  /*
-   * Preset Arm Positions during Auto
-   * (Takes in angle we need to get to) - (current encoder value) = angle we need
-   * to move
-   * -> angle we need to move * 500 = ticks we need to move
-   * EXAMPLE: (90 degrees) - (0 degrees) = 90 degrees ... 90 degrees * 500 = 4500
-   * ticks
-   * ->>> Then the rotation motor is moved until it reaches 4500 ticks.
-   */
+  /** Gets Speed of Arm Extension Motor (Sendable) */
+  public double s_getExtensionMotorSpeed() {
+    return armExtensionMotor.get();
+  }
 
-  private double getAddExtend() {
-    return Constants.addExtend;
+  /** Returns the encoder value */
+  public double s_getRotationEncoderValue() {
+    return armRotationEncoder.getPosition();
+  }
+
+  /** Sets the default angle value (sendable) */
+  public void s_setDefaultAngle(double m_defaultAngle) {
+    Constants.ArmCarryAngleBattery = m_defaultAngle;
+  }
+
+  /** Get the default angle value (sendable) */
+  public double s_getDefaultAngle() {
+    return Constants.ArmCarryAngleBattery;
   }
 
   // Sendable override
@@ -426,27 +256,24 @@ public class Arm extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
 
     // Arm Extension Sendables
-    builder.addDoubleProperty("Extension", null, null);
-    builder.addDoubleProperty("Extension Encoder Position", this::getExtensionEncoderTicks, null);
-    builder.addDoubleProperty("Extension Motor Rotation", this::getExtensionMotorSpeed, null);
-    builder.addStringProperty("Arm Extension Position", this::getExtensionPosition, null);
-    builder.addBooleanProperty("Is Retracted", this::getArmRetractedLimitSwitch, null);
-    builder.addDoubleProperty("Arm Length", this::getArmLength, this::setArmLength);
-    builder.addDoubleProperty("AddExtension", this::getAddExtend, null);
+    builder.addDoubleProperty("Extension Encoder Position", this::s_getExtensionEncoderTicks, null);
+    builder.addDoubleProperty("Extension Motor Rotation", this::s_getExtensionMotorSpeed, null);
+    builder.addBooleanProperty("isRetracted", this::getArmRetractedLimitSwitch, null);
+    builder.addDoubleProperty("AddExtension", this::s_getAddExtend, null);
 
     // Arm Rotation Sendables
-    builder.addDoubleProperty("Angle", this::getArmAngle, null);
-    builder.addDoubleProperty("Rotation Encoder", this::getEncoderValue, null);
-    builder.addBooleanProperty("RedZone", this::armRedZone, null);
-    builder.addDoubleProperty("Default Angle", this::getDefaultAngle, this::setDefaultAngle);
+    builder.addDoubleProperty("Rotation Encoder", this::s_getRotationEncoderValue, null);
+    builder.addDoubleProperty("Default Angle", this::s_getDefaultAngle, this::s_setDefaultAngle);
+    builder.addDoubleProperty("AddRotation", this::s_getAddRotation, null);
 
+    // Arm states
     builder.addBooleanProperty("Comp LS", this::getCompressorLimitSwitch, null);
     builder.addBooleanProperty("Batt LS", this::getBatteryLimitSwitch, null);
-    builder.addStringProperty("isBatterySide", this::getArmSideOrientation, null);
-    builder.addStringProperty("isCube", this::getIsCube, null);
-    builder.addStringProperty("isAutonomous", this::getIsAutonomous, null);
-
-    builder.addBooleanProperty("RedZone Latch Engaged", this::getLatchEngaged, null);
+    builder.addStringProperty("isBatterySide", this::s_getArmSideOrientation, null);
+    builder.addStringProperty("isCube", this::s_getIsCube, null);
+    builder.addStringProperty("isAutonomous", this::s_getIsAutonomous, null);
+    builder.addBooleanProperty("isLatched", this::s_getLatchEngaged, null);
+    builder.addBooleanProperty("isRedZone", this::armRedZone, null);
   }
 
   @Override
@@ -455,6 +282,3 @@ public class Arm extends SubsystemBase {
   }
 
 }
-// Arm Rotation Notes
-// 0, 1, 5, 50 , 60 (Normal arm side degrees)
-// 270, 269, 265, 220, 210 (Opposite arm side degrees)

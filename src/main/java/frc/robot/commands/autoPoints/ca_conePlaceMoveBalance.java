@@ -5,12 +5,10 @@
 package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.TrajectoryContainer;
 import frc.robot.commands.armAction.ca_setArmPosition;
 import frc.robot.commands.armAction.ca_setSideOrientation;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
-import frc.robot.commands.autoDriveActions.ca_autoTrajectoryKinematicWithGyro;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.subsystems.Drivetrain;
@@ -25,10 +23,8 @@ addCommands(
   new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(1),
   new ca_setSideOrientation(ArmSideOrientation.CompressorSide), // Changes the arm side
   new cm_GripperOpen(gripper), // Drops the game piece
-  new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront,
-  TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece trajMobiPointsEnd
-  new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront,
-  TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece trajGoToChargeStationEnd
+  // Replace new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront, TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece trajMobiPointsEnd
+  // Replace new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryFront, TrajectoryContainer.trajFrontEnd, 0.0), // Moves to game piece trajGoToChargeStationEnd
   new ca_autoBalance(drivetrain) // Balances the drivetrain
 );    
   }

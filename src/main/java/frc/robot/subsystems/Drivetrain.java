@@ -4,9 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 //Gyro Imports
@@ -16,11 +14,9 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Encoder;
@@ -28,12 +24,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.AutoMovementConstraints;
 import frc.robot.Constants.TrajectoryConstants;
 import frc.robot.extensions.Helper;
-import frc.robot.extensions.PID;
-import frc.robot.Constants.direction;
 import frc.robot.extensions.Talon;
 
 /** Add your docs here. */
@@ -81,18 +74,11 @@ public class Drivetrain extends SubsystemBase {
 
     private final PIDController anglePID;
 
-    private final MotorControllerGroup m_leftGroup = new MotorControllerGroup(leftMotors);
-    private final MotorControllerGroup m_rightGroup = new MotorControllerGroup(rightMotors);
-
-    //
-
     // Simulate
     public double zSimAngle;
 
+    // Drivetrain contructor
     public Drivetrain() {
-
-        trajPos = 0;
-        trajSpeed = 0;
 
         // Creates new motor objects and configures the talons in a separate method
         FLMotor = Talon.createDefaultTalon(Constants.FLMotorID);
@@ -133,13 +119,6 @@ public class Drivetrain extends SubsystemBase {
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
         ahrs.calibrate();
-        // new Thread(){
-        //     public void run(){
-        //         Thread.sleep(500);
-
-        //     }.start();
-        // }
-        // ahrs.reset();
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
         kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);
@@ -188,6 +167,7 @@ public class Drivetrain extends SubsystemBase {
         diffdrive.tankDrive(leftSpeed, rightSpeed);
     }
 
+    // Moves forward using the gyro to keep the robot strait
     public void driveWithStraightWithGyro(double avgSpeed, double targetAngle) {
         double err = targetAngle - getZAngleConverted();
         double P = 0.001;
@@ -199,7 +179,6 @@ public class Drivetrain extends SubsystemBase {
     public void driveWithJoysticks(Joystick leftJoystick, Joystick rightJoystick) {
         diffdrive.tankDrive(-leftJoystick.getRawAxis(Constants.joystickAxis),
                 -rightJoystick.getRawAxis(Constants.joystickAxis));
-        System.out.println("Pitch Angle: " + s_getAngleY());
     }
 
     /** Stops all Drivetrain motor groups. */
@@ -288,178 +267,21 @@ public class Drivetrain extends SubsystemBase {
         return omega;
     }
 
-    public void setTrajPos(State currState) {
-        trajPos = currState.poseMeters.getY();
-    }
-
-    public void setTrajSpeed(State currState) {
-        trajSpeed = currState.velocityMetersPerSecond;
-    }
-
-    public void driveTankWithStateTraj(State currState, Double end, Double time) {
-        Double velocityTarget = currState.velocityMetersPerSecond;
-        driveWithAuto(velocityTarget * Math.signum(end), velocityTarget * Math.signum(end));
-        // System.out.println("Time:"+ time + "Velocity:" + velocityTarget + "Position:"
-        // + currState.poseMeters.getY());
-    }
-
-    public void driveTankWithStateKinematicTraj(State currState, Double end, Double time) {
-        Double velocityTarget = currState.velocityMetersPerSecond;
-        // Rate is 0, because we are following a straight line, the speed varies
-        // depending of path, it follows a trapezoid curve.
-        Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
-        Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
-        driveWithAuto(leftSpeedWheel * Math.signum(end), rightSpeedWheel * Math.signum(end));
-        // System.out.println("Time: "+ time + " Velocity: " + velocityTarget + "
-        // Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel +
-        // " RightSpeed: " + rightSpeedWheel);
-    }
-
-    public void driveArcadeWithStateKinematicGyroTraj(State currState, Double end, Double time, Double targetAngle) {
-        Double velocityTarget = currState.velocityMetersPerSecond;
-        // Rate is 0, because we are following a straight line, the speed varies
-        // depending of path, it follows a trapezoid curve.
-        Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
-        Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
-        driveWithStraightWithGyro(velocityTarget * Math.signum(end), targetAngle);
-        // System.out.println("Time: "+ time + " Velocity: " + velocityTarget + "
-        // Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel +
-        // " RightSpeed: " + rightSpeedWheel);
-
-    }
-
-    public void driveWithPIDTank(State currState, Double end, Double time) {
-        Double velocityTarget = currState.velocityMetersPerSecond;
-        // Rate is 0, because we are following a straight line, the speed varies
-        // depending of path, it follows a trapezoide curve.
-        Double leftSpeedWheel = getLeftSpeedKin(velocityTarget, 0);
-        Double rightSpeedWheel = getRightpeedKin(velocityTarget, 0);
-        setSpeeds(leftSpeedWheel, rightSpeedWheel);
-        // System.out.println("Time: "+ time + " Velocity: " + velocityTarget + "
-        // Position: " + currState.poseMeters.getY() + " LeftSpeed: " + leftSpeedWheel +
-        // " RightSpeed: " + rightSpeedWheel);
-
-    }
-
-    public Double calculateSpeeds(State currState) {
-        // enc pos
-        double encoderPosition = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))
-                / 2;
-        // traj pos
-        double currentTrajectoryPos = currState.poseMeters.getY();
-        double P = 1.0 / 20;
-        //
-        double targetSpeed = Math.min((currentTrajectoryPos - encoderPosition) / .02 * P,
-                AutoMovementConstraints.autodtMaxSpeed);
-        return targetSpeed;
-    }
-
-    public void driveWithPIDArcade(State currState, Double end, Double time, Double angle) {
-        // Double velocityTarget = currState.velocityMetersPerSecond;
-        Double velocityTarget = calculateSpeeds(currState) * Math.signum(end);// * Math.signum(end)
-        // Rate is 0, because we are following a straight line, the speed varies
-        // depending of path, it follows a trapezoide curve.
-        Double leftSpeedWheel = -getLeftSpeedKin(velocityTarget, 0);
-        Double rightSpeedWheel = -getRightpeedKin(velocityTarget, 0);
-        // TO DO
-        Double targetAngle = angle;
-        double err = targetAngle - s_getAngleZ();
-        // if (angle == 0 || angle == 360) {
-        // if (getZAngleConverted() <= 180) {
-        // err = 0.0 - getZAngleConverted();
-        // } else {
-        // err = 360 - getZAngleConverted();
-        // }
-        // }
-        double P = 0.03; // 0.02 best value on floor ///0.0175
-        //anglePID.calculate(s_getAngleZ(), angle);
-        // Deadband
-        if (err <= 0.05 && err >= -0.05) {
-            err = 0;
-        }
-
-        double driftCorrectionTwist = err*P;//anglePID.calculate(s_getAngleZ(), angle); // err * P;
-        Double leftSpeedWheelWithGyroCorrection = leftSpeedWheel - driftCorrectionTwist;
-        Double rightSpeedWheelWithGyroCorrection = rightSpeedWheel + driftCorrectionTwist;
-        //
-        setSpeeds(leftSpeedWheelWithGyroCorrection, rightSpeedWheelWithGyroCorrection);
-
-    }
-
-    public void setSpeeds(Double leftSpeedWheel, Double rightSpeedWheel) {
-        final double leftFeedforward = m_feedforward.calculate(leftSpeedWheel);
-        final double rightFeedforward = m_feedforward.calculate(-rightSpeedWheel);
-
-        final double leftOutput = m_leftPIDController.calculate(leftEncoder.getRate(), leftSpeedWheel); // is encoder
-                                                                                                        // in ticks
-                                                                                                        // per/sec or
-                                                                                                        // m/sec
-        final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), -rightSpeedWheel);
-        System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
-                + leftFeedforward + " rightFeedforward: " + rightFeedforward + " leftEncoder :" + leftEncoder.getRate()
-                + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput + " rightOutput: "
-                + rightOutput + " leftEncoderDistance: " + leftEncoder.getDistance() + " rightEncoderDistance: "
-                + rightEncoder.getDistance());
-        FLMotor.setVoltage(leftOutput + leftFeedforward);
-        FRMotor.setVoltage(rightOutput + rightFeedforward);
-        MLMotor.setVoltage(leftOutput + leftFeedforward);
-        MRMotor.setVoltage(rightOutput + rightFeedforward);
-        BLMotor.setVoltage(leftOutput + leftFeedforward);
-        BRMotor.setVoltage(rightOutput + rightFeedforward);
-    }
-
+    // Determine if we have reached a target position and stop the motors
     public Boolean reachDriveTarget(Double targetPosition) {
         double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))
                 * (Math.signum(targetPosition)) / 2;
         System.out.println(" targetPosition: " + targetPosition + " averageDistance: " + averageTickValue);
-        if (averageTickValue >= targetPosition - 0.1 && averageTickValue <= targetPosition + 0.1) { // if tick value
-                                                                                                    // is greater than
-                                                                                                    // or equal to
-                                                                                                    // 10000, stop
-                                                                                                    // both motors
+
+        // if tick value is greater than or equal to target position, stop both motors
+        if (averageTickValue >= targetPosition - 0.1 && averageTickValue <= targetPosition + 0.1) {
             leftMotors.stopMotor();
             rightMotors.stopMotor();
             return true;
         } else {
-
         }
         return false;
 
-    }
-
-    public direction[] calculateTrajEnum(Translation2d goal) {
-        direction[] pointMap = {};
-        int start = 1;
-
-        // Turn
-        if (goal.getX() < 0) {
-            pointMap[0] = direction.LEFT;
-        } else if (goal.getX() > 0) {
-            pointMap[0] = direction.RIGHT;
-        } else {
-            start = 0;
-        }
-
-        // Front
-        int j = 0;
-        for (int i = start; i < goal.getX(); i++) {
-            pointMap[i] = direction.FRONT;
-            j = i;
-        }
-        // Turn
-        if (goal.getY() < 0) {
-            pointMap[j] = direction.LEFT;
-        } else if (goal.getY() > 0) {
-            pointMap[j] = direction.RIGHT;
-        } else {
-            start = j;
-        }
-
-        for (int i = start; i < goal.getY(); i++) {
-            pointMap[i] = direction.FRONT;
-        }
-
-        return pointMap;
     }
 
     // ******************** Sendables ********************
@@ -484,14 +306,6 @@ public class Drivetrain extends SubsystemBase {
     /** Get the Max speed value (sendable) */
     public double s_getMaxSpeed() {
         return m_MaxSpeed;
-    }
-
-    public Double s_getTrajPos() {
-        return trajPos;
-    }
-
-    public Double s_getTrajSpeed() {
-        return trajSpeed;
     }
 
     /** Gets the distance since reset/init based on setDistancePerPulse */
@@ -536,8 +350,6 @@ public class Drivetrain extends SubsystemBase {
         builder.addFloatProperty("Z/Yaw", this::s_getAngleZ, null);
         builder.addDoubleProperty("RightEncoder", this::s_getEncoderRightTicks, null);
         builder.addDoubleProperty("LeftEncoder", this::s_getEncoderLeftTicks, null);
-        builder.addDoubleProperty("Trajectory Position", this::s_getTrajPos, null);
-        builder.addDoubleProperty("Trajectory Speed", this::s_getTrajSpeed, null);
         builder.addDoubleProperty("Left Encoder Speed", this::s_getEncoderLeftSpeed, null);
         builder.addDoubleProperty("Right Encoder Speed", this::s_getEncoderRightSpeed, null);
         builder.addDoubleProperty("Left Encoder Distance", this::s_getEncoderLeftDistance, null);

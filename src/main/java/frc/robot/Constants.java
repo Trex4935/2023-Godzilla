@@ -106,8 +106,6 @@ public final class Constants {
 
   public static final double ArmShelfDistance = -45000;
 
-  public static double tempArmDistance = 10;
-
   public static boolean buttonOccupied = false;
 
   // Gripper Constants

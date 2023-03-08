@@ -16,30 +16,32 @@ public class ca_setArmPosition extends CommandBase {
 
   /** Creates a new ca_setArmPosition. */
   public ca_setArmPosition(ArmPosition armState) {
-    m_armState = armState; 
+    m_armState = armState;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     Constants.selectedArmState = m_armState;
-      //encoder values of rotation compared to target ticks for encoder position to turn true
+    // encoder values of rotation compared to target ticks for encoder position to
+    // turn true
     // System.out.println(m_armState);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Arm.checkRotation(m_armState) && Arm.checkExtension(m_armState);
+    return false;
   }
 }

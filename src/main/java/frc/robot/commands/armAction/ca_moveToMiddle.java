@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
-public class ca_goToConeBumper extends CommandBase {
+public class ca_moveToMiddle extends CommandBase {
   Arm m_arm;
 
   /** Creates a new ca_goToConeBumper. */
-  public ca_goToConeBumper(Arm arm) {
+  public ca_moveToMiddle(Arm arm) {
     m_arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -25,8 +25,8 @@ public class ca_goToConeBumper extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.setArmRotationSM(Constants.ArmCarryAngleBattery);
-    m_arm.setArmExtensionMM(Constants.autoConeBumperDistance);
+    m_arm.setArmRotationSM(Constants.ArmMiddleAngleBattery);
+    m_arm.setArmExtensionMM(Constants.ArmMiddleDistance);
   }
 
   // Called once the command ends or is interrupted.
@@ -37,7 +37,7 @@ public class ca_goToConeBumper extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Arm.checkExtension2(Constants.autoConeBumperDistance) && Arm.checkRotation2(Constants.ArmCarryAngleBattery);
+    return Arm.checkExtension2(Constants.ArmMiddleDistance) && Arm.checkRotation2(Constants.ArmMiddleAngleBattery);
 
   }
 }

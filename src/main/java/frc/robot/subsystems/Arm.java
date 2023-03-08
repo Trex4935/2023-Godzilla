@@ -33,7 +33,7 @@ public class Arm extends SubsystemBase {
   public DigitalInput armRetractedLimitSwitch;
 
   // Arm Rotation
-  public CANSparkMax armRotationMotor;
+  public static CANSparkMax armRotationMotor;
   static RelativeEncoder armRotationEncoder;
 
   SparkMaxPIDController armRotationPID;
@@ -306,22 +306,22 @@ public class Arm extends SubsystemBase {
       switch (armPos) {
         case HIGH:
           isReached = ticksOffHighC <= 1 && ticksOffHighC >= -1;
-          System.out.println("highc reached");
+          // System.out.println("highc reached");
           break;
 
         case MIDDLE:
           isReached = ticksOffMiddleC <= 1 && ticksOffMiddleC >= -1;
-          System.out.println("middlec reached");
+          // System.out.println("middlec reached");
           break;
 
         case LOW:
           isReached = ticksOffLowC <= 1 && ticksOffLowC >= -1;
-          System.out.println("lowc reached");
+          // System.out.println("lowc reached");
           break;
 
         case CARRY:
           isReached = ticksOffCarryC <= 1 && ticksOffCarryC >= -1;
-          System.out.println("carryc reached");
+          // System.out.println("carryc reached");
           break;
 
         default:
@@ -330,6 +330,10 @@ public class Arm extends SubsystemBase {
       }
       return isReached;
     }
+  }
+
+  public static boolean checkRotation2(double desiredTicks) {
+    return Math.abs(armRotationEncoder.getPosition()) - desiredTicks < 1;
   }
 
   public static boolean checkExtension(ArmPosition armPos) {
@@ -362,6 +366,10 @@ public class Arm extends SubsystemBase {
 
     return isExtended;
 
+  }
+
+  public static boolean checkExtension2(double desiredTicks) {
+    return Math.abs(armExtensionMotor.getSelectedSensorPosition()) - desiredTicks < 100;
   }
 
   public String getIsAutonomous() {

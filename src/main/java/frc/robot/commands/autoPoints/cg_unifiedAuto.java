@@ -12,20 +12,18 @@ import frc.robot.commands.armAction.ca_moveToMiddle;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Gripper;
 
-
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class cg_unifiedAuto extends SequentialCommandGroup {
   /** Creates a new cg_unifiedAuto. */
-  public cg_unifiedAuto( Arm arm,  Gripper gripper) {
+  public cg_unifiedAuto(Arm arm, Gripper gripper) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ca_goToConeBumper(arm),
-      new cm_GripperClose(gripper),
-      new ca_moveToMiddle(arm),
-      new cm_GripperOpen(gripper)
+        new ca_goToConeBumper(arm),
+        new cm_GripperClose(gripper).raceWith(new ca_moveToMiddle(arm)),
+        new cm_GripperOpen(gripper)
 
     );
   }

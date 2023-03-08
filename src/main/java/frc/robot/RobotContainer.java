@@ -24,7 +24,7 @@ import frc.robot.commands.armAction.cm_setGamePieceType;
 import frc.robot.commands.armAction.cm_setSpeedLimit;
 import frc.robot.commands.autoDriveActions.ca_MoveBack;
 import frc.robot.commands.autoDriveActions.cm_driveWithJoysticks;
-
+import frc.robot.commands.autoPoints.cg_unifiedAuto;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -138,7 +138,7 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(driveWithJoysticks);
 
     // Runs the arm state machine
-    arm.setDefaultCommand(armMovementCombo);
+    // arm.setDefaultCommand(armMovementCombo);
 
     // Increase Speed when pressing triggers.
     new JoystickButton(m_JoystickRight, Constants.joystickTrigger).onTrue(setSpeedLimitMax)

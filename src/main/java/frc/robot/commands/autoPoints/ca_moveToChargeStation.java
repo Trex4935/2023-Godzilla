@@ -15,9 +15,10 @@ public class ca_moveToChargeStation extends CommandBase {
   /** Creates a new fastAutoBalance. */
   public ca_moveToChargeStation(Drivetrain dt) {
 
+    // Use addRequirements() here to declare subsystem dependencies.
     drivetrain = dt;
     addRequirements(drivetrain);
-    // Use addRequirements() here to declare subsystem dependencies.
+    
   }
 
   // Called when the command is initially scheduled.
@@ -27,15 +28,18 @@ public class ca_moveToChargeStation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //Gets Speed, Position and angle of where to go to -for mobility points-
     drivetrain.driveStraightTarget(Constants.autoSpeed,  Constants.autoAngle, Constants.autoPosition);
   }
 
   // Called once the command ends or is interrupted.
   @Override
+  //stops checking for pitch change once the pitch has been triggered to start autobalance code.
   public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
+  //Boolean to check whether the pitch of the robot has change in order or indicate for the autobalance ot trigger.
   public boolean isFinished() {
     System.out.println(drivetrain.checkPitch());
     return drivetrain.checkPitch();

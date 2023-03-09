@@ -31,8 +31,8 @@ public class cg_autoScoreMobilityBalance extends SequentialCommandGroup {
         new cm_GripperOpen(gripper).alongWith(new cm_setArmPositionManual(ArmPosition.MIDDLE)).withTimeout(2), // Resets
         new ca_setArmPosition(ArmPosition.CARRY).withTimeout(0.5),
         // use anoter drive to target to drivestation
-        new ca_fastAutoBalance(drivetrain),
-    new ca_autoBalance(drivetrain)
+        new ca_moveToChargeStation(drivetrain),
+        new ca_autoBalance(drivetrain)
     );
   }
 }

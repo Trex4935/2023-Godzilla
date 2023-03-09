@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class ca_fastAutoBalance extends CommandBase {
+public class ca_moveToChargeStation extends CommandBase {
 
   private final Drivetrain drivetrain;
 
   /** Creates a new fastAutoBalance. */
-  public ca_fastAutoBalance(Drivetrain dt) {
+  public ca_moveToChargeStation(Drivetrain dt) {
 
     drivetrain = dt;
     addRequirements(drivetrain);

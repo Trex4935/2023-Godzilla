@@ -25,15 +25,14 @@ public class cg_autoScoreMobilityBalance extends SequentialCommandGroup {
     addCommands(
 
         new cm_GripperClose(gripper).withTimeout(1.25), // Closes on game piece
-        //new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(0.5), // Drops the
+        // new ca_setArmPosition(ArmPosition.MIDDLE).withTimeout(0.5), // Drops the
         new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(2),
         new cm_setArmPositionManual(ArmPosition.MIDDLE).withTimeout(3.5),
-        new cm_GripperOpen(gripper).alongWith(new cm_setArmPositionManual(ArmPosition.MIDDLE)).withTimeout(2), // , // Resets
-
+        new cm_GripperOpen(gripper).alongWith(new cm_setArmPositionManual(ArmPosition.MIDDLE)).withTimeout(2), // Resets
         new ca_setArmPosition(ArmPosition.CARRY).withTimeout(0.5),
         // use anoter drive to target to drivestation
         new ca_fastAutoBalance(drivetrain),
-        new ca_autoBalance(drivetrain)
+    new ca_autoBalance(drivetrain)
     );
   }
 }

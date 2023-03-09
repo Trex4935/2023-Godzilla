@@ -119,6 +119,13 @@ public class Drivetrain extends SubsystemBase {
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
         ahrs.calibrate();
+        // new Thread(){
+        // public void run(){
+        // Thread.sleep(500);
+
+        // }.start();
+        // }
+        // ahrs.reset();
 
         // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
         kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);
@@ -142,7 +149,7 @@ public class Drivetrain extends SubsystemBase {
     /** Gets the offset of the pitch */
     public Float getYAngleOffset() {
         // return ahrs.getYaw();
-        return s_getAngleY() - 1.35f;
+        return s_getAngleY() - 2f;
     }
 
     /** Gets Yaw(Z) angle from Gyro and converts it to 360 */
@@ -267,7 +274,6 @@ public class Drivetrain extends SubsystemBase {
         return omega;
     }
 
-
     public void setSpeeds(Double leftSpeedWheel, Double rightSpeedWheel) {
         final double leftFeedforward = m_feedforward.calculate(leftSpeedWheel);
         final double rightFeedforward = m_feedforward.calculate(-rightSpeedWheel);
@@ -290,19 +296,24 @@ public class Drivetrain extends SubsystemBase {
         BRMotor.setVoltage(rightOutput + rightFeedforward);
     }
 
-    public void driveStraightTarget(double Speed, double Angle, double Position){
+    public void driveStraightTarget(double Speed, double Angle, double Position) {
+
+        System.out.println("Speed: " + Speed);
+        System.out.println("Angle: " + Angle);
+        System.out.println("Position: " + Position);
+        System.out.println("Reached Target: " + reachDriveTarget(Position));
 
         if (reachDriveTarget(Position)) {
             stopMotors();
         } else {
             driveWithStraightWithGyro(Speed, Angle);
         }
-    
-    }
-    public boolean checkPitch()
-    {
 
-        return(s_getAngleY() > 10);
+    }
+
+    public boolean checkPitch() {
+
+        return s_getAngleY() > 5;
     }
 
     public Boolean reachDriveTarget(Double targetPosition) {
@@ -316,8 +327,9 @@ public class Drivetrain extends SubsystemBase {
             rightMotors.stopMotor();
             return true;
         } else {
+            return false;
         }
-        return false;
+        
 
     }
 

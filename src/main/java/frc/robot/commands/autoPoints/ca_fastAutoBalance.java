@@ -27,7 +27,7 @@ public class ca_fastAutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.driveStraightTarget(Constants.autoSpeed, Constants.autoPosition, Constants.autoAngle);
+    drivetrain.driveStraightTarget(Constants.autoSpeed,  Constants.autoAngle, Constants.autoPosition);
   }
 
   // Called once the command ends or is interrupted.
@@ -37,6 +37,7 @@ public class ca_fastAutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println(drivetrain.checkPitch());
     return drivetrain.checkPitch();
   }
 }

@@ -38,14 +38,14 @@ public class RobotContainer {
 
   // Declare Subsystems
   public final Drivetrain drivetrain;
-  private final Arm arm;
+  public final Arm arm;
   private final Gripper gripper;
 
   // Declare Commands
   private final cm_driveWithJoysticks driveWithJoysticks;
   private final cm_setSpeedLimit setSpeedLimitMax;
   private final cm_setSpeedLimit setSpeedLimitDefault;
-  private final ca_ArmMovementCombo armMovementCombo;
+  public final ca_ArmMovementCombo armMovementCombo;
   private final cm_setArmPositionManual setArmPositionHigh;
   private final cm_setArmPositionManual setArmPositionMiddle;
   private final cm_setArmPositionManual setArmPositionLow;

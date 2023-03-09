@@ -25,7 +25,7 @@ public class ca_goToConeBumper extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.setArmRotationSM(Constants.ArmCarryAngleBattery);
+    m_arm.setArmRotationSM(Constants.ArmBumberAngleBattery);
     m_arm.setArmExtensionMM(Constants.autoConeBumperDistance);
   }
 
@@ -37,7 +37,7 @@ public class ca_goToConeBumper extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Arm.checkExtension2(Constants.autoConeBumperDistance) && Arm.checkRotation2(Constants.ArmCarryAngleBattery);
+    return Arm.checkExtension2(Constants.autoConeBumperDistance) && Arm.checkRotation2(Constants.ArmBumberAngleBattery);
 
   }
 }

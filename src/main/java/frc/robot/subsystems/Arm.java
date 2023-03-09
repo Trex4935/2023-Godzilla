@@ -58,11 +58,10 @@ public class Arm extends SubsystemBase {
     armRotationEncoder = armRotationMotor.getEncoder();
 
     // PID for arm extension
-    Falcon.configMotionMagic(armExtensionMotor, 0.01, 0, 0, 0, 32000, 32000);
+    Falcon.configMotionMagic(armExtensionMotor, 0.64, 0, 0, 0, 32000, 32000);
 
     // PID for arm rotation
-    SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.0001, 0, 0, 0, 0, 32000, 16000, 0);
-
+    SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.000125, 0.000000, 0.000, 0, 0, 32000, 16000, 0);
   }
 
   // Arm Extension Methods
@@ -183,11 +182,13 @@ public class Arm extends SubsystemBase {
   }
 
   public static boolean checkRotation2(double desiredTicks) {
-    return Math.abs(armRotationEncoder.getPosition()) - desiredTicks < 1;
+    desiredTicks = Math.abs(desiredTicks);
+    return Helper.RangeCompare(desiredTicks + 1, desiredTicks - 1, Math.abs(armRotationEncoder.getPosition()));
   }
 
   public static boolean checkExtension2(double desiredTicks) { /** Gets Speed of Arm Extension Motor (Sendable) */
-    return Math.abs(armExtensionMotor.getSelectedSensorPosition()) - desiredTicks < 100;
+    desiredTicks = Math.abs(desiredTicks);
+    return Helper.RangeCompare(desiredTicks + 500, desiredTicks - 500, Math.abs(armExtensionMotor.getSelectedSensorPosition()));
   }
 
   // ******************** Sendables ********************

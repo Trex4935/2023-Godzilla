@@ -77,34 +77,30 @@ public final class Constants {
   public static final double ArmMiddleAngleBattery = 70;
   public static final double ArmLowAngleBattery = 16;
   public static double ArmCarryAngleBattery = 10;
+  public static final double ArmBumberAngleBattery = 4;
 
   public static final double ArmCarryAngleCompressor = 313;
   public static final double ArmHighAngleCompressor = 240;
-  public static final double ArmMiddleAngleCompressor = 250;
+  public static final double ArmMiddleAngleCompressor = 252;
   public static final double ArmLowAngleCompressor = 310;
 
   public static final int sideVal = 0;
 
   // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID
-  public static final double armExtensionSpeed = 0.7;
+  public static final double armExtensionSpeed = 0.9;
 
   // Arm Distances
   // Units = Inches (Converting to ticks)
   // Math: 1 in. = -5000 ticks
-  public static int inchPerExtentionTicks = -5000;
-  /** 33 in -> -165000 ticks */
   public static final double ArmHighDistance = -165000;
-  /** 10 in -> -50000 */
-  public static final double ArmMiddleDistance = -90000;
-  /** 20 in -> -100000 */
+  public static final double ArmMiddleDistance = -80000;
   public static final double ArmLowDistance = -140000;
-  /** 1 in -> -5000 */
-  public static final double ArmRammingDistance = 0;
-
   public static final double ArmCarryDistance = -5000;
-
   public static final double ArmShelfDistance = -45000;
+  public static final double autoConeBumperDistance = -60000;
+  public static final double autoArmMiddleDistance = -75000;
+
 
   public static boolean buttonOccupied = false;
 

@@ -30,7 +30,7 @@ public class Arm extends SubsystemBase {
   public DigitalInput armRetractedLimitSwitch;
 
   // Arm Rotation
-  public CANSparkMax armRotationMotor;
+  public static CANSparkMax armRotationMotor;
   static RelativeEncoder armRotationEncoder;
 
   SparkMaxPIDController armRotationPID;
@@ -58,11 +58,10 @@ public class Arm extends SubsystemBase {
     armRotationEncoder = armRotationMotor.getEncoder();
 
     // PID for arm extension
-    Falcon.configMotionMagic(armExtensionMotor, 0.01, 0, 0, 0, 32000, 32000);
+    Falcon.configMotionMagic(armExtensionMotor, 0.64, 0, 0, 0, 32000, 32000);
 
     // PID for arm rotation
-    SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.0001, 0, 0, 0, 0, 32000, 16000, 0);
-
+    SparkMax.configPIDwithSmartMotion(armRotationMotor, 0.000125, 0.000000, 0.000, 0, 0, 32000, 16000, 0);
   }
 
   // Arm Extension Methods
@@ -180,6 +179,16 @@ public class Arm extends SubsystemBase {
   // Get the state of the compressor side limit swith
   public boolean getBatteryLimitSwitch() {
     return batterySideLimitSwitch.get();
+  }
+
+  public static boolean checkRotation2(double desiredTicks) {
+    desiredTicks = Math.abs(desiredTicks);
+    return Helper.RangeCompare(desiredTicks + 1, desiredTicks - 1, Math.abs(armRotationEncoder.getPosition()));
+  }
+
+  public static boolean checkExtension2(double desiredTicks) { /** Gets Speed of Arm Extension Motor (Sendable) */
+    desiredTicks = Math.abs(desiredTicks);
+    return Helper.RangeCompare(desiredTicks + 500, desiredTicks - 500, Math.abs(armExtensionMotor.getSelectedSensorPosition()));
   }
 
   // ******************** Sendables ********************

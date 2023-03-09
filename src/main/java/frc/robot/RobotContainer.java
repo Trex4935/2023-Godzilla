@@ -24,7 +24,7 @@ import frc.robot.commands.armAction.cm_setGamePieceType;
 import frc.robot.commands.armAction.cm_setSpeedLimit;
 import frc.robot.commands.autoDriveActions.ca_MoveBack;
 import frc.robot.commands.autoDriveActions.cm_driveWithJoysticks;
-
+import frc.robot.commands.autoPoints.cg_unifiedAuto;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,20 +33,19 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 
-
 // Robot Base Class
 public class RobotContainer {
 
   // Declare Subsystems
   public final Drivetrain drivetrain;
-  private final Arm arm;
+  public final Arm arm;
   private final Gripper gripper;
 
   // Declare Commands
   private final cm_driveWithJoysticks driveWithJoysticks;
   private final cm_setSpeedLimit setSpeedLimitMax;
   private final cm_setSpeedLimit setSpeedLimitDefault;
-  private final ca_ArmMovementCombo armMovementCombo;
+  public final ca_ArmMovementCombo armMovementCombo;
   private final cm_setArmPositionManual setArmPositionHigh;
   private final cm_setArmPositionManual setArmPositionMiddle;
   private final cm_setArmPositionManual setArmPositionLow;
@@ -64,8 +63,7 @@ public class RobotContainer {
   private final cm_setGamePieceType setGamePieceTypeCubeTrue;
   /** Sets the game piece type to CubeFalse */
   private final cm_setGamePieceType setGamePieceTypeCubeFalse;
-  private final ca_MoveBack autoScoreMobilityBalance;
-  
+  private final cg_unifiedAuto unifiedAuto;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.leftJoystick);
@@ -86,15 +84,15 @@ public class RobotContainer {
     // Create Command objects
 
     // Autonomous
-    autoScoreMobilityBalance = new ca_MoveBack();
+    unifiedAuto = new cg_unifiedAuto(arm, gripper);
 
     // Arm
     armMovementCombo = new ca_ArmMovementCombo(arm);
 
-        // Drivetrain
-        driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
-        setSpeedLimitMax = new cm_setSpeedLimit(0.99);
-        setSpeedLimitDefault = new cm_setSpeedLimit(0.75);
+    // Drivetrain
+    driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
+    setSpeedLimitMax = new cm_setSpeedLimit(0.99);
+    setSpeedLimitDefault = new cm_setSpeedLimit(0.75);
 
     /// Operator ///
 
@@ -110,16 +108,14 @@ public class RobotContainer {
     setArmPositionMiddle = new cm_setArmPositionManual(ArmPosition.MIDDLE);
     setArmPositionLow = new cm_setArmPositionManual(ArmPosition.LOW);
     setArmPositionShelf = new cm_setArmPositionManual(ArmPosition.SHELF);
-    
+
     // Setting arm orientation
     setSideOrientationCompressor = new ca_setSideOrientation(ArmSideOrientation.CompressorSide);
     setSideOrientationBattery = new ca_setSideOrientation(ArmSideOrientation.BatterySide);
 
-    // Setting game piece type    
+    // Setting game piece type
     setGamePieceTypeCubeTrue = new cm_setGamePieceType("cube");
     setGamePieceTypeCubeFalse = new cm_setGamePieceType("cone");
-
-
 
     // Gripper
     gripperOpen = new cm_GripperOpen(gripper);
@@ -129,7 +125,7 @@ public class RobotContainer {
     SmartDashboard.putData(drivetrain);
     SmartDashboard.putData(arm);
     SmartDashboard.putData(gripper);
-    
+
     // Configure control bindings
     configureBindings();
 
@@ -142,19 +138,23 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(driveWithJoysticks);
 
     // Runs the arm state machine
-    arm.setDefaultCommand(armMovementCombo);
+    // arm.setDefaultCommand(armMovementCombo);
 
     // Increase Speed when pressing triggers.
     new JoystickButton(m_JoystickRight, Constants.joystickTrigger).onTrue(setSpeedLimitMax)
         .onFalse(setSpeedLimitDefault);
-    
+
     // Arduino Controller Button Mapping
     // Arm Movement
-    new JoystickButton(m_ArduinoController, Constants.groundButtonID).whileTrue(setArmPositionLow).onFalse(manualResetAddArm);
-    new JoystickButton(m_ArduinoController, Constants.middleButtonID).whileTrue(setArmPositionMiddle).onFalse(manualResetAddArm);
-    new JoystickButton(m_ArduinoController, Constants.highButtonID).whileTrue(setArmPositionHigh).onFalse(manualResetAddArm);
-    new JoystickButton(m_ArduinoController, Constants.shelfButtonID).whileTrue(setArmPositionShelf).onFalse(manualResetAddArm);
-    
+    new JoystickButton(m_ArduinoController, Constants.groundButtonID).whileTrue(setArmPositionLow)
+        .onFalse(manualResetAddArm);
+    new JoystickButton(m_ArduinoController, Constants.middleButtonID).whileTrue(setArmPositionMiddle)
+        .onFalse(manualResetAddArm);
+    new JoystickButton(m_ArduinoController, Constants.highButtonID).whileTrue(setArmPositionHigh)
+        .onFalse(manualResetAddArm);
+    new JoystickButton(m_ArduinoController, Constants.shelfButtonID).whileTrue(setArmPositionShelf)
+        .onFalse(manualResetAddArm);
+
     // manual EXTENSION
     new JoystickButton(m_ArduinoController, Constants.ardJoystickUp).whileTrue(manualAddExtendTicks);
     new JoystickButton(m_ArduinoController, Constants.ardJoystickDown).whileTrue(manualDecreaseExtendTicks);
@@ -181,7 +181,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return autoBalance.withTimeout(15);
-    return autoScoreMobilityBalance;
+    return unifiedAuto;
 
   }
 }

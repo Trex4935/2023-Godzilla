@@ -76,7 +76,7 @@
               "_showGlyph": false
             }
           },
-          "5,0": {
+          "7,0": {
             "size": [
               1,
               1
@@ -256,7 +256,7 @@
               "imageHeight": -1
             }
           },
-          "0,0": {
+          "2,0": {
             "size": [
               1,
               1
@@ -269,7 +269,7 @@
               "_showGlyph": false
             }
           },
-          "1,0": {
+          "3,0": {
             "size": [
               1,
               1
@@ -282,7 +282,7 @@
               "_showGlyph": false
             }
           },
-          "2,0": {
+          "4,0": {
             "size": [
               1,
               1
@@ -295,7 +295,7 @@
               "_showGlyph": false
             }
           },
-          "3,0": {
+          "5,0": {
             "size": [
               1,
               1
@@ -308,7 +308,7 @@
               "_showGlyph": false
             }
           },
-          "4,0": {
+          "6,0": {
             "size": [
               1,
               1
@@ -321,7 +321,7 @@
               "_showGlyph": false
             }
           },
-          "6,0": {
+          "8,0": {
             "size": [
               1,
               1
@@ -330,6 +330,149 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/limelight-bat_PipelineName",
               "_title": "limelight-bat_PipelineName",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/X/Roll",
+              "_title": "Drivetrain/X/Roll",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Y/Pitch",
+              "_title": "Drivetrain/Y/Pitch",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Z/Yaw",
+              "_title": "Drivetrain/Z/Yaw",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Trajectory Position",
+              "_title": "Drivetrain/Trajectory Position",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Trajectory Speed",
+              "_title": "Drivetrain/Trajectory Speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Left Encoder Speed",
+              "_title": "Drivetrain/Left Encoder Speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Right Encoder Speed",
+              "_title": "Drivetrain/Right Encoder Speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Left Encoder Distance",
+              "_title": "Drivetrain/Left Encoder Distance",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Right Encoder Distance",
+              "_title": "Drivetrain/Right Encoder Distance",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Arm/isBatterySide",
+              "_title": "Arm/isBatterySide",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Arm/isCube",
+              "_title": "Arm/isCube",
               "_glyph": 148,
               "_showGlyph": false
             }

@@ -66,6 +66,11 @@ public class ca_ArmMovementCombo extends CommandBase {
           m_arm.setArmExtensionMM(Constants.ArmLowDistance);
           break;
 
+        case BUMPER:
+          m_arm.setArmRotationSM(Constants.ArmCarryAngleBattery);
+          m_arm.setArmExtensionMM(Constants.autoConeBumperDistance);
+          break;
+
         /* case RAMMING:
           System.out.println("RAMMING-B");
           m_arm.armRotationToLimit(Constants.selectedArmSideOrientation);

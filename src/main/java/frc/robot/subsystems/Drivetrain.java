@@ -329,8 +329,6 @@ public class Drivetrain extends SubsystemBase {
         } else {
             return false;
         }
-        
-
     }
 
     // ******************** Sendables ********************

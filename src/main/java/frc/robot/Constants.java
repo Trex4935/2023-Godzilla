@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 
@@ -197,7 +198,7 @@ public final class Constants {
   }
   // Auto Balance Values
 
-  public static double autoSpeed = -0.5; // -1 to 1
-  public static double autoPosition = -2.0; // in meters
+  public static double autoSpeed = -0.7; // -1 to 1
+  public static double autoPosition = 2.5;//Units.inchesToMeters(1); // in meters 187
   public static double autoAngle = 0.0; // in degrees
 }

@@ -35,13 +35,15 @@ public class ca_moveToChargeStation extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   //stops checking for pitch change once the pitch has been triggered to start autobalance code.
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drivetrain.stopMotors();
+  }
 
   // Returns true when the command should end.
   @Override
   //Boolean to check whether the pitch of the robot has change in order or indicate for the autobalance ot trigger.
   public boolean isFinished() {
     System.out.println(drivetrain.checkPitch());
-    return drivetrain.checkPitch();
+    return drivetrain.reachDriveTarget(Constants.autoPosition);//drivetrain.checkPitch() || 
   }
 }

@@ -20,6 +20,7 @@ public class Talon {
         // Input dead band
         public double neutralDeadband = 0.04;
 
+        
         // Motor ramp when using open loop
         public double openLoopRamp = 0.1;
 

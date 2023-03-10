@@ -133,8 +133,8 @@ public class Drivetrain extends SubsystemBase {
         // initiate simulate gyro Position
         zSimAngle = 0;
 
-        drivePID = new PIDController(0.03, 0.000, 0); // 0.05, 0.001
-        drivePID.setIntegratorRange(-1, 1); // -2,2
+        drivePID = new PIDController(0.025, 0.0001, 0); // (0.03, 0.0001, 0); with the stop and (0.03, 0.000, 0); with direct stop both works
+        drivePID.setIntegratorRange(-0.25, 0.25); // -2,2 https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/pidcontroller.html
 
         anglePID = new PIDController(0.0225, 0.00, 0); // 0.05, 0.001
         drivePID.setIntegratorRange(-180, 180); // -2,2

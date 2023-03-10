@@ -28,12 +28,12 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         // new ca_goToConeBumper(arm),
-        /* // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
-        new cm_GripperClose(gripper).withTimeout(.1),
-        new ca_rotateArmToMiddle(arm),
-        new ca_moveArmToMiddle(arm),
-        new cm_GripperOpen(gripper),
-        new ca_setArmPosition(ArmPosition.CARRY).withTimeout(0.5), */
+         // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
+        // new cm_GripperClose(gripper).withTimeout(.1),
+        // new ca_rotateArmToMiddle(arm),
+        // new ca_moveArmToMiddle(arm),
+        // new cm_GripperOpen(gripper),
+        // new ca_setArmPosition(ArmPosition.CARRY).withTimeout(0.5),
         // use anoter drive to target to drivestation
         new ca_moveToChargeStation(drivetrain),
         new ca_doesAbsolutelyNothing().withTimeout(.2),

@@ -84,7 +84,7 @@ public class RobotContainer {
     // Create Command objects
 
     // Autonomous
-    unifiedAuto = new cg_unifiedAuto(arm, gripper);
+    unifiedAuto = new cg_unifiedAuto(arm, gripper, drivetrain);
 
     // Arm
     armMovementCombo = new ca_ArmMovementCombo(arm);

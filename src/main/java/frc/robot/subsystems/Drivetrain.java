@@ -296,13 +296,14 @@ public class Drivetrain extends SubsystemBase {
         BRMotor.setVoltage(rightOutput + rightFeedforward);
     }
 
+    // Uses gyro to go to position w/ drive straight
     public void driveStraightTarget(double Speed, double Angle, double Position) {
-
-        System.out.println("Speed: " + Speed);
-        System.out.println("Angle: " + Angle);
-        System.out.println("Position: " + Position);
-        System.out.println("Reached Target: " + reachDriveTarget(Position));
-
+        // Beep boop thingy mabober-computer- tels us what its doing
+        // System.out.println("Speed: " + Speed);
+        // System.out.println("Angle: " + Angle);
+        // System.out.println("Position: " + Position);
+        // System.out.println("Reached Target: " + reachDriveTarget(Position));
+        // stops when reaches position
         if (reachDriveTarget(Position)) {
             stopMotors();
         } else {
@@ -311,11 +312,14 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
+    // checks the pitch(elevation) from gyro
     public boolean checkPitch() {
 
         return s_getAngleY() > 5;
     }
 
+    // Chages encoder ticks to meters to make the constant easier to input for
+    // position.
     public Boolean reachDriveTarget(Double targetPosition) {
         double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))
                 * (Math.signum(targetPosition)) / 2;

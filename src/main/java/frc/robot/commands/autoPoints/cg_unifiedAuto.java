@@ -10,8 +10,11 @@ import frc.robot.commands.armAction.ca_moveArmToHigh;
 import frc.robot.commands.armAction.ca_moveArmToMiddle;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
+import frc.robot.extensions.ArmPosition;
 import frc.robot.commands.armAction.ca_rotateArmToMiddle;
+import frc.robot.commands.armAction.ca_setArmPosition;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Gripper;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -19,7 +22,7 @@ import frc.robot.subsystems.Gripper;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class cg_unifiedAuto extends SequentialCommandGroup {
   /** Creates a new cg_unifiedAuto. */
-  public cg_unifiedAuto(Arm arm, Gripper gripper) {
+  public cg_unifiedAuto(Arm arm, Gripper gripper, Drivetrain drivetrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -28,7 +31,11 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
         new cm_GripperClose(gripper).withTimeout(.1),
         new ca_rotateArmToMiddle(arm),
         new ca_moveArmToMiddle(arm),
-        new cm_GripperOpen(gripper)
+        new cm_GripperOpen(gripper),
+        new ca_setArmPosition(ArmPosition.CARRY).withTimeout(0.5),
+        // use anoter drive to target to drivestation
+        new ca_moveToChargeStation(drivetrain),
+        new ca_autoBalance(drivetrain)
 
     );
   }

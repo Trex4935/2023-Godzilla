@@ -11,12 +11,15 @@ import frc.robot.subsystems.Drivetrain;
 public class ca_moveToChargeStation extends CommandBase {
 
   private final Drivetrain m_drivetrain;
+  private int i = 0;
+
 
   /** Creates a new fastAutoBalance. */
   public ca_moveToChargeStation(Drivetrain drivetrain) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
+
     addRequirements(m_drivetrain);
     
   }
@@ -31,8 +34,15 @@ public class ca_moveToChargeStation extends CommandBase {
     //Gets Speed, Position and angle of where to go to -for mobility points-
     m_drivetrain.driveStraightTarget(Constants.autoSpeed, Constants.autoAngle, Constants.autoChargeStationPosition);
     
+    // Check if on incline for more than 200ms (10 cycles).
     if (m_drivetrain.checkPitch()) {
-      Constants.doAutoBalance = true;
+      i++;
+      if (i > 10) {
+        // If on incline for longer than 200ms, then perform balance.
+        Constants.doAutoBalance = true;
+      }
+    } else {
+      i = 0;  
     }
   }
   // Called once the command ends or is interrupted.

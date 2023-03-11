@@ -5,6 +5,7 @@
 package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.armAction.ca_moveArmToMiddle;
 import frc.robot.commands.armAction.ca_moveToCarryCompressor;
 import frc.robot.commands.armAction.cm_GripperClose;
@@ -37,7 +38,7 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
         new ca_moveToChargeStation(drivetrain));
 
       // If it went on the charge station, it'll autobalance. If NOT, it'll go to mobility line and change arm side.
-        if(drivetrain.checkPitch()){
+        if(Constants.doAutoBalance){
           addCommands(
         new ca_doesAbsolutelyNothing().withTimeout(.2),
         new ca_autoBalance(drivetrain)); }

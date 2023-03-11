@@ -36,6 +36,7 @@ public class cg_mobilityUnifiedAuto extends SequentialCommandGroup {
       // Go to Mobility, while moving arm to CompressorSide:
         new ca_moveToCarryCompressor(arm).raceWith(new ca_moveToMobility(drivetrain))
     );
+    // If doing balance, move back and balance.
     if (Constants.doAutoBalance) {
       addCommands(
         new ca_mobilityToBalance(drivetrain),

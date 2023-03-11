@@ -24,11 +24,14 @@ public class ca_moveToMobility extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Go to mobility position (187in)
     m_drivetrain.driveStraightTarget(Constants.autoSpeed, Constants.autoAngle, Constants.autoMobilityPosition);
     
+    // Check if on incline for more than 200ms (10 cycles).
     if (m_drivetrain.checkPitch()) {
       i++;
       if (i > 10) {
+        // If on incline for longer than 200ms, then perform balance.
         Constants.doAutoBalance = true;
       }
     } else {

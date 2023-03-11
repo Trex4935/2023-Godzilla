@@ -34,7 +34,7 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
         new cm_GripperOpen(gripper),
         
       // Goes the distance to middle of charge station
-        new ca_moveToChargeStation(drivetrain).raceWith());
+        new ca_moveToChargeStation(drivetrain));
 
       // If it went on the charge station, it'll autobalance. If NOT, it'll go to mobility line and change arm side.
         if(drivetrain.checkPitch()){
@@ -43,7 +43,7 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
         new ca_autoBalance(drivetrain)); }
         else {
           addCommands(
-            new ca_moveToCarryCompressor(arm).raceWith(new ca_balanceToMobility(drivetrain)));
+            new ca_moveToCarryCompressor(arm).alongWith(new ca_balanceToMobility(drivetrain)));
           }
       }
 }

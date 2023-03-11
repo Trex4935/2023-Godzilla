@@ -5,6 +5,7 @@
 package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.armAction.ca_moveArmToMiddle;
 import frc.robot.commands.armAction.ca_moveToCarryCompressor;
@@ -28,6 +29,7 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       // Cone Score:
+        new WaitCommand(.4),
         // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
         new cm_GripperClose(gripper).withTimeout(.1),
         new ca_rotateArmToMiddle(arm),
@@ -40,8 +42,10 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
       // If it went on the charge station, it'll autobalance. If NOT, it'll go to mobility line and change arm side.
         if(Constants.doAutoBalance){
           addCommands(
-        new ca_doesAbsolutelyNothing().withTimeout(.2),
-        new ca_autoBalance(drivetrain)); }
+            new ca_doesAbsolutelyNothing().withTimeout(.2),
+            new ca_autoBalance(drivetrain)
+          );
+        }
         else {
           addCommands(
             new ca_moveToCarryCompressor(arm).alongWith(new ca_balanceToMobility(drivetrain)));

@@ -82,23 +82,24 @@ public final class Constants {
   public static double ArmCarryAngleBattery = 10;
   public static final double ArmBumberAngleBattery = 4;
 
-  public static final double ArmCarryAngleCompressor = 313;
+  public static final double ArmCarryAngleCompressor = 318;
   public static final double ArmHighAngleCompressor = 240;
   public static final double ArmMiddleAngleCompressor = 252;
-  public static final double ArmLowAngleCompressor = 310;
+  public static final double ArmLowAngleCompressor = 316;
 
   public static final int sideVal = 0;
 
   // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID
-  public static final double armExtensionSpeed = 0.95;
+  public static final double armExtensionSpeed = 0.9;
 
   // Arm Distances
   // Units = Inches (Converting to ticks)
+
   // Math: 1 in. = -5000 ticks
-  public static final double ArmHighDistance = -165000;
+  public static final double ArmHighDistance = -199000;
   public static final double ArmMiddleDistance = -80000;
-  public static final double ArmLowDistance = -180000; //140000
+  public static final double ArmLowDistance = -120000; //140000
   public static final double ArmCarryDistance = -5000;
   public static final double ArmShelfDistance = -45000;
   public static final double autoConeBumperDistance = -60000;
@@ -121,6 +122,7 @@ public final class Constants {
 
   /** Actual Joystick Axis ID */
   public static final int joystickAxis = 1;
+
 
   // Controller Constants
 

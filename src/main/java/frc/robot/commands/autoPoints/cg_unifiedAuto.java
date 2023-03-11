@@ -29,9 +29,9 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       // Cone Score:
-        new WaitCommand(.4),
+        new WaitCommand(1),
         // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
-        new cm_GripperClose(gripper).withTimeout(.1),
+        new cm_GripperClose(gripper).withTimeout(.25),
         new ca_rotateArmToMiddle(arm),
         new ca_moveArmToMiddle(arm),
         new cm_GripperOpen(gripper),
@@ -42,13 +42,14 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
       // If it went on the charge station, it'll autobalance. If NOT, it'll go to mobility line and change arm side.
         if(Constants.doAutoBalance){
           addCommands(
-            new ca_doesAbsolutelyNothing().withTimeout(.2),
+            new WaitCommand(0.2),
             new ca_autoBalance(drivetrain)
           );
         }
         else {
           addCommands(
-            new ca_moveToCarryCompressor(arm).alongWith(new ca_balanceToMobility(drivetrain)));
-          }
+            new ca_balanceToMobility(drivetrain)
+          );
+        }
       }
 }

@@ -99,12 +99,12 @@ public final class Constants {
   // Math: 1 in. = -5000 ticks
   public static final double ArmHighDistance = -199000;
   public static final double ArmMiddleDistance = -80000;
-  public static final double ArmLowDistance = -120000; //140000
+  public static final double ArmLowDistanceBattery = -120000; //140000
   public static final double ArmCarryDistance = -5000;
   public static final double ArmShelfDistance = -45000;
   public static final double autoConeBumperDistance = -60000;
   public static final double autoArmMiddleDistance = -75000;
-
+  public static final double ArmLowDistanceCompressor = -135000;
 
   public static boolean buttonOccupied = false;
 

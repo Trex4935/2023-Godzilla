@@ -218,9 +218,9 @@ public class Drivetrain extends SubsystemBase {
         leftMotors.set(leftPitch + driftCorrectionTwist); // left: + becase .set, -.setVolt
         rightMotors.set(rightPitch - driftCorrectionTwist); // right: - becase .set, +.setVolt
 
-        System.out.println("leftPitch: " + leftPitch +
+        /* System.out.println("leftPitch: " + leftPitch +
                 " rightPitch: " + rightPitch + " err: " + err +
-                " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist + " Pitch Angle: " + s_getAngleY());
+                " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist + " Pitch Angle: " + s_getAngleY()); */
     }
 
     /** Converts inches to ticks for motors */
@@ -283,11 +283,11 @@ public class Drivetrain extends SubsystemBase {
                                                                                                         // per/sec or
                                                                                                         // m/sec
         final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), -rightSpeedWheel);
-        System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
+        /* System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
                 + leftFeedforward + " rightFeedforward: " + rightFeedforward + " leftEncoder :" + leftEncoder.getRate()
                 + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput + " rightOutput: "
                 + rightOutput + " leftEncoderDistance: " + leftEncoder.getDistance() + " rightEncoderDistance: "
-                + rightEncoder.getDistance());
+                + rightEncoder.getDistance()); */
         FLMotor.setVoltage(leftOutput + leftFeedforward);
         FRMotor.setVoltage(rightOutput + rightFeedforward);
         MLMotor.setVoltage(leftOutput + leftFeedforward);

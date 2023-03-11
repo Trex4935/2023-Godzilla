@@ -11,7 +11,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "5,4": {
+          "0,0": {
             "size": [
               1,
               1
@@ -24,7 +24,46 @@
               "_showGlyph": false
             }
           },
-          "1,3": {
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/X/Roll",
+              "_title": "Drivetrain/X/Roll",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Y/Pitch",
+              "_title": "Drivetrain/Y/Pitch",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Z/Yaw",
+              "_title": "Drivetrain/Z/Yaw",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,0": {
             "size": [
               1,
               1
@@ -37,7 +76,7 @@
               "_showGlyph": false
             }
           },
-          "1,2": {
+          "5,0": {
             "size": [
               1,
               1
@@ -50,7 +89,59 @@
               "_showGlyph": false
             }
           },
-          "8,1": {
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Left Encoder Speed",
+              "_title": "Drivetrain/Left Encoder Speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Right Encoder Speed",
+              "_title": "Drivetrain/Right Encoder Speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Left Encoder Distance",
+              "_title": "Drivetrain/Left Encoder Distance",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Right Encoder Distance",
+              "_title": "Drivetrain/Right Encoder Distance",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,1": {
             "size": [
               1,
               1
@@ -63,7 +154,7 @@
               "_showGlyph": false
             }
           },
-          "7,1": {
+          "1,1": {
             "size": [
               1,
               1
@@ -76,61 +167,35 @@
               "_showGlyph": false
             }
           },
-          "7,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Arm/Arm Extension Position",
-              "_title": "Arm/Arm Extension Position",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "6,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/Arm/Is Retracted",
-              "_title": "Arm/Is Retracted",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
           "2,1": {
             "size": [
               1,
               1
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Arm/Arm Length",
-              "_title": "Arm/Arm Length",
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Arm/isRetracted",
+              "_title": "Arm/isRetracted",
               "_glyph": 148,
-              "_showGlyph": false
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           },
-          "5,3": {
+          "3,1": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Arm/Angle",
-              "_title": "Arm/Angle",
+              "_source0": "network_table:///SmartDashboard/Arm/AddExtension",
+              "_title": "Arm/AddExtension",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
-          "5,2": {
+          "4,1": {
             "size": [
               1,
               1
@@ -149,21 +214,6 @@
               1
             ],
             "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/Arm/RedZone",
-              "_title": "Arm/RedZone",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "9,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Arm/Default Angle",
               "_title": "Arm/Default Angle",
@@ -171,7 +221,20 @@
               "_showGlyph": false
             }
           },
-          "4,1": {
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Arm/AddRotation",
+              "_title": "Arm/AddRotation",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,1": {
             "size": [
               1,
               1
@@ -186,7 +249,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "3,1": {
+          "8,1": {
             "size": [
               1,
               1
@@ -201,257 +264,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "9,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Arm/AddExtension",
-              "_title": "Arm/AddExtension",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "2,2": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://limelight-bat",
-              "_title": "limelight-bat",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": -1.0,
-              "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
-            }
-          },
-          "6,2": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://limelight-com",
-              "_title": "limelight-com",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": -1.0,
-              "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
-            }
-          },
-          "2,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/limelight-com_PipelineName",
-              "_title": "limelight-com_PipelineName",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "3,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/limelight-com_Stream",
-              "_title": "limelight-com_Stream",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "4,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/limelight-com_Interface",
-              "_title": "limelight-com_Interface",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "5,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/limelight-bat_Stream",
-              "_title": "limelight-bat_Stream",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "6,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/limelight-bat_Interface",
-              "_title": "limelight-bat_Interface",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "8,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/limelight-bat_PipelineName",
-              "_title": "limelight-bat_PipelineName",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "0,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/X/Roll",
-              "_title": "Drivetrain/X/Roll",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "1,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Y/Pitch",
-              "_title": "Drivetrain/Y/Pitch",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "9,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Z/Yaw",
-              "_title": "Drivetrain/Z/Yaw",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "0,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Trajectory Position",
-              "_title": "Drivetrain/Trajectory Position",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "1,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Trajectory Speed",
-              "_title": "Drivetrain/Trajectory Speed",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "9,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Left Encoder Speed",
-              "_title": "Drivetrain/Left Encoder Speed",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "0,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Right Encoder Speed",
-              "_title": "Drivetrain/Right Encoder Speed",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "0,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Left Encoder Distance",
-              "_title": "Drivetrain/Left Encoder Distance",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "0,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Right Encoder Distance",
-              "_title": "Drivetrain/Right Encoder Distance",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "1,4": {
             "size": [
               1,
               1
@@ -464,7 +277,7 @@
               "_showGlyph": false
             }
           },
-          "9,4": {
+          "0,2": {
             "size": [
               1,
               1
@@ -473,6 +286,142 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Arm/isCube",
               "_title": "Arm/isCube",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Arm/isAutonomous",
+              "_title": "Arm/isAutonomous",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Arm/isLatched",
+              "_title": "Arm/isLatched",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Arm/isRedZone",
+              "_title": "Arm/isRedZone",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Gripper/GripperClosed",
+              "_title": "Gripper/GripperClosed",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight-com_PipelineName",
+              "_title": "limelight-com_PipelineName",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight-com_Stream",
+              "_title": "limelight-com_Stream",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight-com_Interface",
+              "_title": "limelight-com_Interface",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight-bat_PipelineName",
+              "_title": "limelight-bat_PipelineName",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight-bat_Stream",
+              "_title": "limelight-bat_Stream",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight-bat_Interface",
+              "_title": "limelight-bat_Interface",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -490,167 +439,60 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Tab 3",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
         "tiles": {
-          "2,0": {
+          "5,0": {
             "size": [
-              3,
-              4
+              5,
+              5
             ],
             "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/Arm",
-              "_title": "Arm",
-              "_glyph": 149,
+              "_type": "Camera Stream",
+              "_source0": "camera_server://limelight-bat",
+              "_title": "limelight-bat",
+              "_glyph": 148,
               "_showGlyph": false,
-              "Layout/Label position": "BOTTOM",
-              "_children": [
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Arm/Extension Encoder Position",
-                  "_title": "Extension Encoder Position",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Arm/Extension Motor Rotation",
-                  "_title": "Extension Motor Rotation",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Arm/Arm Extension Position",
-                  "_title": "Arm Extension Position",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Arm/Is Retracted",
-                  "_title": "Is Retracted",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Arm/Arm Length",
-                  "_title": "Arm Length",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Arm/Angle",
-                  "_title": "Angle",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Arm/Rotation Encoder",
-                  "_title": "Rotation Encoder",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Arm/RedZone",
-                  "_title": "RedZone",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Arm/Default Angle",
-                  "_title": "Default Angle",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Arm/Comp LS",
-                  "_title": "Comp LS",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Arm/Batt LS",
-                  "_title": "Batt LS",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                }
-              ]
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
             }
           },
-          "8,0": {
+          "0,0": {
             "size": [
-              2,
-              4
+              5,
+              5
             ],
             "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/Gripper",
-              "_title": "Gripper",
-              "_glyph": 149,
+              "_type": "Camera Stream",
+              "_source0": "camera_server://limelight-com",
+              "_title": "limelight-com",
+              "_glyph": 148,
               "_showGlyph": false,
-              "Layout/Label position": "BOTTOM",
-              "_children": []
-            }
-          },
-          "6,0": {
-            "size": [
-              2,
-              4
-            ],
-            "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/Drivetrain",
-              "_title": "Drivetrain",
-              "_glyph": 149,
-              "_showGlyph": false,
-              "Layout/Label position": "BOTTOM",
-              "_children": [
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Drivetrain/MaxSpeed",
-                  "_title": "MaxSpeed",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                },
-                {
-                  "_type": "Subsystem Layout",
-                  "_source0": "network_table:///LiveWindow/Drivetrain/Roll, Pitch, and Yaw Values",
-                  "_title": "Roll, Pitch, and Yaw Values",
-                  "_glyph": 149,
-                  "_showGlyph": false,
-                  "Layout/Label position": "BOTTOM",
-                  "_children": []
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Drivetrain/RightEncoder",
-                  "_title": "RightEncoder",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Drivetrain/LeftEncoder",
-                  "_title": "LeftEncoder",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                }
-              ]
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
             }
           }
         }
@@ -658,9 +500,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -7.333333492279053,
-    "y": -7.333333492279053,
-    "width": 1518.6666259765625,
-    "height": 969.3333129882812
+    "x": 0.0,
+    "y": 0.0,
+    "width": 1504.0,
+    "height": 955.3333129882812
   }
 }

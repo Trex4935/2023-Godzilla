@@ -10,6 +10,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class ca_moveToMobility extends CommandBase {
   Drivetrain m_drivetrain;
+  private int i = 0;
   /** Creates a new ca_driveMobility. */
   public ca_moveToMobility(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
@@ -26,9 +27,13 @@ public class ca_moveToMobility extends CommandBase {
     m_drivetrain.driveStraightTarget(Constants.autoSpeed, Constants.autoAngle, Constants.autoMobilityPosition);
     
     if (m_drivetrain.checkPitch()) {
-      Constants.doAutoBalance = true;
+      i++;
+      if (i > 10) {
+        Constants.doAutoBalance = true;
+      }
+    } else {
+      i = 0;  
     }
-    
   }
 
   // Called once the command ends or is interrupted.

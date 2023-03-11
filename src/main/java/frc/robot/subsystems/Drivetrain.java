@@ -108,8 +108,8 @@ public class Drivetrain extends SubsystemBase {
         // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
 
         // Create PID Controllers
-        m_leftPIDController = new PIDController(0.2, 0.001, 0);// Right P ==0.01 for flat , 0.0225
-        m_rightPIDController = new PIDController(0.2, 0.001, 0);// Right P ==0.01 for flat,0.0225
+        m_leftPIDController = new PIDController(0.02, 0.001, 0);// Right P ==0.01 for flat , 0.0225
+        m_rightPIDController = new PIDController(0.02, 0.001, 0);// Right P ==0.01 for flat,0.0225
         m_leftPIDController.setIntegratorRange(-12, 12);// V
         m_rightPIDController.setIntegratorRange(-12, 12);// V
         // Feed Forward
@@ -133,8 +133,8 @@ public class Drivetrain extends SubsystemBase {
         // initiate simulate gyro Position
         zSimAngle = 0;
 
-        drivePID = new PIDController(0.06, 0.0008, 0); // 0.05, 0.001
-        drivePID.setIntegratorRange(-4, 4); // -2,2
+        drivePID = new PIDController(0.025, 0.0001, 0); // (0.03, 0.0001, 0); with the stop and (0.03, 0.000, 0); with direct stop both works
+        drivePID.setIntegratorRange(-0.25, 0.25); // -2,2 https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/pidcontroller.html
 
         anglePID = new PIDController(0.0225, 0.00, 0); // 0.05, 0.001
         drivePID.setIntegratorRange(-180, 180); // -2,2
@@ -190,8 +190,8 @@ public class Drivetrain extends SubsystemBase {
 
     /** Stops all Drivetrain motor groups. */
     public void stopMotors() {
-        leftMotors.set(0);
-        rightMotors.set(0);
+        leftMotors.stopMotor();
+        rightMotors.stopMotor();
     }
 
     /** Sets the max speed value (sendable) */
@@ -212,7 +212,7 @@ public class Drivetrain extends SubsystemBase {
         double leftPitch = Math.min(drivePID.calculate(getYAngleOffset(), 0), 0.8);
         double rightPitch = Math.min(drivePID.calculate(getYAngleOffset(), 0), 0.8);
         double err = 0 - s_getAngleZ();
-        double P = 0.0175; // 0.2
+        double P = 0.001; // 0.2
         double driftCorrectionTwist = err * P;
 
         leftMotors.set(leftPitch + driftCorrectionTwist); // left: + becase .set, -.setVolt
@@ -315,7 +315,7 @@ public class Drivetrain extends SubsystemBase {
     // checks the pitch(elevation) from gyro
     public boolean checkPitch() {
 
-        return s_getAngleY() > 5;
+        return s_getAngleY() > 8;
     }
 
     // Chages encoder ticks to meters to make the constant easier to input for

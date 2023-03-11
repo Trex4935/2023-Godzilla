@@ -4,15 +4,20 @@
 
 package frc.robot.commands.autoPoints;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class ca_autoBalance extends CommandBase {
+  public final Timer time;
   public final Drivetrain m_drivetrain;
+  private int i =0;
   /** Creates a new ca_autoBalance. */
   public ca_autoBalance(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
+    time = new Timer();
     addRequirements(drivetrain);
   }
 
@@ -30,13 +35,21 @@ public class ca_autoBalance extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_drivetrain.stopMotors();
+    System.out.println("WE ARE DONE WITH AUTO!");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-  
+    boolean isdone = false;
+
+    if ((m_drivetrain.getYAngleOffset() <= .4f) && (m_drivetrain.getYAngleOffset() >= -.4f)) {
+      i++;
+      if (i>50){isdone = true;}
+      else {isdone = false;}
+    }
+
     // Replace getYAngle with correct direction (Pitch relative to the robot) once confirmed
-    return  (m_drivetrain.getYAngleOffset() <= .4f) && (m_drivetrain.getYAngleOffset() >= -.4f);
+    return isdone ;
   }
 }

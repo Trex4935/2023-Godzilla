@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
 
@@ -95,7 +98,7 @@ public final class Constants {
   // Math: 1 in. = -5000 ticks
   public static final double ArmHighDistance = -165000;
   public static final double ArmMiddleDistance = -80000;
-  public static final double ArmLowDistance = -140000;
+  public static final double ArmLowDistance = -180000; //140000
   public static final double ArmCarryDistance = -5000;
   public static final double ArmShelfDistance = -45000;
   public static final double autoConeBumperDistance = -60000;
@@ -196,8 +199,12 @@ public final class Constants {
     LEFT
   }
   // Auto Balance Values
-
-  public static double autoSpeed = -0.5; // -1 to 1
-  public static double autoPosition = -2.0; // in meters
+  /** Moves backwards/CompressorSide */
+  public static double autoSpeed = -0.7; // -1 to 1
+  /** Distance */
+  public static double autoChargeStationPosition = 2.5;//Units.inchesToMeters(1); // in meters 187
+  public static double autoMobilityPosition = Units.inchesToMeters(187);
+  public static double autoBalanceToMobility = autoMobilityPosition - autoChargeStationPosition;
   public static double autoAngle = 0.0; // in degrees
+  public static boolean doAutoBalance = false;
 }

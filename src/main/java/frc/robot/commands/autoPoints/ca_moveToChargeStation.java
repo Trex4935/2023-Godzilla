@@ -10,14 +10,14 @@ import frc.robot.subsystems.Drivetrain;
 
 public class ca_moveToChargeStation extends CommandBase {
 
-  private final Drivetrain drivetrain;
+  private final Drivetrain m_drivetrain;
 
   /** Creates a new fastAutoBalance. */
-  public ca_moveToChargeStation(Drivetrain dt) {
+  public ca_moveToChargeStation(Drivetrain drivetrain) {
 
     // Use addRequirements() here to declare subsystem dependencies.
-    drivetrain = dt;
-    addRequirements(drivetrain);
+    m_drivetrain = drivetrain;
+    addRequirements(m_drivetrain);
     
   }
 
@@ -29,19 +29,24 @@ public class ca_moveToChargeStation extends CommandBase {
   @Override
   public void execute() {
     //Gets Speed, Position and angle of where to go to -for mobility points-
-    drivetrain.driveStraightTarget(Constants.autoSpeed,  Constants.autoAngle, Constants.autoPosition);
+    m_drivetrain.driveStraightTarget(Constants.autoSpeed, Constants.autoAngle, Constants.autoChargeStationPosition);
+    
+    if (m_drivetrain.checkPitch()) {
+      Constants.doAutoBalance = true;
+    }
   }
-
   // Called once the command ends or is interrupted.
   @Override
   //stops checking for pitch change once the pitch has been triggered to start autobalance code.
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drivetrain.stopMotors();
+  }
 
   // Returns true when the command should end.
   @Override
   //Boolean to check whether the pitch of the robot has change in order or indicate for the autobalance ot trigger.
   public boolean isFinished() {
-    System.out.println(drivetrain.checkPitch());
-    return drivetrain.checkPitch();
+    System.out.println(m_drivetrain.checkPitch());
+    return m_drivetrain.reachDriveTarget(Constants.autoChargeStationPosition);//drivetrain.checkPitch() || 
   }
 }

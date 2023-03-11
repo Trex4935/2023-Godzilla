@@ -24,9 +24,11 @@ public class ca_moveToMobility extends CommandBase {
   @Override
   public void execute() {
     m_drivetrain.driveStraightTarget(Constants.autoSpeed, Constants.autoAngle, Constants.autoMobilityPosition);
+    
     if (m_drivetrain.checkPitch()) {
       Constants.doAutoBalance = true;
     }
+    
   }
 
   // Called once the command ends or is interrupted.

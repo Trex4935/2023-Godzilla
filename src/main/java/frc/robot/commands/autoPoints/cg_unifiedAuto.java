@@ -9,6 +9,7 @@ import frc.robot.commands.armAction.ca_moveArmToMiddle;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
 import frc.robot.commands.autoDriveActions.ca_doesAbsolutelyNothing;
+import frc.robot.commands.autoDriveActions.ca_mobilityToBalance;
 import frc.robot.commands.armAction.ca_rotateArmToMiddle;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -30,9 +31,17 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
         new ca_moveArmToMiddle(arm),
         new cm_GripperOpen(gripper),
       // Go to Balance, while moving arm to CompressorSide:
-        new ca_moveToChargeStation(drivetrain),
+        new ca_moveToChargeStation(drivetrain));
+
+        if(drivetrain.checkPitch()){
+          addCommands(
         new ca_doesAbsolutelyNothing().withTimeout(.2),
-        new ca_autoBalance(drivetrain)
+        new ca_autoBalance(drivetrain)); }
+        else {
+          addCommands(
+            new ca_mobilityToBalance(drivetrain));
+        }
+      }
 
     );
   }

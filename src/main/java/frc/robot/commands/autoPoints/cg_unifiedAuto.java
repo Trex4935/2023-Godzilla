@@ -30,6 +30,7 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
         new ca_rotateArmToMiddle(arm),
         new ca_moveArmToMiddle(arm),
         new cm_GripperOpen(gripper),
+        
       // Go to Balance, while moving arm to CompressorSide:
         new ca_moveToChargeStation(drivetrain));
 

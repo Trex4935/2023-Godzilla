@@ -323,7 +323,7 @@ public class Drivetrain extends SubsystemBase {
     public Boolean reachDriveTarget(Double targetPosition) {
         double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))
                 * (Math.signum(targetPosition)) / 2;
-        System.out.println(" targetPosition: " + targetPosition + " averageDistance: " + averageTickValue);
+        // System.out.println(" targetPosition: " + targetPosition + " averageDistance: " + averageTickValue);
 
         // if tick value is greater than or equal to target position, stop both motors
         if (averageTickValue >= targetPosition - 0.1 && averageTickValue <= targetPosition + 0.1) {

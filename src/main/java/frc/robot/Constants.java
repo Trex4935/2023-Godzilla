@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -199,6 +201,8 @@ public final class Constants {
   // Auto Balance Values
 
   public static double autoSpeed = -0.7; // -1 to 1
-  public static double autoPosition = 2.5;//Units.inchesToMeters(1); // in meters 187
+  public static double autoChargeStationPosition = 2.5;//Units.inchesToMeters(1); // in meters 187
+  public static double autoMobilityPosition = Units.inchesToMeters(187);
   public static double autoAngle = 0.0; // in degrees
+  public static boolean doAutoBalance = false;
 }

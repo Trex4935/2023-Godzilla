@@ -5,13 +5,12 @@
 package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.armAction.ca_setArmPosition;
-import frc.robot.commands.armAction.ca_setSideOrientation;
+import frc.robot.commands.armAction.ca_moveArmToMiddle;
+import frc.robot.commands.armAction.ca_moveToCarryCompressor;
+import frc.robot.commands.armAction.ca_rotateArmToMiddle;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
 import frc.robot.commands.autoDriveActions.ca_doesAbsolutelyNothing;
-import frc.robot.extensions.ArmPosition;
-import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Gripper;
@@ -23,16 +22,16 @@ public class cg_autoScoreBalance extends SequentialCommandGroup {
 
     // Use addRequirements() here to declare subsystem dependencies
     addCommands(
-
-        new cm_GripperClose(gripper).withTimeout(0.75), // Closes on game piece
-        new ca_setSideOrientation(ArmSideOrientation.CompressorSide).withTimeout(6),
-        new ca_setArmPosition(ArmPosition.MIDDLE),
-        new cm_GripperOpen(gripper).alongWith(new ca_setArmPosition(ArmPosition.MIDDLE)), // , // Resets arm to default
-                                                                                          // position
-        new ca_doesAbsolutelyNothing().withTimeout(1),
-        /* new ca_autoTrajectoryKinematicWithGyro(drivetrain, TrajectoryContainer.trajectoryMobility,
-            TrajectoryContainer.trajMobilityEnd, 0.0), // Moves to game piece */
-        new ca_autoBalance(drivetrain) // Balances the drivetrain
+      // Cone Score:
+        // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
+        new cm_GripperClose(gripper).withTimeout(.1),
+        new ca_rotateArmToMiddle(arm),
+        new ca_moveArmToMiddle(arm),
+        new cm_GripperOpen(gripper),
+      // Go to Balance, while moving arm to CompressorSide:
+        new ca_moveToCarryCompressor(arm).raceWith(new ca_moveToChargeStation(drivetrain)),
+        new ca_doesAbsolutelyNothing().withTimeout(.2),
+        new ca_autoBalance(drivetrain)
     );
   }
 }

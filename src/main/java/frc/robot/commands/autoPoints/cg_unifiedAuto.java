@@ -27,14 +27,13 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        // new ca_goToConeBumper(arm),
-         // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
-        // new cm_GripperClose(gripper).withTimeout(.1),
-        // new ca_rotateArmToMiddle(arm),
-        // new ca_moveArmToMiddle(arm),
-        // new cm_GripperOpen(gripper),
-        // new ca_setArmPosition(ArmPosition.CARRY).withTimeout(0.5),
-        // use anoter drive to target to drivestation
+      // Cone Score:
+        // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
+        new cm_GripperClose(gripper).withTimeout(.1),
+        new ca_rotateArmToMiddle(arm),
+        new ca_moveArmToMiddle(arm),
+        new cm_GripperOpen(gripper),
+      // Go to Balance, while moving arm to CompressorSide:
         new ca_moveToChargeStation(drivetrain),
         new ca_doesAbsolutelyNothing().withTimeout(.2),
         new ca_autoBalance(drivetrain)

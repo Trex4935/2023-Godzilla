@@ -6,6 +6,7 @@ package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class ca_autoBalance extends CommandBase {
@@ -27,7 +28,11 @@ public class ca_autoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.autoBalance();
+    if (m_drivetrain.checkPitch()){
+    m_drivetrain.autoBalance();}
+    else {    
+    m_drivetrain.driveStraightTarget(Constants.autoSpeed,  Constants.autoAngle, Constants.autoBalanceToMobility);
+    }
   }
 
   // Called once the command ends or is interrupted.

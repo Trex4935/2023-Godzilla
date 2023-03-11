@@ -203,6 +203,7 @@ public final class Constants {
   public static double autoSpeed = -0.7; // -1 to 1
   public static double autoChargeStationPosition = 2.5;//Units.inchesToMeters(1); // in meters 187
   public static double autoMobilityPosition = Units.inchesToMeters(187);
+  public static double autoBalanceToMobility = Units.inchesToMeters(50);
   public static double autoAngle = 0.0; // in degrees
   public static boolean doAutoBalance = false;
 }

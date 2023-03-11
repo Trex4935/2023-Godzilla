@@ -43,7 +43,4 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
             new ca_mobilityToBalance(drivetrain));
         }
       }
-
-    );
-  }
 }

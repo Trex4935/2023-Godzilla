@@ -28,11 +28,7 @@ public class ca_autoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_drivetrain.checkPitch()){
-    m_drivetrain.autoBalance();}
-    else {    
-    m_drivetrain.driveStraightTarget(Constants.autoSpeed,  Constants.autoAngle, Constants.autoBalanceToMobility);
-    }
+    m_drivetrain.autoBalance();
   }
 
   // Called once the command ends or is interrupted.

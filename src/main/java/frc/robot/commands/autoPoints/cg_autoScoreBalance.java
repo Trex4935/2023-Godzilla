@@ -29,7 +29,7 @@ public class cg_autoScoreBalance extends SequentialCommandGroup {
         new ca_moveArmToMiddle(arm),
         new cm_GripperOpen(gripper),
       // Go to Balance, while moving arm to CompressorSide:
-        new ca_moveToCarryCompressor(arm).raceWith(new ca_moveToChargeStation(drivetrain)),
+        new ca_moveToChargeStation(drivetrain),
         new ca_doesAbsolutelyNothing().withTimeout(.2),
         new ca_autoBalance(drivetrain)
     );

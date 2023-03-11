@@ -29,9 +29,12 @@ public class ca_moveToChargeStation extends CommandBase {
   @Override
   public void execute() {
     //Gets Speed, Position and angle of where to go to -for mobility points-
-    m_drivetrain.driveStraightTarget(Constants.autoSpeed,  Constants.autoAngle, Constants.autoChargeStationPosition);
+    m_drivetrain.driveStraightTarget(Constants.autoSpeed, Constants.autoAngle, Constants.autoChargeStationPosition);
+    
+    if (m_drivetrain.checkPitch()) {
+      Constants.doAutoBalance = true;
+    }
   }
-
   // Called once the command ends or is interrupted.
   @Override
   //stops checking for pitch change once the pitch has been triggered to start autobalance code.

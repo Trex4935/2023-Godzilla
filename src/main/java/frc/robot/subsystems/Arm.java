@@ -108,7 +108,7 @@ public class Arm extends SubsystemBase {
     if (armRetractedLimitSwitch.get()) {
       // if the backwardimitSwitch is true,stop the motor
       armExtensionMotor.stopMotor();
-      // zeroEncoder();
+      zeroEncoder();
     } else {
       // if the backwardLimitSwitch is false, then allow the motor to keep moving
       armExtensionMotor.set(Constants.armExtensionSpeed);

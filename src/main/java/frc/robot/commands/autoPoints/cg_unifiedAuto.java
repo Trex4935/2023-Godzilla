@@ -26,7 +26,8 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
         new cg_autoScore(drivetrain, arm, gripper),
         
       // Goes the distance to middle of charge station
-        new ca_moveToChargeStation(drivetrain).alongWith(new ca_moveToCarryCompressor(arm))
+      new ca_moveToCarryCompressor(arm),  
+      new ca_moveToChargeStation(drivetrain)
         );
 
       // If it went on the charge station, it'll autobalance. If NOT, it'll go to mobility line and change arm side.

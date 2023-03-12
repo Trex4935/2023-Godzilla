@@ -25,8 +25,8 @@ public class ca_moveArmToMiddleCompressor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.setArmRotationSM(Constants.ArmMiddleAngleCompressor);
-    m_arm.setArmExtensionMM(Constants.autoArmMiddleDistance);
+    m_arm.setArmRotationSM(265);
+    m_arm.setArmExtensionMM(-78500);
   }
 
   // Called once the command ends or is interrupted.
@@ -37,7 +37,7 @@ public class ca_moveArmToMiddleCompressor extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Arm.checkExtension2(Constants.autoArmMiddleDistance) && Arm.checkRotation2(Constants.ArmMiddleAngleCompressor);
+    return Arm.checkExtension2(-78500) && Arm.checkRotation2(265);
 
   }
 }

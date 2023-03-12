@@ -176,7 +176,7 @@ public class Drivetrain extends SubsystemBase {
 
     // Moves forward using the gyro to keep the robot strait
     public void driveWithStraightWithGyro(double avgSpeed, double targetAngle) {
-        double err = targetAngle - getZAngleConverted();
+        double err = targetAngle + getZAngleConverted();
         double P = 0.001;
         double driftCorrection = err * P;
         diffdrive.arcadeDrive(avgSpeed, driftCorrection);
@@ -351,7 +351,7 @@ public class Drivetrain extends SubsystemBase {
     /** Gets Yaw(Z) from Gyro */
     public Float s_getAngleZ() {
         // return ahrs.getRoll();
-        return -ahrs.getYaw();
+        return ahrs.getYaw();
     }
 
     /** Get the Max speed value (sendable) */
@@ -396,9 +396,9 @@ public class Drivetrain extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("MaxSpeed", this::s_getMaxSpeed, this::setMaxSpeed);
         // Gyro values
-        builder.addFloatProperty("X/Roll", this::s_getAngleX, null);
-        builder.addFloatProperty("Y/Pitch", this::s_getAngleY, null);
-        builder.addFloatProperty("Z/Yaw", this::s_getAngleZ, null);
+        builder.addFloatProperty("Roll", this::s_getAngleX, null);
+        builder.addFloatProperty("Pitch", this::s_getAngleY, null);
+        builder.addFloatProperty("Yaw", this::s_getAngleZ, null);
         builder.addDoubleProperty("RightEncoder", this::s_getEncoderRightTicks, null);
         builder.addDoubleProperty("LeftEncoder", this::s_getEncoderLeftTicks, null);
         builder.addDoubleProperty("Left Encoder Speed", this::s_getEncoderLeftSpeed, null);

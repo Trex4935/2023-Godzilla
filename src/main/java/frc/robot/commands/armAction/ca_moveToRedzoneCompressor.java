@@ -26,12 +26,13 @@ public class ca_moveToRedzoneCompressor extends CommandBase {
   public void execute() {
     m_arm.retractArm();
     m_arm.rotateCompressorFast();
-    Constants.selectedArmSideOrientation = ArmSideOrientation.CompressorSide;
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Constants.selectedArmSideOrientation = ArmSideOrientation.CompressorSide;
+  }
 
   // Returns true when the command should end.
   @Override

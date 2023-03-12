@@ -25,7 +25,7 @@ public class ca_moveToRedzoneCompressor extends CommandBase {
   @Override
   public void execute() {
     m_arm.retractArm();
-    m_arm.rotateCompressorFast();
+    m_arm.setArmRotationSM(230);
   }
 
   // Called once the command ends or is interrupted.
@@ -37,6 +37,6 @@ public class ca_moveToRedzoneCompressor extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Arm.checkRotation2(200);
+    return m_arm.s_getRotationEncoderValue() > 225;
   }
 }

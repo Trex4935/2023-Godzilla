@@ -37,7 +37,7 @@ public class ca_moveArmToMiddleCompressor extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Arm.checkExtension2(Constants.autoArmMiddleDistance) && Arm.checkRotation2(Constants.ArmMiddleAngleBattery);
+    return Arm.checkExtension2(Constants.autoArmMiddleDistance) && Arm.checkRotation2(Constants.ArmMiddleAngleCompressor);
 
   }
 }

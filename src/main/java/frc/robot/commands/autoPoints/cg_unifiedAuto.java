@@ -7,14 +7,8 @@ package frc.robot.commands.autoPoints;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
-import frc.robot.commands.armAction.ca_moveArmToMiddle;
 import frc.robot.commands.armAction.ca_moveToCarryCompressor;
-import frc.robot.commands.armAction.cm_GripperClose;
-import frc.robot.commands.armAction.cm_GripperOpen;
 import frc.robot.commands.autoDriveActions.ca_balanceToMobility;
-import frc.robot.commands.autoDriveActions.ca_doesAbsolutelyNothing;
-import frc.robot.commands.autoDriveActions.ca_mobilityToBalance;
-import frc.robot.commands.armAction.ca_rotateArmToMiddle;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Gripper;
@@ -29,15 +23,11 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       // Cone Score:
-        new WaitCommand(1),
-        // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
-        new cm_GripperClose(gripper).withTimeout(.25),
-        new ca_rotateArmToMiddle(arm),
-        new ca_moveArmToMiddle(arm),
-        new cm_GripperOpen(gripper),
+        new cg_autoScore(drivetrain, arm, gripper),
         
       // Goes the distance to middle of charge station
-        new ca_moveToChargeStation(drivetrain));
+        new ca_moveToChargeStation(drivetrain).alongWith(new ca_moveToCarryCompressor(arm))
+        );
 
       // If it went on the charge station, it'll autobalance. If NOT, it'll go to mobility line and change arm side.
         if(Constants.doAutoBalance){

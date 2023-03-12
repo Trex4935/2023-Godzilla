@@ -131,6 +131,10 @@ public class Arm extends SubsystemBase {
     }
   }
 
+  public void rotateCompressorFast() {
+    armRotationMotor.set(0.9);
+  }
+
   /** Increases addExtend */
   public void increaseTicks() {
     Constants.addExtend -= 500;

@@ -5,8 +5,8 @@
 package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.armAction.ca_moveArmToMiddle;
-import frc.robot.commands.armAction.ca_moveToCarryCompressor;
+import frc.robot.commands.armAction.ca_moveArmToMiddleCompressor;
+import frc.robot.commands.armAction.ca_moveToRedzoneCompressor;
 import frc.robot.commands.armAction.ca_rotateArmToMiddle;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
@@ -26,7 +26,7 @@ public class cg_autoScoreBalance extends SequentialCommandGroup {
         // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
         new cm_GripperClose(gripper).withTimeout(.1),
         new ca_rotateArmToMiddle(arm),
-        new ca_moveArmToMiddle(arm),
+        new ca_moveArmToMiddleCompressor(arm),
         new cm_GripperOpen(gripper),
       // Go to Balance, while moving arm to CompressorSide:
         new ca_moveToChargeStation(drivetrain),

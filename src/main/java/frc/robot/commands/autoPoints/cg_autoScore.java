@@ -5,6 +5,7 @@
 package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Gripper;
@@ -27,7 +28,8 @@ public class cg_autoScore extends SequentialCommandGroup {
         new cm_GripperClose(gripper).withTimeout(0.5), // Closes on game piece
         new ca_moveToRedzoneCompressor(arm),
         new ca_moveArmToMiddleCompressor(arm),
-        new cm_GripperOpen(gripper)
+        new cm_GripperOpen(gripper),
+        new WaitCommand(0.2)
     );
   }
 }

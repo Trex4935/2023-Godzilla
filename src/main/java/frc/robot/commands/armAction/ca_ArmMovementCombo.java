@@ -63,7 +63,7 @@ public class ca_ArmMovementCombo extends CommandBase {
         case LOW:
           //System.out.println("LOW-B");
           m_arm.setArmRotationSM(Constants.ArmLowAngleBattery);
-          m_arm.setArmExtensionMM(Constants.ArmLowDistance);
+          m_arm.setArmExtensionMM(Constants.ArmLowDistanceBattery);
           break;
 
         case BUMPER:
@@ -110,7 +110,7 @@ public class ca_ArmMovementCombo extends CommandBase {
         case LOW:
           //System.out.println("LOW-C");
           m_arm.setArmRotationSM(Constants.ArmLowAngleCompressor);
-          m_arm.setArmExtensionMM(Constants.ArmLowDistance);
+          m_arm.setArmExtensionMM(Constants.ArmLowDistanceCompressor);
           break;
 
         /* case RAMMING:

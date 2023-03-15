@@ -176,7 +176,7 @@ public class Drivetrain extends SubsystemBase {
 
     // Moves forward using the gyro to keep the robot strait
     public void driveWithStraightWithGyro(double avgSpeed, double targetAngle) {
-        double err = targetAngle - getZAngleConverted();
+        double err = targetAngle + getZAngleConverted();
         double P = 0.001;
         double driftCorrection = err * P;
         diffdrive.arcadeDrive(avgSpeed, driftCorrection);
@@ -218,9 +218,9 @@ public class Drivetrain extends SubsystemBase {
         leftMotors.set(leftPitch + driftCorrectionTwist); // left: + becase .set, -.setVolt
         rightMotors.set(rightPitch - driftCorrectionTwist); // right: - becase .set, +.setVolt
 
-        System.out.println("leftPitch: " + leftPitch +
+        /* System.out.println("leftPitch: " + leftPitch +
                 " rightPitch: " + rightPitch + " err: " + err +
-                " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist + " Pitch Angle: " + s_getAngleY());
+                " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist + " Pitch Angle: " + s_getAngleY()); */
     }
 
     /** Converts inches to ticks for motors */
@@ -283,11 +283,11 @@ public class Drivetrain extends SubsystemBase {
                                                                                                         // per/sec or
                                                                                                         // m/sec
         final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), -rightSpeedWheel);
-        System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
+        /* System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
                 + leftFeedforward + " rightFeedforward: " + rightFeedforward + " leftEncoder :" + leftEncoder.getRate()
                 + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput + " rightOutput: "
                 + rightOutput + " leftEncoderDistance: " + leftEncoder.getDistance() + " rightEncoderDistance: "
-                + rightEncoder.getDistance());
+                + rightEncoder.getDistance()); */
         FLMotor.setVoltage(leftOutput + leftFeedforward);
         FRMotor.setVoltage(rightOutput + rightFeedforward);
         MLMotor.setVoltage(leftOutput + leftFeedforward);
@@ -351,7 +351,7 @@ public class Drivetrain extends SubsystemBase {
     /** Gets Yaw(Z) from Gyro */
     public Float s_getAngleZ() {
         // return ahrs.getRoll();
-        return -ahrs.getYaw();
+        return ahrs.getYaw();
     }
 
     /** Get the Max speed value (sendable) */
@@ -396,9 +396,9 @@ public class Drivetrain extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("MaxSpeed", this::s_getMaxSpeed, this::setMaxSpeed);
         // Gyro values
-        builder.addFloatProperty("X/Roll", this::s_getAngleX, null);
-        builder.addFloatProperty("Y/Pitch", this::s_getAngleY, null);
-        builder.addFloatProperty("Z/Yaw", this::s_getAngleZ, null);
+        builder.addFloatProperty("Roll", this::s_getAngleX, null);
+        builder.addFloatProperty("Pitch", this::s_getAngleY, null);
+        builder.addFloatProperty("Yaw", this::s_getAngleZ, null);
         builder.addDoubleProperty("RightEncoder", this::s_getEncoderRightTicks, null);
         builder.addDoubleProperty("LeftEncoder", this::s_getEncoderLeftTicks, null);
         builder.addDoubleProperty("Left Encoder Speed", this::s_getEncoderLeftSpeed, null);

@@ -26,7 +26,9 @@ public class ca_moveToChargeStation extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_drivetrain.resetGyro();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -56,7 +58,7 @@ public class ca_moveToChargeStation extends CommandBase {
   @Override
   //Boolean to check whether the pitch of the robot has change in order or indicate for the autobalance ot trigger.
   public boolean isFinished() {
-    System.out.println(m_drivetrain.checkPitch());
+    /* System.out.println(m_drivetrain.checkPitch()); */
     return m_drivetrain.reachDriveTarget(Constants.autoChargeStationPosition);//drivetrain.checkPitch() || 
   }
 }

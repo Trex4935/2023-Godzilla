@@ -4,14 +4,15 @@
 
 package frc.robot.commands.armAction;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.extensions.ArmSideOrientation;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class ca_moveToCarryCompressor extends CommandBase {
+public class ca_moveToRedzoneCompressor extends CommandBase {
   Arm m_arm;
   /** Creates a new ca_moveToCarryCompressor. */
-  public ca_moveToCarryCompressor(Arm arm) {
+  public ca_moveToRedzoneCompressor(Arm arm) {
     m_arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -24,16 +25,18 @@ public class ca_moveToCarryCompressor extends CommandBase {
   @Override
   public void execute() {
     m_arm.retractArm();
-    m_arm.setArmRotationSM(Constants.ArmCarryAngleCompressor);
+    m_arm.setArmRotationSM(230);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Constants.selectedArmSideOrientation = ArmSideOrientation.CompressorSide;
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Arm.checkRotation2(Constants.ArmCarryAngleCompressor);
+    return m_arm.s_getRotationEncoderValue() > 225;
   }
 }

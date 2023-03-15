@@ -6,8 +6,8 @@ package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.commands.armAction.ca_moveArmToMiddle;
-import frc.robot.commands.armAction.ca_moveToCarryCompressor;
+import frc.robot.commands.armAction.ca_moveArmToMiddleCompressor;
+import frc.robot.commands.armAction.ca_moveToRedzoneCompressor;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
 import frc.robot.commands.autoDriveActions.ca_doesAbsolutelyNothing;
@@ -31,10 +31,10 @@ public class cg_mobilityUnifiedAuto extends SequentialCommandGroup {
         // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
         new cm_GripperClose(gripper).withTimeout(.1),
         new ca_rotateArmToMiddle(arm),
-        new ca_moveArmToMiddle(arm),
+        new ca_moveArmToMiddleCompressor(arm),
         new cm_GripperOpen(gripper),
       // Go to Mobility, while moving arm to CompressorSide:
-        new ca_moveToCarryCompressor(arm).raceWith(new ca_moveToMobility(drivetrain))
+        new ca_moveToMobility(drivetrain)
     );
     // If doing balance, move back and balance.
     if (Constants.doAutoBalance) {

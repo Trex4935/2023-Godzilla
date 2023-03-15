@@ -51,9 +51,9 @@ public class ca_autoTurnKinematicGyro extends CommandBase {
 
     dt.driveWithAuto(leftSpeed, rightSpeed);
     dt.simulateGyro(leftSpeed, rightSpeed, timer);
-    System.out.println("Time: " + timer.get() + " Velocity: " + chassisSpeed + "Omega: " + comega + " Angle: "
+    /* System.out.println("Time: " + timer.get() + " Velocity: " + chassisSpeed + "Omega: " + comega + " Angle: "
         + dt.s_getAngleZ() + " AngleTarget: " + eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: "
-        + rightSpeed + " Error:" + error);
+        + rightSpeed + " Error:" + error); */
   }
 
   // Called once the command ends or is interrupted.

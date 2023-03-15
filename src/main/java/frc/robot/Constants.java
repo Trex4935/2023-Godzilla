@@ -82,10 +82,10 @@ public final class Constants {
   public static double ArmCarryAngleBattery = 10;
   public static final double ArmBumberAngleBattery = 4;
 
-  public static final double ArmCarryAngleCompressor = 313;
+  public static final double ArmCarryAngleCompressor = 318;
   public static final double ArmHighAngleCompressor = 240;
   public static final double ArmMiddleAngleCompressor = 252;
-  public static final double ArmLowAngleCompressor = 310;
+  public static final double ArmLowAngleCompressor = 316;
 
   public static final int sideVal = 0;
 
@@ -95,15 +95,16 @@ public final class Constants {
 
   // Arm Distances
   // Units = Inches (Converting to ticks)
+
   // Math: 1 in. = -5000 ticks
-  public static final double ArmHighDistance = -165000;
+  public static final double ArmHighDistance = -199000;
   public static final double ArmMiddleDistance = -80000;
-  public static final double ArmLowDistance = -180000; //140000
+  public static final double ArmLowDistanceBattery = -120000; //140000
   public static final double ArmCarryDistance = -5000;
   public static final double ArmShelfDistance = -45000;
   public static final double autoConeBumperDistance = -60000;
   public static final double autoArmMiddleDistance = -75000;
-
+  public static final double ArmLowDistanceCompressor = -135000;
 
   public static boolean buttonOccupied = false;
 
@@ -121,6 +122,7 @@ public final class Constants {
 
   /** Actual Joystick Axis ID */
   public static final int joystickAxis = 1;
+
 
   // Controller Constants
 
@@ -200,10 +202,10 @@ public final class Constants {
   }
   // Auto Balance Values
   /** Moves backwards/CompressorSide */
-  public static double autoSpeed = -0.7; // -1 to 1
+  public static double autoSpeed = 0.7; // -1 to 1
   /** Distance */
   public static double autoChargeStationPosition = 2.5;//Units.inchesToMeters(1); // in meters 187
-  public static double autoMobilityPosition = Units.inchesToMeters(187);
+  public static double autoMobilityPosition = Units.inchesToMeters(180);
   public static double autoBalanceToMobility = autoMobilityPosition - autoChargeStationPosition;
   public static double autoAngle = 0.0; // in degrees
   public static boolean doAutoBalance = false;

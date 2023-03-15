@@ -121,7 +121,7 @@ public class Arm extends SubsystemBase {
    */
   public boolean armRedZone() {
     // if arm is in red zone and it is extended
-    if (Helper.RangeCompare(225, 91, armRotationEncoder.getPosition())) {
+    if (Helper.RangeCompare(225, 100, armRotationEncoder.getPosition())) {
       Constants.inRedZone = true; // Updates global variable
       Constants.switchingSides = false;
       return true;
@@ -129,6 +129,10 @@ public class Arm extends SubsystemBase {
       Constants.inRedZone = false; // Updates global variable
       return false;
     }
+  }
+
+  public void rotateCompressorFast() {
+    armRotationMotor.set(0.9);
   }
 
   /** Increases addExtend */
@@ -261,7 +265,7 @@ public class Arm extends SubsystemBase {
   // Sendable override
   // Anything put here will be added to the network tables and thus can be added
   // to the dashboard / consumed by the LED controller
-  @Override
+   @Override
   public void initSendable(SendableBuilder builder) {
 
     // Arm Extension Sendables

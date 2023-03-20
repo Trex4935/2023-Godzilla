@@ -24,6 +24,7 @@ import frc.robot.commands.armAction.cm_setGamePieceType;
 import frc.robot.commands.armAction.cm_setSpeedLimit;
 import frc.robot.commands.autoDriveActions.ca_MoveBack;
 import frc.robot.commands.autoDriveActions.cm_driveWithJoysticks;
+import frc.robot.commands.autoPoints.cg_mobilityUnifiedAuto;
 import frc.robot.commands.autoPoints.cg_unifiedAuto;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
@@ -64,6 +65,7 @@ public class RobotContainer {
   /** Sets the game piece type to CubeFalse */
   private final cm_setGamePieceType setGamePieceTypeCubeFalse;
   private final cg_unifiedAuto unifiedAuto;
+  private final cg_mobilityUnifiedAuto mobilityUnifiedAuto;
 
   // Declare Other
   private final Joystick m_JoystickLeft = new Joystick(Constants.leftJoystick);
@@ -85,6 +87,7 @@ public class RobotContainer {
 
     // Autonomous
     unifiedAuto = new cg_unifiedAuto(arm, gripper, drivetrain);
+    mobilityUnifiedAuto = new cg_mobilityUnifiedAuto(arm, gripper, drivetrain);
 
     // Arm
     armMovementCombo = new ca_ArmMovementCombo(arm);
@@ -182,6 +185,7 @@ public class RobotContainer {
 
     // return autoBalance.withTimeout(15);
     return unifiedAuto;
+    // return mobilityUnifiedAuto;
 
   }
 }

@@ -5,11 +5,14 @@
 package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.armAction.ca_moveArmToMiddleCompressor;
+import frc.robot.commands.armAction.ca_moveToCarryCompressor;
 import frc.robot.commands.armAction.ca_moveToRedzoneCompressor;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
+import frc.robot.commands.autoDriveActions.ca_balanceToMobility;
 import frc.robot.commands.autoDriveActions.ca_doesAbsolutelyNothing;
 import frc.robot.commands.autoDriveActions.ca_mobilityToBalance;
 import frc.robot.commands.autoDriveActions.ca_moveToMobility;
@@ -28,21 +31,14 @@ public class cg_mobilityUnifiedAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       // Cone Score:
-        // new cm_GripperClose(gripper).raceWith(new ca_rotateArmToMiddle(arm)),
-        new cm_GripperClose(gripper).withTimeout(.1),
-        new ca_rotateArmToMiddle(arm),
-        new ca_moveArmToMiddleCompressor(arm),
-        new cm_GripperOpen(gripper),
-      // Go to Mobility, while moving arm to CompressorSide:
-        new ca_moveToMobility(drivetrain)
+        new cg_autoScore(drivetrain, arm, gripper),
+        new ca_moveToCarryCompressor(arm),
+      // Go to Charge Station
+        new ca_moveToChargeStation(drivetrain), // Senses incline: doAuto = true
+        new WaitCommand(0.2),
+        new ca_autoBalanceNew(drivetrain), // Ends automatically if doAuto == false
+        new ca_balanceToMobility(drivetrain)
     );
     // If doing balance, move back and balance.
-    if (Constants.doAutoBalance) {
-      addCommands(
-        new ca_mobilityToBalance(drivetrain),
-        new ca_doesAbsolutelyNothing().withTimeout(.2),
-        new ca_autoBalance(drivetrain)
-      );
-    }
   }
 }

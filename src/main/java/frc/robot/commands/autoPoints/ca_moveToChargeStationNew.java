@@ -9,14 +9,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class ca_moveToChargeStation extends CommandBase {
+public class ca_moveToChargeStationNew extends CommandBase {
 
   private final Drivetrain m_drivetrain;
   private int i = 0;
 
 
   /** Creates a new fastAutoBalance. */
-  public ca_moveToChargeStation(Drivetrain drivetrain) {
+  public ca_moveToChargeStationNew(Drivetrain drivetrain) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
@@ -35,8 +35,9 @@ public class ca_moveToChargeStation extends CommandBase {
   @Override
   public void execute() {
     //Gets Speed, Position and angle of where to go to -for mobility points-
-    m_drivetrain.driveStraightTarget(Constants.autoSpeed, Constants.autoAngle, Constants.autoChargeStationPosition);
-    
+    m_drivetrain.driveStraightTarget(0.7, Constants.autoAngle, Constants.autoChargeStationPosition);
+    // Slowest Incline Speed: .55 < .65 < .70
+
     // Check if on incline for more than 200ms (10 cycles).
     if (m_drivetrain.checkLessPitch(-8)) {
       i++;
@@ -59,6 +60,6 @@ public class ca_moveToChargeStation extends CommandBase {
   @Override
   //Boolean to check whether the pitch of the robot has change in order or indicate for the autobalance ot trigger.
   public boolean isFinished() {
-    return m_drivetrain.reachDriveTarget(Constants.autoChargeStationPosition);//drivetrain.checkPitch() || 
+    return m_drivetrain.reachDriveTarget(Units.inchesToMeters(75.0));//drivetrain.checkPitch() || 
   }
 }

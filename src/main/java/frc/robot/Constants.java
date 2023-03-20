@@ -202,11 +202,11 @@ public final class Constants {
   }
   // Auto Balance Values
   /** Moves backwards/CompressorSide */
-  public static double autoSpeed = 0.7; // -1 to 1
+  public static double autoSpeed = .85; // 0.75 to 0.9
   /** Distance */
-  public static double autoChargeStationPosition = 2.5;//Units.inchesToMeters(1); // in meters 187
+  public static double autoChargeStationPosition = Units.inchesToMeters(114);//110 < (112) < 114 
   public static double autoMobilityPosition = Units.inchesToMeters(180);
   public static double autoBalanceToMobility = autoMobilityPosition - autoChargeStationPosition;
   public static double autoAngle = 0.0; // in degrees
-  public static boolean doAutoBalance = false;
+  public static boolean doAutoBalance = true;
 }

@@ -4,15 +4,16 @@
 
 package frc.robot.commands.autoDriveActions;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class ca_moveToMobility extends CommandBase {
+public class ca_driveForwardInches extends CommandBase {
   Drivetrain m_drivetrain;
-  private int i = 0;
   /** Creates a new ca_driveMobility. */
-  public ca_moveToMobility(Drivetrain drivetrain) {
+  public ca_driveForwardInches(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -24,20 +25,9 @@ public class ca_moveToMobility extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Go to mobility position (187in)
-    m_drivetrain.driveStraightTarget(Constants.autoSpeed, Constants.autoAngle, Constants.autoMobilityPosition);
-    
-    // Check if on incline for more than 200ms (10 cycles).
-    if (m_drivetrain.checkLessPitch(-8)) {
-      i++;
-      if (i > 10) {
-        // If on incline for longer than 200ms, then perform balance.
-        Constants.doAutoBalance = true;
-      }
-    } else {
-      i = 0;  
-    }
+    m_drivetrain.driveStraightTarget(0.8, -15, Units.inchesToMeters(50));
   }
+  // 0.7 < 0.8 < 0.9
 
   // Called once the command ends or is interrupted.
   @Override
@@ -46,6 +36,6 @@ public class ca_moveToMobility extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_drivetrain.reachDriveTarget(Constants.autoMobilityPosition);
+    return m_drivetrain.reachDriveTarget(Units.inchesToMeters(30)); 
   }
 }

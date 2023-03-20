@@ -212,7 +212,7 @@ public class Drivetrain extends SubsystemBase {
         double leftPitch = Math.min(drivePID.calculate(getYAngleOffset(), 0), 0.8);
         double rightPitch = Math.min(drivePID.calculate(getYAngleOffset(), 0), 0.8);
         double err = 0 - s_getAngleZ();
-        double P = 0.001; // 0.2
+        double P = 0.002; // 0.2 // 0.001
         double driftCorrectionTwist = err * P;
 
         leftMotors.set(leftPitch + driftCorrectionTwist); // left: + becase .set, -.setVolt
@@ -309,13 +309,17 @@ public class Drivetrain extends SubsystemBase {
         } else {
             driveWithStraightWithGyro(Speed, Angle);
         }
-
     }
 
     // checks the pitch(elevation) from gyro
-    public boolean checkPitch() {
+    public boolean checkLessPitch(double angle) {
 
-        return s_getAngleY() > 8;
+        return s_getAngleY() < angle;
+    }
+    // checks the pitch(elevation) from gyro
+    public boolean checkMorePitch(double angle) {
+
+        return s_getAngleY() > angle;
     }
 
     // Chages encoder ticks to meters to make the constant easier to input for
@@ -389,6 +393,14 @@ public class Drivetrain extends SubsystemBase {
         return -rightEncoder.get();
     }
 
+    public boolean s_getDoAutoBalance() {
+        return Constants.doAutoBalance;
+    }
+
+    public void s_setDoAutoBalance(boolean autoStatus) {
+        Constants.doAutoBalance = autoStatus;
+    }
+
     // Sendable override
     // Anything put here will be added to the network tables and thus can be added
     // to the dashboard / consumed by the LED controller
@@ -405,6 +417,6 @@ public class Drivetrain extends SubsystemBase {
         builder.addDoubleProperty("Right Encoder Speed", this::s_getEncoderRightSpeed, null);
         builder.addDoubleProperty("Left Encoder Distance", this::s_getEncoderLeftDistance, null);
         builder.addDoubleProperty("Right Encoder Distance", this::s_getEncoderRightDistance, null);
-
+        builder.addBooleanProperty("Auto Balance?", this::s_getDoAutoBalance, this::s_setDoAutoBalance);
     }
 }

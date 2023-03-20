@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.armAction.ca_moveToCarryCompressor;
 import frc.robot.commands.autoDriveActions.ca_balanceToMobility;
+import frc.robot.commands.autoDriveActions.ca_driveForwardInches;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Gripper;
@@ -24,23 +25,14 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
     addCommands(
       // Cone Score:
         new cg_autoScore(drivetrain, arm, gripper),
-        
-      // Goes the distance to middle of charge station
-      new ca_moveToCarryCompressor(arm),  
-      new ca_moveToChargeStation(drivetrain)
-        );
-
-      // If it went on the charge station, it'll autobalance. If NOT, it'll go to mobility line and change arm side.
-        if(Constants.doAutoBalance){
-          addCommands(
-            new WaitCommand(0.2),
-            new ca_autoBalance(drivetrain)
-          );
-        }
-        else {
-          addCommands(
-            new ca_balanceToMobility(drivetrain)
-          );
-        }
-      }
+        new ca_moveToCarryCompressor(arm),
+      // Go to Charge Station
+        new ca_driveForwardInches(drivetrain).withTimeout(3),
+        //new WaitCommand(1),
+        new ca_moveToChargeStationNew(drivetrain), // Senses incline: doAuto = true
+        //new WaitCommand(1),
+        new ca_autoBalanceNew(drivetrain)//, // Ends automatically if doAuto == false
+        // new ca_balanceToMobility(drivetrain)
+    );
+  }
 }

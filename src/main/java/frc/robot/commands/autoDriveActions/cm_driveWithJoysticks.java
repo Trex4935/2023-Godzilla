@@ -7,6 +7,7 @@ package frc.robot.commands.autoDriveActions;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.extensions.DriveState;
 import frc.robot.subsystems.Drivetrain;
 
 public class cm_driveWithJoysticks extends CommandBase {
@@ -16,7 +17,7 @@ public class cm_driveWithJoysticks extends CommandBase {
   
 
 
-  /** Creates a new cm_driveWithJoysticks. */
+  /** This command moves robot by calling the joysticks method and taking in the inputs of both joysticks */
   public cm_driveWithJoysticks(Drivetrain dt, Joystick joystickLeft, Joystick joystickRight) {
     m_Drivetrain = dt;
     m_joystickLeft = joystickLeft;
@@ -34,9 +35,36 @@ public class cm_driveWithJoysticks extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //This command moves robot by calling the joysticks method and taking in the inputs of both joysticks 
-  m_Drivetrain.setMaxSpeed(Constants.dtmaxspeed);
+  //This command moves robot by calling the joysticks method and taking in the inputs of both joysticks 
+  
+  // If arm in correct position and is at normal speed, therefore not pressing trigger, go slow.
+  if (Constants.armExtensionAtPosition && Constants.armRotationAtPosition 
+      && Constants.selectedDriveState == DriveState.NORMAL) {
+    
+    Constants.selectedDriveState = DriveState.SLOW;
+
+  }
+  
+  // State machine to determine speed.
+  switch (Constants.selectedDriveState) {
+    case TURBO:
+      m_Drivetrain.setMaxSpeed(0.99);
+      break;
+
+    case SLOW:
+      m_Drivetrain.setMaxSpeed(0.25);
+      break;
+  
+    default:
+      m_Drivetrain.setMaxSpeed(0.75);
+      break;
+  }
+  // Always drive.
   m_Drivetrain.driveWithJoysticks(m_joystickLeft, m_joystickRight);
+
+  // Return to default in case of code failure
+  Constants.selectedDriveState = DriveState.NORMAL;
+  
   }
 
   // Called once the command ends or is interrupted.

@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
+import frc.robot.extensions.DriveState;
 
 // Robot Base Class
 public class RobotContainer {
@@ -45,7 +46,6 @@ public class RobotContainer {
   // Declare Commands
   private final cm_driveWithJoysticks driveWithJoysticks;
   private final cm_setSpeedLimit setSpeedLimitMax;
-  private final cm_setSpeedLimit setSpeedLimitDefault;
   public final ca_ArmMovementCombo armMovementCombo;
   private final cm_setArmPositionManual setArmPositionHigh;
   private final cm_setArmPositionManual setArmPositionMiddle;
@@ -94,8 +94,7 @@ public class RobotContainer {
 
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
-    setSpeedLimitMax = new cm_setSpeedLimit(0.99);
-    setSpeedLimitDefault = new cm_setSpeedLimit(0.75);
+    setSpeedLimitMax = new cm_setSpeedLimit(DriveState.TURBO);
 
     /// Operator ///
 
@@ -144,8 +143,7 @@ public class RobotContainer {
     // arm.setDefaultCommand(armMovementCombo);
 
     // Increase Speed when pressing triggers.
-    new JoystickButton(m_JoystickRight, Constants.joystickTrigger).onTrue(setSpeedLimitMax)
-        .onFalse(setSpeedLimitDefault);
+    new JoystickButton(m_JoystickRight, Constants.joystickTrigger).whileTrue(setSpeedLimitMax);
 
     // Arduino Controller Button Mapping
     // Arm Movement

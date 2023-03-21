@@ -78,6 +78,11 @@ public class Arm extends SubsystemBase {
   /** Using MotionMagic set the arm to a given position */
   public void setArmExtensionMM(double armPositionTicks) {
     armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks + Constants.addExtend);
+    if (checkExtension2(armPositionTicks)) {
+      Constants.armExtensionAtPosition = true;
+    } else {
+      Constants.armExtensionAtPosition = false;
+    }
   }
 
   /** Using SmartMotion to set the arm to a given angle */
@@ -100,6 +105,11 @@ public class Arm extends SubsystemBase {
     // if not latched or hit limit switch, MOVE MOTOR.
     else {
       armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
+      if (checkRotation2(armRotationTicks)) {
+        Constants.armRotationAtPosition = true;
+      } else {
+        Constants.armRotationAtPosition = false;
+      }
     }
   }
 

@@ -6,12 +6,13 @@ package frc.robot.commands.armAction;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.extensions.DriveState;
 
 public class cm_setSpeedLimit extends CommandBase {
-  double m_speedLimit;
+  DriveState m_driveState;
   /** Creates a new cm_releaseSpeedLimiter. */
-  public cm_setSpeedLimit(double SpeedLimit) {
-    m_speedLimit = SpeedLimit;
+  public cm_setSpeedLimit(DriveState DriveState) {
+    m_driveState = DriveState;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -22,7 +23,7 @@ public class cm_setSpeedLimit extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Constants.dtmaxspeed = m_speedLimit;
+    Constants.selectedDriveState = m_driveState;
   }
 
   // Called once the command ends or is interrupted.
@@ -32,6 +33,6 @@ public class cm_setSpeedLimit extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

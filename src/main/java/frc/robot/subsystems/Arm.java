@@ -78,7 +78,7 @@ public class Arm extends SubsystemBase {
   /** Using MotionMagic set the arm to a given position */
   public void setArmExtensionMM(double armPositionTicks) {
     armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks + Constants.addExtend);
-    if (checkExtension2(armPositionTicks)) {
+    if (checkExtension2(armPositionTicks + Constants.addExtend)) {
       Constants.armExtensionAtPosition = true;
     } else {
       Constants.armExtensionAtPosition = false;
@@ -105,7 +105,7 @@ public class Arm extends SubsystemBase {
     // if not latched or hit limit switch, MOVE MOTOR.
     else {
       armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
-      if (checkRotation2(armRotationTicks)) {
+      if (checkRotation2(armRotationTicks + Constants.addRotate)) {
         Constants.armRotationAtPosition = true;
       } else {
         Constants.armRotationAtPosition = false;
@@ -115,6 +115,9 @@ public class Arm extends SubsystemBase {
 
   /** Sets the speed that the arm moves backward */
   public void retractArm() {
+    // Sets position to false so that it doesn't set it speed state to slow.
+    Constants.armExtensionAtPosition = false;
+
     if (armRetractedLimitSwitch.get()) {
       // if the backwardimitSwitch is true,stop the motor
       armExtensionMotor.stopMotor();

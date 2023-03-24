@@ -12,9 +12,13 @@ import frc.robot.subsystems.Drivetrain;
 
 public class ca_driveForwardInches extends CommandBase {
   Drivetrain m_drivetrain;
+  Double m_angle;
+  Double m_finalDistance;
   /** Creates a new ca_driveMobility. */
-  public ca_driveForwardInches(Drivetrain drivetrain) {
+  public ca_driveForwardInches(Drivetrain drivetrain, Double angle, Double finalDistance) {
     m_drivetrain = drivetrain;
+    m_angle = angle;
+    m_finalDistance = finalDistance;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -25,7 +29,7 @@ public class ca_driveForwardInches extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.driveStraightTarget(0.8, -15, Units.inchesToMeters(50));
+    m_drivetrain.driveStraightTarget(0.8, m_angle, Units.inchesToMeters(m_finalDistance));
   }
   // 0.7 < 0.8 < 0.9
 
@@ -36,6 +40,6 @@ public class ca_driveForwardInches extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_drivetrain.reachDriveTarget(Units.inchesToMeters(30)); 
+    return m_drivetrain.reachDriveTarget(Units.inchesToMeters(m_finalDistance)); 
   }
 }

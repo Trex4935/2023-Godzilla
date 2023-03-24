@@ -26,11 +26,13 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
       // Cone Score:
         new cg_autoScore(drivetrain, arm, gripper),
         new ca_moveToCarryCompressor(arm),
-      // Go to Charge Station
-        new ca_driveForwardInches(drivetrain).withTimeout(3),
-        //new WaitCommand(1),
-        new ca_moveToChargeStationNew(drivetrain), // Senses incline: doAuto = true
-        //new WaitCommand(1),
+        // goes into charge station straight on 30in
+        new ca_driveForwardInches(drivetrain, 0.0, 30.0).withTimeout(3),
+        // angled into charge station 45degrees for 40in
+        new ca_driveForwardInches(drivetrain, -45.0, 70.0).withTimeout(3),
+        // straightens out robot 45degrees runs 30in
+        new ca_driveForwardInches(drivetrain, 45.0, 100.0).withTimeout(3),
+        // new ca_moveToChargeStationNew(drivetrain), // Senses incline: doAuto = true
         new ca_autoBalanceNew(drivetrain)//, // Ends automatically if doAuto == false
         // new ca_balanceToMobility(drivetrain)
     );

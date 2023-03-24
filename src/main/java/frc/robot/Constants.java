@@ -120,8 +120,8 @@ public final class Constants {
 
   // Driver Constants
   // (Differentiates the joysticks inputs by assigning different ID ports)
-  public static final int leftJoystick = 0; // Left Joystick ID
-  public static final int rightJoystick = 1; // Right Joystick ID
+  public static final int rightJoystick = 0; // Left Joystick ID
+  public static final int leftJoystick = 1; // Right Joystick ID
 
   public static final int joystickTrigger = 1;
 

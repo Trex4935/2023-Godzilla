@@ -68,8 +68,8 @@ public class RobotContainer {
   private final cg_mobilityUnifiedAuto mobilityUnifiedAuto;
 
   // Declare Other
-  private final Joystick m_JoystickLeft = new Joystick(Constants.leftJoystick);
   private final Joystick m_JoystickRight = new Joystick(Constants.rightJoystick);
+  private final Joystick m_JoystickLeft = new Joystick(Constants.leftJoystick);
   private final Joystick m_ArduinoController = new Joystick(Constants.controllerID);
 
   /**
@@ -93,7 +93,7 @@ public class RobotContainer {
     armMovementCombo = new ca_ArmMovementCombo(arm);
 
     // Drivetrain
-    driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
+    driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickRight, m_JoystickLeft);
     setSpeedLimitMax = new cm_setSpeedLimit(DriveState.TURBO);
 
     /// Operator ///

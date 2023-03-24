@@ -54,11 +54,11 @@ public final class Constants {
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
   public static double dtmaxspeed = 1; // Speed Limit
-
   public static DriveState selectedDriveState = DriveState.NORMAL;
+  public static double direction = -1;
 
   // ARM ROTATION Constants
-
+ 
   /** Motor ID */
   public static final int armRotationCAN = 13;
   public static final double armRotateSpeed = 0.85; // Arm Rotation Speed

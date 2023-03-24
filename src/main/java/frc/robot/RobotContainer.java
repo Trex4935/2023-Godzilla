@@ -10,6 +10,7 @@ import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Arm;
 
 // Commands
+import frc.robot.commands.armAction.cm_changeDirection;
 import frc.robot.commands.armAction.ca_ArmMovementCombo;
 import frc.robot.commands.armAction.cm_setArmPositionManual;
 import frc.robot.commands.armAction.ca_setSideOrientation;
@@ -66,6 +67,7 @@ public class RobotContainer {
   private final cm_setGamePieceType setGamePieceTypeCubeFalse;
   private final cg_unifiedAuto unifiedAuto;
   private final cg_mobilityUnifiedAuto mobilityUnifiedAuto;
+  private final cm_changeDirection changeDirection;
 
   // Declare Other
   private final Joystick m_JoystickRight = new Joystick(Constants.rightJoystick);
@@ -95,6 +97,7 @@ public class RobotContainer {
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickRight, m_JoystickLeft);
     setSpeedLimitMax = new cm_setSpeedLimit(DriveState.TURBO);
+    changeDirection = new cm_changeDirection();
 
     /// Operator ///
 
@@ -144,6 +147,7 @@ public class RobotContainer {
 
     // Increase Speed when pressing triggers.
     new JoystickButton(m_JoystickRight, Constants.joystickTrigger).whileTrue(setSpeedLimitMax);
+    new JoystickButton(m_JoystickRight, 3).onTrue(changeDirection);
 
     // Arduino Controller Button Mapping
     // Arm Movement

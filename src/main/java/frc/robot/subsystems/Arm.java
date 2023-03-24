@@ -227,7 +227,7 @@ public class Arm extends SubsystemBase {
 
   // Report the side that the arm is on
   public String s_getArmSideOrientation() {
-    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide) {
+    if (Constants.direction < 0 ) {
       return "battery";
     } else {
       return "compressor";

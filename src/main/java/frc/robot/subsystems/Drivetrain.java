@@ -184,8 +184,8 @@ public class Drivetrain extends SubsystemBase {
 
     // DEFAULT Command that moves the robot with joysticks
     public void driveWithJoysticks(Joystick leftJoystick, Joystick rightJoystick) {
-        diffdrive.tankDrive(-leftJoystick.getRawAxis(Constants.joystickAxis),
-                -rightJoystick.getRawAxis(Constants.joystickAxis));
+        diffdrive.tankDrive(Constants.direction * leftJoystick.getRawAxis(Constants.joystickAxis),
+                Constants.direction * rightJoystick.getRawAxis(Constants.joystickAxis));
     }
 
     /** Stops all Drivetrain motor groups. */

@@ -133,8 +133,10 @@ public class Drivetrain extends SubsystemBase {
         // initiate simulate gyro Position
         zSimAngle = 0;
 
-        drivePID = new PIDController(0.025, 0.0001, 0); // (0.03, 0.0001, 0); with the stop and (0.03, 0.000, 0); with direct stop both works
-        drivePID.setIntegratorRange(-0.25, 0.25); // -2,2 https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/pidcontroller.html
+        drivePID = new PIDController(0.025, 0.0001, 0); // (0.03, 0.0001, 0); with the stop and (0.03, 0.000, 0); with
+                                                        // direct stop both works
+        drivePID.setIntegratorRange(-0.25, 0.25); // -2,2
+                                                  // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/pidcontroller.html
 
         anglePID = new PIDController(0.0225, 0.00, 0); // 0.05, 0.001
         drivePID.setIntegratorRange(-180, 180); // -2,2
@@ -218,9 +220,12 @@ public class Drivetrain extends SubsystemBase {
         leftMotors.set(leftPitch + driftCorrectionTwist); // left: + becase .set, -.setVolt
         rightMotors.set(rightPitch - driftCorrectionTwist); // right: - becase .set, +.setVolt
 
-        /* System.out.println("leftPitch: " + leftPitch +
-                " rightPitch: " + rightPitch + " err: " + err +
-                " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist + " Pitch Angle: " + s_getAngleY()); */
+        /*
+         * System.out.println("leftPitch: " + leftPitch +
+         * " rightPitch: " + rightPitch + " err: " + err +
+         * " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist +
+         * " Pitch Angle: " + s_getAngleY());
+         */
     }
 
     /** Converts inches to ticks for motors */
@@ -283,11 +288,17 @@ public class Drivetrain extends SubsystemBase {
                                                                                                         // per/sec or
                                                                                                         // m/sec
         final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), -rightSpeedWheel);
-        /* System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " + rightSpeedWheel + " leftFeedforward: "
-                + leftFeedforward + " rightFeedforward: " + rightFeedforward + " leftEncoder :" + leftEncoder.getRate()
-                + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput + " rightOutput: "
-                + rightOutput + " leftEncoderDistance: " + leftEncoder.getDistance() + " rightEncoderDistance: "
-                + rightEncoder.getDistance()); */
+        /*
+         * System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " +
+         * rightSpeedWheel + " leftFeedforward: "
+         * + leftFeedforward + " rightFeedforward: " + rightFeedforward +
+         * " leftEncoder :" + leftEncoder.getRate()
+         * + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput +
+         * " rightOutput: "
+         * + rightOutput + " leftEncoderDistance: " + leftEncoder.getDistance() +
+         * " rightEncoderDistance: "
+         * + rightEncoder.getDistance());
+         */
         FLMotor.setVoltage(leftOutput + leftFeedforward);
         FRMotor.setVoltage(rightOutput + rightFeedforward);
         MLMotor.setVoltage(leftOutput + leftFeedforward);
@@ -311,11 +322,23 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+    // Uses gyro to go to position w/ drive straight
+    public boolean turnToTarget(double angle) {
+        if (reachTurnAngle(angle)) {
+            stopMotors();
+            return true;
+        } else {
+            driveWithStraightWithGyro(0, angle);
+            return false;
+        }
+    }
+
     // checks the pitch(elevation) from gyro
     public boolean checkLessPitch(double angle) {
 
         return s_getAngleY() < angle;
     }
+
     // checks the pitch(elevation) from gyro
     public boolean checkMorePitch(double angle) {
 
@@ -327,12 +350,22 @@ public class Drivetrain extends SubsystemBase {
     public Boolean reachDriveTarget(Double targetPosition) {
         double averageTickValue = (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))
                 * (Math.signum(targetPosition)) / 2;
-        // System.out.println(" targetPosition: " + targetPosition + " averageDistance: " + averageTickValue);
+        // System.out.println(" targetPosition: " + targetPosition + " averageDistance:
+        // " + averageTickValue);
 
         // if tick value is greater than or equal to target position, stop both motors
-        if (averageTickValue >= targetPosition - 0.1 && averageTickValue <= targetPosition + 0.1) {
+        if (averageTickValue >= targetPosition - 0.1) {
             leftMotors.stopMotor();
             rightMotors.stopMotor();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean 
+    reachTurnAngle(Double targetAngle) {
+        if (Helper.RangeCompare(targetAngle + 1, targetAngle - 1, getZAngleConverted())) {
             return true;
         } else {
             return false;

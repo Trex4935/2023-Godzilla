@@ -2,23 +2,20 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.autoPoints;
+package frc.robot.commands.autoDriveActions;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class ca_autoBalanceNew extends CommandBase {
-  public final Timer time;
-  public final Drivetrain m_drivetrain;
-  private int i =0;
-  /** Creates a new ca_autoBalance. */
-  public ca_autoBalanceNew(Drivetrain drivetrain) {
+public class ca_autoTurnToAngle extends CommandBase {
+  Drivetrain m_drivetrain;
+  double m_targetangle;
+  Boolean check;
+  
+  public ca_autoTurnToAngle(Drivetrain drivetrain,double targetAngle) {
     m_drivetrain = drivetrain;
-    // Use addRequirements() here to declare subsystem dependencies.
-    time = new Timer();
-    addRequirements(drivetrain);
+    m_targetangle = targetAngle;
+    addRequirements(m_drivetrain);
   }
 
   // Called when the command is initially scheduled.
@@ -28,20 +25,19 @@ public class ca_autoBalanceNew extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // System.out.println("HIHIHIHIHIHIHI");
-    m_drivetrain.autoBalance();
+    check = m_drivetrain.turnToTarget(m_targetangle);
+    System.out.println(check);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.stopMotors();
-    System.out.println("WE ARE DONE WITH AUTO!");
+    m_drivetrain.resetEncoders();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !Constants.doAutoBalance;
+    return check;
   }
 }

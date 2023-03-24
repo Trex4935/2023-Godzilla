@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.armAction.ca_moveToCarryCompressor;
+import frc.robot.commands.autoDriveActions.ca_autoTurnToAngle;
 import frc.robot.commands.autoDriveActions.ca_balanceToMobility;
 import frc.robot.commands.autoDriveActions.ca_driveForwardInches;
 import frc.robot.subsystems.Arm;
@@ -23,20 +24,20 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      // Cone Score:
-        new cg_autoScore(drivetrain, arm, gripper),
-       new ca_moveToCarryCompressor(arm),
+        // Cone Score:
+         new cg_autoScore(drivetrain, arm, gripper),
+        // new ca_moveToCarryCompressor(arm),
         // goes into charge station straight on 30in
-        new ca_driveForwardInches(drivetrain,0.8, 0.0, 30.0),
-        //new ca_driveForwardInches(drivetrain, 0.0,-45.0, 10.0).withTimeout(3),
+        new ca_driveForwardInches(drivetrain, 0.8, 0.0, 30.0),
+        new ca_autoTurnToAngle(drivetrain, -45),
         // angled into charge station 45degrees for 40in
-        new ca_driveForwardInches(drivetrain,0.8, -45.0, 70.0),
-        //new ca_driveForwardInches(drivetrain,0.0, 0.0, 80.0),
+        new ca_driveForwardInches(drivetrain, 0.8, -45.0, 30.0),
+        new ca_autoTurnToAngle(drivetrain, 0),
         // straightens out robot 45degrees runs 30in
-        new ca_driveForwardInches(drivetrain, 0.8,0.0, 100.0),
+        new ca_driveForwardInches(drivetrain, 0.65, 0.0, 20.0),
         // new ca_moveToChargeStationNew(drivetrain), // Senses incline: doAuto = true
-        new ca_autoBalanceNew(drivetrain)//, // Ends automatically if doAuto == false
-        // new ca_balanceToMobility(drivetrain)
+        new ca_autoBalanceNew(drivetrain)// , // Ends automatically if doAuto == false
+    // new ca_balanceToMobility(drivetrain)
     );
   }
 }

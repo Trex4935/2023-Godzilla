@@ -147,7 +147,7 @@ public class RobotContainer {
 
     // Increase Speed when pressing triggers.
     new JoystickButton(m_JoystickRight, Constants.joystickTrigger).whileTrue(setSpeedLimitMax);
-    new JoystickButton(m_JoystickRight, 3).onTrue(changeDirection);
+    // new JoystickButton(m_JoystickRight, 3).onTrue(changeDirection);
 
     // Arduino Controller Button Mapping
     // Arm Movement

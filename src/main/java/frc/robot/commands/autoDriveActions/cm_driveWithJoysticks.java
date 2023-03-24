@@ -52,7 +52,7 @@ public class cm_driveWithJoysticks extends CommandBase {
       break;
 
     case SLOW:
-      m_Drivetrain.setMaxSpeed(0.25);
+      m_Drivetrain.setMaxSpeed(0.5);
       break;
   
     default:

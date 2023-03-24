@@ -14,11 +14,13 @@ public class ca_driveForwardInches extends CommandBase {
   Drivetrain m_drivetrain;
   Double m_angle;
   Double m_finalDistance;
+  Double m_speed;
   /** Creates a new ca_driveMobility. */
-  public ca_driveForwardInches(Drivetrain drivetrain, Double angle, Double finalDistance) {
+  public ca_driveForwardInches(Drivetrain drivetrain,Double speed,Double angle, Double finalDistance) {
     m_drivetrain = drivetrain;
     m_angle = angle;
     m_finalDistance = finalDistance;
+    m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -29,7 +31,7 @@ public class ca_driveForwardInches extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.driveStraightTarget(0.8, m_angle, Units.inchesToMeters(m_finalDistance));
+    m_drivetrain.driveStraightTarget(m_speed, m_angle, Units.inchesToMeters(m_finalDistance));
   }
   // 0.7 < 0.8 < 0.9
 

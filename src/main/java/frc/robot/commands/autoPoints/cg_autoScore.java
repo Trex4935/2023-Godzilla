@@ -25,7 +25,7 @@ public class cg_autoScore extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new cm_GripperClose(gripper).withTimeout(1), // Closes on game piece
+        new cm_GripperClose(gripper).withTimeout(2), // Closes on game piece
         new ca_moveToRedzoneCompressor(arm),
         new ca_moveArmToMiddleCompressor(arm),
         new cm_GripperOpen(gripper),

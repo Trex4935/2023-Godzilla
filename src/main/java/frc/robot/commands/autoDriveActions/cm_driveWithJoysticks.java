@@ -59,7 +59,8 @@ public class cm_driveWithJoysticks extends CommandBase {
       m_Drivetrain.setMaxSpeed(0.75);
       break;
   }
-
+  // Always drive.
+  m_Drivetrain.driveWithJoysticks(m_joystickLeft, m_joystickRight);
 
   // Return to default in case of code failure
   Constants.selectedDriveState = DriveState.NORMAL;

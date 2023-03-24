@@ -54,10 +54,8 @@ public final class Constants {
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
   public static double dtmaxspeed = 1; // Speed Limit
-  public static double changeDirection = -1.0; //Swaps direction
 
   public static DriveState selectedDriveState = DriveState.NORMAL;
-  
 
   // ARM ROTATION Constants
 
@@ -66,7 +64,6 @@ public final class Constants {
   public static final double armRotateSpeed = 0.85; // Arm Rotation Speed
   public static double slowArmRotateSpeed = 0.4;
   public static boolean inRedZone = false;
-
 
   /** Class for the speed and acceleration limits of the robot. */
   public static class AutoMovementConstraints {

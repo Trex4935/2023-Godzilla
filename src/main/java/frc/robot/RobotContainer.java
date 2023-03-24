@@ -15,7 +15,6 @@ import frc.robot.commands.armAction.cm_setArmPositionManual;
 import frc.robot.commands.armAction.ca_setSideOrientation;
 import frc.robot.commands.armAction.cm_GripperClose;
 import frc.robot.commands.armAction.cm_GripperOpen;
-import frc.robot.commands.armAction.cm_changeDirection;
 import frc.robot.commands.armAction.cm_manualAddExtendTicks;
 import frc.robot.commands.armAction.cm_manualDecreaseExtendTicks;
 import frc.robot.commands.armAction.cm_manualResetAddArm;
@@ -45,7 +44,6 @@ public class RobotContainer {
   private final Gripper gripper;
 
   // Declare Commands
-  private final cm_changeDirection changeDirection;
   private final cm_driveWithJoysticks driveWithJoysticks;
   private final cm_setSpeedLimit setSpeedLimitMax;
   public final ca_ArmMovementCombo armMovementCombo;
@@ -94,13 +92,9 @@ public class RobotContainer {
     // Arm
     armMovementCombo = new ca_ArmMovementCombo(arm);
 
-  
-
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickRight, m_JoystickLeft);
     setSpeedLimitMax = new cm_setSpeedLimit(DriveState.TURBO);
-    changeDirection = new cm_changeDirection();
-
 
     /// Operator ///
 
@@ -148,13 +142,8 @@ public class RobotContainer {
     // Runs the arm state machine
     // arm.setDefaultCommand(armMovementCombo);
 
-    
-
     // Increase Speed when pressing triggers.
     new JoystickButton(m_JoystickRight, Constants.joystickTrigger).whileTrue(setSpeedLimitMax);
-    new JoystickButton(m_JoystickRight, 3).toggleOnTrue(changeDirection);
-
-    
 
     // Arduino Controller Button Mapping
     // Arm Movement

@@ -71,8 +71,9 @@ public class Drivetrain extends SubsystemBase {
     // PID Controller
     private final PIDController m_leftPIDController;
     private final PIDController m_rightPIDController;
-
     private final PIDController anglePID;
+
+    
 
     // Simulate
     public double zSimAngle;
@@ -168,7 +169,6 @@ public class Drivetrain extends SubsystemBase {
         leftMotors.set(0.105);
         rightMotors.set(0.105);
     }
-
     // Moves the robot with Code
     public void driveWithAuto(double leftSpeed, double rightSpeed) {
         diffdrive.tankDrive(leftSpeed, rightSpeed);
@@ -182,11 +182,13 @@ public class Drivetrain extends SubsystemBase {
         diffdrive.arcadeDrive(avgSpeed, driftCorrection);
     }
 
-    // DEFAULT Command that moves the robot with joysticks
+    /** DEFAULT Command that moves the robot with joysticks */
     public void driveWithJoysticks(Joystick leftJoystick, Joystick rightJoystick) {
-        diffdrive.tankDrive(-leftJoystick.getRawAxis(Constants.joystickAxis),
-                -rightJoystick.getRawAxis(Constants.joystickAxis));
+        diffdrive.tankDrive(Constants.changeDirection*leftJoystick.getRawAxis(Constants.joystickAxis),
+                Constants.changeDirection-rightJoystick.getRawAxis(Constants.joystickAxis));
     }
+   
+    
 
     /** Stops all Drivetrain motor groups. */
     public void stopMotors() {

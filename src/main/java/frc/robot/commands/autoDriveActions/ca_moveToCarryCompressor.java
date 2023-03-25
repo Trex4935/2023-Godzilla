@@ -5,22 +5,15 @@
 package frc.robot.commands.autoDriveActions;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.Constants;
+import frc.robot.subsystems.Arm;
 
-public class ca_driveForwardInches extends CommandBase {
-  private Drivetrain m_drivetrain;
-  private Double m_angle;
-  private Double m_finalDistance;
-  private Double m_speed;
-  private boolean check;
-  /** Creates a new ca_driveMobility. */
-  public ca_driveForwardInches(Drivetrain drivetrain,Double speed,Double angle, Double finalDistance) {
-    m_drivetrain = drivetrain;
-    m_angle = angle;
-    m_finalDistance = finalDistance;
-    m_speed = speed;
+public class ca_moveToCarryCompressor extends CommandBase {
+  Arm m_arm;
+  /** Creates a new ca_moveToCarryCompressor. */
+  public ca_moveToCarryCompressor(Arm arm) {
+    m_arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_drivetrain);
   }
 
   // Called when the command is initially scheduled.
@@ -30,9 +23,9 @@ public class ca_driveForwardInches extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    check = m_drivetrain.driveStraightTarget(m_speed, m_angle, m_finalDistance);
+    m_arm.retractArm();
+    m_arm.setArmRotationSM(Constants.ArmCarryAngleCompressor);
   }
-  // 0.7 < 0.8 < 0.9
 
   // Called once the command ends or is interrupted.
   @Override
@@ -41,6 +34,6 @@ public class ca_driveForwardInches extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return check;
+    return Arm.checkRotation2(Constants.ArmCarryAngleCompressor);
   }
 }

@@ -75,9 +75,9 @@ public class Drivetrain extends SubsystemBase {
         // Create encoders and set distance values
         leftEncoder = new Encoder(1, 2);
         rightEncoder = new Encoder(3, 4);
-        leftEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171));
-        rightEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171)); // 0.00230097
-        // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
+        // 160 ticks per inch ... so get distance should get inches traveled
+        leftEncoder.setDistancePerPulse(160);
+        rightEncoder.setDistancePerPulse(160);
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
@@ -104,10 +104,6 @@ public class Drivetrain extends SubsystemBase {
     // Uses gyro to go to position w/ drive straight
     public boolean driveStraightTarget(double Speed, double Angle, double Position) {
         // Beep boop thingy mabober-computer- tels us what its doing
-        // System.out.println("Speed: " + Speed);
-        // System.out.println("Angle: " + Angle);
-        // System.out.println("Position: " + Position);
-        // System.out.println("Reached Target: " + reachDriveTarget(Position));
         // stops when reaches position
         if (reachDriveTarget(Position)) {
             stopMotors();
@@ -177,9 +173,7 @@ public class Drivetrain extends SubsystemBase {
         // " + averageTickValue);
 
         // if tick value is greater than or equal to target position, stop both motors
-        if (averageTickValue >= targetPosition - 0.1) {
-            leftMotors.stopMotor();
-            rightMotors.stopMotor();
+        if (averageTickValue >= targetPosition - 0.5) {
             return true;
         } else {
             return false;

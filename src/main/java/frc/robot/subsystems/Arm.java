@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.extensions.Falcon;
 import frc.robot.extensions.FlippedDIO;
 import frc.robot.extensions.Helper;

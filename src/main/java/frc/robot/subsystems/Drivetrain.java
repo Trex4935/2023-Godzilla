@@ -84,6 +84,12 @@ public class Drivetrain extends SubsystemBase {
         ahrs.calibrate();
     }
 
+    // DEFAULT Command that moves the robot with joysticks
+    public void driveWithJoysticks(Joystick leftJoystick, Joystick rightJoystick) {
+        diffdrive.tankDrive(-leftJoystick.getRawAxis(Constants.joystickAxis),
+                -rightJoystick.getRawAxis(Constants.joystickAxis));
+    }
+
     /** Resets the gyro */
     public void resetGyro() {
         ahrs.reset();
@@ -95,18 +101,24 @@ public class Drivetrain extends SubsystemBase {
         return Helper.ConvertTo360(rollBoundedDouble);
     }
 
-    // Moves forward using the gyro to keep the robot strait
-    public void driveWithStraightWithGyro(double avgSpeed, double targetAngle) {
-        double err = targetAngle + getZAngleConverted();
-        double P = 0.001;
-        double driftCorrection = err * P;
-        diffdrive.arcadeDrive(0.8, 0);
-    }
-
-    // DEFAULT Command that moves the robot with joysticks
-    public void driveWithJoysticks(Joystick leftJoystick, Joystick rightJoystick) {
-        diffdrive.tankDrive(-leftJoystick.getRawAxis(Constants.joystickAxis),
-                -rightJoystick.getRawAxis(Constants.joystickAxis));
+    // Uses gyro to go to position w/ drive straight
+    public boolean driveStraightTarget(double Speed, double Angle, double Position) {
+        // Beep boop thingy mabober-computer- tels us what its doing
+        // System.out.println("Speed: " + Speed);
+        // System.out.println("Angle: " + Angle);
+        // System.out.println("Position: " + Position);
+        // System.out.println("Reached Target: " + reachDriveTarget(Position));
+        // stops when reaches position
+        if (reachDriveTarget(Position)) {
+            stopMotors();
+            return true;
+        } else {
+            double err = Angle + getZAngleConverted();
+            double P = 0.001;
+            double driftCorrection = err * P;
+            diffdrive.arcadeDrive(Speed, driftCorrection);
+            return false;
+        }
     }
 
     /** Stops all Drivetrain motor groups. */
@@ -143,27 +155,15 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // Uses gyro to go to position w/ drive straight
-    public void driveStraightTarget(double Speed, double Angle, double Position) {
-        // Beep boop thingy mabober-computer- tels us what its doing
-        // System.out.println("Speed: " + Speed);
-        // System.out.println("Angle: " + Angle);
-        // System.out.println("Position: " + Position);
-        // System.out.println("Reached Target: " + reachDriveTarget(Position));
-        // stops when reaches position
-        if (reachDriveTarget(Position)) {
-            stopMotors();
-        } else {
-            driveWithStraightWithGyro(Speed, Angle);
-        }
-    }
-
-    // Uses gyro to go to position w/ drive straight
     public boolean turnToTarget(double angle) {
         if (reachTurnAngle(angle)) {
             stopMotors();
             return true;
         } else {
-            driveWithStraightWithGyro(0, angle);
+            double err = angle + getZAngleConverted();
+            double P = 0.001;
+            double driftCorrection = err * P;
+            diffdrive.arcadeDrive(0, driftCorrection);
             return false;
         }
     }

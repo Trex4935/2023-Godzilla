@@ -2,20 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.armAction;
+package frc.robot.commands.teleop;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.extensions.ArmPosition;
+import frc.robot.subsystems.Arm;
 
-public class cm_setArmPositionManual extends CommandBase {
-  ArmPosition m_armState;
-  Timer timer;
-
-  /** Creates a new ca_setArmPosition. */
-  public cm_setArmPositionManual(ArmPosition armState) {
-    m_armState = armState; 
+public class cm_manualAddExtendTicks extends CommandBase {
+  
+  private final Arm m_Arm;
+  /** Creates a new cm_manualAddExtendTicks. */
+  public cm_manualAddExtendTicks(Arm arm) {
+    m_Arm = arm;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -25,16 +23,12 @@ public class cm_setArmPositionManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Constants.buttonOccupied = true;
-    Constants.selectedArmState = m_armState;
-      //encoder values of rotation compared to target ticks for encoder position to turn true
-    // System.out.println(m_armState);
+    m_Arm.increaseTicks();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Constants.buttonOccupied = false;
   }
 
   // Returns true when the command should end.

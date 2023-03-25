@@ -11,12 +11,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Encoder;
@@ -24,8 +18,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.AutoMovementConstraints;
-import frc.robot.Constants.TrajectoryConstants;
 import frc.robot.extensions.Helper;
 import frc.robot.extensions.Talon;
 
@@ -51,31 +43,11 @@ public class Drivetrain extends SubsystemBase {
     private static Encoder leftEncoder;
     private static Encoder rightEncoder;
 
-    // PID
-    PIDController drivePID;
-
     // Declaring Gyro Objects
     public static AHRS ahrs;
 
     // Max speed value for the motors ... default comes from constants
     Double m_MaxSpeed = Constants.dtmaxspeed;
-
-    // Kinemtatics
-    DifferentialDriveKinematics kin;
-    double trajPos;
-    double trajSpeed;
-
-    //
-    private final SimpleMotorFeedforward m_feedforward;
-
-    // PID Controller
-    private final PIDController m_leftPIDController;
-    private final PIDController m_rightPIDController;
-
-    private final PIDController anglePID;
-
-    // Simulate
-    public double zSimAngle;
 
     // Drivetrain contructor
     public Drivetrain() {
@@ -107,40 +79,9 @@ public class Drivetrain extends SubsystemBase {
         rightEncoder.setDistancePerPulse(Units.inchesToMeters(139.565 / 14171)); // 0.00230097
         // Constants.wheelDiameter * Math.PI) / Constants.encoderTicks
 
-        // Create PID Controllers
-        m_leftPIDController = new PIDController(0.02, 0.001, 0);// Right P ==0.01 for flat , 0.0225
-        m_rightPIDController = new PIDController(0.02, 0.001, 0);// Right P ==0.01 for flat,0.0225
-        m_leftPIDController.setIntegratorRange(-12, 12);// V
-        m_rightPIDController.setIntegratorRange(-12, 12);// V
-        // Feed Forward
-        m_feedforward = new SimpleMotorFeedforward(0.18 * 12, 1.15);// new SimpleMotorFeedforward(0.105 * 12, 1.15); //
-                                                                    // on the ground 0.165 for ks
-
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
         ahrs.calibrate();
-        // new Thread(){
-        // public void run(){
-        // Thread.sleep(500);
-
-        // }.start();
-        // }
-        // ahrs.reset();
-
-        // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
-        kin = new DifferentialDriveKinematics(TrajectoryConstants.kTrackWidthMeters);
-
-        // initiate simulate gyro Position
-        zSimAngle = 0;
-
-        drivePID = new PIDController(0.025, 0.0001, 0); // (0.03, 0.0001, 0); with the stop and (0.03, 0.000, 0); with
-                                                        // direct stop both works
-        drivePID.setIntegratorRange(-0.25, 0.25); // -2,2
-                                                  // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/pidcontroller.html
-
-        anglePID = new PIDController(0.0225, 0.00, 0); // 0.05, 0.001
-        drivePID.setIntegratorRange(-180, 180); // -2,2
-
     }
 
     /** Resets the gyro */
@@ -148,32 +89,10 @@ public class Drivetrain extends SubsystemBase {
         ahrs.reset();
     }
 
-    /** Gets the offset of the pitch */
-    public Float getYAngleOffset() {
-        // return ahrs.getYaw();
-        return s_getAngleY() - 2f;
-    }
-
     /** Gets Yaw(Z) angle from Gyro and converts it to 360 */
     public double getZAngleConverted() {
         double rollBoundedDouble = s_getAngleZ().doubleValue();
         return Helper.ConvertTo360(rollBoundedDouble);
-    }
-
-    /** Creates an array of the yaw, pitch, and roll values */
-    public float[] PrincipalAxisValues() {
-        return new float[] { s_getAngleX(), s_getAngleY(), s_getAngleZ() };
-    }
-
-    // Sets motor speed slow for auto.
-    public void SlowSpeed() {
-        leftMotors.set(0.105);
-        rightMotors.set(0.105);
-    }
-
-    // Moves the robot with Code
-    public void driveWithAuto(double leftSpeed, double rightSpeed) {
-        diffdrive.tankDrive(leftSpeed, rightSpeed);
     }
 
     // Moves forward using the gyro to keep the robot strait
@@ -208,26 +127,6 @@ public class Drivetrain extends SubsystemBase {
         rightEncoder.reset();
     }
 
-    /** Move the robot based on its pitch/y axis */
-    public void autoBalance() {
-        // Set motors speed using PID controller to get Y-axis to 0 degrees
-        double leftPitch = Math.min(drivePID.calculate(getYAngleOffset(), 0), 0.8);
-        double rightPitch = Math.min(drivePID.calculate(getYAngleOffset(), 0), 0.8);
-        double err = 0 - s_getAngleZ();
-        double P = 0.002; // 0.2 // 0.001
-        double driftCorrectionTwist = err * P;
-
-        leftMotors.set(leftPitch + driftCorrectionTwist); // left: + becase .set, -.setVolt
-        rightMotors.set(rightPitch - driftCorrectionTwist); // right: - becase .set, +.setVolt
-
-        /*
-         * System.out.println("leftPitch: " + leftPitch +
-         * " rightPitch: " + rightPitch + " err: " + err +
-         * " P: " + P + " driftCorrectionTwist: " + driftCorrectionTwist +
-         * " Pitch Angle: " + s_getAngleY());
-         */
-    }
-
     /** Converts inches to ticks for motors */
     public double inchesToTicks(double inches) {
         // 6 diameter wheel
@@ -241,70 +140,6 @@ public class Drivetrain extends SubsystemBase {
         // 160 ticks per 1 inch of travel
 
         return inches * 160;
-    }
-
-    // takes in chasis speed and chasis angular rate or rotation and return the left
-    // speed of the wheel;
-    public double getLeftSpeedKin(double chassisSpeedx, double chassisAngularRate) {
-        double chassisSpeedy = 0;
-        DifferentialDriveWheelSpeeds wheelSpeed = kin
-                .toWheelSpeeds(new ChassisSpeeds(chassisSpeedx, chassisSpeedy, chassisAngularRate));
-        return wheelSpeed.leftMetersPerSecond;
-    }
-
-    // takes in chasis speed and chasis angular rate or rotation and return the
-    // right speed of the wheel;
-    public double getRightpeedKin(double chassisSpeedx, double chassisAngularRate) {
-        double chassisSpeedy = 0;
-        DifferentialDriveWheelSpeeds wheelSpeed = kin
-                .toWheelSpeeds(new ChassisSpeeds(chassisSpeedx, chassisSpeedy, chassisAngularRate));
-        ;
-        return wheelSpeed.rightMetersPerSecond;
-    }
-
-    public void simulateGyro(double leftSpeed, double rightSpeed, Timer timer) {
-
-        ChassisSpeeds chassisSpeed = kin.toChassisSpeeds(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
-        zSimAngle = chassisSpeed.omegaRadiansPerSecond * 0.02 + zSimAngle;
-    }
-
-    public double getOmega(double startAngle, double endAngle) {
-        double omega = 0;
-        if (startAngle > endAngle) { // if Start > End , go left, w +
-            omega = -AutoMovementConstraints.dtmaxomega;
-        } else { // if Start < End, go right, w -
-            omega = AutoMovementConstraints.dtmaxomega;
-        }
-
-        return omega;
-    }
-
-    public void setSpeeds(Double leftSpeedWheel, Double rightSpeedWheel) {
-        final double leftFeedforward = m_feedforward.calculate(leftSpeedWheel);
-        final double rightFeedforward = m_feedforward.calculate(-rightSpeedWheel);
-
-        final double leftOutput = m_leftPIDController.calculate(leftEncoder.getRate(), leftSpeedWheel); // is encoder
-                                                                                                        // in ticks
-                                                                                                        // per/sec or
-                                                                                                        // m/sec
-        final double rightOutput = m_rightPIDController.calculate(rightEncoder.getRate(), -rightSpeedWheel);
-        /*
-         * System.out.println("leftSpeed: " + leftSpeedWheel + " rightSpeed: " +
-         * rightSpeedWheel + " leftFeedforward: "
-         * + leftFeedforward + " rightFeedforward: " + rightFeedforward +
-         * " leftEncoder :" + leftEncoder.getRate()
-         * + " rightEncoder: " + rightEncoder.getRate() + " leftOutput: " + leftOutput +
-         * " rightOutput: "
-         * + rightOutput + " leftEncoderDistance: " + leftEncoder.getDistance() +
-         * " rightEncoderDistance: "
-         * + rightEncoder.getDistance());
-         */
-        FLMotor.setVoltage(leftOutput + leftFeedforward);
-        FRMotor.setVoltage(rightOutput + rightFeedforward);
-        MLMotor.setVoltage(leftOutput + leftFeedforward);
-        MRMotor.setVoltage(rightOutput + rightFeedforward);
-        BLMotor.setVoltage(leftOutput + leftFeedforward);
-        BRMotor.setVoltage(rightOutput + rightFeedforward);
     }
 
     // Uses gyro to go to position w/ drive straight
@@ -333,18 +168,6 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
-    // checks the pitch(elevation) from gyro
-    public boolean checkLessPitch(double angle) {
-
-        return s_getAngleY() < angle;
-    }
-
-    // checks the pitch(elevation) from gyro
-    public boolean checkMorePitch(double angle) {
-
-        return s_getAngleY() > angle;
-    }
-
     // Chages encoder ticks to meters to make the constant easier to input for
     // position.
     public Boolean reachDriveTarget(Double targetPosition) {
@@ -363,8 +186,7 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
-    public Boolean 
-    reachTurnAngle(Double targetAngle) {
+    public Boolean reachTurnAngle(Double targetAngle) {
         if (Helper.RangeCompare(targetAngle + 1, targetAngle - 1, getZAngleConverted())) {
             return true;
         } else {

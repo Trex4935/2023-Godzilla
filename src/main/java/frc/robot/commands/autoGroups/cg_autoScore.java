@@ -2,17 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.autoPoints;
+package frc.robot.commands.autoGroups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.commands.teleop.ca_moveArmToMiddleCompressor;
+import frc.robot.commands.teleop.ca_moveToRedzoneCompressor;
+import frc.robot.commands.teleop.cm_GripperClose;
+import frc.robot.commands.teleop.cm_GripperOpen;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Gripper;
-import frc.robot.commands.armAction.ca_moveArmToMiddleCompressor;
-import frc.robot.commands.armAction.ca_moveToRedzoneCompressor;
-import frc.robot.commands.armAction.cm_GripperClose;
-import frc.robot.commands.armAction.cm_GripperOpen;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

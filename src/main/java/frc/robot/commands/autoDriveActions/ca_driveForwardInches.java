@@ -6,8 +6,6 @@ package frc.robot.commands.autoDriveActions;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class ca_driveForwardInches extends CommandBase {
@@ -22,6 +20,7 @@ public class ca_driveForwardInches extends CommandBase {
     m_finalDistance = finalDistance;
     m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_drivetrain);
   }
 
   // Called when the command is initially scheduled.

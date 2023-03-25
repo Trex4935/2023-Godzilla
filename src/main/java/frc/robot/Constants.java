@@ -58,7 +58,7 @@ public final class Constants {
   public static double direction = -1;
 
   // ARM ROTATION Constants
- 
+
   /** Motor ID */
   public static final int armRotationCAN = 13;
   public static final double armRotateSpeed = 0.85; // Arm Rotation Speed

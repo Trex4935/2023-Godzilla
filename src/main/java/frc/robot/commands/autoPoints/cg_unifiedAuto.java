@@ -5,11 +5,6 @@
 package frc.robot.commands.autoPoints;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
-import frc.robot.commands.armAction.ca_moveToCarryCompressor;
-import frc.robot.commands.autoDriveActions.ca_autoTurnToAngle;
-import frc.robot.commands.autoDriveActions.ca_balanceToMobility;
 import frc.robot.commands.autoDriveActions.ca_driveForwardInches;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -28,8 +23,8 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
          new cg_autoScore(drivetrain, arm, gripper),
         // new ca_moveToCarryCompressor(arm),
         // goes into charge station straight on 30in
-        new ca_driveForwardInches(drivetrain, 0.6, 0.0, 180.0),
-        new ca_driveForwardInches(drivetrain, -0.4, 0.0, 10.0)
+        new ca_driveForwardInches(drivetrain, 0.6, 0.0, 180.0) //,
+        // new ca_driveForwardInches(drivetrain, -0.4, 0.0, 10.0)
         // new ca_autoTurnToAngle(drivetrain, -45),
         // angled into charge station 45degrees for 40in
         // new ca_driveForwardInches(drivetrain, 0.8, -45.0, 30.0),

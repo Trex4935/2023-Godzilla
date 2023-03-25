@@ -10,7 +10,6 @@ import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Arm;
 
 // Commands
-import frc.robot.commands.armAction.cm_changeDirection;
 import frc.robot.commands.armAction.ca_ArmMovementCombo;
 import frc.robot.commands.armAction.cm_setArmPositionManual;
 import frc.robot.commands.armAction.ca_setSideOrientation;
@@ -23,9 +22,7 @@ import frc.robot.commands.armAction.cm_manualRotateBattery;
 import frc.robot.commands.armAction.cm_manualRotateCompressor;
 import frc.robot.commands.armAction.cm_setGamePieceType;
 import frc.robot.commands.armAction.cm_setSpeedLimit;
-import frc.robot.commands.autoDriveActions.ca_MoveBack;
 import frc.robot.commands.autoDriveActions.cm_driveWithJoysticks;
-import frc.robot.commands.autoPoints.cg_mobilityUnifiedAuto;
 import frc.robot.commands.autoPoints.cg_unifiedAuto;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
@@ -45,7 +42,7 @@ public class RobotContainer {
   private final Gripper gripper;
 
   // Declare Commands
-  private final cm_driveWithJoysticks driveWithJoysticks;
+  public final cm_driveWithJoysticks driveWithJoysticks;
   private final cm_setSpeedLimit setSpeedLimitMax;
   public final ca_ArmMovementCombo armMovementCombo;
   private final cm_setArmPositionManual setArmPositionHigh;
@@ -66,9 +63,7 @@ public class RobotContainer {
   /** Sets the game piece type to CubeFalse */
   private final cm_setGamePieceType setGamePieceTypeCubeFalse;
   private final cg_unifiedAuto unifiedAuto;
-  private final cg_mobilityUnifiedAuto mobilityUnifiedAuto;
-  private final cm_changeDirection changeDirection;
-
+  
   // Declare Other
   private final Joystick m_JoystickRight = new Joystick(Constants.rightJoystick);
   private final Joystick m_JoystickLeft = new Joystick(Constants.leftJoystick);
@@ -89,7 +84,6 @@ public class RobotContainer {
 
     // Autonomous
     unifiedAuto = new cg_unifiedAuto(arm, gripper, drivetrain);
-    mobilityUnifiedAuto = new cg_mobilityUnifiedAuto(arm, gripper, drivetrain);
 
     // Arm
     armMovementCombo = new ca_ArmMovementCombo(arm);
@@ -97,8 +91,7 @@ public class RobotContainer {
     // Drivetrain
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickRight, m_JoystickLeft);
     setSpeedLimitMax = new cm_setSpeedLimit(DriveState.TURBO);
-    changeDirection = new cm_changeDirection();
-
+    
     /// Operator ///
 
     // Manual control of arm
@@ -140,7 +133,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     // Makes controller driving the default command
-    drivetrain.setDefaultCommand(driveWithJoysticks);
+    // drivetrain.setDefaultCommand(driveWithJoysticks);
 
     // Runs the arm state machine
     // arm.setDefaultCommand(armMovementCombo);

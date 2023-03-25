@@ -181,13 +181,13 @@ public class Drivetrain extends SubsystemBase {
         double err = targetAngle + getZAngleConverted();
         double P = 0.001;
         double driftCorrection = err * P;
-        diffdrive.arcadeDrive(avgSpeed, driftCorrection);
+        diffdrive.arcadeDrive(0.8, 0);
     }
 
     // DEFAULT Command that moves the robot with joysticks
     public void driveWithJoysticks(Joystick leftJoystick, Joystick rightJoystick) {
-        diffdrive.tankDrive(Constants.direction * leftJoystick.getRawAxis(Constants.joystickAxis),
-                Constants.direction * rightJoystick.getRawAxis(Constants.joystickAxis));
+        diffdrive.tankDrive(-leftJoystick.getRawAxis(Constants.joystickAxis),
+                -rightJoystick.getRawAxis(Constants.joystickAxis));
     }
 
     /** Stops all Drivetrain motor groups. */

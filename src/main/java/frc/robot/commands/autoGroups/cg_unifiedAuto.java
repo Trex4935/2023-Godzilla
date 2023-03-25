@@ -24,7 +24,7 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
         new cg_autoScore(drivetrain, arm, gripper),
         new ca_moveToCarryCompressor(arm),
         // goes into charge station straight on 30in
-        new ca_driveForwardInches(drivetrain, 0.6, 0.0, 180.0) // ,
+        new ca_driveForwardInches(drivetrain, 0.25, 0.0, 180.0).withTimeout(5) // ,
     );
   }
 }

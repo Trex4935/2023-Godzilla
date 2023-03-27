@@ -5,41 +5,39 @@
 package frc.robot.commands.autoDriveActions;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.Constants;
+import frc.robot.extensions.ArmSideOrientation;
+import frc.robot.subsystems.Arm;
 
-public class ca_driveForwardInches extends CommandBase {
-  private Drivetrain m_drivetrain;
-  private Double m_angle;
-  private Double m_finalDistance;
-  private Double m_speed;
-  private boolean check;
-  /** Creates a new ca_driveMobility. */
-  public ca_driveForwardInches(Drivetrain drivetrain) {
-    m_drivetrain = drivetrain;
+public class ca_moveToCarryBattery extends CommandBase {
+  Arm m_arm;
+  /** Creates a new ca_moveToCarryCompressor. */
+  public ca_moveToCarryBattery(Arm arm) {
+    m_arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_drivetrain.resetEncoders();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    check = m_drivetrain.driveStraightTarget(0.6, 0, 170);
+    m_arm.retractArm();
+    m_arm.setArmRotationSM(Constants.ArmCarryAngleBattery);
   }
-  // 0.7 < 0.8 < 0.9
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Constants.selectedArmSideOrientation = ArmSideOrientation.BatterySide;
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return check;
+    return Arm.checkRotation2(Constants.ArmCarryAngleBattery);
   }
 }

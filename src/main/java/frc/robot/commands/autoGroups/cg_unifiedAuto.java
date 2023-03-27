@@ -6,6 +6,7 @@ package frc.robot.commands.autoGroups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.autoDriveActions.ca_driveForwardInches;
+import frc.robot.commands.autoDriveActions.ca_moveToCarryBattery;
 import frc.robot.commands.autoDriveActions.ca_moveToCarryCompressor;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -21,10 +22,11 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         // Cone Score:
-        new cg_autoScore(drivetrain, arm, gripper),
-        new ca_moveToCarryCompressor(arm),
+         new cg_autoScore(drivetrain, arm, gripper),
+         new ca_moveToCarryCompressor(arm), 
         // goes into charge station straight on 30in
-        new ca_driveForwardInches(drivetrain, 0.25, 0.0, 180.0).withTimeout(5) // ,
+        new ca_driveForwardInches(drivetrain).withTimeout(3),
+        new ca_moveToCarryBattery(arm)
     );
   }
 }

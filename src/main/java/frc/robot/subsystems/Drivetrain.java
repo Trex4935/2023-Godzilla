@@ -76,8 +76,8 @@ public class Drivetrain extends SubsystemBase {
         leftEncoder = new Encoder(1, 2);
         rightEncoder = new Encoder(3, 4);
         // 160 ticks per inch ... so get distance should get inches traveled
-        leftEncoder.setDistancePerPulse(.00625);
-        rightEncoder.setDistancePerPulse(.00625);
+        leftEncoder.setDistancePerPulse(.00975);
+        rightEncoder.setDistancePerPulse(.00975);
 
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);

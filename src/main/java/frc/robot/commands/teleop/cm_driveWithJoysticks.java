@@ -38,8 +38,7 @@ public class cm_driveWithJoysticks extends CommandBase {
   //This command moves robot by calling the joysticks method and taking in the inputs of both joysticks 
   
   // If arm in correct position and is at normal speed, therefore not pressing trigger, go slow.
-  if (Constants.armExtensionAtPosition && Constants.armRotationAtPosition 
-      && Constants.selectedDriveState == DriveState.NORMAL) {
+  if (Constants.LeftTriggerBool == true) {
     
     Constants.selectedDriveState = DriveState.SLOW;
 

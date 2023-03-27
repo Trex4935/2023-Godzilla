@@ -14,6 +14,7 @@ import frc.robot.commands.teleop.ca_setSideOrientation;
 import frc.robot.commands.teleop.cm_GripperClose;
 import frc.robot.commands.teleop.cm_GripperOpen;
 import frc.robot.commands.teleop.cm_driveWithJoysticks;
+import frc.robot.commands.teleop.cm_leftTrigger;
 import frc.robot.commands.teleop.cm_manualAddExtendTicks;
 import frc.robot.commands.teleop.cm_manualDecreaseExtendTicks;
 import frc.robot.commands.teleop.cm_manualResetAddArm;
@@ -42,6 +43,7 @@ public class RobotContainer {
   // Declare Commands
   public final cm_driveWithJoysticks driveWithJoysticks;
   private final cm_setSpeedLimit setSpeedLimitMax;
+  private final cm_leftTrigger leftTrigger;
   public final ca_ArmMovementCombo armMovementCombo;
   private final cm_setArmPositionManual setArmPositionHigh;
   private final cm_setArmPositionManual setArmPositionMiddle;
@@ -138,6 +140,8 @@ public class RobotContainer {
 
     // Increase Speed when pressing triggers.
     new JoystickButton(m_JoystickRight, Constants.joystickTrigger).whileTrue(setSpeedLimitMax);
+    // Decrease Speed when pressing triggers
+    new JoystickButton(m_JoystickLeft, Constants.joystickTrigger).whileTrue(leftTrigger);
     // new JoystickButton(m_JoystickRight, 3).onTrue(changeDirection);
 
     // Arduino Controller Button Mapping

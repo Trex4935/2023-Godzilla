@@ -21,7 +21,7 @@ import frc.robot.subsystems.Gripper;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class cg_unifiedAuto extends SequentialCommandGroup {
   /** Creates a new cg_unifiedAuto. */
-  public cg_unifiedAuto(Arm arm, Gripper gripper, Drivetrain drivetrain, Double constants) {
+  public cg_unifiedAuto(Arm arm, Gripper gripper, Drivetrain drivetrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

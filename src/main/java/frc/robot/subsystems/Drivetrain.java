@@ -92,8 +92,8 @@ public class Drivetrain extends SubsystemBase {
 
      // ALTERNATE Command that moves the robot with joysticks in th opposite direction
      public void driveWithJoysticksInverted(Joystick leftJoystick, Joystick rightJoystick) {
-        diffdrive.tankDrive(leftJoystick.getRawAxis(Constants.joystickAxis),
-                rightJoystick.getRawAxis(Constants.joystickAxis));
+        diffdrive.tankDrive(rightJoystick.getRawAxis(Constants.joystickAxis),
+                leftJoystick.getRawAxis(Constants.joystickAxis));
     }
 
     /** Resets the gyro */

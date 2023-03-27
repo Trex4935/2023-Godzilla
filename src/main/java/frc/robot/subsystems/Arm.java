@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.extensions.ArmSideOrientation;
 import frc.robot.extensions.Falcon;
 import frc.robot.extensions.FlippedDIO;
 import frc.robot.extensions.Helper;
@@ -78,6 +77,11 @@ public class Arm extends SubsystemBase {
   /** Using MotionMagic set the arm to a given position */
   public void setArmExtensionMM(double armPositionTicks) {
     armExtensionMotor.set(TalonFXControlMode.MotionMagic, armPositionTicks + Constants.addExtend);
+    if (checkExtension2(armPositionTicks + Constants.addExtend)) {
+      Constants.armExtensionAtPosition = true;
+    } else {
+      Constants.armExtensionAtPosition = false;
+    }
   }
 
   /** Using SmartMotion to set the arm to a given angle */
@@ -100,11 +104,19 @@ public class Arm extends SubsystemBase {
     // if not latched or hit limit switch, MOVE MOTOR.
     else {
       armRotationPID.setReference(armRotationTicks + Constants.addRotate, ControlType.kSmartMotion);
+      if (checkRotation2(armRotationTicks + Constants.addRotate)) {
+        Constants.armRotationAtPosition = true;
+      } else {
+        Constants.armRotationAtPosition = false;
+      }
     }
   }
 
   /** Sets the speed that the arm moves backward */
   public void retractArm() {
+    // Sets position to false so that it doesn't set it speed state to slow.
+    Constants.armExtensionAtPosition = false;
+
     if (armRetractedLimitSwitch.get()) {
       // if the backwardimitSwitch is true,stop the motor
       armExtensionMotor.stopMotor();
@@ -214,7 +226,7 @@ public class Arm extends SubsystemBase {
 
   // Report the side that the arm is on
   public String s_getArmSideOrientation() {
-    if (Constants.selectedArmSideOrientation == ArmSideOrientation.BatterySide) {
+    if (Constants.direction < 0 ) {
       return "battery";
     } else {
       return "compressor";

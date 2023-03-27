@@ -8,24 +8,20 @@ package frc.robot;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Arm;
-
-// Commands
-import frc.robot.commands.armAction.ca_ArmMovementCombo;
-import frc.robot.commands.armAction.cm_setArmPositionManual;
-import frc.robot.commands.armAction.ca_setSideOrientation;
-import frc.robot.commands.armAction.cm_GripperClose;
-import frc.robot.commands.armAction.cm_GripperOpen;
-import frc.robot.commands.armAction.cm_manualAddExtendTicks;
-import frc.robot.commands.armAction.cm_manualDecreaseExtendTicks;
-import frc.robot.commands.armAction.cm_manualResetAddArm;
-import frc.robot.commands.armAction.cm_manualRotateBattery;
-import frc.robot.commands.armAction.cm_manualRotateCompressor;
-import frc.robot.commands.armAction.cm_setGamePieceType;
-import frc.robot.commands.armAction.cm_setSpeedLimit;
-import frc.robot.commands.autoDriveActions.ca_MoveBack;
-import frc.robot.commands.autoDriveActions.cm_driveWithJoysticks;
-import frc.robot.commands.autoPoints.cg_mobilityUnifiedAuto;
-import frc.robot.commands.autoPoints.cg_unifiedAuto;
+import frc.robot.commands.autoGroups.cg_unifiedAuto;
+import frc.robot.commands.teleop.ca_ArmMovementCombo;
+import frc.robot.commands.teleop.ca_setSideOrientation;
+import frc.robot.commands.teleop.cm_GripperClose;
+import frc.robot.commands.teleop.cm_GripperOpen;
+import frc.robot.commands.teleop.cm_driveWithJoysticks;
+import frc.robot.commands.teleop.cm_manualAddExtendTicks;
+import frc.robot.commands.teleop.cm_manualDecreaseExtendTicks;
+import frc.robot.commands.teleop.cm_manualResetAddArm;
+import frc.robot.commands.teleop.cm_manualRotateBattery;
+import frc.robot.commands.teleop.cm_manualRotateCompressor;
+import frc.robot.commands.teleop.cm_setArmPositionManual;
+import frc.robot.commands.teleop.cm_setGamePieceType;
+import frc.robot.commands.teleop.cm_setSpeedLimit;
 // Misc
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
+import frc.robot.extensions.DriveState;
 
 // Robot Base Class
 public class RobotContainer {
@@ -43,9 +40,8 @@ public class RobotContainer {
   private final Gripper gripper;
 
   // Declare Commands
-  private final cm_driveWithJoysticks driveWithJoysticks;
+  public final cm_driveWithJoysticks driveWithJoysticks;
   private final cm_setSpeedLimit setSpeedLimitMax;
-  private final cm_setSpeedLimit setSpeedLimitDefault;
   public final ca_ArmMovementCombo armMovementCombo;
   private final cm_setArmPositionManual setArmPositionHigh;
   private final cm_setArmPositionManual setArmPositionMiddle;
@@ -65,11 +61,10 @@ public class RobotContainer {
   /** Sets the game piece type to CubeFalse */
   private final cm_setGamePieceType setGamePieceTypeCubeFalse;
   private final cg_unifiedAuto unifiedAuto;
-  private final cg_mobilityUnifiedAuto mobilityUnifiedAuto;
-
+  
   // Declare Other
-  private final Joystick m_JoystickLeft = new Joystick(Constants.leftJoystick);
   private final Joystick m_JoystickRight = new Joystick(Constants.rightJoystick);
+  private final Joystick m_JoystickLeft = new Joystick(Constants.leftJoystick);
   private final Joystick m_ArduinoController = new Joystick(Constants.controllerID);
 
   /**
@@ -87,16 +82,14 @@ public class RobotContainer {
 
     // Autonomous
     unifiedAuto = new cg_unifiedAuto(arm, gripper, drivetrain);
-    mobilityUnifiedAuto = new cg_mobilityUnifiedAuto(arm, gripper, drivetrain);
 
     // Arm
     armMovementCombo = new ca_ArmMovementCombo(arm);
 
     // Drivetrain
-    driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickLeft, m_JoystickRight);
-    setSpeedLimitMax = new cm_setSpeedLimit(0.99);
-    setSpeedLimitDefault = new cm_setSpeedLimit(0.75);
-
+    driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickRight, m_JoystickLeft);
+    setSpeedLimitMax = new cm_setSpeedLimit(DriveState.TURBO);
+    
     /// Operator ///
 
     // Manual control of arm
@@ -138,14 +131,14 @@ public class RobotContainer {
   private void configureBindings() {
 
     // Makes controller driving the default command
-    drivetrain.setDefaultCommand(driveWithJoysticks);
+    // drivetrain.setDefaultCommand(driveWithJoysticks);
 
     // Runs the arm state machine
     // arm.setDefaultCommand(armMovementCombo);
 
     // Increase Speed when pressing triggers.
-    new JoystickButton(m_JoystickRight, Constants.joystickTrigger).onTrue(setSpeedLimitMax)
-        .onFalse(setSpeedLimitDefault);
+    new JoystickButton(m_JoystickRight, Constants.joystickTrigger).whileTrue(setSpeedLimitMax);
+    // new JoystickButton(m_JoystickRight, 3).onTrue(changeDirection);
 
     // Arduino Controller Button Mapping
     // Arm Movement

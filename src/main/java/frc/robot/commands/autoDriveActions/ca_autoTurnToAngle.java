@@ -7,38 +7,33 @@ package frc.robot.commands.autoDriveActions;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-public class ca_driveForwardInches extends CommandBase {
-  private Drivetrain m_drivetrain;
-  private Double m_angle;
-  private Double m_finalDistance;
-  private Double m_speed;
-  private boolean check;
-  /** Creates a new ca_driveMobility. */
-  public ca_driveForwardInches(Drivetrain drivetrain,Double speed,Double angle, Double finalDistance) {
+public class ca_autoTurnToAngle extends CommandBase {
+  Drivetrain m_drivetrain;
+  double m_targetangle;
+  Boolean check;
+  
+  public ca_autoTurnToAngle(Drivetrain drivetrain,double targetAngle) {
     m_drivetrain = drivetrain;
-    m_angle = angle;
-    m_finalDistance = finalDistance;
-    m_speed = speed;
-    // Use addRequirements() here to declare subsystem dependencies.
+    m_targetangle = targetAngle;
     addRequirements(m_drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_drivetrain.resetEncoders();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    check = m_drivetrain.driveStraightTarget(m_speed, m_angle, m_finalDistance);
+    check = m_drivetrain.turnToTarget(m_targetangle);
+    System.out.println(check);
   }
-  // 0.7 < 0.8 < 0.9
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drivetrain.resetEncoders();
+  }
 
   // Returns true when the command should end.
   @Override

@@ -2,39 +2,34 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.autoDriveActions;
+package frc.robot.commands.teleop;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.Constants;
+import frc.robot.extensions.ArmSideOrientation;
 
-public class ca_driveForwardInches extends CommandBase {
-  private Drivetrain m_drivetrain;
-  private Double m_angle;
-  private Double m_finalDistance;
-  private Double m_speed;
-  private boolean check;
-  /** Creates a new ca_driveMobility. */
-  public ca_driveForwardInches(Drivetrain drivetrain,Double speed,Double angle, Double finalDistance) {
-    m_drivetrain = drivetrain;
-    m_angle = angle;
-    m_finalDistance = finalDistance;
-    m_speed = speed;
+public class ca_setSideOrientation extends CommandBase {
+  ArmSideOrientation m_armSide;
+  boolean m_isBattery;
+
+  /** Creates a new ca_setSideOrientation. */
+  public ca_setSideOrientation(ArmSideOrientation armSide) {
+    m_armSide = armSide;
+    
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.resetEncoders();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    check = m_drivetrain.driveStraightTarget(m_speed, m_angle, m_finalDistance);
+    Constants.switchingSides = !Constants.switchingSides;
+    Constants.selectedArmSideOrientation = m_armSide;
   }
-  // 0.7 < 0.8 < 0.9
 
   // Called once the command ends or is interrupted.
   @Override
@@ -43,6 +38,6 @@ public class ca_driveForwardInches extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return check;
+    return true;
   }
 }

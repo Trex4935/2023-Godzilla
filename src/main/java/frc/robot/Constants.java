@@ -4,14 +4,13 @@
 
 package frc.robot;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.ArmSideOrientation;
+import frc.robot.extensions.DriveState;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -55,6 +54,8 @@ public final class Constants {
   /** Movement Constants */
   public static final double dtmaxaccel = 1; // Acceleration Limit
   public static double dtmaxspeed = 1; // Speed Limit
+  public static DriveState selectedDriveState = DriveState.NORMAL;
+  public static double direction = -1;
 
   // ARM ROTATION Constants
 
@@ -88,10 +89,12 @@ public final class Constants {
   public static final double ArmLowAngleCompressor = 316;
 
   public static final int sideVal = 0;
+  public static boolean armRotationAtPosition = false;
 
   // ARM EXTENSION
   public static final int armExtensionCAN = 21; // Motor CAN ID
   public static final double armExtensionSpeed = 0.9;
+  
 
   // Arm Distances
   // Units = Inches (Converting to ticks)
@@ -106,6 +109,8 @@ public final class Constants {
   public static final double autoArmMiddleDistance = -75000;
   public static final double ArmLowDistanceCompressor = -135000;
 
+  public static boolean armExtensionAtPosition = false;
+
   public static boolean buttonOccupied = false;
 
   // Gripper Constants
@@ -115,14 +120,13 @@ public final class Constants {
 
   // Driver Constants
   // (Differentiates the joysticks inputs by assigning different ID ports)
-  public static final int leftJoystick = 0; // Left Joystick ID
-  public static final int rightJoystick = 1; // Right Joystick ID
+  public static final int rightJoystick = 0; // Left Joystick ID
+  public static final int leftJoystick = 1; // Right Joystick ID
 
   public static final int joystickTrigger = 1;
 
   /** Actual Joystick Axis ID */
   public static final int joystickAxis = 1;
-
 
   // Controller Constants
 

@@ -14,6 +14,7 @@ import frc.robot.commands.teleop.ca_setSideOrientation;
 import frc.robot.commands.teleop.cm_GripperClose;
 import frc.robot.commands.teleop.cm_GripperOpen;
 import frc.robot.commands.teleop.cm_driveWithJoysticks;
+import frc.robot.commands.teleop.cm_invertDrivetrain;
 import frc.robot.commands.teleop.cm_manualAddExtendTicks;
 import frc.robot.commands.teleop.cm_manualDecreaseExtendTicks;
 import frc.robot.commands.teleop.cm_manualResetAddArm;
@@ -43,6 +44,7 @@ public class RobotContainer {
   public final cm_driveWithJoysticks driveWithJoysticks;
   private final cm_setSpeedLimit setSpeedLimitMax;
   public final ca_ArmMovementCombo armMovementCombo;
+  private final cm_invertDrivetrain invertDrivetrain;
   private final cm_setArmPositionManual setArmPositionHigh;
   private final cm_setArmPositionManual setArmPositionMiddle;
   private final cm_setArmPositionManual setArmPositionLow;
@@ -87,6 +89,7 @@ public class RobotContainer {
     armMovementCombo = new ca_ArmMovementCombo(arm);
 
     // Drivetrain
+    invertDrivetrain = new cm_invertDrivetrain();
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, m_JoystickRight, m_JoystickLeft);
     setSpeedLimitMax = new cm_setSpeedLimit(DriveState.TURBO);
     
@@ -135,6 +138,9 @@ public class RobotContainer {
 
     // Runs the arm state machine
     // arm.setDefaultCommand(armMovementCombo);
+
+    // Inverts drivetrain
+    new JoystickButton(m_JoystickRight, 3).toggleOnTrue(invertDrivetrain);
 
     // Increase Speed when pressing triggers.
     new JoystickButton(m_JoystickRight, Constants.joystickTrigger).whileTrue(setSpeedLimitMax);

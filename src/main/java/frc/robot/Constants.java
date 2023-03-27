@@ -31,6 +31,7 @@ public final class Constants {
   public static ArmSideOrientation selectedArmSideOrientation = ArmSideOrientation.BatterySide;
 
   // ROBOT Constants
+  public static boolean isDrivetrainInverted = false;
   public static String isCube = "cone";
   // Battery-Side is default
   public static String isBatterySide = "battery";

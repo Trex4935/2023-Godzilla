@@ -60,7 +60,9 @@ public class cm_driveWithJoysticks extends CommandBase {
       break;
   }
   // Always drive.
+
   if (Constants.isDrivetrainInverted == true) {
+
     m_Drivetrain.driveWithJoysticksInverted(m_joystickLeft, m_joystickRight);
   } else {
     m_Drivetrain.driveWithJoysticks(m_joystickLeft, m_joystickRight);

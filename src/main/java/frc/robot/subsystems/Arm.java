@@ -226,10 +226,10 @@ public class Arm extends SubsystemBase {
 
   // Report the side that the arm is on
   public String s_getArmSideOrientation() {
-    if (Constants.direction < 0 ) {
-      return "battery";
-    } else {
+    if (Constants.isDrivetrainInverted) {
       return "compressor";
+    } else {
+      return "battery";
     }
   }
 

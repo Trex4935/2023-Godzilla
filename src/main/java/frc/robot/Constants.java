@@ -211,6 +211,7 @@ public final class Constants {
   public static double autoChargeStationPosition = Units.inchesToMeters(114);//110 < (112) < 114 
   public static double autoMobilityPosition = Units.inchesToMeters(180);
   public static double autoBalanceToMobility = autoMobilityPosition - autoChargeStationPosition;
+  public static double autoTwoPiece = Units.inchesToMeters(224-39.25);
   public static double autoAngle = 0.0; // in degrees
   public static boolean doAutoBalance = true;
 }

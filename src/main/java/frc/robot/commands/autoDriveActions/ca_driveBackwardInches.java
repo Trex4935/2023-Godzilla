@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class ca_driveForwardInches extends CommandBase {
+public class ca_driveBackwardInches extends CommandBase {
   private Drivetrain m_drivetrain;
   private Double m_angle;
   private Double m_finalDistance;
   private Double m_speed;
   private boolean check;
   /** Creates a new ca_driveMobility. */
-  public ca_driveForwardInches(Drivetrain drivetrain) {
+  public ca_driveBackwardInches(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drivetrain);
@@ -30,7 +30,7 @@ public class ca_driveForwardInches extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    check = m_drivetrain.driveStraightTarget(0.6, 0, Constants.autoTwoPiece);
+    check = m_drivetrain.driveStraightTarget(0.6, 0, -Constants.autoTwoPiece);
   }
   // 0.7 < 0.8 < 0.9
 

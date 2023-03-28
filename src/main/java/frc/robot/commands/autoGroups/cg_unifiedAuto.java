@@ -33,7 +33,8 @@ public class cg_unifiedAuto extends SequentialCommandGroup {
         // arm goes to ground, picks up a piece, and goes back to score it
         new ca_moveArmToGround(arm),
         new cm_GripperOpen(gripper).withTimeout(.5),
-        new cm_GripperClose(gripper).alongWith(new ca_driveBackwardInches(drivetrain)),
+        new cm_GripperClose(gripper).withTimeout(0.25),
+        new ca_driveBackwardInches(drivetrain),
         new cg_autoScore(drivetrain, arm, gripper)
     );
   }

@@ -196,7 +196,6 @@ public final class Constants {
   public static double addRotate = 0;
 
   public static double speedLimit = 0.75;
-  public static boolean LeftTriggerBool = false;
 
   // Direction
   public enum direction {

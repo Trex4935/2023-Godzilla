@@ -30,7 +30,7 @@ public class ca_driveBackwardInches extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    check = m_drivetrain.driveStraightTarget(0.6, 0, -Constants.autoTwoPiece);
+    check = m_drivetrain.driveStraightTarget(-0.6, 0, Constants.autoTwoPiece);
   }
   // 0.7 < 0.8 < 0.9
 

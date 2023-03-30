@@ -142,12 +142,12 @@ public class RobotContainer {
     // arm.setDefaultCommand(armMovementCombo);
 
     // Inverts drivetrain
-    new JoystickButton(m_JoystickRight, 3).toggleOnTrue(invertDrivetrain);
+    new JoystickButton(m_JoystickLeft, Constants.joystickTrigger).toggleOnTrue(invertDrivetrain);
 
     // Increase Speed when pressing triggers.
     new JoystickButton(m_JoystickRight, Constants.joystickTrigger).whileTrue(setSpeedLimitMax);
     // Decrease Speed when pressing triggers
-    new JoystickButton(m_JoystickLeft, Constants.joystickTrigger).whileTrue(setSpeedLimitMin);
+    new JoystickButton(m_JoystickRight, 3).whileTrue(setSpeedLimitMin);
     // new JoystickButton(m_JoystickRight, 3).onTrue(changeDirection);
 
     // Arduino Controller Button Mapping

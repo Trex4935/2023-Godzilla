@@ -7,6 +7,8 @@ package frc.robot.extensions;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import frc.robot.Constants;
+
 /** Add your docs here. */
 public class Talon {
 
@@ -81,20 +83,19 @@ public class Talon {
 
         talon.configSupplyCurrentLimit(config.currLimitCfg);
 
-        final int kTimeout = 30;
-        talon.configPeakCurrentLimit(15, kTimeout);
-		talon.configPeakCurrentDuration(0, kTimeout);
-		talon.configContinuousCurrentLimit(10, kTimeout);
+       
+        talon.configPeakCurrentLimit(15);
+		talon.configPeakCurrentDuration(0);
+		talon.configContinuousCurrentLimit(10);
 
         boolean _currentLimEn = true;
        
 		talon.enableCurrentLimit(_currentLimEn); // Honor initial setting
 
 		/* setup a basic closed loop */
+    
 		talon.setNeutralMode(NeutralMode.Brake); // Netural Mode override 
-        talon.configSelectedFeedbackSensor(  FeedbackDevice.QuadEncoder, // Sensor Type 
-                                            0,      // PID Index
-                                            kTimeout);      // Config Timeout
+        talon.configSelectedFeedbackSensor(  FeedbackDevice.QuadEncoder, 0,0);      
 
         /* Ensure Sensor is in phase, else closed loop will not work.
          * Positive Sensor should match Motor Positive output (Green LED)

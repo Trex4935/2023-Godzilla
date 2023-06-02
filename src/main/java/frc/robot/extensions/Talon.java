@@ -81,8 +81,29 @@ public class Talon {
 
         talon.configSupplyCurrentLimit(config.currLimitCfg);
 
+        final int kTimeout = 30;
+        talon.configPeakCurrentLimit(15, kTimeout);
+		talon.configPeakCurrentDuration(0, kTimeout);
+		talon.configContinuousCurrentLimit(10, kTimeout);
+
+        boolean _currentLimEn = true;
+       
+		talon.enableCurrentLimit(_currentLimEn); // Honor initial setting
+
+		/* setup a basic closed loop */
+		talon.setNeutralMode(NeutralMode.Brake); // Netural Mode override 
+        talon.configSelectedFeedbackSensor(  FeedbackDevice.QuadEncoder, // Sensor Type 
+                                            0,      // PID Index
+                                            kTimeout);      // Config Timeout
+
+        /* Ensure Sensor is in phase, else closed loop will not work.
+         * Positive Sensor should match Motor Positive output (Green LED)
+         */
+        talon.setSensorPhase(true);
+
         // Return the configured motor object
         return talon;
     }
 
 }
+
